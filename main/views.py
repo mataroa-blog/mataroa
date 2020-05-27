@@ -7,7 +7,32 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from main import forms, models
 
 
+def root_index(request):
+    if request.META["HTTP_HOST"] != settings.CANONICAL_HOST:
+        return redirect(settings.CANONICAL_HOST)
+
+
+def blog_index(request, username):
+    return redirect("//" + username + "." + settings.CANONICAL_HOST[2:])
+
+
 def index(request):
+    if "HTTP_HOST" not in request.META:
+        return render(request, "main/index.html")
+
+    host = request.META["HTTP_HOST"]
+    if host == settings.CANONICAL_HOST:
+        return render(request, "main/index.html")
+    elif ".mataroa.blog" in host:
+        subdomain = host.split(".")[0]
+        if models.User.objects.filter(username=subdomain).exists():
+            user = models.User.objects.get(username=subdomain)
+            return render(
+                request,
+                "main/blog_index.html",
+                {"user": user, "posts": models.Post.objects.filter(owner=user)},
+            )
+
     return render(request, "main/index.html")
 
 
