@@ -221,7 +221,8 @@ aside {
 }
 
 nav {
-    margin-top: 32px;
+    margin-top: 8px;
+    margin-left: 16px;
 }
 
 blockquote {
