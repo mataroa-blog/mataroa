@@ -132,3 +132,62 @@ class UserDeleteTestCase(TestCase):
         response = self.client.post(reverse("user_delete", args=(self.user.id,)))
         self.assertEqual(response.status_code, 302)
         self.assertFalse(models.User.objects.filter(id=self.user.id).exists())
+
+
+class PostCreateTestCase(TestCase):
+    def test_post_create(self):
+        data = {
+            "title": "New post",
+            "body": "Content sentence.",
+        }
+        response = self.client.post(reverse("post_create"), data)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(models.Post.objects.get(title=data["title"]))
+
+
+class PostDetailTestCase(TestCase):
+    def setUp(self):
+        self.data = {
+            "title": "New post",
+            "body": "Content sentence.",
+        }
+        self.client.post(reverse("post_create"), self.data)
+        self.post = models.Post.objects.get(title=self.data["title"])
+
+    def test_post_detail(self):
+        response = self.client.get(reverse("post_detail", args=(self.post.id,)))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.data["title"])
+        self.assertContains(response, self.data["body"])
+
+
+class PostUpdateTestCase(TestCase):
+    def setUp(self):
+        data = {
+            "title": "New post",
+            "body": "Content sentence.",
+        }
+        self.client.post(reverse("post_create"), data)
+        self.post = models.Post.objects.get(title=data["title"])
+
+    def test_post_update(self):
+        new_data = {
+            "title": "Updated post",
+            "body": "Updated content sentence.",
+        }
+        self.client.post(reverse("post_update", args=(self.post.id,)), new_data)
+
+        updated_doc = models.Post.objects.get(id=self.post.id)
+        self.assertTrue(updated_doc.title, new_data["title"])
+        self.assertTrue(updated_doc.body, new_data["body"])
+
+
+class PostDeleteTestCase(TestCase):
+    def setUp(self):
+        self.post = models.Post.objects.create(
+            title="New post", body="Content sentence.",
+        )
+
+    def test_post_delete(self):
+        self.client.post(reverse("post_delete", args=(self.post.id,)))
+        self.assertFalse(models.Post.objects.all().exists())
