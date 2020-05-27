@@ -1,0 +1,11 @@
+{% extends 'main/layout.html' %}
+
+{% block content %}
+<main class="delete">
+    <h1>Delete {{ post.title }} for sure?</h1>
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" value="Yes, delete for sure">
+    </form>
+</main>
+{% endblock %}

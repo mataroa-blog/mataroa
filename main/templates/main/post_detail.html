@@ -1,0 +1,38 @@
+{% extends 'main/layout.html' %}
+
+{% block content %}
+<main>
+    <h1 class="main-title">
+        {{ post.title }}
+    </h1>
+
+    <div class="main-body">
+        {{ post.as_markdown|safe }}
+    </div>
+</main>
+
+<aside>
+    <br>--
+    <br><a href="{% url 'post_update' post.id %}">Edit post</a>
+    <br><a href="{% url 'post_delete' post.id %}">Del</a>
+    {% if messages %}
+    {% for message in messages %}
+    <br><span{% if message.tags %} class="alert-{{ message.tags }}"{% endif %}>{{ message|safe }}</span>
+    {% endfor %}
+    {% endif %}
+</aside>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    window.addEventListener('keypress', function (evt) {
+        if (evt.key === 'e') {
+            let url = document.location.href + 'edit/';
+            document.location.assign(url);
+        } else if (evt.key === 'u') {
+            let url = '/';
+            document.location.assign(url);
+        }
+    });
+</script>
+{% endblock %}
