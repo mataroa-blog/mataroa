@@ -20,3 +20,11 @@ urlpatterns += [
     path("accounts/<int:pk>/edit/", views.UserUpdate.as_view(), name="user_update"),
     path("accounts/<int:pk>/delete/", views.UserDelete.as_view(), name="user_delete"),
 ]
+
+# posts crud
+urlpatterns += [
+    path("posts/create/", views.PostCreate.as_view(), name="post_create"),
+    path("posts/<int:pk>/", views.PostDetail.as_view(), name="post_detail"),
+    path("posts/<int:pk>/edit/", views.PostUpdate.as_view(), name="post_update",),
+    path("posts/<int:pk>/delete/", views.PostDelete.as_view(), name="post_delete",),
+]

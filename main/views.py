@@ -1,5 +1,6 @@
+from django.conf import settings
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
@@ -56,4 +57,25 @@ class UserUpdate(SuccessMessageMixin, UpdateView):
 
 class UserDelete(DeleteView):
     model = models.User
+    success_url = reverse_lazy("index")
+
+
+class PostDetail(DetailView):
+    model = models.Post
+
+
+class PostCreate(SuccessMessageMixin, CreateView):
+    model = models.Post
+    fields = ["title", "body"]
+    success_message = "%(title)s was created successfully"
+
+
+class PostUpdate(SuccessMessageMixin, UpdateView):
+    model = models.Post
+    fields = ["title", "body"]
+    success_message = "%(title)s updated successfully"
+
+
+class PostDelete(DeleteView):
+    model = models.Post
     success_url = reverse_lazy("index")
