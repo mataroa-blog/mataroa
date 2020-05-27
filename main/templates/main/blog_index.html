@@ -1,0 +1,18 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Mataroa — Blogging unplatform{% endblock %}
+
+{% block content %}
+<main>
+    <h1>{{ user.blog_title }}</h1>
+    <ul>
+        {% for p in posts %}
+        <li><a href="#">{{ p.title }}</a></li>
+        {% endfor %}
+    </ul>
+</main>
+
+<footer>
+    Powered by mataroa.blog
+</footer>
+{% endblock %}
