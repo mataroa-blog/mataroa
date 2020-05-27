@@ -173,19 +173,16 @@ class PostDetailTestCase(TestCase):
 
 class PostUpdateTestCase(TestCase):
     def setUp(self):
-        # create user and login
         self.user = models.User.objects.create(username="john")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username='john', password='abcdef123456')
-
-        # create post
-        data = {
+        self.data = {
             "title": "New post",
             "body": "Content sentence.",
         }
-        self.client.post(reverse("post_create"), data)
-        self.post = models.Post.objects.get(title=data["title"])
+        self.post = models.Post.objects.create(
+            title=self.data["title"],
+            body=self.data["body"],
+            owner=self.user,
+        )
 
     def test_post_update(self):
         new_data = {
@@ -201,15 +198,15 @@ class PostUpdateTestCase(TestCase):
 
 class PostDeleteTestCase(TestCase):
     def setUp(self):
-        # create user and login
         self.user = models.User.objects.create(username="john")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username='john', password='abcdef123456')
-
-        # create post
+        self.data = {
+            "title": "New post",
+            "body": "Content sentence.",
+        }
         self.post = models.Post.objects.create(
-            title="New post", body="Content sentence.",
+            title=self.data["title"],
+            body=self.data["body"],
+            owner=self.user,
         )
 
     def test_post_delete(self):

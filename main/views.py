@@ -84,6 +84,6 @@ class PostUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = "%(title)s updated successfully"
 
 
-class PostDelete(LoginRequiredMixin, DeleteView):
+class PostDelete(DeleteView):
     model = models.Post
     success_url = reverse_lazy("index")
