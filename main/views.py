@@ -1,7 +1,7 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect
 from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView
@@ -84,6 +84,6 @@ class PostUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = "%(title)s updated successfully"
 
 
-class PostDelete(DeleteView):
+class PostDelete(LoginRequiredMixin, DeleteView):
     model = models.Post
     success_url = reverse_lazy("index")

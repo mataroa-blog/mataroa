@@ -139,7 +139,7 @@ class PostCreateTestCase(TestCase):
         self.user = models.User.objects.create(username="john")
         self.user.set_password("abcdef123456")
         self.user.save()
-        self.client.login(username='john', password='abcdef123456')
+        self.client.login(username="john", password="abcdef123456")
 
     def test_post_create(self):
         data = {
@@ -159,9 +159,7 @@ class PostDetailTestCase(TestCase):
             "body": "Content sentence.",
         }
         self.post = models.Post.objects.create(
-            title=self.data["title"],
-            body=self.data["body"],
-            owner=self.user,
+            title=self.data["title"], body=self.data["body"], owner=self.user
         )
 
     def test_post_detail(self):
@@ -179,9 +177,7 @@ class PostUpdateTestCase(TestCase):
             "body": "Content sentence.",
         }
         self.post = models.Post.objects.create(
-            title=self.data["title"],
-            body=self.data["body"],
-            owner=self.user,
+            title=self.data["title"], body=self.data["body"], owner=self.user
         )
 
     def test_post_update(self):
@@ -199,14 +195,15 @@ class PostUpdateTestCase(TestCase):
 class PostDeleteTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="john")
+        self.user.set_password("abcdef123456")
+        self.user.save()
+        self.client.login(username="john", password="abcdef123456")
         self.data = {
             "title": "New post",
             "body": "Content sentence.",
         }
         self.post = models.Post.objects.create(
-            title=self.data["title"],
-            body=self.data["body"],
-            owner=self.user,
+            title=self.data["title"], body=self.data["body"], owner=self.user
         )
 
     def test_post_delete(self):
