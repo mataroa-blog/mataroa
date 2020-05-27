@@ -135,6 +135,12 @@ class UserDeleteTestCase(TestCase):
 
 
 class PostCreateTestCase(TestCase):
+    def setUp(self):
+        self.user = models.User.objects.create(username="john")
+        self.user.set_password("abcdef123456")
+        self.user.save()
+        self.client.login(username='john', password='abcdef123456')
+
     def test_post_create(self):
         data = {
             "title": "New post",
@@ -147,12 +153,16 @@ class PostCreateTestCase(TestCase):
 
 class PostDetailTestCase(TestCase):
     def setUp(self):
+        self.user = models.User.objects.create(username="john")
         self.data = {
             "title": "New post",
             "body": "Content sentence.",
         }
-        self.client.post(reverse("post_create"), self.data)
-        self.post = models.Post.objects.get(title=self.data["title"])
+        self.post = models.Post.objects.create(
+            title=self.data["title"],
+            body=self.data["body"],
+            owner=self.user,
+        )
 
     def test_post_detail(self):
         response = self.client.get(reverse("post_detail", args=(self.post.id,)))
@@ -163,6 +173,13 @@ class PostDetailTestCase(TestCase):
 
 class PostUpdateTestCase(TestCase):
     def setUp(self):
+        # create user and login
+        self.user = models.User.objects.create(username="john")
+        self.user.set_password("abcdef123456")
+        self.user.save()
+        self.client.login(username='john', password='abcdef123456')
+
+        # create post
         data = {
             "title": "New post",
             "body": "Content sentence.",
@@ -184,6 +201,13 @@ class PostUpdateTestCase(TestCase):
 
 class PostDeleteTestCase(TestCase):
     def setUp(self):
+        # create user and login
+        self.user = models.User.objects.create(username="john")
+        self.user.set_password("abcdef123456")
+        self.user.save()
+        self.client.login(username='john', password='abcdef123456')
+
+        # create post
         self.post = models.Post.objects.create(
             title="New post", body="Content sentence.",
         )

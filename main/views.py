@@ -1,3 +1,5 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect, render
@@ -64,18 +66,24 @@ class PostDetail(DetailView):
     model = models.Post
 
 
-class PostCreate(SuccessMessageMixin, CreateView):
+class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = models.Post
     fields = ["title", "body"]
     success_message = "%(title)s was created successfully"
 
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.owner = self.request.user
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
 
-class PostUpdate(SuccessMessageMixin, UpdateView):
+
+class PostUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = models.Post
     fields = ["title", "body"]
     success_message = "%(title)s updated successfully"
 
 
-class PostDelete(DeleteView):
+class PostDelete(LoginRequiredMixin, DeleteView):
     model = models.Post
     success_url = reverse_lazy("index")
