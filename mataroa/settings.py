@@ -73,6 +73,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "mataroa.wsgi.application"
 
+AUTH_USER_MODEL = "main.User"
+
+LOGIN_REDIRECT_URL = "/"
+
 SESSION_COOKIE_AGE = 31449600  # 60 * 60 * 24 * 7 * 52 = 1 year in seconds
 
 
