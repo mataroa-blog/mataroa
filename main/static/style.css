@@ -205,7 +205,9 @@ p {
     max-width: 500px;
 }
 
-h1 {
+h1,
+h2,
+h3 {
     font-weight: 500;
 }
 
@@ -217,11 +219,10 @@ main {
 aside {
     margin-top: 8px;
     margin-left: 16px;
-    color: var(--green-color);
 }
 
 nav {
-    margin-top: 8px;
+    margin-top: 16px;
     margin-left: 16px;
 }
 
