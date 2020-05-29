@@ -12,7 +12,7 @@ urlpatterns = [
     path("blog/<slug:username>", views.blog_index, name="blog_index"),
 ]
 
-# user system
+# user system — available for //mataroa.blog
 urlpatterns += [
     path("accounts/", include("django.contrib.auth.urls")),
     path("accounts/create/", views.UserCreate.as_view(), name="user_create"),
@@ -21,10 +21,11 @@ urlpatterns += [
     path("accounts/<int:pk>/delete/", views.UserDelete.as_view(), name="user_delete"),
 ]
 
-# posts crud
+# posts crud — available for //myblog.mataroa.blog
 urlpatterns += [
     path("posts/create/", views.PostCreate.as_view(), name="post_create"),
     path("posts/<int:pk>/", views.PostDetail.as_view(), name="post_detail"),
     path("posts/<int:pk>/edit/", views.PostUpdate.as_view(), name="post_update",),
     path("posts/<int:pk>/delete/", views.PostDelete.as_view(), name="post_delete",),
+    path("export/", views.blog_export, name="blog_export"),
 ]
