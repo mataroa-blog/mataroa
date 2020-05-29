@@ -3,11 +3,12 @@ import uuid
 import zipfile
 
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
@@ -15,12 +16,16 @@ from main import forms, models
 
 
 def root_index(request):
-    if request.META["HTTP_HOST"] != settings.CANONICAL_HOST:
-        return redirect(settings.CANONICAL_HOST)
+    if "HTTP_HOST" in request.META and (
+        request.META["HTTP_HOST"] != settings.CANONICAL_HOST
+    ):
+        return redirect("//" + settings.CANONICAL_HOST)
+    else:
+        return redirect(reverse_lazy("index"))
 
 
 def blog_index(request, username):
-    return redirect("//" + username + "." + settings.CANONICAL_HOST[2:])
+    return redirect("//" + username + "." + settings.CANONICAL_HOST)
 
 
 def index(request):
@@ -46,6 +51,14 @@ def index(request):
 class UserDetail(DetailView):
     model = models.User
 
+    def dispatch(self, request, *args, **kwargs):
+        if "HTTP_HOST" in request.META and (
+            request.META["HTTP_HOST"] != settings.CANONICAL_HOST
+        ):
+            return redirect("//" + settings.CANONICAL_HOST + reverse("post_create"))
+        else:
+            return super().dispatch(request, *args, **kwargs)
+
 
 class UserCreate(SuccessMessageMixin, CreateView):
     form_class = forms.UserCreationForm
@@ -69,6 +82,14 @@ class UserDelete(DeleteView):
 class PostDetail(DetailView):
     model = models.Post
 
+    def dispatch(self, request, *args, **kwargs):
+        if "HTTP_HOST" in request.META and (
+            request.META["HTTP_HOST"] != settings.CANONICAL_HOST
+        ):
+            return redirect("//" + settings.CANONICAL_HOST + reverse("post_detail"))
+        else:
+            return super().dispatch(request, *args, **kwargs)
+
 
 class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = models.Post
@@ -80,6 +101,14 @@ class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         self.object.owner = self.request.user
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
+
+    def dispatch(self, request, *args, **kwargs):
+        if "HTTP_HOST" in request.META and (
+            request.META["HTTP_HOST"] != settings.CANONICAL_HOST
+        ):
+            return redirect("//" + settings.CANONICAL_HOST + reverse("post_create"))
+        else:
+            return super().dispatch(request, *args, **kwargs)
 
 
 class PostUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):

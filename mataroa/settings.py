@@ -30,7 +30,7 @@ DEBUG = True if os.environ.get("NODEBUG") is None else False
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", ".mataroa.blog"]
 
 # leading slashes are important so that browser do not handle it as internal url
-CANONICAL_HOST = "//mataroa.blog:8000"
+CANONICAL_HOST = "mataroa.blog:8000"
 
 
 # Application definition
