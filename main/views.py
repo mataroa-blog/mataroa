@@ -15,17 +15,13 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from main import forms, models
 
 
-def root_index(request):
+def dashboard(request):
     if "HTTP_HOST" in request.META and (
         request.META["HTTP_HOST"] != settings.CANONICAL_HOST
     ):
-        return redirect("//" + settings.CANONICAL_HOST)
-    else:
-        return redirect(reverse_lazy("index"))
+        return redirect("//" + settings.CANONICAL_HOST + reverse("dashboard"))
 
-
-def blog_index(request, username):
-    return redirect("//" + username + "." + settings.CANONICAL_HOST)
+    return render(request, "main/dashboard.html")
 
 
 def index(request):
@@ -34,6 +30,8 @@ def index(request):
 
     host = request.META["HTTP_HOST"]
     if host == settings.CANONICAL_HOST:
+        if request.user.is_authenticated:
+            return redirect("dashboard")
         return render(request, "main/index.html")
     elif ".mataroa.blog" in host:
         subdomain = host.split(".")[0]
@@ -42,7 +40,11 @@ def index(request):
             return render(
                 request,
                 "main/blog_index.html",
-                {"user": user, "posts": models.Post.objects.filter(owner=user)},
+                {
+                    "user": user,
+                    "posts": models.Post.objects.filter(owner=user),
+                    "subdomain": subdomain,
+                },
             )
 
     return render(request, "main/index.html")
@@ -55,7 +57,11 @@ class UserDetail(DetailView):
         if "HTTP_HOST" in request.META and (
             request.META["HTTP_HOST"] != settings.CANONICAL_HOST
         ):
-            return redirect("//" + settings.CANONICAL_HOST + reverse("post_create"))
+            return redirect(
+                "//"
+                + settings.CANONICAL_HOST
+                + reverse("user_detail", args=(request.user.id,))
+            )
         else:
             return super().dispatch(request, *args, **kwargs)
 
@@ -82,13 +88,16 @@ class UserDelete(DeleteView):
 class PostDetail(DetailView):
     model = models.Post
 
-    def dispatch(self, request, *args, **kwargs):
-        if "HTTP_HOST" in request.META and (
-            request.META["HTTP_HOST"] != settings.CANONICAL_HOST
-        ):
-            return redirect("//" + settings.CANONICAL_HOST + reverse("post_detail"))
-        else:
-            return super().dispatch(request, *args, **kwargs)
+    def get_context_data(self, **kwargs):
+        context = super(PostDetail, self).get_context_data(**kwargs)
+        if "HTTP_HOST" in self.request.META:
+            host = self.request.META["HTTP_HOST"]
+            subdomain = host.split(".")[0]
+            context["subdomain"] = subdomain
+            context["blog_title"] = models.User.objects.get(
+                username=subdomain
+            ).blog_title
+        return context
 
 
 class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):

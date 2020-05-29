@@ -8,8 +8,7 @@ admin.site.site_header = "mataroa administration"
 # indexes
 urlpatterns = [
     path("", views.index, name="index"),
-    path("root/", views.root_index, name="root_index"),
-    path("blog/<slug:username>", views.blog_index, name="blog_index"),
+    path("dashboard", views.dashboard, name="dashboard"),
 ]
 
 # user system — available for //mataroa.blog
