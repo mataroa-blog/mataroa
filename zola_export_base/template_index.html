@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="{{ config.description }}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}{{ config.title }}{% endblock title %}</title>
+        <link rel="stylesheet" href="{{ get_url(path='style.css') }}">
+    </head>
+    <body>
+        {% block content %}
+        <header>
+            <h1><a href="/">{{ config.title }}</a></h1>
+        </header>
+        <main>
+            <ul class="posts">
+                {% set blog = get_section(path='_index.md') %}
+                {% for post in blog.pages %}
+                <li>
+                    <a href="{{ post.permalink }}">{{ post.title }}</a>
+                    <small>— <time datetime="{{ post.date | date(format="%+") }}" itemprop="datePublished">{{ post.date | date(format='%B %e, %Y') }}</time></small>
+                </li>
+                {% endfor %}
+            </ul>
+        </main>
+
+        <footer>
+            --
+            <br><a href="/rss.xml">RSS</a>
+        </footer>
+        {% endblock content %}
+
+    </body>
+</html>
