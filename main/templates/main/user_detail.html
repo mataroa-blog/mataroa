@@ -1,5 +1,7 @@
 {% extends 'main/layout.html' %}
 
+{% block title %}{{ user.username }} at Mataroa{% endblock %}
+
 {% block content %}
 <main class="user">
     <h1 class="main-title">
@@ -11,7 +13,7 @@
         | <a href="{% url 'logout' %}">Logout</a>
 
         <br>
-        <br><a href="{% url 'user_delete' user.id %}" class="user-delete">Delete account</a>
+        <br><a href="{% url 'user_delete' user.id %}">Delete account</a>
     </div>
 </main>
 {% endblock %}

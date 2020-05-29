@@ -1,5 +1,7 @@
 {% extends 'main/layout.html' %}
 
+{% block title %}Deleting {{ post.title }} — {{ request.user.username }} at Mataroa{% endblock %}
+
 {% block content %}
 <main class="delete">
     <h1>Delete {{ post.title }} for sure?</h1>

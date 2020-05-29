@@ -1,15 +1,14 @@
 {% extends 'main/layout.html' %}
 
+{% block title %}Update subdomain and email — Mataroa{% endblock %}
+
 {% block content %}
 <main>
-    <h1>Update profile</h1>
+    <h1>Update username (subdomain)</h1>
     <form method="post">
         {{ form.as_p }}
         {% csrf_token %}
         <input type="submit" value="Save">
     </form>
-    <p>
-        <a href="{% url 'password_change' %}">Change password?</a>
-    </p>
 </main>
 {% endblock %}

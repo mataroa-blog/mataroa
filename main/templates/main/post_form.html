@@ -1,5 +1,9 @@
 {% extends 'main/layout.html' %}
 
+{% block title %}
+    {% if form.initial %}Editing {{ form.title.value }}{% else %}Create a new post{% endif %}
+{% endblock %}
+
 {% block content %}
 <main>
     {% if form.initial %}
