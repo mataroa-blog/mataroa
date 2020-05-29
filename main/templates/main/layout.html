@@ -18,19 +18,25 @@
         </aside>
         {% endif %}
 
+        {% if request.user.is_authenticated %}
         <nav>
-            {% if request.user.is_authenticated %}
-            <a href="{{ request.host }}{% url 'root_index' %}">Mataroa</a>
-            | <a href="{% url 'blog_index' request.user.username %}">Blog</a>
-            | <a href="{{ request.host }}{% url 'post_create' %}">New post</a>
-            | <a href="{{ request.host }}{% url 'blog_export' %}">Export</a>
-            | <a href="{{ request.host }}{% url 'user_detail' request.user.id %}">Profile</a>
+            {% if subdomain %}
+            <a href="{% url 'index' %}">Blog</a>
             {% else %}
+            <a href="//{{ request.user.username }}.{{ request.get_host }}">Blog</a>
+            {% endif %}
+            | <a href="{% url 'dashboard' %}">Dashboard</a>
+            | <a href="{% url 'post_create' %}">New post</a>
+        </nav>
+        {% else %}
+        {% if not subdomain %}
+        <nav>
             <a href="{{ request.host }}{% url 'index' %}">Home</a>
             | <a href="{{ request.host }}{% url 'user_create' %}">Sign up</a>
             | <a href="{{ request.host }}{% url 'login' %}">Log in</a>
-            {% endif %}
         </nav>
+        {% endif %}
+        {% endif %}
 
         {% block content %}
         {% endblock %}
