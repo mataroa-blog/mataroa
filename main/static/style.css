@@ -269,3 +269,12 @@ textarea {
 .form-error::before {
     content: "» ";
 }
+
+/* landing */
+.cta {
+    font-size: 20px;
+}
+
+.cta::before {
+    content: "» ";
+}
