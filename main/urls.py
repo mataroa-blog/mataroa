@@ -23,9 +23,9 @@ urlpatterns += [
 
 # posts crud — available for //myblog.mataroa.blog
 urlpatterns += [
-    path("posts/create/", views.PostCreate.as_view(), name="post_create"),
-    path("posts/<int:pk>/", views.PostDetail.as_view(), name="post_detail"),
-    path("posts/<int:pk>/edit/", views.PostUpdate.as_view(), name="post_update",),
-    path("posts/<int:pk>/delete/", views.PostDelete.as_view(), name="post_delete",),
+    path("blog/create/", views.PostCreate.as_view(), name="post_create"),
+    path("blog/<int:pk>/", views.PostDetail.as_view(), name="post_detail"),
+    path("blog/<int:pk>/edit/", views.PostUpdate.as_view(), name="post_update",),
+    path("blog/<int:pk>/delete/", views.PostDelete.as_view(), name="post_delete",),
     path("export/", views.blog_export, name="blog_export"),
 ]
