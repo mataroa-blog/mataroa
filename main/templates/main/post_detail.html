@@ -4,34 +4,35 @@
 
 {% block content %}
 <main>
-    <h1 class="main-title">
-        {{ post.title }}
-    </h1>
+    <a href="{% url 'index' %}" class="brand">{{ blog_title }}</a>
 
-    <div class="main-body">
-        {{ post.as_markdown|safe }}
-    </div>
+    <article itemscope itemtype="http://schema.org/BlogPosting">
+        <h1 class="main-title" itemprop="name headline">
+            {{ post.title }}
+        </h1>
+
+        <div class="byline">
+            Published on <time datetime="{{ post.created_at|date:'F j, Y' }}" itemprop="datePublished">{{ post.created_at|date:'F j, Y' }}</time>
+            {% if request.user.is_authenticated and subdomain == request.user.username %}
+            | <a href="{% url 'post_update' post.id %}">Edit post</a>
+            | <a href="{% url 'post_delete' post.id %}">Del</a>
+            {% endif %}
+        </div>
+
+        <div class="main-body" itemprop="articleBody">
+            {{ post.as_markdown|safe }}
+        </div>
+    </article>
+
+    <br>
+    <a href="{% url 'index' %}">← archive</a>
 </main>
-
-<aside>
-    <br>--
-    <br><a href="{% url 'post_update' post.id %}">Edit post</a>
-    <br><a href="{% url 'post_delete' post.id %}">Del</a>
-    {% if messages %}
-    {% for message in messages %}
-    <br><span{% if message.tags %} class="alert-{{ message.tags }}"{% endif %}>{{ message|safe }}</span>
-    {% endfor %}
-    {% endif %}
-</aside>
 {% endblock %}
 
 {% block scripts %}
 <script>
     window.addEventListener('keypress', function (evt) {
-        if (evt.key === 'e') {
-            let url = document.location.href + 'edit/';
-            document.location.assign(url);
-        } else if (evt.key === 'u') {
+        if (evt.key === 'u') {
             let url = '/';
             document.location.assign(url);
         }
