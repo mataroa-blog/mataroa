@@ -209,3 +209,22 @@ class PostDeleteTestCase(TestCase):
     def test_post_delete(self):
         self.client.post(reverse("post_delete", args=(self.post.id,)))
         self.assertFalse(models.Post.objects.all().exists())
+
+
+class BlogExportTestCase(TestCase):
+    def setUp(self):
+        self.user = models.User.objects.create(username="john")
+        self.user.set_password("abcdef123456")
+        self.user.save()
+        self.client.login(username="john", password="abcdef123456")
+        self.data = {
+            "title": "New post",
+            "body": "Content sentence.",
+        }
+        self.post = models.Post.objects.create(
+            title=self.data["title"], body=self.data["body"], owner=self.user
+        )
+
+    def test_blog_export(self):
+        response = self.client.get(reverse("blog_export"))
+        self.assertEqual(response.status_code, 200)
