@@ -20,16 +20,17 @@
 
         {% if request.user.is_authenticated %}
         <nav>
-            {% if request.user.username %}
+            {% if request.subdomain %}
             <a href="{% url 'index' %}">Blog</a>
-            {% else %}
-            <a href="//{{ request.user.username }}.{{ request.get_host }}">Blog</a>
-            {% endif %}
             | <a href="{% url 'dashboard' %}">Dashboard</a>
             | <a href="{% url 'post_create' %}">New post</a>
+            {% else %}
+            <a href="//{{ request.user.username }}.{{ request.get_host }}">Blog</a>
+            | <a href="{% url 'dashboard' %}">Dashboard</a>
+            {% endif %}
         </nav>
         {% else %}
-        {% if not subdomain %}
+        {% if not request.subdomain %}
         <nav>
             <a href="{{ request.host }}{% url 'index' %}">Home</a>
             | <a href="{{ request.host }}{% url 'user_create' %}">Sign up</a>

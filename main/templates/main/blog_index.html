@@ -1,10 +1,10 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}{{ user.blog_title|default:subdomain }}{% endblock %}
+{% block title %}{{ user.blog_title|default:request.subdomain }}{% endblock %}
 
 {% block content %}
 <main>
-    <h1>{{ user.blog_title|default:subdomain }}</h1>
+    <h1>{{ user.blog_title|default:request.subdomain }}</h1>
     <ul class="posts">
         {% for p in posts %}
         <li>
