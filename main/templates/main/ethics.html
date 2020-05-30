@@ -1,0 +1,27 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Mataroa ethics{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Ethics</h1>
+    <p>
+        We operate this website according to these ideas.
+    </p>
+    <ul>
+        <li>No tracking of user or visitor behaviour</li>
+        <li>We will never sell any user or visitor data</li>
+        <li>There will never be ads</li>
+        <li>
+            All rights under the <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R0679-20160504&from=EN">GDPR</a>
+            are exercisable either via the site or by emailing <a href="mailto:admin@mataroa.blog">admin@mataroa.blog</a>
+        </li>
+    </ul>
+</main>
+
+<footer>
+    <br><a href="{% url 'index' %}">Home</a>
+    | <a href="{% url 'ethics' %}">Ethics</a>
+    | <a href="https://github.com/sirodoht/mataroa/">Source code</a>
+</footer>
+{% endblock %}
