@@ -305,10 +305,15 @@ textarea {
 }
 
 .cta {
+    margin-top: 32px;
+    margin-bottom: 32px;
+}
+
+.cta-link {
     font-size: 20px;
 }
 
-.cta::before {
+.cta-link::before {
     content: "» ";
 }
 
