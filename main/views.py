@@ -67,7 +67,7 @@ class UserCreate(SuccessMessageMixin, CreateView):
     form_class = forms.UserCreationForm
     success_url = reverse_lazy("login")
     template_name = "main/user_create.html"
-    success_message = "Welcome!"
+    success_message = "welcome!"
 
 
 class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
