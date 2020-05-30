@@ -9,6 +9,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
+from django.utils.text import slugify
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
@@ -123,6 +124,7 @@ class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.owner = self.request.user
+        self.object.slug = slugify(self.object.title)
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
@@ -137,8 +139,8 @@ class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
 class PostUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = models.Post
-    fields = ["title", "body"]
-    success_message = "%(title)s updated"
+    fields = ["title", "body", "slug"]
+    success_message = "'%(title)s' updated"
 
 
 class PostDelete(LoginRequiredMixin, DeleteView):

@@ -14,6 +14,10 @@
     <form method="post">
         <label for="id_title">Title</label>
         <input type="text" name="title" id="id_title" maxlength="300" required value="{{ form.title.value|default_if_none:"" }}">
+
+        <label for="id_slug">slug / permalink (<a href="https://yoast.com/what-is-a-permalink/">think SEO</a> before changing that)</label>
+        <input type="text" name="slug" id="id_slug" maxlength="300" required value="{{ form.slug.value|default_if_none:"" }}">
+
         <label for="id_body">Body</label>
         <textarea name="body" id="id_body" cols="60" rows="20">{{ form.body.value|default_if_none:"" }}</textarea>
         {% csrf_token %}
