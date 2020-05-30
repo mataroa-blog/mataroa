@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 
 import dj_database_url
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -152,3 +154,10 @@ EMAIL_SUBJECT_PREFIX = "[Mataroa Notification] "
 #     SESSION_COOKIE_SECURE = True
 #     CSRF_COOKIE_SECURE = True
 #     SECURE_SSL_REDIRECT = True
+
+
+# Sentry
+
+sentry_sdk.init(
+    dsn=os.environ.get("SENTRY_DSN"), integrations=[DjangoIntegration()],
+)

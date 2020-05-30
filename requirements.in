@@ -8,3 +8,4 @@ isort
 flake8
 black
 markdown
+sentry-sdk
