@@ -297,6 +297,13 @@ textarea {
 }
 
 /* landing */
+.lead {
+    max-width: 500px;
+    border: 1px dashed #000;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
 .cta {
     font-size: 20px;
 }
