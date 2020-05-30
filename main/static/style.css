@@ -213,9 +213,10 @@ h3 {
 }
 
 main {
-    margin-left: 16px;
+    max-width: 500px;
     margin-bottom: 16px;
-    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
 }
 @media (max-width: 700px) {
     main {
@@ -232,8 +233,10 @@ aside {
 }
 
 nav {
+    max-width: 500px;
     margin-top: 16px;
-    margin-left: 16px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 ul {
@@ -257,9 +260,11 @@ tr:nth-child(even) {
 }
 
 footer {
+    margin-left: auto;
+    margin-right: auto;
     margin-top: 64px;
-    margin-left: 16px;
     margin-bottom: 16px;
+    max-width: 500px;
 }
 
 /* form */
