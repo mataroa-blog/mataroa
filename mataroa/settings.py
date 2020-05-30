@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "nonrandom_secret")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if os.environ.get("NODEBUG") is None else False
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", ".mataroa.blog", ".mataroalocal.blog"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", ".mataroa.blog", ".mataroalocal.blog", "95.217.176.64"]
 
 ADMINS = [("Wang Nui", "admin@mataroa.blog")]
 
@@ -144,6 +144,7 @@ EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = "Wang Nui <admin@mataroa.blog>"
 SERVER_EMAIL = "Cornelius Manawatu <server@mataroa.blog>"
 EMAIL_SUBJECT_PREFIX = "[Mataroa Notification] "
+
 
 # Security middleware
 
