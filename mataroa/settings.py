@@ -29,6 +29,8 @@ DEBUG = True if os.environ.get("NODEBUG") is None else False
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", ".mataroa.blog", ".mataroalocal.blog"]
 
+ADMINS = [("Mataroa Admin", "admin@mataroa.blog")]
+
 # leading slashes are important so that browser do not handle it as internal url
 CANONICAL_HOST = "mataroa.blog"
 if DEBUG:
@@ -138,7 +140,8 @@ EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = 587
 
 DEFAULT_FROM_EMAIL = "Mataroa Admin <admin@mataroa.blog>"
-
+SERVER_EMAIL = "Server Mataroa <server@mataroa.blog>"
+EMAIL_SUBJECT_PREFIX = "[Mataroa Notification] "
 
 # Security middleware
 
