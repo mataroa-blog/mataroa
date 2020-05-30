@@ -25,20 +25,20 @@ def dashboard(request):
 
 
 def index(request):
-    if (
-        hasattr(request, "subdomain")
-        and models.User.objects.filter(username=request.subdomain).exists()
-    ):
-        user = models.User.objects.get(username=request.subdomain)
-        return render(
-            request,
-            "main/blog_index.html",
-            {
-                "user": user,
-                "posts": models.Post.objects.filter(owner=user),
-                "subdomain": request.subdomain,
-            },
-        )
+    if hasattr(request, "subdomain"):
+        if models.User.objects.filter(username=request.subdomain).exists():
+            user = models.User.objects.get(username=request.subdomain)
+            return render(
+                request,
+                "main/blog_index.html",
+                {
+                    "user": user,
+                    "posts": models.Post.objects.filter(owner=user),
+                    "subdomain": request.subdomain,
+                },
+            )
+        else:
+            return redirect("//" + settings.CANONICAL_HOST + reverse("index"))
 
     if request.user.is_authenticated:
         return redirect("dashboard")
