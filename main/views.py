@@ -11,7 +11,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils.text import slugify
 from django.views.generic import DetailView
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 
 from main import forms, models
 
@@ -192,3 +192,14 @@ def blog_export(request):
 
 def ethics(request):
     return render(request, "main/ethics.html")
+
+
+class InterestView(SuccessMessageMixin, FormView):
+    form_class = forms.InterestForm
+    template_name = "main/interest.html"
+    success_url = reverse_lazy("index")
+    success_message = "thank you for interest! we'll be in touch :)"
+
+    def form_valid(self, form):
+        form.send_email()
+        return super().form_valid(form)

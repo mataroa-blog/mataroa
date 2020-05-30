@@ -10,6 +10,7 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("dashboard/", views.dashboard, name="dashboard"),
     path("ethics/", views.ethics, name="ethics"),
+    path("premium/", views.InterestView.as_view(), name="interest"),
 ]
 
 # user system
