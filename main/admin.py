@@ -19,7 +19,7 @@ admin.site.register(models.User, Admin)
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ("id", "title", "slug")
+    list_display = ("id", "title", "slug", "owner")
 
 
 admin.site.register(models.Post, PostAdmin)
