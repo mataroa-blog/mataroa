@@ -20,7 +20,7 @@
 
         {% if request.user.is_authenticated %}
         <nav>
-            {% if subdomain %}
+            {% if request.user.username %}
             <a href="{% url 'index' %}">Blog</a>
             {% else %}
             <a href="//{{ request.user.username }}.{{ request.get_host }}">Blog</a>
