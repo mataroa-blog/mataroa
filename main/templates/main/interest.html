@@ -1,0 +1,14 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Premium offering interest — Mataroa{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Register your interest for our premium offering</h1>
+    <form method="post">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <input type="submit" value="Submit">
+    </form>
+</main>
+{% endblock %}
