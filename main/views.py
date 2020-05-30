@@ -100,6 +100,20 @@ class PostDetail(DetailView):
             ).blog_title
         return context
 
+    def dispatch(self, request, *args, **kwargs):
+        if "HTTP_HOST" in request.META and (
+            request.META["HTTP_HOST"] == settings.CANONICAL_HOST
+        ):
+            if request.user.is_authenticated:
+                subdomain = request.user.username
+                return redirect(
+                    f"//{subdomain}.{settings.CANONICAL_HOST}{request.path}"
+                )
+            else:
+                return redirect("dashboard")
+        else:
+            return super().dispatch(request, *args, **kwargs)
+
 
 class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = models.Post
