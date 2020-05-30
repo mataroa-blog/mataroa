@@ -173,3 +173,7 @@ def blog_export(request):
     response = HttpResponse(zip_buffer.getvalue(), content_type="application/zip")
     response["Content-Disposition"] = f"attachment; filename={export_name}.zip"
     return response
+
+
+def ethics(request):
+    return render(request, "main/ethics.html")
