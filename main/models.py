@@ -1,4 +1,5 @@
 import markdown
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
@@ -37,7 +38,8 @@ class Post(models.Model):
         )
 
     def get_absolute_url(self):
-        return reverse("post_detail", kwargs={"slug": self.slug})
+        path = reverse("post_detail", kwargs={"slug": self.slug})
+        return f"//{self.owner.username}.{settings.CANONICAL_HOST}{path}"
 
     def __str__(self):
         return self.title
