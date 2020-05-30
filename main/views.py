@@ -127,8 +127,10 @@ class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        self.object.owner = self.request.user
         self.object.slug = slugify(self.object.title)
+        if models.Post.objects.filter(owner=self.request.user, slug=self.object.slug).exists():
+            self.object.slug += "-" + str(uuid.uuid4())[:8]
+        self.object.owner = self.request.user
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
