@@ -100,7 +100,11 @@ class UserUpdateTestCase(TestCase):
         self.client.login(username="john", password="abcdef123456")
 
     def test_user_update(self):
-        data = {"username": "john2", "email": "john2@example.com"}
+        data = {
+            "username": "john2",
+            "email": "john2@example.com",
+            "blog_title": "New title",
+        }
         response = self.client.post(reverse("user_update", args=(self.user.id,)), data)
         self.assertEqual(response.status_code, 302)
         updated_user = models.User.objects.get(id=self.user.id)
@@ -116,12 +120,14 @@ class UserPasswordChangeTestCase(TestCase):
         self.client.login(username="john", password="abcdef123456")
 
     def test_user_password_change(self):
-        data = {"username": "john2", "email": "john2@example.com"}
-        response = self.client.post(reverse("user_update", args=(self.user.id,)), data)
+        data = {
+            "old_password": "abcdef123456",
+            "new_password1": "987wyxtuv",
+            "new_password2": "987wyxtuv",
+        }
+        response = self.client.post(reverse("password_change"), data)
         self.assertEqual(response.status_code, 302)
-        updated_user = models.User.objects.get(id=self.user.id)
-        self.assertEqual(updated_user.username, data["username"])
-        self.assertEqual(updated_user.email, data["email"])
+        self.assertTrue(self.client.login(username="john", password="987wyxtuv"))
 
 
 class UserDeleteTestCase(TestCase):
@@ -147,6 +153,7 @@ class PostCreateTestCase(TestCase):
     def test_post_create(self):
         data = {
             "title": "New post",
+            "slug": "new-post",
             "body": "Content sentence.",
         }
         response = self.client.post(reverse("post_create"), data)
@@ -159,14 +166,18 @@ class PostDetailTestCase(TestCase):
         self.user = models.User.objects.create(username="john")
         self.data = {
             "title": "New post",
+            "slug": "new-post",
             "body": "Content sentence.",
         }
         self.post = models.Post.objects.create(
-            title=self.data["title"], body=self.data["body"], owner=self.user
+            title=self.data["title"],
+            slug=self.data["slug"],
+            body=self.data["body"],
+            owner=self.user,
         )
 
     def test_post_detail(self):
-        response = self.client.get(reverse("post_detail", args=(self.post.id,)))
+        response = self.client.get(reverse("post_detail", args=(self.post.slug,)))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.data["title"])
         self.assertContains(response, self.data["body"])
@@ -177,21 +188,27 @@ class PostUpdateTestCase(TestCase):
         self.user = models.User.objects.create(username="john")
         self.data = {
             "title": "New post",
+            "slug": "new-post",
             "body": "Content sentence.",
         }
         self.post = models.Post.objects.create(
-            title=self.data["title"], body=self.data["body"], owner=self.user
+            title=self.data["title"],
+            slug=self.data["slug"],
+            body=self.data["body"],
+            owner=self.user,
         )
 
     def test_post_update(self):
         new_data = {
             "title": "Updated post",
+            "slug": "updated-new-post",
             "body": "Updated content sentence.",
         }
-        self.client.post(reverse("post_update", args=(self.post.id,)), new_data)
+        self.client.post(reverse("post_update", args=(self.post.slug,)), new_data)
 
         updated_doc = models.Post.objects.get(id=self.post.id)
         self.assertTrue(updated_doc.title, new_data["title"])
+        self.assertTrue(updated_doc.slug, new_data["slug"])
         self.assertTrue(updated_doc.body, new_data["body"])
 
 
@@ -203,14 +220,18 @@ class PostDeleteTestCase(TestCase):
         self.client.login(username="john", password="abcdef123456")
         self.data = {
             "title": "New post",
+            "slug": "new-post",
             "body": "Content sentence.",
         }
         self.post = models.Post.objects.create(
-            title=self.data["title"], body=self.data["body"], owner=self.user
+            title=self.data["title"],
+            body=self.data["body"],
+            slug=self.data["slug"],
+            owner=self.user,
         )
 
     def test_post_delete(self):
-        self.client.post(reverse("post_delete", args=(self.post.id,)))
+        self.client.post(reverse("post_delete", args=(self.post.slug,)))
         self.assertFalse(models.Post.objects.all().exists())
 
 
@@ -222,10 +243,14 @@ class BlogExportTestCase(TestCase):
         self.client.login(username="john", password="abcdef123456")
         self.data = {
             "title": "New post",
+            "slug": "new-post",
             "body": "Content sentence.",
         }
         self.post = models.Post.objects.create(
-            title=self.data["title"], body=self.data["body"], owner=self.user
+            title=self.data["title"],
+            body=self.data["body"],
+            slug=self.data["slug"],
+            owner=self.user,
         )
 
     def test_blog_export(self):
