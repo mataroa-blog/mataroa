@@ -16,8 +16,8 @@
         <div class="byline">
             Published on <time datetime="{{ post.created_at|date:'F j, Y' }}" itemprop="datePublished">{{ post.created_at|date:'F j, Y' }}</time>
             {% if request.user.is_authenticated and subdomain == request.user.username %}
-            | <a href="{% url 'post_update' post.id %}">Edit post</a>
-            | <a href="{% url 'post_delete' post.id %}">Del</a>
+            | <a href="{% url 'post_update' post.slug %}">Edit post</a>
+            | <a href="{% url 'post_delete' post.slug %}">Del</a>
             {% endif %}
         </div>
 

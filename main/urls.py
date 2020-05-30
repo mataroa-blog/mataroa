@@ -24,8 +24,8 @@ urlpatterns += [
 # posts crud
 urlpatterns += [
     path("blog/create/", views.PostCreate.as_view(), name="post_create"),
-    path("blog/<int:pk>/", views.PostDetail.as_view(), name="post_detail"),
-    path("blog/<int:pk>/edit/", views.PostUpdate.as_view(), name="post_update",),
-    path("blog/<int:pk>/delete/", views.PostDelete.as_view(), name="post_delete",),
+    path("blog/<slug:slug>/", views.PostDetail.as_view(), name="post_detail"),
+    path("blog/<slug:slug>/edit/", views.PostUpdate.as_view(), name="post_update",),
+    path("blog/<slug:slug>/delete/", views.PostDelete.as_view(), name="post_delete",),
     path("export/", views.blog_export, name="blog_export"),
 ]

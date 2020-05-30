@@ -8,7 +8,7 @@
     <ul class="posts">
         {% for p in posts %}
         <li>
-            <a href="{% url 'post_detail' p.id %}">{{ p.title }}</a>
+            <a href="{% url 'post_detail' p.slug %}">{{ p.title }}</a>
             <small>— <time datetime="{{ p.created_at|date:'F j, Y' }}" itemprop="datePublished">{{ p.created_at|date:'F j, Y' }}</time></small>
         </li>
         {% endfor %}
