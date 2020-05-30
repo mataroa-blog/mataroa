@@ -231,6 +231,10 @@ nav {
     margin-left: 16px;
 }
 
+ul {
+    padding-left: 24px;
+}
+
 blockquote {
     max-width: 500px;
 }
