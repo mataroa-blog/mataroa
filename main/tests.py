@@ -17,6 +17,7 @@ class UserCreateTestCase(TestCase):
             "username": "john",
             "password1": "abcdef123456",
             "password2": "abcdef123456",
+            "blog_title": "New blog",
         }
         response = self.client.post(reverse("user_create"), data)
         self.assertEqual(response.status_code, 302)
@@ -29,6 +30,7 @@ class UserCreateDisallowedTestCase(TestCase):
             "username": "settings",
             "password1": "abcdef123456",
             "password2": "abcdef123456",
+            "blog_title": "New blog",
         }
         response = self.client.post(reverse("user_create"), data)
         self.assertContains(response, b"This username is not available.")
