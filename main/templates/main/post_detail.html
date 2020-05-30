@@ -4,7 +4,9 @@
 
 {% block content %}
 <main>
+    {% if blog_title %}
     <a href="{% url 'index' %}" class="brand">{{ blog_title }}</a>
+    {% endif %}
 
     <article itemscope itemtype="http://schema.org/BlogPosting">
         <h1 class="main-title" itemprop="name headline">
