@@ -67,7 +67,7 @@ class UserCreate(SuccessMessageMixin, CreateView):
     form_class = forms.UserCreationForm
     success_url = reverse_lazy("login")
     template_name = "main/user_create.html"
-    success_message = "welcome!"
+    success_message = "welcome! login with your new credentials"
 
     def form_valid(self, form):
         if helpers.is_disallowed(form.cleaned_data.get("username")):
