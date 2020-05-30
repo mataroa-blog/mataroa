@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
 
@@ -36,7 +37,7 @@ class LoginTestCase(TestCase):
         response_login = self.client.post(reverse("login"), data)
         self.assertEqual(response_login.status_code, 302)
 
-        response_index = self.client.get(reverse("index"))
+        response_index = self.client.get(reverse("dashboard"))
         user = response_index.context.get("user")
         self.assertTrue(user.is_authenticated)
 
@@ -164,6 +165,9 @@ class PostCreateTestCase(TestCase):
 class PostDetailTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="john")
+        self.user.set_password("abcdef123456")
+        self.user.save()
+        self.client.login(username="john", password="abcdef123456")
         self.data = {
             "title": "New post",
             "slug": "new-post",
@@ -177,7 +181,11 @@ class PostDetailTestCase(TestCase):
         )
 
     def test_post_detail(self):
-        response = self.client.get(reverse("post_detail", args=(self.post.slug,)))
+        response = self.client.get(
+            reverse("post_detail", args=(self.post.slug,)),
+            # needs HTTP_HOST because we need to request it on the subdomain
+            HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
+        )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.data["title"])
         self.assertContains(response, self.data["body"])
