@@ -5,6 +5,15 @@
 {% block content %}
 <main>
     <h1>Register your interest for our premium offering</h1>
+    <p>Our premium offering will cost $25 per year and will include:</p>
+    <ul>
+        <li>Comments</li>
+        <li>Backend-based analytics</li>
+        <li>Image hosting up to 1GB</li>
+        <li>Draft posts</li>
+        <li>Post creation via email</li>
+        <li>Styling options</li>
+    </ul>
     <form method="post">
         {{ form.as_p }}
         {% csrf_token %}
