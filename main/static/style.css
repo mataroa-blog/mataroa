@@ -221,9 +221,10 @@ main {
     margin-left: auto;
     margin-right: auto;
 }
-@media (max-width: 700px) {
+@media (max-width: 500px) {
     main {
-        margin-right: 16px;
+        padding-left: 8px;
+        padding-right: 8px;
     }
 }
 
@@ -236,12 +237,24 @@ aside {
     margin-right: auto;
     box-sizing: border-box;
 }
+@media (max-width: 500px) {
+    aside {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+}
 
 nav {
     max-width: 500px;
     margin-top: 16px;
     margin-left: auto;
     margin-right: auto;
+}
+@media (max-width: 500px) {
+    nav {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
 }
 
 ul {
@@ -270,6 +283,12 @@ footer {
     margin-top: 64px;
     margin-bottom: 16px;
     max-width: 500px;
+}
+@media (max-width: 500px) {
+    footer {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
 }
 
 .heading {
