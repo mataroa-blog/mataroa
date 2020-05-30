@@ -97,6 +97,7 @@ class UserUpdateTestCase(TestCase):
         self.user = models.User.objects.create(username="john")
         self.user.set_password("abcdef123456")
         self.user.save()
+        self.client.login(username="john", password="abcdef123456")
 
     def test_user_update(self):
         data = {"username": "john2", "email": "john2@example.com"}
@@ -112,6 +113,7 @@ class UserPasswordChangeTestCase(TestCase):
         self.user = models.User.objects.create(username="john")
         self.user.set_password("abcdef123456")
         self.user.save()
+        self.client.login(username="john", password="abcdef123456")
 
     def test_user_password_change(self):
         data = {"username": "john2", "email": "john2@example.com"}
@@ -127,6 +129,7 @@ class UserDeleteTestCase(TestCase):
         self.user = models.User.objects.create(username="john")
         self.user.set_password("abcdef123456")
         self.user.save()
+        self.client.login(username="john", password="abcdef123456")
 
     def test_user_delete(self):
         response = self.client.post(reverse("user_delete", args=(self.user.id,)))

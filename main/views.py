@@ -15,6 +15,7 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from main import forms, models
 
 
+@login_required
 def dashboard(request):
     if "HTTP_HOST" in request.META and (
         request.META["HTTP_HOST"] != settings.CANONICAL_HOST
@@ -33,7 +34,7 @@ def index(request):
         if request.user.is_authenticated:
             return redirect("dashboard")
         return render(request, "main/index.html")
-    elif ".mataroa.blog" in host:
+    elif f".{settings.CANONICAL_HOST}" in host:
         subdomain = host.split(".")[0]
         if models.User.objects.filter(username=subdomain).exists():
             user = models.User.objects.get(username=subdomain)
@@ -50,7 +51,7 @@ def index(request):
     return render(request, "main/index.html")
 
 
-class UserDetail(DetailView):
+class UserDetail(LoginRequiredMixin, DetailView):
     model = models.User
 
     def dispatch(self, request, *args, **kwargs):
@@ -73,14 +74,14 @@ class UserCreate(SuccessMessageMixin, CreateView):
     success_message = "Welcome!"
 
 
-class UserUpdate(SuccessMessageMixin, UpdateView):
+class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = models.User
     fields = ["username", "email"]
     success_message = "%(username)s updated successfully"
     template_name = "main/user_update.html"
 
 
-class UserDelete(DeleteView):
+class UserDelete(LoginRequiredMixin, DeleteView):
     model = models.User
     success_url = reverse_lazy("index")
 
