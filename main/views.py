@@ -95,6 +95,10 @@ class UserDelete(LoginRequiredMixin, DeleteView):
 class PostDetail(DetailView):
     model = models.Post
 
+    def get_queryset(self):
+        queryset = models.Post.objects.filter(owner__username=self.request.subdomain)
+        return queryset
+
     def get_context_data(self, **kwargs):
         context = super(PostDetail, self).get_context_data(**kwargs)
         if hasattr(self.request, "subdomain"):
@@ -105,7 +109,6 @@ class PostDetail(DetailView):
 
     def dispatch(self, request, *args, **kwargs):
         if not hasattr(request, "subdomain"):
-            # import ipdb; ipdb.set_trace()
             if request.user.is_authenticated:
                 subdomain = request.user.username
                 return redirect(
@@ -130,7 +133,7 @@ class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
     def dispatch(self, request, *args, **kwargs):
-        if hasattr(request, "subdomain"):
+        if hasattr(request, "subdomain") and request.method == "GET":
             return redirect("//" + settings.CANONICAL_HOST + reverse("post_create"))
         else:
             return super().dispatch(request, *args, **kwargs)
@@ -139,7 +142,7 @@ class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 class PostUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = models.Post
     fields = ["title", "body", "slug"]
-    success_message = "'%(title)s' updated"
+    success_message = "post updated"
 
 
 class PostDelete(LoginRequiredMixin, DeleteView):
