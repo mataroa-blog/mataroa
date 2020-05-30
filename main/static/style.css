@@ -228,11 +228,13 @@ main {
 }
 
 aside {
-    margin-top: 8px;
-    margin-left: 16px;
-    border: 1px dashed #000;
     max-width: 500px;
+    border: 1px dashed #000;
     padding: 2px 6px;
+    margin-top: 8px;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
 }
 
 nav {
