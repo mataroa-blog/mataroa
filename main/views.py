@@ -78,7 +78,7 @@ class UserCreate(SuccessMessageMixin, CreateView):
 class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = models.User
     fields = ["username", "email", "blog_title", "about"]
-    success_message = "settings updated successfully"
+    success_message = "settings updated"
     template_name = "main/user_update.html"
 
 
