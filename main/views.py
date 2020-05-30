@@ -18,36 +18,30 @@ from main import forms, models
 
 @login_required
 def dashboard(request):
-    if "HTTP_HOST" in request.META and (
-        request.META["HTTP_HOST"] != settings.CANONICAL_HOST
-    ):
+    if hasattr(request, "subdomain"):
         return redirect("//" + settings.CANONICAL_HOST + reverse("dashboard"))
 
     return render(request, "main/dashboard.html")
 
 
 def index(request):
-    if "HTTP_HOST" not in request.META:
-        return render(request, "main/index.html")
+    if (
+        hasattr(request, "subdomain")
+        and models.User.objects.filter(username=request.subdomain).exists()
+    ):
+        user = models.User.objects.get(username=request.subdomain)
+        return render(
+            request,
+            "main/blog_index.html",
+            {
+                "user": user,
+                "posts": models.Post.objects.filter(owner=user),
+                "subdomain": request.subdomain,
+            },
+        )
 
-    host = request.META["HTTP_HOST"]
-    if host == settings.CANONICAL_HOST:
-        if request.user.is_authenticated:
-            return redirect("dashboard")
-        return render(request, "main/index.html")
-    elif f".{settings.CANONICAL_HOST}" in host:
-        subdomain = host.split(".")[0]
-        if models.User.objects.filter(username=subdomain).exists():
-            user = models.User.objects.get(username=subdomain)
-            return render(
-                request,
-                "main/blog_index.html",
-                {
-                    "user": user,
-                    "posts": models.Post.objects.filter(owner=user),
-                    "subdomain": subdomain,
-                },
-            )
+    if request.user.is_authenticated:
+        return redirect("dashboard")
 
     return render(request, "main/index.html")
 
@@ -58,9 +52,8 @@ class UserDetail(LoginRequiredMixin, DetailView):
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated and request.user.id != kwargs["pk"]:
             return HttpResponseForbidden()
-        if "HTTP_HOST" in request.META and (
-            request.META["HTTP_HOST"] != settings.CANONICAL_HOST
-        ):
+
+        if hasattr(request, "subdomain"):
             return redirect(
                 "//"
                 + settings.CANONICAL_HOST
@@ -104,26 +97,22 @@ class PostDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(PostDetail, self).get_context_data(**kwargs)
-        if "HTTP_HOST" in self.request.META:
-            host = self.request.META["HTTP_HOST"]
-            subdomain = host.split(".")[0]
-            context["subdomain"] = subdomain
+        if hasattr(self.request, "subdomain"):
             context["blog_title"] = models.User.objects.get(
-                username=subdomain
+                username=self.request.subdomain
             ).blog_title
         return context
 
     def dispatch(self, request, *args, **kwargs):
-        if "HTTP_HOST" in request.META and (
-            request.META["HTTP_HOST"] == settings.CANONICAL_HOST
-        ):
+        if not hasattr(request, "subdomain"):
+            # import ipdb; ipdb.set_trace()
             if request.user.is_authenticated:
                 subdomain = request.user.username
                 return redirect(
                     f"//{subdomain}.{settings.CANONICAL_HOST}{request.path}"
                 )
             else:
-                return redirect("dashboard")
+                return redirect("index")
 
         return super().dispatch(request, *args, **kwargs)
 
@@ -141,9 +130,7 @@ class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
     def dispatch(self, request, *args, **kwargs):
-        if "HTTP_HOST" in request.META and (
-            request.META["HTTP_HOST"] != settings.CANONICAL_HOST
-        ):
+        if hasattr(request, "subdomain"):
             return redirect("//" + settings.CANONICAL_HOST + reverse("post_create"))
         else:
             return super().dispatch(request, *args, **kwargs)
