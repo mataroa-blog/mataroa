@@ -13,7 +13,7 @@ from django.utils.text import slugify
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 
-from main import forms, models
+from main import forms, helpers, models
 
 
 @login_required
@@ -68,6 +68,12 @@ class UserCreate(SuccessMessageMixin, CreateView):
     success_url = reverse_lazy("login")
     template_name = "main/user_create.html"
     success_message = "welcome!"
+
+    def form_valid(self, form):
+        if helpers.is_disallowed(form.cleaned_data.get("username")):
+            form.add_error("username", "This username is not available.")
+            return self.render_to_response(self.get_context_data(form=form))
+        return super().form_valid(form)
 
 
 class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):

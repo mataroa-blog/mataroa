@@ -23,6 +23,17 @@ class UserCreateTestCase(TestCase):
         self.assertTrue(models.User.objects.get(username=data["username"]))
 
 
+class UserCreateDisallowedTestCase(TestCase):
+    def test_user_creation(self):
+        data = {
+            "username": "settings",
+            "password1": "abcdef123456",
+            "password2": "abcdef123456",
+        }
+        response = self.client.post(reverse("user_create"), data)
+        self.assertContains(response, b"This username is not available.")
+
+
 class LoginTestCase(TestCase):
     def setUp(self):
         user = models.User.objects.create(username="john")
