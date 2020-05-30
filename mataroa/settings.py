@@ -94,7 +94,7 @@ AUTH_USER_MODEL = "main.User"
 LOGIN_REDIRECT_URL = "/"
 
 SESSION_COOKIE_AGE = 31449600  # 60 * 60 * 24 * 7 * 52 = 1 year in seconds
-SESSION_COOKIE_DOMAIN = CANONICAL_HOST.split(":")[0]
+SESSION_COOKIE_DOMAIN = CANONICAL_HOST.split(":")[0]  # session visible in subdomains
 
 
 # Database
