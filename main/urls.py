@@ -5,14 +5,14 @@ from main import views
 
 admin.site.site_header = "mataroa administration"
 
-# indexes
+# general
 urlpatterns = [
     path("", views.index, name="index"),
     path("dashboard/", views.dashboard, name="dashboard"),
     path("ethics/", views.ethics, name="ethics"),
 ]
 
-# user system — available for //mataroa.blog
+# user system
 urlpatterns += [
     path("accounts/", include("django.contrib.auth.urls")),
     path("accounts/create/", views.UserCreate.as_view(), name="user_create"),
@@ -21,7 +21,7 @@ urlpatterns += [
     path("accounts/<int:pk>/delete/", views.UserDelete.as_view(), name="user_delete"),
 ]
 
-# posts crud — available for //myblog.mataroa.blog
+# posts crud
 urlpatterns += [
     path("blog/create/", views.PostCreate.as_view(), name="post_create"),
     path("blog/<int:pk>/", views.PostDetail.as_view(), name="post_detail"),
