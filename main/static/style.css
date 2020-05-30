@@ -181,6 +181,8 @@ template {
 
 /* general */
 :root {
+    --link-color: #0c7cf5;
+    --ascent-color: #006cdf;
     --dark-grey-color: #a8a8a8;
     --light-grey-color: #eff1f5;
     --green-color: #26bd60;
@@ -196,6 +198,7 @@ body {
 
 a {
     text-decoration: none;
+    color: var(--link-color);
 }
 
 a:hover {
@@ -267,6 +270,20 @@ footer {
     max-width: 500px;
 }
 
+.heading {
+    padding-bottom: 4px;
+    border-bottom: 2px solid var(--light-grey-color);
+}
+
+.type-stable {
+    color: var(--link-color);
+}
+
+.type-danger {
+    background: var(--red-color) !important;
+    border-color: var(--red-color) !important;
+}
+
 /* form */
 label {
     display: block;
@@ -291,6 +308,19 @@ textarea {
     textarea {
         width: 100%;
     }
+}
+
+input[type="submit"] {
+    cursor: pointer;
+    background: var(--link-color);
+    color: #fff;
+    border: 1px solid var(--ascent-color);
+    padding: 8px 24px;
+}
+
+input[type="submit"]:hover,
+input[type="submit"]:active {
+    background: var(--ascent-color);
 }
 
 .form-error {

@@ -7,7 +7,7 @@
     <h1>Delete {{ post.title }} for sure?</h1>
     <form method="post">
         {% csrf_token %}
-        <input type="submit" value="Yes, delete for sure">
+        <input type="submit" value="Yes, delete for sure" class="type-danger">
     </form>
 </main>
 {% endblock %}

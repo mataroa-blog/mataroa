@@ -23,19 +23,19 @@
         {% if request.user.is_authenticated %}
         <nav>
             {% if request.subdomain %}
-            <a href="{% url 'index' %}">Blog</a>
+            <a href="{% url 'index' %}" class="type-stable">Blog</a>
             {% else %}
-            <a href="//{{ request.user.username }}.{{ request.get_host }}">Blog</a>
+            <a href="//{{ request.user.username }}.{{ request.get_host }}" class="type-stable">Blog</a>
             {% endif %}
-            | <a href="{% url 'dashboard' %}">Dashboard</a>
-            | <a href="{% url 'post_create' %}">New post</a>
+            | <a href="{% url 'dashboard' %}" class="type-stable">Dashboard</a>
+            | <a href="{% url 'post_create' %}" class="type-stable">New post</a>
         </nav>
         {% else %}
         {% if not request.subdomain %}
         <nav>
-            <a href="{{ request.host }}{% url 'index' %}">Home</a>
-            | <a href="{{ request.host }}{% url 'user_create' %}">Sign up</a>
-            | <a href="{{ request.host }}{% url 'login' %}">Log in</a>
+            <a href="{{ request.host }}{% url 'index' %}" class="type-stable">Home</a>
+            | <a href="{{ request.host }}{% url 'user_create' %}" class="type-stable">Sign up</a>
+            | <a href="{{ request.host }}{% url 'login' %}" class="type-stable">Log in</a>
         </nav>
         {% endif %}
         {% endif %}

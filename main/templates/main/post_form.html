@@ -6,10 +6,12 @@
 
 {% block content %}
 <main>
-    {% if form.initial %}
-    <h1>Editing post</h1>
-    {% else %}
-    <h1>Create a new post</h1>
+    <h1 class="heading">
+        {% if form.initial %}
+        Editing post
+        {% else %}
+        Create a new post
+    </h1>
     {% endif %}
     <form method="post">
         <label for="id_title">Title</label>

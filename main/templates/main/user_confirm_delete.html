@@ -7,7 +7,7 @@
     <h1>Delete {{ user.username }} forever?</h1>
     <form method="post">
         {% csrf_token %}
-        <input type="submit" value="Affirmative, delete forever">
+        <input type="submit" value="Affirmative, delete forever" class="type-danger">
     </form>
 </main>
 {% endblock %}
