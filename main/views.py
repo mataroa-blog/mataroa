@@ -118,7 +118,7 @@ class PostDetail(DetailView):
 class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = models.Post
     fields = ["title", "body"]
-    success_message = "%(title)s was created successfully"
+    success_message = "'%(title)s' was created successfully"
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
