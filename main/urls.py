@@ -11,6 +11,11 @@ urlpatterns = [
     path("dashboard/", views.dashboard, name="dashboard"),
     path("ethics/", views.ethics, name="ethics"),
     path("premium/", views.InterestView.as_view(), name="interest"),
+    path(
+        ".well-known/acme-challenge/8Ztw4vrGMbl_ocZpth3LIjhKbnFYGwHeMym23v9CGxo",
+        views.acme_challenge,
+        name="acme_challenge",
+    ),
 ]
 
 # user system

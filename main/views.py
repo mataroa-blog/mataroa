@@ -128,7 +128,9 @@ class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.slug = slugify(self.object.title)
-        if models.Post.objects.filter(owner=self.request.user, slug=self.object.slug).exists():
+        if models.Post.objects.filter(
+            owner=self.request.user, slug=self.object.slug
+        ).exists():
             self.object.slug += "-" + str(uuid.uuid4())[:8]
         self.object.owner = self.request.user
         self.object.save()
@@ -208,3 +210,7 @@ class InterestView(SuccessMessageMixin, FormView):
     def form_valid(self, form):
         form.send_email()
         return super().form_valid(form)
+
+
+def acme_challenge(request):
+    return render(request, "main/acme_challenge.txt")
