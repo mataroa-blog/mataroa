@@ -217,6 +217,11 @@ main {
     margin-bottom: 16px;
     max-width: 700px;
 }
+@media (max-width: 700px) {
+    main {
+        margin-right: 16px;
+    }
+}
 
 aside {
     margin-top: 8px;
@@ -254,6 +259,7 @@ tr:nth-child(even) {
 footer {
     margin-top: 64px;
     margin-left: 16px;
+    margin-bottom: 16px;
 }
 
 /* form */
@@ -269,7 +275,17 @@ textarea {
     display: block;
     border: 2px solid var(--light-grey-color);
     margin-bottom: 16px;
+    box-sizing: border-box;
     width: 500px;
+}
+@media (max-width: 500px) {
+    input[type="text"],
+    input[type="url"],
+    input[type="email"],
+    input[type="password"],
+    textarea {
+        width: 100%;
+    }
 }
 
 .form-error {
