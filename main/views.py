@@ -6,7 +6,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils.text import slugify
@@ -56,6 +56,8 @@ class UserDetail(LoginRequiredMixin, DetailView):
     model = models.User
 
     def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and request.user.id != kwargs["pk"]:
+            return HttpResponseForbidden()
         if "HTTP_HOST" in request.META and (
             request.META["HTTP_HOST"] != settings.CANONICAL_HOST
         ):
@@ -64,8 +66,8 @@ class UserDetail(LoginRequiredMixin, DetailView):
                 + settings.CANONICAL_HOST
                 + reverse("user_detail", args=(request.user.id,))
             )
-        else:
-            return super().dispatch(request, *args, **kwargs)
+
+        return super().dispatch(request, *args, **kwargs)
 
 
 class UserCreate(SuccessMessageMixin, CreateView):
@@ -81,10 +83,20 @@ class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = "settings updated"
     template_name = "main/user_update.html"
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and request.user.id != kwargs["pk"]:
+            return HttpResponseForbidden()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class UserDelete(LoginRequiredMixin, DeleteView):
     model = models.User
     success_url = reverse_lazy("index")
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and request.user.id != kwargs["pk"]:
+            return HttpResponseForbidden()
+        return super().dispatch(request, *args, **kwargs)
 
 
 class PostDetail(DetailView):
@@ -112,8 +124,8 @@ class PostDetail(DetailView):
                 )
             else:
                 return redirect("dashboard")
-        else:
-            return super().dispatch(request, *args, **kwargs)
+
+        return super().dispatch(request, *args, **kwargs)
 
 
 class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
