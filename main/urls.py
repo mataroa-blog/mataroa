@@ -27,7 +27,7 @@ urlpatterns += [
     path("accounts/<int:pk>/delete/", views.UserDelete.as_view(), name="user_delete"),
 ]
 
-# posts crud
+# blog related
 urlpatterns += [
     path("blog/create/", views.PostCreate.as_view(), name="post_create"),
     path("blog/<slug:slug>/", views.PostDetail.as_view(), name="post_detail"),
