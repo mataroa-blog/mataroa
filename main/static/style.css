@@ -305,6 +305,11 @@ footer {
     border-color: var(--red-color) !important;
 }
 
+.help {
+    cursor: help;
+    text-decoration: dotted underline;
+}
+
 /* form */
 label {
     display: block;
