@@ -262,6 +262,7 @@ nav {
     }
 }
 
+ol,
 ul {
     padding-left: 24px;
 }
@@ -280,6 +281,11 @@ tr {
 
 tr:nth-child(even) {
     background: var(--light-grey-color);
+}
+
+code {
+	background: var(--light-grey-color);
+	padding: 2px;
 }
 
 footer {
@@ -341,6 +347,10 @@ textarea {
     }
 }
 
+input[type="checkbox"] {
+    margin-bottom: 16px;
+}
+
 input[type="submit"] {
     cursor: pointer;
     background: var(--link-color);
@@ -352,6 +362,10 @@ input[type="submit"] {
 input[type="submit"]:hover,
 input[type="submit"]:active {
     background: var(--ascent-color);
+}
+
+form .helptext {
+	color: var(--dark-grey-color);
 }
 
 .form-error {
