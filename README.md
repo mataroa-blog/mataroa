@@ -1,6 +1,6 @@
 # mataroa
 
-Blogging unplatform.
+Minimal blogging platform with export as first-class feature.
 
 ## Development
 
