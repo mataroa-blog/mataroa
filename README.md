@@ -125,6 +125,7 @@ export EMAIL_HOST_PASSWORD="smtp_password"
 ## Dokku
 
 This project is also configured to deploy to [dokku](http://dokku.viewdocs.io/dokku/).
+
 * [Procfile](Procfile): app init command
 * [app.json](app.json): predeploy tasks
 * [DOKKU_SCALE](DOKKU_SCALE): process scaling
