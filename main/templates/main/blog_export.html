@@ -1,0 +1,39 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Export blog — {{ request.user.username }} at Mataroa{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Export blog</h1>
+    <p>
+        Mataroa supports exporting all content of your blog into an archive that you
+        can directly use as Zola sources.
+    </p>
+    <p>
+        <a href="https://www.getzola.org/">Zola</a> is a
+        <a href="https://davidwalsh.name/introduction-static-site-generators">static site generator</a>
+        similar to <a href="https://gohugo.io/">Hugo</a>.
+    </p>
+    <p>
+        To install zola
+        <a href="https://www.getzola.org/documentation/getting-started/installation/">see here</a>.
+        To use after downloading the zip archive:
+    </p>
+    <ol>
+        <li><code>cd</code> into the directory</li>
+        <li>run <code>zola serve</code></li>
+        <li>go to <code>http://127.0.0.1:1111</code> in your browser</li>
+    </ol>
+    <p>Ready!</p>
+    <p>
+        You can also host it for free in <a href="https://www.netlify.com/">Netlify</a>.
+        Includes SSL, CDN distribution, auto-building, et al.
+        <a href="https://www.getzola.org/documentation/deployment/netlify/">See here</a>
+        for how-to.
+    </p>
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" value="Export to Zola">
+    </form>
+</main>
+{% endblock %}

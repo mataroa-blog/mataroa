@@ -205,45 +205,48 @@ class PostDelete(LoginRequiredMixin, DeleteView):
 
 @login_required
 def blog_export(request):
-    # load zola templates
-    with open("./zola_export_base/config.toml", "r") as zola_config_file:
-        zola_config = (
-            zola_config_file.read()
-            .replace("example.com", f"{request.user.username}.mataroa.blog")
-            .replace("Example blog title", f"{request.user.username} blog")
-        )
-    with open("./zola_export_base/style.css", "r") as zola_styles_file:
-        zola_styles = zola_styles_file.read()
-    with open("./zola_export_base/template_index.html", "r") as zola_index_file:
-        zola_index = zola_index_file.read()
-    with open("./zola_export_base/config.toml", "r") as zola_post_file:
-        zola_post = zola_post_file.read()
-
-    # get all posts and add them into export_posts encoded
-    posts = models.Post.objects.all()
-    export_posts = []
-    for p in posts:
-        title = p.title.replace(":", "-") + ".md"
-        export_posts.append((title, io.BytesIO(p.body.encode())))
-
-    # create zip archive in memory
-    export_name = "export-" + str(uuid.uuid4())[:8]
-    zip_buffer = io.BytesIO()
-    with zipfile.ZipFile(
-        zip_buffer, "a", zipfile.ZIP_DEFLATED, False
-    ) as export_archive:
-        export_archive.writestr(export_name + "/config.toml", zola_config)
-        export_archive.writestr(export_name + "/static/style.css", zola_styles)
-        export_archive.writestr(export_name + "/templates/index.html", zola_index)
-        export_archive.writestr(export_name + "/templates/post.html", zola_post)
-        for file_name, data in export_posts:
-            export_archive.writestr(
-                export_name + "/content/" + file_name, data.getvalue()
+    if request.method == "GET":
+        return render(request, "main/blog_export.html")
+    elif request.method == "POST":
+        # load zola templates
+        with open("./zola_export_base/config.toml", "r") as zola_config_file:
+            zola_config = (
+                zola_config_file.read()
+                .replace("example.com", f"{request.user.username}.mataroa.blog")
+                .replace("Example blog title", f"{request.user.username} blog")
             )
+        with open("./zola_export_base/style.css", "r") as zola_styles_file:
+            zola_styles = zola_styles_file.read()
+        with open("./zola_export_base/template_index.html", "r") as zola_index_file:
+            zola_index = zola_index_file.read()
+        with open("./zola_export_base/config.toml", "r") as zola_post_file:
+            zola_post = zola_post_file.read()
 
-    response = HttpResponse(zip_buffer.getvalue(), content_type="application/zip")
-    response["Content-Disposition"] = f"attachment; filename={export_name}.zip"
-    return response
+        # get all posts and add them into export_posts encoded
+        posts = models.Post.objects.all()
+        export_posts = []
+        for p in posts:
+            title = p.title.replace(":", "-") + ".md"
+            export_posts.append((title, io.BytesIO(p.body.encode())))
+
+        # create zip archive in memory
+        export_name = "export-" + str(uuid.uuid4())[:8]
+        zip_buffer = io.BytesIO()
+        with zipfile.ZipFile(
+            zip_buffer, "a", zipfile.ZIP_DEFLATED, False
+        ) as export_archive:
+            export_archive.writestr(export_name + "/config.toml", zola_config)
+            export_archive.writestr(export_name + "/static/style.css", zola_styles)
+            export_archive.writestr(export_name + "/templates/index.html", zola_index)
+            export_archive.writestr(export_name + "/templates/post.html", zola_post)
+            for file_name, data in export_posts:
+                export_archive.writestr(
+                    export_name + "/content/" + file_name, data.getvalue()
+                )
+
+        response = HttpResponse(zip_buffer.getvalue(), content_type="application/zip")
+        response["Content-Disposition"] = f"attachment; filename={export_name}.zip"
+        return response
 
 
 def ethics(request):
