@@ -33,6 +33,6 @@ urlpatterns += [
     path("blog/<slug:slug>/", views.PostDetail.as_view(), name="post_detail"),
     path("blog/<slug:slug>/edit/", views.PostUpdate.as_view(), name="post_update",),
     path("blog/<slug:slug>/delete/", views.PostDelete.as_view(), name="post_delete",),
-    path("feed/", feeds.BlogFeed(), name="rss_feed"),
+    path("rss/", feeds.RSSBlogFeed(), name="rss_feed"),
     path("export/", views.blog_export, name="blog_export"),
 ]

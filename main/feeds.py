@@ -4,7 +4,7 @@ from django.http import Http404
 from main import models
 
 
-class BlogFeed(Feed):
+class RSSBlogFeed(Feed):
     title = ""
     link = ""
     description = ""
@@ -16,7 +16,7 @@ class BlogFeed(Feed):
         user = models.User.objects.get(username=request.subdomain)
         self.title = user.blog_title
         self.subdomain = request.subdomain
-        return super(BlogFeed, self).__call__(request, *args, **kwargs)
+        return super(RSSBlogFeed, self).__call__(request, *args, **kwargs)
 
     def items(self):
         return models.Post.objects.filter(owner__username=self.subdomain).order_by(
