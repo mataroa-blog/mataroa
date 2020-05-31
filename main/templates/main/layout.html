@@ -15,7 +15,7 @@
         {% if messages %}
         <aside>
             {% for message in messages %}
-            <div{% if message.tags %} class="alert-{{ message.tags }}"{% endif %}>{{ message|safe }}</div>
+            <div {% if message.tags %}class="alert-{{ message.tags }}"{% endif %}>{{ message|safe }}</div>
             {% endfor %}
         </aside>
         {% endif %}
