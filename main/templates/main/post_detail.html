@@ -5,15 +5,15 @@
 {% block content %}
 <main>
     {% if blog_title %}
-    <a href="{% url 'index' %}" class="brand">{{ blog_title }}</a>
+    <a href="{% url 'index' %}" class="posts-item-brand">{{ blog_title }}</a>
     {% endif %}
 
     <article itemscope itemtype="http://schema.org/BlogPosting">
-        <h1 class="main-title" itemprop="name headline">
+        <h1 class="posts-item-title" itemprop="name headline">
             {{ post.title }}
         </h1>
 
-        <div class="byline">
+        <div class="posts-item-byline">
             Published on <time datetime="{{ post.created_at|date:'F j, Y' }}" itemprop="datePublished">{{ post.created_at|date:'F j, Y' }}</time>
             {% if request.user.is_authenticated and request.subdomain %}
             | <a href="{% url 'post_update' post.slug %}">Edit post</a>
@@ -21,7 +21,7 @@
             {% endif %}
         </div>
 
-        <div class="main-body" itemprop="articleBody">
+        <div itemprop="articleBody">
             {{ post.as_markdown|safe }}
         </div>
     </article>
