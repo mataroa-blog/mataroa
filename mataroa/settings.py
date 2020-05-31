@@ -37,7 +37,7 @@ ALLOWED_HOSTS = [
     "95.217.176.64",
 ]
 
-ADMINS = [("Theodore Keloglou", "zf@sirodoht.com")]
+ADMINS = [("Theodore Keloglou", "theodorekeloglou@gmail.com")]
 
 # leading slashes are important so that browser do not handle it as internal url
 CANONICAL_HOST = "mataroa.blog"
