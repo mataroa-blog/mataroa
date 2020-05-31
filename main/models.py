@@ -25,6 +25,7 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        ordering = ["-created_at"]
         unique_together = [["slug", "owner"]]
 
     @property
