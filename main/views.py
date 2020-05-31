@@ -34,7 +34,9 @@ def index(request):
                 "main/blog_index.html",
                 {
                     "user": user,
-                    "posts": models.Post.objects.filter(owner=user),
+                    "posts": models.Post.objects.filter(owner=user).order_by(
+                        "-created_at"
+                    ),
                     "subdomain": request.subdomain,
                 },
             )
