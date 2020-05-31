@@ -6,7 +6,8 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import HttpResponse, HttpResponseForbidden, HttpResponseRedirect
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils.text import slugify
@@ -50,8 +51,8 @@ class UserDetail(LoginRequiredMixin, DetailView):
     model = models.User
 
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated and request.user.id != kwargs["pk"]:
-            return HttpResponseForbidden()
+        if request.user.id != kwargs["pk"]:
+            raise PermissionDenied()
 
         if hasattr(request, "subdomain"):
             return redirect(
@@ -83,8 +84,8 @@ class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     template_name = "main/user_update.html"
 
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated and request.user.id != kwargs["pk"]:
-            return HttpResponseForbidden()
+        if request.user.id != kwargs["pk"]:
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -93,8 +94,8 @@ class UserDelete(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy("index")
 
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated and request.user.id != kwargs["pk"]:
-            return HttpResponseForbidden()
+        if request.user.id != kwargs["pk"]:
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -154,10 +155,52 @@ class PostUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     fields = ["title", "body", "slug"]
     success_message = "post updated"
 
+    def get_queryset(self):
+        queryset = models.Post.objects.filter(
+            owner__username=self.request.user.username
+        )
+        return queryset
+
+    def dispatch(self, request, *args, **kwargs):
+        if not hasattr(request, "subdomain"):
+            if request.user.is_authenticated:
+                subdomain = request.user.username
+                return redirect(
+                    f"//{subdomain}.{settings.CANONICAL_HOST}{request.path}"
+                )
+            else:
+                return redirect("index")
+
+        if request.user.username != request.subdomain:
+            raise PermissionDenied()
+
+        return super().dispatch(request, *args, **kwargs)
+
 
 class PostDelete(LoginRequiredMixin, DeleteView):
     model = models.Post
     success_url = reverse_lazy("index")
+
+    def get_queryset(self):
+        queryset = models.Post.objects.filter(
+            owner__username=self.request.user.username
+        )
+        return queryset
+
+    def dispatch(self, request, *args, **kwargs):
+        if not hasattr(request, "subdomain"):
+            if request.user.is_authenticated:
+                subdomain = request.user.username
+                return redirect(
+                    f"//{subdomain}.{settings.CANONICAL_HOST}{request.path}"
+                )
+            else:
+                return redirect("index")
+
+        if request.user.username != request.subdomain:
+            raise PermissionDenied()
+
+        return super().dispatch(request, *args, **kwargs)
 
 
 @login_required
