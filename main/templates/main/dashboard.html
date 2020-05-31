@@ -5,15 +5,18 @@
 {% block content %}
 <main>
     <h1>Dashboard</h1>
-
-    <ul>
-        <li><a href="{% url 'post_create' %}" class="type-stable"><b>New post</b></a></li>
-        <li><a href="{% url 'user_update' user.id %}" class="type-stable">Change blog title, subdomain, email</a></li>
-        <li><a href="{% url 'blog_export' %}" class="type-stable">Export to Zola</a></li>
-        <li><a href="{% url 'password_change' %}" class="type-stable">Change password</a></li>
-        <li><a href="{% url 'user_delete' user.id %}" class="type-stable">Delete account</a></li>
-        <li><a href="{% url 'logout' %}" class="type-stable">Logout</a></li>
+    <p style="font-size: 16px;">
+        <a href="{% url 'post_create' %}" class="type-stable"><b>New post »</b></a>
+    </p>
+    <p class="dashboard-list">
+        <a href="{% url 'user_update' user.id %}" class="type-stable">Change blog title, subdomain, email</a>
+        <br><a href="{% url 'password_change' %}" class="type-stable">Change password</a>
+        <br><a href="{% url 'blog_export' %}" class="type-stable">Export to Zola</a>
+        <br><a href="{% url 'logout' %}" class="type-stable">Logout</a>
+    </p>
+    <p>
+        <a href="{% url 'user_delete' user.id %}" class="type-delete">Delete account</a>
+    </p>
     </ul>
-
 </main>
 {% endblock %}

@@ -296,18 +296,23 @@ footer {
     }
 }
 
+.help {
+    cursor: help;
+    text-decoration: dotted underline;
+}
+
+/* mods */
 .type-stable {
     color: var(--link-color);
+}
+
+.type-delete {
+    color: var(--red-color);
 }
 
 .type-danger {
     background: var(--red-color) !important;
     border-color: var(--red-color) !important;
-}
-
-.help {
-    cursor: help;
-    text-decoration: dotted underline;
 }
 
 /* form */
@@ -421,4 +426,9 @@ input[type="submit"]:active {
 
 .posts-item-brand::before {
     content: "» ";
+}
+
+/* dashboard */
+.dashboard-list {
+    line-height: 1.6;
 }
