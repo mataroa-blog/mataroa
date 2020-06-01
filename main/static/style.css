@@ -268,7 +268,17 @@ ul {
 }
 
 blockquote {
-    max-width: 500px;
+    border-left: 4px solid var(--light-grey-color);
+    padding-left: 16px;
+    margin-left: 0;
+    color: var(--dark-grey-color);
+}
+
+table {
+    border-collapse: collapse;
+    border: 1px solid var(--light-grey-color);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 th {
@@ -279,8 +289,15 @@ tr {
     min-width: 300px;
 }
 
+thead:nth-child(odd),
 tr:nth-child(even) {
     background: var(--light-grey-color);
+}
+
+th,
+td {
+    max-width: 0px;
+    padding: 4px;
 }
 
 code {
@@ -417,6 +434,16 @@ form .helptext {
     white-space: nowrap;
 }
 
+.byline {
+    color: var(--dark-grey-color);
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+
+.byline::before {
+    content: "» ";
+}
+
 /* post detail */
 .posts-item-title {
     margin-bottom: 8px;
@@ -431,7 +458,7 @@ form .helptext {
     display: block;
     margin-top: 16px;
     margin-bottom: 16px;
-    color: #000;
+    color: var(--dark-grey-color);
 }
 
 .posts-item-brand:hover {
