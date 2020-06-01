@@ -6,7 +6,6 @@
 <main>
     <h1>Sign up to start your blog</h1>
     <form method="post">
-        Your username will be your blog's subdomain. E.g. peter.mataroa.blog
         {{ form.as_p }}
         {% csrf_token %}
         <input type="submit" value="Sign up">
