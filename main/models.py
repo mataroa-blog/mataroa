@@ -4,8 +4,17 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
 
+from main import validators
+
 
 class User(AbstractUser):
+    username = models.CharField(
+        max_length=150,
+        unique=True,
+        help_text="This will be your subdomain. Lowercase alphanumeric.",
+        validators=[validators.StrictUsernameValidator()],
+        error_messages={"unique": "A user with that username already exists."},
+    )
     about = models.TextField(blank=True, null=True)
     blog_title = models.CharField(max_length=500)
     blog_byline = models.CharField(max_length=500, blank=True, null=True)
