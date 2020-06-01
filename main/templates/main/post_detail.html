@@ -2,6 +2,8 @@
 
 {% block title %}{{ post.title}} — {{ blog_title }}{% endblock %}
 
+{% block meta_description %}{{ post.body|truncatewords:16 }}{% endblock %}
+
 {% block content %}
 <main>
     {% if blog_title %}
