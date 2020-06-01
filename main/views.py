@@ -266,5 +266,9 @@ class InterestView(SuccessMessageMixin, FormView):
         return super().form_valid(form)
 
 
+def markdown_guide(request):
+    return render(request, "main/markdown_guide.html")
+
+
 def acme_challenge(request):
     return render(request, "main/acme_challenge.txt")

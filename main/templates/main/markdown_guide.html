@@ -1,0 +1,52 @@
+{% extends 'main/layout.html' %}
+
+{% load static %}
+
+{% block title %}Markdown Guide — Mataroa{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Markdown Guide</h1>
+    <p>
+        Mataroa supports Markdown in the blog posts body. Markdown is a very simple
+        formatting language.
+    </p>
+
+    <h2>Italics</h2>
+    <p>
+        You can use *asterisks* between words to make them <i>italics</i>.
+    </p>
+
+    <h2>Bold</h2>
+    <p>
+        You can use **double asterisks* to make words <strong>bold</strong>.
+    </p>
+
+    <h2>Image</h2>
+    <div>
+        <img src="{% static 'favicon.ico' %}" alt="red dot">
+    </div>
+    <p style="margin-top: 0;">
+        You can write it like this:
+        <br>![image description - red dot](http://example.com/red-dot.jpg)
+        <br>to have an image.
+    </p>
+
+    <h2>Links</h2>
+    <p>
+        Write a link like this: [website link](https://sourcehut.org/)
+        <br>for it to appear like this <a href="https://sourcehut.org/">website link</a>.
+    </p>
+
+    <h2>Monospace font</h2>
+    <p>
+        For a monospace font `use backticks` and it will appear <code>like this</code>.
+    </p>
+</main>
+
+<footer>
+    <br><a href="{% url 'index' %}">Home</a>
+    | <a href="{% url 'ethics' %}">Ethics</a>
+    | <a href="https://github.com/sirodoht/mataroa/">Source code</a>
+</footer>
+{% endblock %}
