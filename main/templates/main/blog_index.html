@@ -5,6 +5,12 @@
 {% block content %}
 <main>
     <h1>{{ user.blog_title|default:request.subdomain }}</h1>
+    {% if user.blog_byline %}
+    <p class="byline">
+        {{ user.blog_byline }}
+    </p>
+    {% endif %}
+
     <ul class="posts">
         {% for p in posts %}
         <li>
