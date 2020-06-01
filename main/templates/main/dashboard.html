@@ -9,7 +9,7 @@
         <a href="{% url 'post_create' %}" class="type-stable"><b>New post »</b></a>
     </p>
     <p class="dashboard-list">
-        <a href="{% url 'user_update' user.id %}" class="type-stable">Change blog title, subdomain, email</a>
+        <a href="{% url 'user_update' user.id %}" class="type-stable">Blog settings</a>
         <br><a href="{% url 'password_change' %}" class="type-stable">Change password</a>
         <br><a href="{% url 'blog_export' %}" class="type-stable">Export to Zola</a>
         <br><a href="{% url 'logout' %}" class="type-stable">Log out</a>
