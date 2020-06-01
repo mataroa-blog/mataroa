@@ -20,7 +20,5 @@ class InterestForm(forms.Form):
 
         Best,
         Python
-
-        PS. Mail services please don't block me again :(
         """
         mail_admins("Interest form response", body)
