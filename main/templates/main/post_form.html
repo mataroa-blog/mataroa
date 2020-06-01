@@ -22,7 +22,7 @@
         <input type="text" name="slug" id="id_slug" maxlength="300" required value="{{ form.slug.value|default_if_none:"" }}">
         {% endif %}
 
-        <label for="id_body">Body</label>
+        <label for="id_body">Body (<a href="{% url 'markdown_guide' %}">supports markdown</a>)</label>
         <textarea name="body" id="id_body" cols="60" rows="20">{{ form.body.value|default_if_none:"" }}</textarea>
         {% csrf_token %}
         <input type="submit" value="Save">
