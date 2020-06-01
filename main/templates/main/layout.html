@@ -30,6 +30,9 @@
             {% endif %}
             | <a href="{% url 'dashboard' %}" class="type-stable">Dashboard</a>
             | <a href="{% url 'post_create' %}" class="type-stable">New post</a>
+            {% if request.user.is_superuser %}
+            | <a href="{% url 'admin:index' %}" class="type-stable">Admin</a>
+            {% endif %}
         </nav>
         {% else %}
         {% if not request.subdomain %}
