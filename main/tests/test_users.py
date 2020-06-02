@@ -135,7 +135,7 @@ class UserUpdateTestCase(TestCase):
 
     def test_user_update(self):
         data = {
-            "username": "alice_updated",
+            "username": "alice-updated",
             "email": "alice_updated@example.com",
             "blog_title": "Updated title",
         }
@@ -167,7 +167,7 @@ class UserUpdateNotOwnTestCase(TestCase):
         }
         self.victim = models.User.objects.create(**victim_data)
 
-    def test_user_update(self):
+    def test_user_update_not_own(self):
         data = {
             "username": "bob_sucks",
             "email": "bob_sucks@example.com",
