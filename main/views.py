@@ -27,6 +27,10 @@ def dashboard(request):
 
 def index(request):
     if hasattr(request, "subdomain"):
+        if request.subdomain == "random":
+            random_user = models.User.objects.all().order_by('?')[0]
+            return redirect(f'//{random_user.username}.{settings.CANONICAL_HOST}{reverse("index")}')
+
         if models.User.objects.filter(username=request.subdomain).exists():
             user = models.User.objects.get(username=request.subdomain)
             return render(
