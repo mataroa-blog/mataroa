@@ -81,7 +81,7 @@ class LogoutTestCase(TestCase):
 
     def test_logout(self):
         response_logout = self.client.get(reverse("logout"))
-        self.assertEqual(response_logout.status_code, 200)
+        self.assertEqual(response_logout.status_code, 302)
 
         response_index = self.client.get(reverse("index"))
         user = response_index.context.get("user")
