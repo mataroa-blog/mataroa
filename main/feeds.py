@@ -15,6 +15,7 @@ class RSSBlogFeed(Feed):
             raise Http404()
         user = models.User.objects.get(username=request.subdomain)
         self.title = user.blog_title
+        self.description = user.blog_byline
         self.subdomain = request.subdomain
         return super(RSSBlogFeed, self).__call__(request, *args, **kwargs)
 
@@ -28,3 +29,6 @@ class RSSBlogFeed(Feed):
 
     def item_description(self, item):
         return item.body
+
+    def item_pubdate(self, item):
+        return item.created_at
