@@ -11,6 +11,8 @@
         <meta name="keywords" content="blogs, platform, fast">
         <link rel="stylesheet" href="{% static 'style.css' %}">
         <link rel="icon" href="{% static 'favicon.ico' %}">
+        {% block head_extra %}
+        {% endblock %}
     </head>
     <body>
         {% if messages %}

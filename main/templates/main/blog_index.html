@@ -2,6 +2,10 @@
 
 {% block title %}{{ user.blog_title|default:request.subdomain }}{% endblock %}
 
+{% block head_extra %}
+<link rel="alternate" type="application/rss+xml" title="RSS" href="{% url 'rss_feed' %}">
+{% endblock %}
+
 {% block content %}
 <main>
     <h1>{{ user.blog_title|default:request.subdomain }}</h1>
