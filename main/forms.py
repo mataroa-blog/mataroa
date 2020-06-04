@@ -7,7 +7,7 @@ from django.core.mail import mail_admins
 class UserCreationForm(DjUserCreationForm):
     class Meta:
         model = get_user_model()
-        fields = ["username", "blog_title"]
+        fields = ["username"]
 
 
 class InterestForm(forms.Form):

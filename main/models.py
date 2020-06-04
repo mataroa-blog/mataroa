@@ -16,7 +16,7 @@ class User(AbstractUser):
         error_messages={"unique": "A user with that username already exists."},
     )
     about = models.TextField(blank=True, null=True)
-    blog_title = models.CharField(max_length=500)
+    blog_title = models.CharField(max_length=500, blank=True, null=True)
     blog_byline = models.CharField(max_length=500, blank=True, null=True)
 
     def get_absolute_url(self):
