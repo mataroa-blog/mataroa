@@ -24,6 +24,7 @@
         {% endif %}
 
         {% if request.user.is_authenticated %}
+        {% if not request.subdomain or request.subdomain == request.user.username %}
         <nav>
             {% if request.subdomain %}
             <a href="{% url 'index' %}" class="type-stable">Blog</a>
@@ -36,6 +37,7 @@
             | <a href="{% url 'admin:index' %}" class="type-stable">Admin</a>
             {% endif %}
         </nav>
+        {% endif %}
         {% else %}
         {% if not request.subdomain %}
         <nav>
