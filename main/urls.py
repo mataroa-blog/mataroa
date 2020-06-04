@@ -21,6 +21,7 @@ urlpatterns = [
 
 # user system
 urlpatterns += [
+    path("accounts/logout/", views.Logout.as_view(), name="logout"),
     path("accounts/", include("django.contrib.auth.urls")),
     path("accounts/create/", views.UserCreate.as_view(), name="user_create"),
     path("accounts/<int:pk>/", views.UserDetail.as_view(), name="user_detail"),

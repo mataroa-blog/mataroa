@@ -3,8 +3,10 @@ import uuid
 import zipfile
 
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LogoutView as DjLogoutView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpResponseRedirect
@@ -28,8 +30,10 @@ def dashboard(request):
 def index(request):
     if hasattr(request, "subdomain"):
         if request.subdomain == "random":
-            random_user = models.User.objects.all().order_by('?')[0]
-            return redirect(f'//{random_user.username}.{settings.CANONICAL_HOST}{reverse("index")}')
+            random_user = models.User.objects.all().order_by("?")[0]
+            return redirect(
+                f'//{random_user.username}.{settings.CANONICAL_HOST}{reverse("index")}'
+            )
 
         if models.User.objects.filter(username=request.subdomain).exists():
             user = models.User.objects.get(username=request.subdomain)
@@ -51,6 +55,12 @@ def index(request):
         return redirect("dashboard")
 
     return render(request, "main/index.html")
+
+
+class Logout(DjLogoutView):
+    def dispatch(self, request, *args, **kwargs):
+        messages.add_message(request, messages.INFO, "logged out")
+        return super().dispatch(request, *args, **kwargs)
 
 
 class UserDetail(LoginRequiredMixin, DetailView):
