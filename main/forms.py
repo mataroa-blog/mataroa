@@ -14,11 +14,10 @@ class InterestForm(forms.Form):
     email = forms.EmailField()
 
     def send_email(self):
-        body = f"""
-        Person who is interested in Mataroa premium!
-        This is their email: {self.cleaned_data.get("email")}
+        body = "Person who is interested in Mataroa premium!"
+        body += f"\nThis is their email: {self.cleaned_data.get('email')}"
+        body += "\n"
+        body += "\nBest,"
+        body += "\nPython"
 
-        Best,
-        Python
-        """
         mail_admins("Interest form response", body)
