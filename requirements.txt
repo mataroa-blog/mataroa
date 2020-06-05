@@ -12,9 +12,9 @@ certifi==2020.4.5.1       # via sentry-sdk
 click==7.1.2              # via black
 dj-database-url==0.5.0    # via -r requirements.in
 django-dotenv==1.4.2      # via -r requirements.in
-django==3.0.6             # via -r requirements.in
+django==3.0.7             # via -r requirements.in
 flake8==3.8.2             # via -r requirements.in
-importlib-metadata==1.6.0  # via flake8, markdown
+importlib-metadata==1.6.1  # via flake8, markdown
 isort==4.3.21             # via -r requirements.in
 markdown==3.2.2           # via -r requirements.in
 mccabe==0.6.1             # via flake8
