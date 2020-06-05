@@ -273,7 +273,7 @@ class InterestView(SuccessMessageMixin, FormView):
     form_class = forms.InterestForm
     template_name = "main/interest.html"
     success_url = reverse_lazy("index")
-    success_message = "thank you for interest! we'll be in touch :)"
+    success_message = "thank you for your interest! we'll be in touch :)"
 
     def form_valid(self, form):
         form.send_email()
