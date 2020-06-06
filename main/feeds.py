@@ -28,7 +28,7 @@ class RSSBlogFeed(Feed):
         return item.title
 
     def item_description(self, item):
-        return item.body
+        return item.as_markdown()
 
     def item_pubdate(self, item):
         return item.created_at
