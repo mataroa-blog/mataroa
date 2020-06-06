@@ -39,7 +39,7 @@ class Post(models.Model):
         unique_together = [["slug", "owner"]]
 
     @property
-    def as_markdown(self):
+    def as_html(self):
         return markdown.markdown(
             self.body,
             extensions=[
