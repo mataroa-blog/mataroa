@@ -12,6 +12,8 @@ class Admin(UserAdmin):
         "date_joined",
         "last_login",
         "blog_title",
+        "blog_byline",
+        "cname",
     )
 
 

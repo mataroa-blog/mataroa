@@ -18,6 +18,7 @@ class User(AbstractUser):
     about = models.TextField(blank=True, null=True)
     blog_title = models.CharField(max_length=500, blank=True, null=True)
     blog_byline = models.CharField(max_length=500, blank=True, null=True)
+    cname = models.URLField(blank=True, null=True)
 
     def get_absolute_url(self):
         return reverse("user_detail", kwargs={"pk": self.pk})
