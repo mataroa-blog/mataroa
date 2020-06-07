@@ -1,10 +1,10 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}Update subdomain and email — Mataroa{% endblock %}
+{% block title %}Blog settings — Mataroa{% endblock %}
 
 {% block content %}
 <main>
-    <h1>Update username (subdomain)</h1>
+    <h1>Blog settings</h1>
     <form method="post">
         {{ form.as_p }}
         {% csrf_token %}
