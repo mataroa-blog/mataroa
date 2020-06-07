@@ -187,6 +187,7 @@ template {
     --light-grey-color: #eff1f5;
     --green-color: #26bd60;
     --red-color: #ff0000;
+    --purple-color: #e223e2;
 }
 
 html,
@@ -203,6 +204,14 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+a:visited {
+    color: var(--purple-color);
+}
+
+a:active {
+    color: var(--red-color);
 }
 
 p {
@@ -325,12 +334,12 @@ footer {
 }
 
 /* mods */
-.type-stable {
-    color: var(--link-color);
+.type-unvisited {
+    color: var(--link-color) !important;
 }
 
 .type-delete {
-    color: var(--red-color);
+    color: var(--red-color) !important;
 }
 
 .type-danger {
