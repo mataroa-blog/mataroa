@@ -10,3 +10,6 @@ tasks:
   - build: |
       cd mataroa
       pip3 install -r requirements.txt
+  - test: |
+      cd mataroa
+      python3 manage.py test
