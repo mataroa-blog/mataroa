@@ -18,7 +18,15 @@ class User(AbstractUser):
     about = models.TextField(blank=True, null=True)
     blog_title = models.CharField(max_length=500, blank=True, null=True)
     blog_byline = models.CharField(max_length=500, blank=True, null=True)
-    cname = models.URLField(blank=True, null=True)
+    custom_domain = models.CharField(
+        max_length=150,
+        blank=True,
+        null=True,
+        help_text="DNS: CNAME your .mataroa.blog subdomain or A with IP 95.217.176.64",
+        validators=[validators.validate_domain_name],
+    )
+    custom_domain_cert = models.TextField(blank=True, null=True)
+    custom_domain_key = models.TextField(blank=True, null=True)
 
     def get_absolute_url(self):
         return reverse("user_detail", kwargs={"pk": self.pk})
