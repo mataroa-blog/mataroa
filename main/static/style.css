@@ -202,6 +202,10 @@ a {
     color: var(--link-color);
 }
 
+a:hover {
+    text-decoration: underline;
+}
+
 p {
     max-width: 500px;
 }
