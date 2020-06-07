@@ -31,7 +31,7 @@ def host_middleware(get_response):
             request.subdomain = host_parts[0]
         elif models.User.objects.filter(custom_domain=host).exists():
             # custom domain case
-            request.subdomain = models.User.objects.get(custom_domain=host).subdomain
+            request.subdomain = models.User.objects.get(custom_domain=host).username
         else:
             raise SuspiciousOperation()
 
