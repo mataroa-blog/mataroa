@@ -1,10 +1,10 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.admin import UserAdmin as DjUserAdmin
 
 from main import models
 
 
-class Admin(UserAdmin):
+class UserAdmin(DjUserAdmin):
     list_display = (
         "id",
         "username",
@@ -13,11 +13,27 @@ class Admin(UserAdmin):
         "last_login",
         "blog_title",
         "blog_byline",
-        "cname",
+        "custom_domain",
+    )
+
+    fieldsets = DjUserAdmin.fieldsets + (
+        (
+            "Blog options",
+            {
+                "fields": (
+                    "about",
+                    "blog_title",
+                    "blog_byline",
+                    "custom_domain",
+                    "custom_domain_cert",
+                    "custom_domain_key",
+                ),
+            },
+        ),
     )
 
 
-admin.site.register(models.User, Admin)
+admin.site.register(models.User, UserAdmin)
 
 
 class PostAdmin(admin.ModelAdmin):
