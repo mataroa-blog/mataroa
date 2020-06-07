@@ -13,11 +13,7 @@
         Create a new post
         {% endif %}
     </h1>
-    <form method="post"
-        {% if form.initial %}data-is-update="true"{% endif %}
-        {% if form.published_at.value and form.initial %}data-is-published="true"{% endif %}
-    >
-
+    <form method="post">
         {{ form.non_field_errors }}
 
         <p>
@@ -64,13 +60,7 @@
         </p>
 
         {% csrf_token %}
-        {% if not form.initial and form.published_at.value %}
-        <input type="submit" value="Publish">
-        {% elif form.initial and form.published_at.value %}
-        <input type="submit" value="Update">
-        {% elif form.initial and not form.published_at.value %}
-        <input type="submit" value="Save as draft">
-        {% endif %}
+        <input type="submit" value="Save">
     </form>
 </main>
 {% endblock %}
@@ -78,51 +68,5 @@
 {% block scripts %}
 <script>
     document.querySelector('input[name="title"]').focus();
-
-    var submitBtn = document.querySelector('input[type=submit');
-    var isUpdate = document.querySelector('form').dataset.isUpdate;
-    var isPublished = document.querySelector('form').dataset.isPublished;
-
-    function isDateValid(dateString) {
-        if (dateString.split('-').length !== 3) {
-            return false;
-        }
-        if (dateString.length !== 10) {
-            return false;
-        }
-        return true;
-    }
-
-    function checkPubDate(evt) {
-        var pubDateValue = document.querySelector('input[name=published_at').value;
-        var pubDateFilled = !!document.querySelector('input[name=published_at').value;
-
-        if (!isUpdate && pubDateFilled) {
-            // is new and has pub date filled
-            submitBtn.value = 'Publish';
-        } else if (!isUpdate && !pubDateFilled) {
-            // is new and has pub date empty
-            submitBtn.value = 'Save as draft';
-        } else if (isUpdate && isPublished && !pubDateFilled) {
-            // is update and already published and has pub date empty
-            submitBtn.value = 'Unpublish';
-        } else if (isUpdate && isPublished && pubDateFilled) {
-            // is update and already published and pub date filled
-            submitBtn.value = 'Update';
-        } else if (isUpdate && !isPublished && !pubDateFilled) {
-            // is update and not published and pub date empty
-            submitBtn.value = 'Save as draft';
-        } else if (isUpdate && !isPublished && pubDateFilled) {
-            // is update and not published and pub date filled
-            if (isDateValid(pubDateValue)) {
-                submitBtn.value = 'Publish';
-            } else {
-                submitBtn.value = 'Save as draft';
-            }
-        }
-    }
-
-    document.querySelector('input[name=published_at').addEventListener('keyup', checkPubDate);
-    document.querySelector('input[name=published_at').addEventListener('keydown', checkPubDate);
 </script>
 {% endblock %}
