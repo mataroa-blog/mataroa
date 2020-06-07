@@ -60,6 +60,17 @@ To create the database schema:
 python manage.py migrate
 ```
 
+### Subdomains
+
+To develop locally with subdomains, you need to add something like that in your `/etc/hosts`:
+
+```
+127.0.0.1 mataroalocal.blog
+127.0.0.1 yourlocaluser.mataroalocal.blog
+127.0.0.1 random.mataroalocal.blog
+127.0.0.1 test.mataroalocal.blog 
+```
+
 ### Serve
 
 To run the Django development server:
