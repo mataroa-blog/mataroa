@@ -23,7 +23,11 @@
         {% for p in posts %}
         <li>
             <a href="{% url 'post_detail' p.slug %}">{{ p.title }}</a>
-            <small>— <time datetime="{{ p.created_at|date:'F j, Y' }}" itemprop="datePublished">{{ p.created_at|date:'F j, Y' }}</time></small>
+            {% if p.published_at %}
+            <small>— <time datetime="{{ p.published_at|date:'F j, Y' }}" itemprop="datePublished">{{ p.published_at|date:'F j, Y' }}</time></small>
+            {% else %}
+            <small>— DRAFT</small>
+            {% endif %}
         </li>
         {% endfor %}
     </ul>

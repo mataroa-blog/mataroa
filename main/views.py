@@ -38,15 +38,20 @@ def index(request):
             )
 
         if models.User.objects.filter(username=request.subdomain).exists():
-            user = models.User.objects.get(username=request.subdomain)
+            blog_user = models.User.objects.get(username=request.subdomain)
+            if request.user.is_authenticated and request.user == blog_user:
+                posts = models.Post.objects.filter(owner=blog_user)
+            else:
+                posts = models.Post.objects.filter(
+                    owner=blog_user, published_at__isnull=False
+                ).order_by("-published_at")
+
             return render(
                 request,
                 "main/blog_index.html",
                 {
-                    "user": user,
-                    "posts": models.Post.objects.filter(owner=user).order_by(
-                        "-created_at"
-                    ),
+                    "blog_user": blog_user,
+                    "posts": posts,
                     "subdomain": request.subdomain,
                 },
             )
