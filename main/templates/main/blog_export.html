@@ -4,7 +4,7 @@
 
 {% block content %}
 <main>
-    <h1>Export your blog</h1>
+    <h1>Export blog</h1>
     <p>
         Mataroa allows you to export your blog posts into a zip archive that you
         can directly use to self-host your website. We support three options:
@@ -44,7 +44,7 @@
         <a href="https://www.getzola.org/documentation/deployment/netlify/">See here</a>
         for how-to.
     </p>
-    <form method="post">
+    <form method="post" action="{% url 'blog_export_zola' %}">
         {% csrf_token %}
         <input type="submit" value="Export as Zola sources">
     </form>
