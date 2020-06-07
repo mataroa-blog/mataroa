@@ -35,6 +35,7 @@ ALLOWED_HOSTS = [
     ".mataroa.blog",
     ".mataroalocal.blog",
     "95.217.176.64",
+    "*",
 ]
 
 ADMINS = [("Theodore Keloglou", "zf@sirodoht.com")]
@@ -66,7 +67,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "main.middleware.subdomain_middleware",
+    "main.middleware.host_middleware",
 ]
 
 ROOT_URLCONF = "mataroa.urls"
