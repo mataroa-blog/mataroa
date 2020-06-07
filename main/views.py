@@ -1,5 +1,3 @@
-import uuid
-
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -10,7 +8,6 @@ from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
-from django.utils.text import slugify
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 
@@ -177,11 +174,7 @@ class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        self.object.slug = slugify(self.object.title)
-        if models.Post.objects.filter(
-            owner=self.request.user, slug=self.object.slug
-        ).exists():
-            self.object.slug += "-" + str(uuid.uuid4())[:8]
+        self.object.slug = helpers.get_post_slug(self.object.title, self.request.user)
         self.object.owner = self.request.user
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
