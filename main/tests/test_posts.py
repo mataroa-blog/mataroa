@@ -37,6 +37,63 @@ class PostCreateAnonTestCase(TestCase):
         self.assertTrue(reverse("login") in response.url)
 
 
+class PostCreateDraftTestCase(TestCase):
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.user.set_password("abcdef123456")
+        self.user.save()
+        self.client.login(username="alice", password="abcdef123456")
+        self.data = {
+            "title": "New post",
+            "slug": "new-post",
+            "body": "Content sentence.",
+            "published_at": "",
+        }
+        self.client.post(reverse("post_create"), self.data)
+
+    def test_post_create_draft(self):
+        """Test draft post gets created."""
+        self.assertTrue(models.Post.objects.get(title=self.data["title"]))
+
+    def test_post_draft_index(self):
+        """Test draft post appears on blog index as draft."""
+        response = self.client.get(
+            reverse("index"),
+            HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "DRAFT")
+
+
+class PostCreateDraftAnonTestCase(TestCase):
+    """Test draft post does not appear on blog index for non-logged in users."""
+
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.data_published = {
+            "title": "New post",
+            "slug": "new-post",
+            "body": "Content sentence.",
+        }
+        models.Post.objects.create(owner=self.user, **self.data_published)
+        self.data_nonpublished = {
+            "title": "Draft post",
+            "slug": "draft-post",
+            "body": "Incomplete content sentence.",
+            "published_at": None,
+        }
+        models.Post.objects.create(owner=self.user, **self.data_nonpublished)
+
+    def test_post_draft_index(self):
+        response = self.client.get(
+            reverse("index"),
+            HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.data_published["title"])
+        self.assertNotContains(response, self.data_nonpublished["title"])
+
+
 class PostDetailTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
@@ -48,12 +105,7 @@ class PostDetailTestCase(TestCase):
             "slug": "new-post",
             "body": "Content sentence.",
         }
-        self.post = models.Post.objects.create(
-            title=self.data["title"],
-            slug=self.data["slug"],
-            body=self.data["body"],
-            owner=self.user,
-        )
+        self.post = models.Post.objects.create(owner=self.user, **self.data)
 
     def test_post_detail(self):
         response = self.client.get(
