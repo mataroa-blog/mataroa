@@ -1,7 +1,7 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}{{ user.blog_title|default:request.subdomain }}{% endblock %}
-{% block meta_description %}{{ user.blog_byline|default:"" }}{% endblock %}
+{% block title %}{{ blog_user.blog_title|default:blog_user.username }}{% endblock %}
+{% block meta_description %}{{ blog_user.blog_byline|default:"" }}{% endblock %}
 
 {% block head_extra %}
 <link rel="alternate" type="application/rss+xml" title="RSS" href="{% url 'rss_feed' %}">
@@ -9,13 +9,13 @@
 
 {% block content %}
 <main class="blog">
-    {% if user.blog_title %}
-    <h1>{{ user.blog_title }}</h1>
+    {% if blog_user.blog_title %}
+    <h1>{{ blog_user.blog_title }}</h1>
     {% endif %}
 
-    {% if user.blog_byline %}
+    {% if blog_user.blog_byline %}
     <p class="byline">
-        {{ user.blog_byline }}
+        {{ blog_user.blog_byline }}
     </p>
     {% endif %}
 
