@@ -257,7 +257,7 @@ def blog_export(request):
             zola_styles = zola_styles_file.read()
         with open("./zola_export_base/template_index.html", "r") as zola_index_file:
             zola_index = zola_index_file.read()
-        with open("./zola_export_base/config.toml", "r") as zola_post_file:
+        with open("./zola_export_base/template_post.html", "r") as zola_post_file:
             zola_post = zola_post_file.read()
 
         # get all posts and add them into export_posts encoded
