@@ -19,6 +19,7 @@ Using [venv](https://docs.python.org/3/library/venv.html):
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+pip install -r requirements_dev.txt
 ```
 
 This project also uses [pip-tools](https://github.com/jazzband/pip-tools) for

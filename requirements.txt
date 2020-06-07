@@ -4,28 +4,15 @@
 #
 #    pip-compile
 #
-appdirs==1.4.4            # via black
 asgiref==3.2.7            # via django
-attrs==19.3.0             # via black
-black==19.10b0            # via -r requirements.in
-click==7.1.2              # via black
 dj-database-url==0.5.0    # via -r requirements.in
 django-dotenv==1.4.2      # via -r requirements.in
 django==3.0.7             # via -r requirements.in
-flake8==3.8.2             # via -r requirements.in
-importlib-metadata==1.6.1  # via flake8, markdown
-isort==4.3.21             # via -r requirements.in
+importlib-metadata==1.6.1  # via markdown
 markdown==3.2.2           # via -r requirements.in
-mccabe==0.6.1             # via flake8
-pathspec==0.8.0           # via black
 psycopg2-binary==2.8.5    # via -r requirements.in
-pycodestyle==2.6.0        # via flake8
-pyflakes==2.2.0           # via flake8
 pytz==2020.1              # via django
-regex==2020.6.7           # via black
 sqlparse==0.3.1           # via django
-toml==0.10.1              # via black
-typed-ast==1.4.1          # via black
 uwsgi==2.0.18             # via -r requirements.in
 whitenoise==5.1.0         # via -r requirements.in
 zipp==3.1.0               # via importlib-metadata

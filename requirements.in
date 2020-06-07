@@ -4,7 +4,4 @@ dj-database-url
 whitenoise
 uwsgi
 django-dotenv
-isort
-flake8
-black
 markdown
