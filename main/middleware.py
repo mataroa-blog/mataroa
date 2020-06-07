@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.core.exceptions import SuspiciousOperation
+from django.http import HttpResponseBadRequest
 
 from main import models
 
@@ -33,7 +33,7 @@ def host_middleware(get_response):
             # custom domain case
             request.subdomain = models.User.objects.get(custom_domain=host).username
         else:
-            raise SuspiciousOperation()
+            return HttpResponseBadRequest()
 
         response = get_response(request)
         return response
