@@ -95,14 +95,36 @@ class UserCreate(SuccessMessageMixin, CreateView):
 
 class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = models.User
-    fields = ["username", "email", "blog_title", "blog_byline", "about"]
-    success_message = "settings updated"
+    fields = [
+        "username",
+        "email",
+        "blog_title",
+        "blog_byline",
+        "custom_domain",
+        "about",
+    ]
     template_name = "main/user_update.html"
+    success_message = "settings updated"
+    success_url = reverse_lazy("dashboard")
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.id != kwargs["pk"]:
             raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        if not form.cleaned_data.get("custom_domain"):
+            return super().form_valid(form)
+
+        if models.User.objects.filter(
+            custom_domain=form.cleaned_data.get("custom_domain")
+        ).exists():
+            form.add_error(
+                "custom_domain",
+                "This domain name is already connected to a mataroa blog.",
+            )
+            return self.render_to_response(self.get_context_data(form=form))
+        return super().form_valid(form)
 
 
 class UserDelete(LoginRequiredMixin, DeleteView):
