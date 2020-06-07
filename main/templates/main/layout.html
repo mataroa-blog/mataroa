@@ -27,23 +27,23 @@
         {% if not request.subdomain or request.subdomain == request.user.username %}
         <nav>
             {% if request.subdomain %}
-            <a href="{% url 'index' %}" class="type-unvisited">Blog</a>
+            <a href="{% url 'index' %}">Blog</a>
             {% else %}
-            <a href="//{{ request.user.username }}.{{ request.get_host }}" class="type-unvisited">Blog</a>
+            <a href="//{{ request.user.username }}.{{ request.get_host }}">Blog</a>
             {% endif %}
-            | <a href="{% url 'dashboard' %}" class="type-unvisited">Dashboard</a>
-            | <a href="{% url 'post_create' %}" class="type-unvisited">New post</a>
+            | <a href="{% url 'dashboard' %}">Dashboard</a>
+            | <a href="{% url 'post_create' %}">New post</a>
             {% if request.user.is_superuser %}
-            | <a href="{% url 'admin:index' %}" class="type-unvisited">Admin</a>
+            | <a href="{% url 'admin:index' %}">Admin</a>
             {% endif %}
         </nav>
         {% endif %}
         {% else %}
         {% if not request.subdomain %}
         <nav>
-            <a href="{{ request.host }}{% url 'index' %}" class="type-unvisited">Home</a>
-            | <a href="{{ request.host }}{% url 'user_create' %}" class="type-unvisited">Sign up</a>
-            | <a href="{{ request.host }}{% url 'login' %}" class="type-unvisited">Log in</a>
+            <a href="{{ request.host }}{% url 'index' %}">Home</a>
+            | <a href="{{ request.host }}{% url 'user_create' %}">Sign up</a>
+            | <a href="{{ request.host }}{% url 'login' %}">Log in</a>
         </nav>
         {% endif %}
         {% endif %}

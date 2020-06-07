@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-<main>
+<main class="blog">
     {% if user.blog_title %}
     <h1>{{ user.blog_title }}</h1>
     {% endif %}
@@ -31,6 +31,6 @@
 <footer>
     ---
     <br>
-    <a class="type-unvisited" href="{% url 'rss_feed' %}">RSS »</a>
+    <a href="{% url 'rss_feed' %}">RSS »</a>
 </footer>
 {% endblock %}

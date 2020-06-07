@@ -202,18 +202,6 @@ a {
     color: var(--link-color);
 }
 
-a:hover {
-    text-decoration: underline;
-}
-
-a:visited {
-    color: var(--purple-color);
-}
-
-a:active {
-    color: var(--red-color);
-}
-
 p {
     max-width: 500px;
 }
@@ -334,10 +322,6 @@ footer {
 }
 
 /* mods */
-.type-unvisited {
-    color: var(--link-color) !important;
-}
-
 .type-delete {
     color: var(--red-color) !important;
 }
@@ -424,6 +408,18 @@ form .helptext {
 }
 
 /* blog index */
+.blog a:hover {
+    text-decoration: underline;
+}
+
+.blog a:visited {
+    color: var(--purple-color);
+}
+
+.blog a:active {
+    color: var(--red-color);
+}
+
 .posts {
     list-style: none;
     padding-left: 0;

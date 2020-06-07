@@ -6,13 +6,13 @@
 <main>
     <h1>Dashboard</h1>
     <p style="font-size: 16px;">
-        <a href="{% url 'post_create' %}" class="type-unvisited"><b>New post »</b></a>
+        <a href="{% url 'post_create' %}"><b>New post »</b></a>
     </p>
     <p class="dashboard-list">
-        <a href="{% url 'user_update' user.id %}" class="type-unvisited">Blog settings</a>
-        <br><a href="{% url 'password_change' %}" class="type-unvisited">Change password</a>
-        <br><a href="{% url 'blog_export' %}" class="type-unvisited">Export to Zola</a>
-        <br><a href="{% url 'logout' %}" class="type-unvisited">Log out</a>
+        <a href="{% url 'user_update' user.id %}">Blog settings</a>
+        <br><a href="{% url 'password_change' %}">Change password</a>
+        <br><a href="{% url 'blog_export' %}">Export</a>
+        <br><a href="{% url 'logout' %}">Log out</a>
     </p>
     <p>
         <a href="{% url 'user_delete' user.id %}" class="type-delete">Delete account</a>
