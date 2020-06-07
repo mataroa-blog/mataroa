@@ -9,7 +9,8 @@
         <a href="{% url 'post_create' %}"><b>New post »</b></a>
     </p>
     <p class="dashboard-list">
-        <a href="{% url 'user_update' user.id %}">Blog settings</a>
+        <a href="{% url 'blog_import' %}">Import posts</a>
+        <br><a href="{% url 'user_update' user.id %}">Blog settings</a>
         <br><a href="{% url 'password_change' %}">Change password</a>
         <br><a href="{% url 'blog_export' %}">Export blog</a>
         <br><a href="{% url 'logout' %}">Log out</a>

@@ -239,6 +239,29 @@ class PostDelete(LoginRequiredMixin, DeleteView):
         return super().dispatch(request, *args, **kwargs)
 
 
+class BlogImport(FormView):
+    form_class = forms.UploadFilesForm
+    template_name = "main/blog_import.html"
+    success_url = reverse_lazy("blog_index")
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        files = request.FILES.getlist("file")
+        if form.is_valid():
+            for f in files:
+                content = f.read().decode("utf-8")
+                models.Post.objects.create(
+                    title=f.name,
+                    slug=helpers.get_post_slug(f.name, request.user),
+                    body=content,
+                    owner=request.user,
+                )
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+
 def ethics(request):
     return render(request, "main/ethics.html")
 

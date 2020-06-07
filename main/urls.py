@@ -39,8 +39,9 @@ urlpatterns += [
     path("rss/", feeds.RSSBlogFeed(), name="rss_feed"),
 ]
 
-# blog export
+# blog import / export
 urlpatterns += [
+    path("import/", views.BlogImport.as_view(), name="blog_import"),
     path("export/", views_export.blog_export, name="blog_export"),
     path(
         "export/markdown/",

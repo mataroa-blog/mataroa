@@ -1,0 +1,17 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Import posts — {{ request.user.username }} at Mataroa{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Import posts</h1>
+    <p>
+        Mataroa allows you to import text/markdown files to jump start your blog.
+    </p>
+    <form method="post" enctype="multipart/form-data">
+        <input type="file" name="file" id="id_file" multiple required>
+        {% csrf_token %}
+        <input type="submit" value="Upload">
+    </form>
+</main>
+{% endblock %}

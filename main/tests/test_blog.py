@@ -77,6 +77,29 @@ class BlogIndexRedirTestCase(TestCase):
             f"{self.user.username}.{settings.CANONICAL_HOST}" in response.url
         )
 
+
+class BlogImportTestCase(TestCase):
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.user.blog_title = "Blog of Alice"
+        self.user.set_password("abcdef123456")
+        self.user.save()
+        self.client.login(username="alice", password="abcdef123456")
+        self.data = {
+            "title": "Welcome post",
+            "slug": "welcome-post",
+            "body": "Content sentence.",
+        }
+        self.post = models.Post.objects.create(owner=self.user, **self.data)
+
+    def test_blog_import(self):
+        # probably a bad idea to test using README
+        filename = "README.md"
+        with open(filename) as fp:
+            self.client.post(reverse("blog_import"), {"file": fp})
+            self.assertEqual(models.Post.objects.get(title=filename).title, filename)
+
+
 class BlogExportMarkdownTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
