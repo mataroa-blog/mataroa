@@ -3,13 +3,13 @@ packages:
   - python3
   - python3-pip
   - postgresql
-environment:
-  SECRET_KEY: "thisisthesecretkey"
-  DATABASE_URL: "postgres://postgres:postgres@localhost:5432/postgres"
 tasks:
   - build: |
       cd mataroa
       pip3 install -r requirements.txt
   - test: |
       cd mataroa
+      sudo -u postgres bash
+      psql -U postgres -d postgres -c "ALTER USER postgres WITH PASSWORD 'postgres';"
+      export DATABASE_URL='postgres://postgres:postgres@localhost:5432/postgres'
       python3 manage.py test
