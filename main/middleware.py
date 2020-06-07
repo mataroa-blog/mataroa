@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.exceptions import SuspiciousOperation
 
 from main import models
 
@@ -28,9 +29,11 @@ def host_middleware(get_response):
             # validation will happen inside views
             # the indexes are different because settings.CANONICAL_HOST has no subdomain
             request.subdomain = host_parts[0]
-        else:
+        elif models.User.objects.filter(custom_domain=host).exists():
             # custom domain case
             request.subdomain = models.User.objects.get(custom_domain=host).subdomain
+        else:
+            raise SuspiciousOperation()
 
         response = get_response(request)
         return response
