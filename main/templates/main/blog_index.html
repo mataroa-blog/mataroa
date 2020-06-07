@@ -1,6 +1,7 @@
 {% extends 'main/layout.html' %}
 
 {% block title %}{{ user.blog_title|default:request.subdomain }}{% endblock %}
+{% block meta_description %}{{ user.blog_byline|default:"" }}{% endblock %}
 
 {% block head_extra %}
 <link rel="alternate" type="application/rss+xml" title="RSS" href="{% url 'rss_feed' %}">
