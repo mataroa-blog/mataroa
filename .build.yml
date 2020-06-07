@@ -1,6 +1,7 @@
 image: debian/buster
 packages:
   - python3
+  - python3-pip
 tasks:
   - build: |
       cd mataroa
