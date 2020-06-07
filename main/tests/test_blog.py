@@ -55,7 +55,7 @@ class BlogIndexAnonTestCase(TestCase):
         self.assertContains(response, self.data["title"])
 
 
-class BlogExportTestCase(TestCase):
+class BlogExportMarkdownTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
         self.user.set_password("abcdef123456")
@@ -69,8 +69,53 @@ class BlogExportTestCase(TestCase):
         self.post = models.Post.objects.create(owner=self.user, **self.data)
 
     def test_blog_export(self):
-        response = self.client.get(reverse("blog_export"))
+        response = self.client.post(reverse("blog_export_markdown"))
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["Content-Type"], "application/zip")
+        self.assertContains(response, "export-markdown".encode("utf-8"))
+        self.assertContains(response, "Welcome post".encode("utf-8"))
+
+
+class BlogExportZolaTestCase(TestCase):
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.user.set_password("abcdef123456")
+        self.user.save()
+        self.client.login(username="alice", password="abcdef123456")
+        self.data = {
+            "title": "Welcome post",
+            "slug": "welcome-post",
+            "body": "Content sentence.",
+        }
+        self.post = models.Post.objects.create(owner=self.user, **self.data)
+
+    def test_blog_export(self):
+        response = self.client.post(reverse("blog_export_zola"))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["Content-Type"], "application/zip")
+        self.assertContains(response, "export-zola".encode("utf-8"))
+        self.assertContains(response, "Welcome post".encode("utf-8"))
+
+
+class BlogExportHugoTestCase(TestCase):
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.user.set_password("abcdef123456")
+        self.user.save()
+        self.client.login(username="alice", password="abcdef123456")
+        self.data = {
+            "title": "Welcome post",
+            "slug": "welcome-post",
+            "body": "Content sentence.",
+        }
+        self.post = models.Post.objects.create(owner=self.user, **self.data)
+
+    def test_blog_export(self):
+        response = self.client.post(reverse("blog_export_hugo"))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["Content-Type"], "application/zip")
+        self.assertContains(response, "export-hugo".encode("utf-8"))
+        self.assertContains(response, "Welcome post".encode("utf-8"))
 
 
 class RSSFeedTestCase(TestCase):
