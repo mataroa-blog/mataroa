@@ -341,6 +341,7 @@ footer {
 /* form */
 label {
     display: block;
+    margin-top: 16px;
 }
 
 input[type="text"],
@@ -350,7 +351,6 @@ input[type="password"],
 textarea {
     display: block;
     border: 2px solid var(--light-grey-color);
-    margin-bottom: 16px;
     box-sizing: border-box;
     width: 500px;
 }
