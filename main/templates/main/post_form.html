@@ -13,25 +13,64 @@
         Create a new post
         {% endif %}
     </h1>
-    <form method="post">
+    <form method="post"
+        {% if form.initial %}data-is-update="true"{% endif %}
+        {% if form.published_at.value and form.initial %}data-is-published="true"{% endif %}
+    >
+
+        {{ form.non_field_errors }}
+
         <p>
             <label for="id_title">Title</label>
-            <input type="text" name="title" id="id_title" maxlength="300" required value="{{ form.title.value|default_if_none:"" }}">
+            {% if form.title.errors %}
+                {% for error in form.title.errors %}
+                    <span class="form-error">{{ error|escape }}</span>
+                {% endfor %}
+            {% endif %}
+            <input type="text" name="title" id="id_title" maxlength="300" required value="{{ form.title.value|default_if_none:'' }}">
         </p>
 
         {% if form.initial %}
         <p>
-            <label for="id_slug">slug / permalink (<a href="https://yoast.com/what-is-a-permalink/">think SEO</a> before changing that)</label>
-            <input type="text" name="slug" id="id_slug" maxlength="300" required value="{{ form.slug.value|default_if_none:"" }}">
+            <label for="id_slug">Slug / permalink (<a href="https://yoast.com/what-is-a-permalink/">think SEO</a> before changing that)</label>
+            {% if form.slug.errors %}
+                {% for error in form.slug.errors %}
+                    <span class="form-error">{{ error|escape }}</span>
+                {% endfor %}
+            {% endif %}
+            <input type="text" name="slug" id="id_slug" maxlength="300" required value="{{ form.slug.value|default_if_none:'' }}">
         </p>
         {% endif %}
 
         <p>
-            <label for="id_body">Body (<a href="{% url 'markdown_guide' %}">supports markdown</a>)</label>
-            <textarea name="body" id="id_body" cols="60" rows="20">{{ form.body.value|default_if_none:"" }}</textarea>
+            <label for="id_published_at">Publication date (format e.g. 2006-01-30)</label>
+            {% if form.published_at.errors %}
+                {% for error in form.published_at.errors %}
+                    <span class="form-error">{{ error|escape }}</span>
+                {% endfor %}
+            {% endif %}
+            <input type="text" name="published_at" value="{{ form.published_at.value|date:'Y-m-d' }}" id="id_published_at">
+            <span class="helptext">{{ form.published_at.help_text }}</span>
         </p>
+
+        <p>
+            <label for="id_body">Body (<a href="{% url 'markdown_guide' %}">supports markdown</a>)</label>
+            {% if form.body.errors %}
+                {% for error in form.body.errors %}
+                    <span class="form-error">{{ error|escape }}</span>
+                {% endfor %}
+            {% endif %}
+            <textarea name="body" id="id_body" cols="60" rows="20">{{ form.body.value|default_if_none:'' }}</textarea>
+        </p>
+
         {% csrf_token %}
-        <input type="submit" value="Save">
+        {% if not form.initial and form.published_at.value %}
+        <input type="submit" value="Publish">
+        {% elif form.initial and form.published_at.value %}
+        <input type="submit" value="Update">
+        {% elif form.initial and not form.published_at.value %}
+        <input type="submit" value="Save as draft">
+        {% endif %}
     </form>
 </main>
 {% endblock %}
@@ -39,5 +78,51 @@
 {% block scripts %}
 <script>
     document.querySelector('input[name="title"]').focus();
+
+    var submitBtn = document.querySelector('input[type=submit');
+    var isUpdate = document.querySelector('form').dataset.isUpdate;
+    var isPublished = document.querySelector('form').dataset.isPublished;
+
+    function isDateValid(dateString) {
+        if (dateString.split('-').length !== 3) {
+            return false;
+        }
+        if (dateString.length !== 10) {
+            return false;
+        }
+        return true;
+    }
+
+    function checkPubDate(evt) {
+        var pubDateValue = document.querySelector('input[name=published_at').value;
+        var pubDateFilled = !!document.querySelector('input[name=published_at').value;
+
+        if (!isUpdate && pubDateFilled) {
+            // is new and has pub date filled
+            submitBtn.value = 'Publish';
+        } else if (!isUpdate && !pubDateFilled) {
+            // is new and has pub date empty
+            submitBtn.value = 'Save as draft';
+        } else if (isUpdate && isPublished && !pubDateFilled) {
+            // is update and already published and has pub date empty
+            submitBtn.value = 'Unpublish';
+        } else if (isUpdate && isPublished && pubDateFilled) {
+            // is update and already published and pub date filled
+            submitBtn.value = 'Update';
+        } else if (isUpdate && !isPublished && !pubDateFilled) {
+            // is update and not published and pub date empty
+            submitBtn.value = 'Save as draft';
+        } else if (isUpdate && !isPublished && pubDateFilled) {
+            // is update and not published and pub date filled
+            if (isDateValid(pubDateValue)) {
+                submitBtn.value = 'Publish';
+            } else {
+                submitBtn.value = 'Save as draft';
+            }
+        }
+    }
+
+    document.querySelector('input[name=published_at').addEventListener('keyup', checkPubDate);
+    document.querySelector('input[name=published_at').addEventListener('keydown', checkPubDate);
 </script>
 {% endblock %}

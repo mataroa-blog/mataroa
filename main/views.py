@@ -174,7 +174,7 @@ class PostDetail(DetailView):
 
 class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = models.Post
-    fields = ["title", "body"]
+    fields = ["title", "published_at", "body"]
     success_message = "'%(title)s' was created"
 
     def form_valid(self, form):
@@ -193,7 +193,7 @@ class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
 class PostUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = models.Post
-    fields = ["title", "body", "slug"]
+    fields = ["title", "slug", "published_at", "body"]
     success_message = "post updated"
 
     def get_queryset(self):
