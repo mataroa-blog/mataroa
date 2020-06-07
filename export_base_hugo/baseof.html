@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        {{- if eq .Section "blog" }}
+        <title>{{ .Title }} - {{ .Site.Title }}</title>
+        <meta name="description" content="{{ .Summary }}">
+        {{- else }}
+        <title>{{ .Site.Title }}</title>
+        <meta name="description" content="{{ .Site.Params.Description }}">
+        {{- end }}
+
+        <link href="{{ .Site.BaseURL }}style.css" rel="stylesheet">
+        <link href="{{ .RSSLink }}" rel="alternate" type="application/rss+xml">
+    </head>
+
+    <body>
+        {{- block "main" . }}
+        {{- end }}
+    </body>
+</html>

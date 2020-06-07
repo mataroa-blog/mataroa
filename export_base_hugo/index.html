@@ -1,0 +1,29 @@
+{{ define "main" }}
+<main>
+    <h1>{{ .Site.Title }}</h1>
+
+    {{- if .Site.Params.Description }}
+    <p class="byline">
+        {{ .Site.Params.Description }}
+    </p>
+    {{- end }}
+
+    <ul class="posts">
+        {{ range (.Paginate .Pages).Pages }}
+        <li>
+            <a href="{{ .Permalink }}">{{ .Title }}</a>
+            <small>
+                — <time datetime="{{ dateFormat "Jan 2, 2006" .Date }}" itemprop="datePublished">
+                    {{ dateFormat "Jan 2, 2006" .Date }}
+                </time>
+            </small>
+        </li>
+        {{ end }}
+    </ul>
+</main>
+
+<footer>
+    --
+    <br><a href="/rss.xml">RSS</a>
+</footer>
+{{ end }}
