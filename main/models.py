@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 
 from main import validators
 
@@ -42,9 +43,15 @@ class Post(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    published_at = models.DateField(
+        default=timezone.now,
+        blank=True,
+        null=True,
+        help_text="Leave blank to keep as draft/unpublished",
+    )
 
     class Meta:
-        ordering = ["-created_at"]
+        ordering = ["-published_at", "-created_at"]
         unique_together = [["slug", "owner"]]
 
     @property

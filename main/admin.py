@@ -37,7 +37,15 @@ admin.site.register(models.User, UserAdmin)
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ("id", "title", "slug", "owner", "created_at", "updated_at")
+    list_display = (
+        "id",
+        "title",
+        "slug",
+        "owner",
+        "created_at",
+        "updated_at",
+        "published_at",
+    )
 
 
 admin.site.register(models.Post, PostAdmin)
