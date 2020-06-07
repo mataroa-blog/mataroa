@@ -206,7 +206,12 @@ p {
     max-width: 500px;
 }
 
-h1,
+h1 {
+    font-weight: 500;
+    padding-bottom: 4px;
+    border-bottom: 2px solid var(--light-grey-color);
+}
+
 h2,
 h3 {
     font-weight: 500;
@@ -257,44 +262,15 @@ blockquote {
     max-width: 500px;
 }
 
-@media (max-width: 500px) {
-    header {
-        padding-left: 8px;
-        padding-right: 8px;
-    }
-}
-
-header a {
-    display: block;
-    font-size: 32px;
-    margin-bottom: 40px;
-    color: #000;
-    font-weight: 400;
-}
-
-header a:hover {
-    text-decoration: underline;
-}
-
-.heading {
-    padding-bottom: 4px;
-    border-bottom: 2px solid var(--light-grey-color);
-}
-
-.brand {
-    display: block;
-    margin-top: 16px;
-    margin-bottom: 32px;
-    color: #000;
-}
-
-.brand:hover {
-    text-decoration: underline;
-}
-
+/* index */
 .byline {
     color: var(--dark-grey-color);
-    margin-bottom: 32px;
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+
+.byline::before {
+    content: "» ";
 }
 
 .posts {
@@ -316,6 +292,32 @@ header a:hover {
     white-space: nowrap;
 }
 
+/* post detail */
+.posts-item-title {
+    margin-bottom: 8px;
+}
+
+.posts-item-byline {
+    color: var(--dark-grey-color);
+    margin-bottom: 8px;
+}
+
+.posts-item-brand {
+    display: block;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    color: var(--dark-grey-color);
+}
+
+.posts-item-brand:hover {
+    text-decoration: none;
+}
+
+.posts-item-brand::before {
+    content: "» ";
+}
+
+/* footer */
 footer {
     margin-left: auto;
     margin-right: auto;

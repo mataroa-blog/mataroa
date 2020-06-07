@@ -9,10 +9,15 @@
     </head>
     <body>
         {% block content %}
-        <header>
-            <h1 class="heading"><a href="/">{{ config.title }}</a></h1>
-        </header>
         <main>
+            <h1>{{ config.title }}</h1>
+
+            {% if config.description %}
+            <p class="byline">
+                {{ config.description }}
+            </p>
+            {% endif %}
+
             <ul class="posts">
                 {% set blog = get_section(path='_index.md') %}
                 {% for post in blog.pages %}

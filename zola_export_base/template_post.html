@@ -4,12 +4,17 @@
 
 {% block content %}
 <main>
-    <a href="/" class="brand">{{ config.title }}</a>
+    <a href="/" class="posts-item-brand">{{ config.title }}</a>
+
     <article itemscope itemtype="http://schema.org/BlogPosting">
-        <h1 itemprop="name headline">{{ page.title }}</h1>
-        <div class="byline">
+        <h1 class="posts-item-title" itemprop="name headline">
+            {{ page.title }}
+        </h1>
+
+        <div class="posts-item-byline">
             Published on <time datetime="{{ page.date | date(format="%+") }}" itemprop="datePublished">{{ page.date | date(format="%B %e, %Y") }}</time>
         </div>
+
         <div itemprop="articleBody">
             {{ page.content | safe }}
         </div>
