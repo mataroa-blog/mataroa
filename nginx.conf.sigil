@@ -120,7 +120,7 @@ server {
 server {
   listen      [{{ $.NGINX_BIND_ADDRESS_IP6 }}]:{{ $listen_port }} ssl {{ if eq $.HTTP2_SUPPORTED "true" }}http2{{ else if eq $.SPDY_SUPPORTED "true" }}spdy{{ end }};
   listen      {{ if $.NGINX_BIND_ADDRESS_IP4 }}{{ $.NGINX_BIND_ADDRESS_IP4 }}:{{end}}{{ $listen_port }} ssl {{ if eq $.HTTP2_SUPPORTED "true" }}http2{{ else if eq $.SPDY_SUPPORTED "true" }}spdy{{ end }};
-  server_name mostlyoverstatements.com
+  server_name mostlyoverstatements.com;
   access_log  /var/log/nginx/mataroa-mostlyoverstatements-com-access.log;
   error_log   /var/log/nginx/mataroa-mostlyoverstatements-com-error.log;
 
