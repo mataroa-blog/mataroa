@@ -4,18 +4,31 @@
 
 {% block content %}
 <main>
-    <h1>Export blog</h1>
+    <h1>Export your blog</h1>
     <p>
-        Mataroa supports exporting all content of your blog into an archive that you
-        can directly use as Zola sources.
+        Mataroa allows you to export your blog posts into a zip archive that you
+        can directly use to self-host your website. We support three options:
     </p>
+    <ul>
+        <li><a href="#export-markdown">Markdown</a>: all your blog posts as .md files, zip archived</li>
+        <li><a href="#export-zola">Zola</a>: simple static site generator that we like</li>
+        <li><a href="#export-hugo">Hugo</a>: one of the most popular and reliable static site generators</li>
+    </ul>
+
+    <h2 id="export-markdown">Markdown</h2>
+    <form method="post" action="{% url 'blog_export_markdown' %}">
+        {% csrf_token %}
+        <input type="submit" value="Export as markdown files">
+    </form>
+
+    <h2 id="export-zola">Zola</h2>
     <p>
         <a href="https://www.getzola.org/">Zola</a> is a
         <a href="https://davidwalsh.name/introduction-static-site-generators">static site generator</a>
         similar to <a href="https://gohugo.io/">Hugo</a>.
     </p>
     <p>
-        To install zola
+        To install Zola
         <a href="https://www.getzola.org/documentation/getting-started/installation/">see here</a>.
         To use after downloading the zip archive:
     </p>
@@ -33,7 +46,34 @@
     </p>
     <form method="post">
         {% csrf_token %}
-        <input type="submit" value="Export to Zola">
+        <input type="submit" value="Export as Zola sources">
+    </form>
+
+    <h2 id="export-hugo">Hugo</h2>
+    <p>
+        <a href="https://gohugo.io/">Hugo</a> is one of the most popular and reliable open source
+        <a href="https://davidwalsh.name/introduction-static-site-generators">static site generators</a>.
+    </p>
+    <p>
+        To install Hugo
+        <a href="https://gohugo.io/getting-started/installing/">see here</a>.
+        To use after downloading the zip archive:
+    </p>
+    <ol>
+        <li><code>cd</code> into the directory</li>
+        <li>run <code>hugo server</code></li>
+        <li>go to <code>http://127.0.0.1:1313</code> in your browser</li>
+    </ol>
+    <p>Ready!</p>
+    <p>
+        You can also host it for free in <a href="https://www.netlify.com/">Netlify</a>.
+        Includes SSL, CDN distribution, auto-building, et al.
+        <a href="https://gohugo.io/hosting-and-deployment/hosting-on-netlify/">See here</a>
+        for how-to.
+    </p>
+    <form method="post" action="{% url 'blog_export_hugo' %}">
+        {% csrf_token %}
+        <input type="submit" value="Export as Hugo sources">
     </form>
 </main>
 {% endblock %}
