@@ -18,6 +18,13 @@ from main import forms, helpers, models
 
 
 @login_required
+def blog_index(request):
+    return redirect(
+        f'//{request.user.username}.{settings.CANONICAL_HOST}{reverse("index")}'
+    )
+
+
+@login_required
 def dashboard(request):
     if hasattr(request, "subdomain"):
         return redirect("//" + settings.CANONICAL_HOST + reverse("dashboard"))

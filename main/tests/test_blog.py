@@ -9,6 +9,7 @@ class IndexTestCase(TestCase):
     def test_index(self):
         response = self.client.get(reverse("index"))
         self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Mataroa")
 
 
 class BlogIndexTestCase(TestCase):
@@ -54,6 +55,27 @@ class BlogIndexAnonTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.data["title"])
 
+
+class BlogIndexRedirTestCase(TestCase):
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.user.blog_title = "Blog of Alice"
+        self.user.set_password("abcdef123456")
+        self.user.save()
+        self.client.login(username="alice", password="abcdef123456")
+        self.data = {
+            "title": "Welcome post",
+            "slug": "welcome-post",
+            "body": "Content sentence.",
+        }
+        self.post = models.Post.objects.create(owner=self.user, **self.data)
+
+    def test_blog_index_redir(self):
+        response = self.client.get(reverse("blog_index"))
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(
+            f"{self.user.username}.{settings.CANONICAL_HOST}" in response.url
+        )
 
 class BlogExportMarkdownTestCase(TestCase):
     def setUp(self):

@@ -8,6 +8,7 @@ admin.site.site_header = "mataroa administration"
 # general
 urlpatterns = [
     path("", views.index, name="index"),
+    path("blog/", views.blog_index, name="blog_index"),
     path("dashboard/", views.dashboard, name="dashboard"),
     path("ethics/", views.ethics, name="ethics"),
     path("premium/", views.InterestView.as_view(), name="interest"),
