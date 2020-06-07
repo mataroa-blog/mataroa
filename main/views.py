@@ -252,6 +252,9 @@ def blog_export(request):
                 zola_config_file.read()
                 .replace("example.com", f"{request.user.username}.mataroa.blog")
                 .replace("Example blog title", f"{request.user.username} blog")
+                .replace(
+                    "Example blog description", f"{request.user.blog_byline or ''}"
+                )
             )
         with open("./zola_export_base/style.css", "r") as zola_styles_file:
             zola_styles = zola_styles_file.read()
