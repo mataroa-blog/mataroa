@@ -52,3 +52,14 @@ def is_disallowed(username):
         "www",
     ]
     return username in disallowed_usernames
+
+
+def prepend_frontmatter(body, post_title, pub_date):
+    frontmatter = "+++\n"
+    frontmatter += f'title = "{post_title}"\n'
+    frontmatter += f"date = {pub_date}\n"
+    frontmatter += 'template = "post.html"\n'
+    frontmatter += "+++\n"
+    frontmatter += "\n"
+
+    return frontmatter + body

@@ -265,7 +265,8 @@ def blog_export(request):
         export_posts = []
         for p in posts:
             title = p.title.replace(":", "-") + ".md"
-            export_posts.append((title, io.BytesIO(p.body.encode())))
+            body = helpers.prepend_frontmatter(p.body, p.title, p.created_at.date())
+            export_posts.append((title, io.BytesIO(body.encode())))
 
         # create zip archive in memory
         export_name = "export-" + str(uuid.uuid4())[:8]
