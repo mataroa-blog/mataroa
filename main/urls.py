@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import include, path
 
-from main import feeds, views
+from main import feeds, views, views_export
 
 admin.site.site_header = "mataroa administration"
 
@@ -36,5 +36,16 @@ urlpatterns += [
     path("blog/<slug:slug>/edit/", views.PostUpdate.as_view(), name="post_update",),
     path("blog/<slug:slug>/delete/", views.PostDelete.as_view(), name="post_delete",),
     path("rss/", feeds.RSSBlogFeed(), name="rss_feed"),
-    path("export/", views.blog_export, name="blog_export"),
+]
+
+# blog export
+urlpatterns += [
+    path("export/", views_export.blog_export, name="blog_export"),
+    path(
+        "export/markdown/",
+        views_export.blog_export_markdown,
+        name="blog_export_markdown",
+    ),
+    path("export/zola/", views_export.blog_export_zola, name="blog_export_zola"),
+    path("export/hugo/", views_export.blog_export_hugo, name="blog_export_hugo"),
 ]
