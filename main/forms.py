@@ -21,3 +21,7 @@ class InterestForm(forms.Form):
         body += "\nPython"
 
         mail_admins("Interest form response", body)
+
+
+class UploadFilesForm(forms.Form):
+    file = forms.FileField(widget=forms.ClearableFileInput(attrs={"multiple": True}))
