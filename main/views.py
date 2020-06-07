@@ -52,7 +52,7 @@ def index(request):
     if request.user.is_authenticated:
         return redirect("dashboard")
 
-    return render(request, "main/index.html")
+    return render(request, "main/landing.html")
 
 
 class Logout(DjLogoutView):
