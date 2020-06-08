@@ -145,25 +145,30 @@ class PostUpdateNotOwnTestCase(TestCase):
     """Tests user cannot update other user's post."""
 
     def setUp(self):
-        self.user = models.User.objects.create(username="alice")
-        self.data = {
+        self.victim = models.User.objects.create(username="bob")
+        self.original_data = {
             "title": "New post",
             "slug": "new-post",
             "body": "Content sentence.",
         }
-        self.post = models.Post.objects.create(owner=self.user, **self.data)
+        self.post = models.Post.objects.create(owner=self.victim, **self.original_data)
+
+        self.attacker = models.User.objects.create(username="alice")
+        self.attacker.set_password("abcdef123456")
+        self.attacker.save()
+        self.client.login(username="alice", password="abcdef123456")
 
     def test_post_update_not_own(self):
         new_data = {
-            "title": "Updated post",
-            "slug": "updated-new-post",
-            "body": "Updated content sentence.",
+            "title": "Bob sucks",
+            "slug": "sorry-bob",
+            "body": "No more content.",
         }
         self.client.post(reverse("post_update", args=(self.post.slug,)), new_data)
         updated_post = models.Post.objects.get(id=self.post.id)
-        self.assertTrue(updated_post.title, new_data["title"])
-        self.assertTrue(updated_post.slug, new_data["slug"])
-        self.assertTrue(updated_post.body, new_data["body"])
+        self.assertTrue(updated_post.title, self.original_data["title"])
+        self.assertTrue(updated_post.slug, self.original_data["slug"])
+        self.assertTrue(updated_post.body, self.original_data["body"])
 
 
 class PostUpdateAnonTestCase(TestCase):
