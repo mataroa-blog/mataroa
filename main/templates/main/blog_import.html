@@ -9,7 +9,15 @@
         Mataroa allows you to import text/markdown files to jump start your blog.
     </p>
     <form method="post" enctype="multipart/form-data">
-        <input type="file" name="file" id="id_file" multiple required>
+        {{ form.non_field_errors }}
+        <p>
+            <input type="file" name="file" id="id_file" multiple required>
+            {% if form.file.errors %}
+                {% for error in form.file.errors %}
+                    <div class="form-error">{{ error|escape }}</div>
+                {% endfor %}
+            {% endif %}
+        </p>
         {% csrf_token %}
         <input type="submit" value="Upload">
     </form>
