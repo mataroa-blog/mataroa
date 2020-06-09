@@ -348,7 +348,7 @@ def ethics(request):
     return render(request, "main/ethics.html")
 
 
-class InterestView(SuccessMessageMixin, FormView):
+class Interest(SuccessMessageMixin, FormView):
     form_class = forms.InterestForm
     template_name = "main/interest.html"
     success_url = reverse_lazy("index")
