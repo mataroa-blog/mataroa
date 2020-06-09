@@ -1,0 +1,13 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Deleting {{ image.name }} — {{ request.user.username }} at Mataroa{% endblock %}
+
+{% block content %}
+<main class="delete">
+    <h1>Delete {{ image.name }} for sure?</h1>
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" value="Yes, delete for sure" class="type-danger">
+    </form>
+</main>
+{% endblock %}

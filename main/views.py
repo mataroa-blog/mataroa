@@ -1,3 +1,5 @@
+import uuid
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -5,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView as DjLogoutView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView
@@ -244,7 +246,7 @@ class PostDelete(LoginRequiredMixin, DeleteView):
         return super().dispatch(request, *args, **kwargs)
 
 
-class BlogImport(FormView):
+class BlogImport(LoginRequiredMixin, FormView):
     form_class = forms.UploadFilesForm
     template_name = "main/blog_import.html"
     success_url = reverse_lazy("blog_index")
@@ -265,6 +267,78 @@ class BlogImport(FormView):
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
+
+
+def image_raw(request, slug, extension):
+    image = models.Image.objects.get(slug=slug)
+    return HttpResponse(image.data, content_type="image/" + image.extension)
+
+
+class ImageList(LoginRequiredMixin, FormView):
+    form_class = forms.UploadFilesForm
+    template_name = "main/image_list.html"
+    success_url = reverse_lazy("image_list")
+
+    def get_context_data(self, **kwargs):
+        context = super(ImageList, self).get_context_data(**kwargs)
+        context["images"] = models.Image.objects.filter(owner=self.request.user)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        files = request.FILES.getlist("file")
+        if form.is_valid():
+            for f in files:
+                name_ext_parts = f.name.rsplit(".", 1)
+                name = name_ext_parts[0].replace(".", "-")
+                extension = name_ext_parts[1]
+                if extension == "jpg":
+                    extension = "jpeg"
+                data = f.read()
+
+                # file limit 6MB but say it's 5MB
+                if len(data) > 6 * 1000 * 1000:
+                    form.add_error("file", "File too big. Limit is 5MB.")
+                    return self.form_invalid(form)
+
+                models.Image.objects.create(
+                    name=name,
+                    data=data,
+                    extension=extension,
+                    owner=request.user,
+                    slug=str(uuid.uuid4())[:8],
+                )
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+
+class ImageDetail(DetailView):
+    model = models.Image
+
+
+class ImageUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    model = models.Image
+    fields = ["name"]
+    success_message = "image updated"
+
+    def dispatch(self, request, *args, **kwargs):
+        image = self.get_object()
+        if request.user != image.owner:
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
+
+class ImageDelete(LoginRequiredMixin, DeleteView):
+    model = models.Image
+    success_url = reverse_lazy("image_list")
+
+    def dispatch(self, request, *args, **kwargs):
+        image = self.get_object()
+        if request.user != image.owner:
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 def ethics(request):

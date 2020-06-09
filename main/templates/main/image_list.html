@@ -1,0 +1,30 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Images — {{ request.user.username }} at Mataroa{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Images</h1>
+    <form method="post" enctype="multipart/form-data">
+        {{ form.non_field_errors }}
+        <p>
+            <input type="file" name="file" id="id_file" multiple required>
+            {% if form.file.errors %}
+                {% for error in form.file.errors %}
+                    <div class="form-error">{{ error|escape }}</div>
+                {% endfor %}
+            {% endif %}
+        </p>
+        {% csrf_token %}
+        <input type="submit" value="Upload">
+    </form>
+</main>
+
+<section class="images-grid">
+    {% for image in images %}
+    <a href="{% url 'image_detail' image.slug %}" class="images-grid-item">
+        <img src="{% url 'image_raw' image.slug image.extension %}" alt="{{ image.name }}">
+    </a>
+    {% endfor %}
+</section>
+{% endblock %}

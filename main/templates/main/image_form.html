@@ -1,0 +1,21 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Editing {{ form.name.value }} image — {{ request.user.username }} at Mataroa{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Editing image</h1>
+
+    <form method="post">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <input type="submit" value="Save">
+    </form>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.querySelector('input[name="name"]').focus();
+</script>
+{% endblock %}

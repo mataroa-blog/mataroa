@@ -51,3 +51,14 @@ urlpatterns += [
     path("export/zola/", views_export.blog_export_zola, name="blog_export_zola"),
     path("export/hugo/", views_export.blog_export_hugo, name="blog_export_hugo"),
 ]
+
+# images
+urlpatterns += [
+    path("images/<slug:slug>.<slug:extension>", views.image_raw, name="image_raw"),
+    path("images/", views.ImageList.as_view(), name="image_list"),
+    path("images/<slug:slug>", views.ImageDetail.as_view(), name="image_detail"),
+    path("images/<slug:slug>/edit/", views.ImageUpdate.as_view(), name="image_update",),
+    path(
+        "images/<slug:slug>/delete/", views.ImageDelete.as_view(), name="image_delete",
+    ),
+]

@@ -1,0 +1,27 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}{{ image.name }} — {{ request.user.username }} at Mataroa{% endblock %}
+
+{% block content %}
+<main>
+    <h1>{{ image.name }}</h1>
+
+    <div class="images-item-byline">
+        <a class="images-item-back" href="{% url 'image_list' %}">« all images</a>
+        — Uploaded on <time datetime="{{ image.uploaded_at|date:'F j, Y' }}">{{ image.uploaded_at|date:'F j, Y' }}</time>
+        | <a href="{% url 'image_update' image.slug %}">Edit image</a>
+        | <a href="{% url 'image_delete' image.slug %}">Del</a>
+    </div>
+
+    <p>
+        Use markdown syntax to add this image in a post:
+    </p>
+    <code>
+        ![{{ image.name }}]({{ request.scheme }}:{{ image.raw_url_absolute }})
+    </code>
+</main>
+
+<section class="images-item">
+    <img src="{% url 'image_raw' image.slug image.extension %}" alt="{{ image.name }}">
+</section>
+{% endblock %}
