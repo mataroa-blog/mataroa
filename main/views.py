@@ -10,6 +10,7 @@ from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 
@@ -45,7 +46,9 @@ def index(request):
                 posts = models.Post.objects.filter(owner=blog_user)
             else:
                 posts = models.Post.objects.filter(
-                    owner=blog_user, published_at__isnull=False
+                    owner=blog_user,
+                    published_at__isnull=False,
+                    published_at__lte=timezone.now().date(),
                 ).order_by("-published_at")
 
             return render(

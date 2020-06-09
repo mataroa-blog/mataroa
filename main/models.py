@@ -49,7 +49,7 @@ class Post(models.Model):
         default=timezone.now,
         blank=True,
         null=True,
-        help_text="Leave blank to keep as draft/unpublished",
+        help_text="Leave blank to keep as draft/unpublished. Use a future date for auto-posting.",
     )
 
     class Meta:
