@@ -317,7 +317,7 @@ class ImageList(LoginRequiredMixin, FormView):
             return self.form_invalid(form)
 
 
-class ImageDetail(DetailView):
+class ImageDetail(LoginRequiredMixin, DetailView):
     model = models.Image
 
 
