@@ -6,8 +6,12 @@
 <main>
     <h1>Import posts</h1>
     <p>
-        Mataroa allows you to import text/markdown files to jump start your blog.
+        Mataroa allows you to import text/markdown files.
     </p>
+    <ul>
+        <li>You can choose multiple files at once.</li>
+        <li>They will be uploaded as drafts (unpublished).</li>
+    </ul>
     <form method="post" enctype="multipart/form-data">
         {{ form.non_field_errors }}
         <p>

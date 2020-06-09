@@ -266,6 +266,7 @@ class BlogImport(LoginRequiredMixin, FormView):
                     slug=helpers.get_post_slug(f.name, request.user),
                     body=content,
                     owner=request.user,
+                    published_at=None,
                 )
             return self.form_valid(form)
         else:
