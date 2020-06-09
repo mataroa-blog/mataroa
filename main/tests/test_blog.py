@@ -85,19 +85,16 @@ class BlogImportTestCase(TestCase):
         self.user.set_password("abcdef123456")
         self.user.save()
         self.client.login(username="alice", password="abcdef123456")
-        self.data = {
-            "title": "Welcome post",
-            "slug": "welcome-post",
-            "body": "Content sentence.",
-        }
-        self.post = models.Post.objects.create(owner=self.user, **self.data)
 
     def test_blog_import(self):
-        # probably a bad idea to test using README
-        filename = "README.md"
+        filename = "main/tests/testdata/lorem.md"
         with open(filename) as fp:
             self.client.post(reverse("blog_import"), {"file": fp})
-            self.assertEqual(models.Post.objects.get(title=filename).title, filename)
+            self.assertTrue(models.Post.objects.filter(title="lorem.md").exists())
+            self.assertTrue(
+                "Curabitur pretium tincidunt lacus"
+                in models.Post.objects.get(title="lorem.md").body
+            )
 
 
 class BlogExportMarkdownTestCase(TestCase):
