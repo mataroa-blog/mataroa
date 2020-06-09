@@ -121,6 +121,9 @@ class PostDetailTestCase(TestCase):
 class PostUpdateTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
+        self.user.set_password("abcdef123456")
+        self.user.save()
+        self.client.login(username="alice", password="abcdef123456")
         self.data = {
             "title": "New post",
             "slug": "new-post",
@@ -134,11 +137,15 @@ class PostUpdateTestCase(TestCase):
             "slug": "updated-new-post",
             "body": "Updated content sentence.",
         }
-        self.client.post(reverse("post_update", args=(self.post.slug,)), new_data)
+        self.client.post(
+            reverse("post_update", args=(self.post.slug,)),
+            data=new_data,
+            HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
+        )
         updated_post = models.Post.objects.get(id=self.post.id)
-        self.assertTrue(updated_post.title, new_data["title"])
-        self.assertTrue(updated_post.slug, new_data["slug"])
-        self.assertTrue(updated_post.body, new_data["body"])
+        self.assertEqual(updated_post.title, new_data["title"])
+        self.assertEqual(updated_post.slug, new_data["slug"])
+        self.assertEqual(updated_post.body, new_data["body"])
 
 
 class PostUpdateNotOwnTestCase(TestCase):
@@ -166,9 +173,9 @@ class PostUpdateNotOwnTestCase(TestCase):
         }
         self.client.post(reverse("post_update", args=(self.post.slug,)), new_data)
         updated_post = models.Post.objects.get(id=self.post.id)
-        self.assertTrue(updated_post.title, self.original_data["title"])
-        self.assertTrue(updated_post.slug, self.original_data["slug"])
-        self.assertTrue(updated_post.body, self.original_data["body"])
+        self.assertEqual(updated_post.title, self.original_data["title"])
+        self.assertEqual(updated_post.slug, self.original_data["slug"])
+        self.assertEqual(updated_post.body, self.original_data["body"])
 
 
 class PostUpdateAnonTestCase(TestCase):
@@ -191,9 +198,9 @@ class PostUpdateAnonTestCase(TestCase):
         }
         self.client.post(reverse("post_update", args=(self.post.slug,)), new_data)
         post_now = models.Post.objects.get(id=self.post.id)
-        self.assertTrue(post_now.title, new_data["title"])
-        self.assertTrue(post_now.slug, new_data["slug"])
-        self.assertTrue(post_now.body, new_data["body"])
+        self.assertEqual(post_now.title, self.data["title"])
+        self.assertEqual(post_now.slug, self.data["slug"])
+        self.assertEqual(post_now.body, self.data["body"])
 
     def test_post_update_anon_subdomain(self):
         new_data = {
@@ -207,9 +214,9 @@ class PostUpdateAnonTestCase(TestCase):
             HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
         )
         post_now = models.Post.objects.get(id=self.post.id)
-        self.assertTrue(post_now.title, new_data["title"])
-        self.assertTrue(post_now.slug, new_data["slug"])
-        self.assertTrue(post_now.body, new_data["body"])
+        self.assertEqual(post_now.title, self.data["title"])
+        self.assertEqual(post_now.slug, self.data["slug"])
+        self.assertEqual(post_now.body, self.data["body"])
 
 
 class PostDeleteTestCase(TestCase):
