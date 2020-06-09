@@ -49,3 +49,18 @@ class PostAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.Post, PostAdmin)
+
+
+class ImageAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "name",
+        "slug",
+        "extension",
+        "owner",
+        "uploaded_at",
+        "data",
+    )
+
+
+admin.site.register(models.Image, ImageAdmin)
