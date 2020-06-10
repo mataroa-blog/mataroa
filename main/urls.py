@@ -56,7 +56,7 @@ urlpatterns += [
 urlpatterns += [
     path("images/<slug:slug>.<slug:extension>", views.image_raw, name="image_raw"),
     re_path(
-        r"^images/(?P<options>[\w\?\=]+)?$",
+        r"^images/(?P<options>\?[\w\=]+)?$",  # e.g. images/ or images/?raw=true
         views.ImageList.as_view(),
         name="image_list",
     ),
