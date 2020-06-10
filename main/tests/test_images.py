@@ -142,7 +142,7 @@ class ImageDeleteAnonTestCase(TestCase):
         self.image = models.Image.objects.get(name="vulf")
         self.client.logout()
 
-    def test_post_delete_anon(self):
+    def test_image_delete_anon(self):
         self.client.post(reverse("image_delete", args=(self.image.slug,)))
         self.assertTrue(
             models.Image.objects.filter(name="vulf", owner=self.user).exists()

@@ -363,10 +363,6 @@ textarea {
     }
 }
 
-input[type="checkbox"] {
-    margin-bottom: 16px;
-}
-
 input[type="submit"] {
     cursor: pointer;
     background: var(--link-color);
@@ -482,6 +478,43 @@ form .helptext {
 
 .posts-item-body img {
     max-width: 100%;
+}
+
+/* page detail */
+.pages-item-title {
+    margin-bottom: 8px;
+}
+
+.pages-item-byline {
+    color: var(--dark-grey-color);
+    margin-bottom: 8px;
+}
+
+.pages-item-brand {
+    display: block;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    color: var(--dark-grey-color);
+}
+
+.pages-item-brand:hover {
+    text-decoration: none;
+}
+
+.pages-item-brand::before {
+    content: "» ";
+}
+
+.pages-item-body img {
+    max-width: 100%;
+}
+
+.pages-generic-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: 16px;
+    row-gap: 16px;
+    margin-top: 16px;
 }
 
 /* dashboard */

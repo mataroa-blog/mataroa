@@ -16,7 +16,7 @@ from django.http import (
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 
 from main import forms, helpers, models
@@ -382,6 +382,76 @@ class ImageDelete(LoginRequiredMixin, DeleteView):
     def dispatch(self, request, *args, **kwargs):
         image = self.get_object()
         if request.user != image.owner:
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
+
+class PageList(LoginRequiredMixin, ListView):
+    model = models.Page
+
+    def get_queryset(self):
+        return models.Page.objects.filter(owner=self.request.user)
+
+
+class PageCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    model = models.Page
+    fields = ["title", "slug", "is_hidden", "body"]
+    success_message = "'%(title)s' was created"
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.owner = self.request.user
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+
+class PageDetail(DetailView):
+    model = models.Page
+
+    def get_queryset(self):
+        queryset = models.Page.objects.filter(owner__username=self.request.subdomain)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(PageDetail, self).get_context_data(**kwargs)
+        if hasattr(self.request, "subdomain"):
+            context["blog_title"] = models.User.objects.get(
+                username=self.request.subdomain
+            ).blog_title
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        if not hasattr(request, "subdomain"):
+            if request.user.is_authenticated:
+                subdomain = request.user.username
+                return redirect(
+                    f"//{subdomain}.{settings.CANONICAL_HOST}{request.path}"
+                )
+            else:
+                return redirect("index")
+
+        return super().dispatch(request, *args, **kwargs)
+
+
+class PageUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    model = models.Page
+    fields = ["title", "slug", "is_hidden", "body"]
+    success_message = "page updated"
+
+    def dispatch(self, request, *args, **kwargs):
+        page = self.get_object()
+        if request.user != page.owner:
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
+
+class PageDelete(LoginRequiredMixin, DeleteView):
+    model = models.Page
+    success_url = reverse_lazy("page_list")
+
+    def dispatch(self, request, *args, **kwargs):
+        page = self.get_object()
+        if request.user != page.owner:
             raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 

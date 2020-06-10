@@ -1,0 +1,21 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Pages — {{ request.user.username }} at Mataroa{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Pages</h1>
+    <p>
+        <a href="{% url 'page_create' %}">Create a new page</a>
+    </p>
+    <ul>
+        {% for page in page_list %}
+        <li>
+            <a href="{% url 'page_detail' page.slug %}">
+                {{ page.title }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</main>
+{% endblock %}

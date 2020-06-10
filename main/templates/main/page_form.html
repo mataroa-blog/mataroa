@@ -1,16 +1,16 @@
 {% extends 'main/layout.html' %}
 
 {% block title %}
-    {% if form.initial %}Editing {{ form.title.value }}{% else %}Create a new post{% endif %}
+    {% if form.initial %}Editing {{ form.title.value }}{% else %}Create a new page{% endif %}
 {% endblock %}
 
 {% block content %}
 <main>
     <h1>
         {% if form.initial %}
-        Editing post
+        Editing page
         {% else %}
-        Create a new post
+        Create a new page
         {% endif %}
     </h1>
     <form method="post">
@@ -26,27 +26,21 @@
             <input type="text" name="title" id="id_title" maxlength="300" required value="{{ form.title.value|default_if_none:'' }}">
         </p>
 
-        {% if form.initial %}
         <p>
-            <label for="id_slug">Slug / permalink (<a href="https://yoast.com/what-is-a-permalink/">think SEO</a> before changing that)</label>
+            <label for="id_slug">Slug</label>
             {% if form.slug.errors %}
                 {% for error in form.slug.errors %}
                     <span class="form-error">{{ error|escape }}</span>
                 {% endfor %}
             {% endif %}
             <input type="text" name="slug" id="id_slug" maxlength="300" required value="{{ form.slug.value|default_if_none:'' }}">
+            <span class="helptext">{{ form.slug.help_text }}</span>
         </p>
-        {% endif %}
 
         <p>
-            <label for="id_published_at">Publication date (format e.g. 2006-01-30)</label>
-            {% if form.published_at.errors %}
-                {% for error in form.published_at.errors %}
-                    <span class="form-error">{{ error|escape }}</span>
-                {% endfor %}
-            {% endif %}
-            <input type="text" name="published_at" value="{{ form.published_at.value|date:'Y-m-d' }}" id="id_published_at">
-            <span class="helptext">{{ form.published_at.help_text }}</span>
+            <label for="id_is_hidden" style="display: inline-block; margin-top: 0;">Hidden?</label>
+            <input type="checkbox" name="is_hidden" id="id_is_hidden" {% if form.is_hidden.value %}checked{% endif %}>
+            <br><span class="helptext">{{ form.is_hidden.help_text }}</span>
         </p>
 
         <p>

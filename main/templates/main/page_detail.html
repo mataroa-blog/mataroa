@@ -1,0 +1,40 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}{{ page.title}} — {{ blog_title }}{% endblock %}
+
+{% block meta_description %}{{ page.body|truncatewords:16 }}{% endblock %}
+
+{% block content %}
+<main>
+    {% if blog_title %}
+    <a href="{% url 'index' %}" class="pages-item-brand">{{ blog_title }}</a>
+    {% endif %}
+
+    <h1 class="pages-item-title">{{ page.title }}</h1>
+
+    {% if request.user.is_authenticated and request.subdomain == user.username %}
+    <div class="pages-item-byline">
+        Last updated on <time datetime="{{ page.updated_at|date:'F j, Y' }}">{{ page.updated_at|date:'F j, Y' }}</time>
+        | <a href="{% url 'page_update' page.slug %}">Edit page</a>
+        | <a href="{% url 'page_delete' page.slug %}">Del</a>
+    </div>
+    {% endif %}
+
+    <div class="pages-item-body">
+        {{ page.as_html|safe }}
+    </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    window.addEventListener('keypress', function (evt) {
+        if (evt.key === 'u') {
+            document.location.assign('/pages');
+        } else if (evt.key === 'e') {
+            let url = document.location.pathname + 'edit';
+            document.location.assign(url);
+        }
+    });
+</script>
+{% endblock %}

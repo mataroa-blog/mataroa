@@ -54,15 +54,24 @@ urlpatterns += [
 
 # images
 urlpatterns += [
-    path("images/<slug:slug>.<slug:extension>", views.image_raw, name="image_raw"),
+    path("images/<slug:slug>.<slug:extension>/", views.image_raw, name="image_raw"),
     re_path(
         r"^images/(?P<options>\?[\w\=]+)?$",  # e.g. images/ or images/?raw=true
         views.ImageList.as_view(),
         name="image_list",
     ),
-    path("images/<slug:slug>", views.ImageDetail.as_view(), name="image_detail"),
+    path("images/<slug:slug>/", views.ImageDetail.as_view(), name="image_detail"),
     path("images/<slug:slug>/edit/", views.ImageUpdate.as_view(), name="image_update",),
     path(
         "images/<slug:slug>/delete/", views.ImageDelete.as_view(), name="image_delete",
     ),
+]
+
+# pages
+urlpatterns += [
+    path("pages/", views.PageList.as_view(), name="page_list"),
+    path("pages/create/", views.PageCreate.as_view(), name="page_create"),
+    path("<slug:slug>/", views.PageDetail.as_view(), name="page_detail"),
+    path("<slug:slug>/edit/", views.PageUpdate.as_view(), name="page_update",),
+    path("<slug:slug>/delete/", views.PageDelete.as_view(), name="page_delete",),
 ]
