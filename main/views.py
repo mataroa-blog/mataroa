@@ -250,7 +250,7 @@ class PostDelete(LoginRequiredMixin, DeleteView):
 
 
 class BlogImport(LoginRequiredMixin, FormView):
-    form_class = forms.UploadFilesForm
+    form_class = forms.UploadTextFilesForm
     template_name = "main/blog_import.html"
     success_url = reverse_lazy("blog_index")
 
