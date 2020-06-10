@@ -498,13 +498,14 @@ form .helptext {
 }
 
 .images-grid-item {
-    text-align: center;
+    display: flex;
+    justify-content: center;
     border: 1px solid var(--light-grey-color);
 }
 
 .images-grid-item img {
-    width: 300px;
-    height: 300px;
+    max-width: 300px;
+    max-height: 300px;
     object-fit: contain;
 }
 
