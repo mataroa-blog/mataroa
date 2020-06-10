@@ -354,6 +354,14 @@ class ImageList(LoginRequiredMixin, FormView):
 class ImageDetail(LoginRequiredMixin, DetailView):
     model = models.Image
 
+    def get_context_data(self, **kwargs):
+        context = super(ImageDetail, self).get_context_data(**kwargs)
+        context["used_by_posts"] = []
+        for post in models.Post.objects.filter(owner=self.request.user):
+            if self.object.get_absolute_url() in post.body:
+                context["used_by_posts"].append(post)
+        return context
+
 
 class ImageUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = models.Image
