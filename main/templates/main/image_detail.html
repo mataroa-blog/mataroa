@@ -20,12 +20,14 @@
         ![{{ image.name }}]({{ request.scheme }}:{{ image.raw_url_absolute }})
     </code>
 
+    {% if used_by_posts %}
     <p>Currently appearing in:</p>
     <ul>
         {% for post in used_by_posts %}
         <li><a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a></li>
         {% endfor %}
     </ul>
+    {% endif %}
 </main>
 
 <section class="images-item">
