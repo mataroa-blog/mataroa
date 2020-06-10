@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
 
 from main import feeds, views, views_export
 
@@ -30,7 +30,7 @@ urlpatterns += [
     path("accounts/<int:pk>/delete/", views.UserDelete.as_view(), name="user_delete"),
 ]
 
-# blog related
+# blog posts
 urlpatterns += [
     path("blog/create/", views.PostCreate.as_view(), name="post_create"),
     path("blog/<slug:slug>/", views.PostDetail.as_view(), name="post_detail"),
@@ -55,7 +55,11 @@ urlpatterns += [
 # images
 urlpatterns += [
     path("images/<slug:slug>.<slug:extension>", views.image_raw, name="image_raw"),
-    path("images/", views.ImageList.as_view(), name="image_list"),
+    re_path(
+        r"^images/(?P<options>[\w\?\=]+)?$",
+        views.ImageList.as_view(),
+        name="image_list",
+    ),
     path("images/<slug:slug>", views.ImageDetail.as_view(), name="image_detail"),
     path("images/<slug:slug>/edit/", views.ImageUpdate.as_view(), name="image_update",),
     path(

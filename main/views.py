@@ -7,7 +7,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView as DjLogoutView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import (
+    Http404,
+    HttpResponse,
+    HttpResponseBadRequest,
+    HttpResponseRedirect,
+)
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
@@ -279,7 +284,7 @@ def image_raw(request, slug, extension):
 
 
 class ImageList(LoginRequiredMixin, FormView):
-    form_class = forms.UploadFilesForm
+    form_class = forms.UploadImagesForm
     template_name = "main/image_list.html"
     success_url = reverse_lazy("image_list")
 
@@ -296,9 +301,9 @@ class ImageList(LoginRequiredMixin, FormView):
             for f in files:
                 name_ext_parts = f.name.rsplit(".", 1)
                 name = name_ext_parts[0].replace(".", "-")
-                extension = name_ext_parts[1]
-                if extension == "jpg":
-                    extension = "jpeg"
+                self.extension = name_ext_parts[1]
+                if self.extension == "jpg":
+                    self.extension = "jpeg"
                 data = f.read()
 
                 # file limit 6MB but say it's 5MB
@@ -306,16 +311,37 @@ class ImageList(LoginRequiredMixin, FormView):
                     form.add_error("file", "File too big. Limit is 5MB.")
                     return self.form_invalid(form)
 
+                self.slug = str(uuid.uuid4())[:8]
                 models.Image.objects.create(
                     name=name,
                     data=data,
-                    extension=extension,
+                    extension=self.extension,
                     owner=request.user,
-                    slug=str(uuid.uuid4())[:8],
+                    slug=self.slug,
                 )
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
+
+    def get_success_url(self):
+        # if ?raw=true in url, return to image_raw instead of image_list
+        if (
+            len(self.request.FILES.getlist("file")) == 1
+            and self.request.GET.get("raw") == "true"
+        ):
+            return reverse("image_raw", args=(self.slug, self.extension))
+        else:
+            return str(self.success_url)  # success_url may be lazy
+
+    def form_invalid(self, form):
+        # if ?raw=true in url, return form error as string
+        if (
+            len(self.request.FILES.getlist("file")) == 1
+            and self.request.GET.get("raw") == "true"
+        ):
+            return HttpResponseBadRequest(" ".join(form.errors["file"]))
+        else:
+            return super(ImageList, self).form_invalid(form)
 
 
 class ImageDetail(LoginRequiredMixin, DetailView):
