@@ -15,7 +15,7 @@ class User(AbstractUser):
         max_length=150,
         unique=True,
         help_text="This will be your subdomain. Lowercase alphanumeric.",
-        validators=[validators.StrictUsernameValidator()],
+        validators=[validators.AlphanumericHyphenValidator()],
         error_messages={"unique": "A user with that username already exists."},
     )
     about = models.TextField(blank=True, null=True)
@@ -106,3 +106,41 @@ class Image(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Page(models.Model):
+    title = models.CharField(max_length=300)
+    slug = models.CharField(
+        max_length=300,
+        validators=[validators.AlphanumericHyphenValidator()],
+        help_text="Lowercase letters, numbers, and - (hyphen) allowed.",
+    )
+    body = models.TextField(blank=True, null=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_hidden = models.BooleanField(
+        default=False,
+        help_text="If checked, page link will not appear on index footer.",
+    )
+
+    class Meta:
+        ordering = ["slug"]
+        unique_together = [["slug", "owner"]]
+
+    @property
+    def as_html(self):
+        return markdown.markdown(
+            self.body,
+            extensions=[
+                "markdown.extensions.fenced_code",
+                "markdown.extensions.tables",
+            ],
+        )
+
+    def get_absolute_url(self):
+        path = reverse("page_detail", kwargs={"slug": self.slug})
+        return f"//{self.owner.username}.{settings.CANONICAL_HOST}{path}"
+
+    def __str__(self):
+        return self.title

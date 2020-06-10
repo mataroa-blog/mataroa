@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
                 help_text="This will be your subdomain. Lowercase alphanumeric.",
                 max_length=150,
                 unique=True,
-                validators=[main.validators.StrictUsernameValidator()],
+                validators=[main.validators.AlphanumericHyphenValidator()],
             ),
         ),
     ]
