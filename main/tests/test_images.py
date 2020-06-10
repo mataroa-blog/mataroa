@@ -40,7 +40,8 @@ class ImageDetailTestCase(TestCase):
     def test_image_detail(self):
         response = self.client.get(reverse("image_detail", args=(self.image.slug,)),)
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "vulf")
+        self.assertInHTML("<h1>vulf</h1>", response.content.decode("utf-8"))
+        self.assertContains(response, "Uploaded on")
 
 
 class ImageUpdateTestCase(TestCase):
