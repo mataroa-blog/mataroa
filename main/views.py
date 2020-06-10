@@ -60,9 +60,12 @@ def index(request):
                 request,
                 "main/blog_index.html",
                 {
+                    "subdomain": request.subdomain,
                     "blog_user": blog_user,
                     "posts": posts,
-                    "subdomain": request.subdomain,
+                    "pages": models.Page.objects.filter(
+                        owner=blog_user, is_hidden=False
+                    ),
                 },
             )
         else:
