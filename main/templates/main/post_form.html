@@ -50,13 +50,14 @@
         </p>
 
         <p>
-            <label for="id_body">Body (<a href="{% url 'markdown_guide' %}">supports markdown</a>)</label>
+            <label for="id_body">Content (<a href="{% url 'markdown_guide' %}">supports markdown</a>) <span id="js-status"></span></label>
             {% if form.body.errors %}
                 {% for error in form.body.errors %}
                     <span class="form-error">{{ error|escape }}</span>
                 {% endfor %}
             {% endif %}
             <textarea name="body" id="id_body" cols="60" rows="20">{{ form.body.value|default_if_none:'' }}</textarea>
+            <span class="helptext" id="js-show" style="display: none;">Attach images by dragging & dropping.</span>
         </p>
 
         {% csrf_token %}
@@ -67,6 +68,104 @@
 
 {% block scripts %}
 <script>
+    // when page loads, focus on title
     document.querySelector('input[name="title"]').focus();
+
+    // get csrf token from django template variable
+    function getCsrf() {
+        var inputElems = document.querySelectorAll('input');
+        var csrfToken = '';
+        var i = 0;
+        for (i = 0; i < inputElems.length; i++) {
+            if (inputElems[i].name === 'csrfmiddlewaretoken') {
+                csrfToken = inputElems[i].value;
+                break;
+            }
+        }
+        return csrfToken;
+    }
+
+    // setup for drag and drop uploading
+    document.getElementById('js-show').style.display = 'inline';
+    document.getElementById('js-status').style.color = '#f00';
+
+    // get body element, used for drag and drop onto it
+    var bodyElem = document.querySelector('textarea[name="body"]');
+
+    // prevent default drag and drop behaviours
+    [
+        'drag',
+        'dragstart',
+        'dragend',
+        'dragover',
+        'dragenter',
+        'dragleave',
+        'drop',
+    ].forEach(function (event) {
+        bodyElem.addEventListener(event, function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+    });
+
+    function injectImageMarkdown(textInputElem, imageName, imageURL) {
+        // build markdown image code
+        var markdownImageCode = '![' + imageName + '](' + imageURL + ')';
+
+        // inject markdown image code in cursor position
+        if (textInputElem.selectionStart || textInputElem.selectionStart == '0') {
+            var startPos = textInputElem.selectionStart;
+            var endPos = textInputElem.selectionEnd;
+            textInputElem.value = textInputElem.value.substring(0, startPos)
+                + markdownImageCode
+                + '\n'
+                + textInputElem.value.substring(endPos, textInputElem.value.length);
+
+            // set cursor location to after markdownImageCode +1 for the new line
+            textInputElem.selectionEnd = endPos + markdownImageCode.length + 1;
+        } else {
+            // there is no cursor, just append
+            textInputElem.value += markdownImageCode;
+        }
+    }
+
+    bodyElem.addEventListener('drop', function (e) {
+        // only upload one file at a time
+        if (e.dataTransfer.files.length === 1) {
+
+            // prepare form data
+            var formData = new FormData();
+            var name = e.dataTransfer.files[0].name;
+            formData.append("file", e.dataTransfer.files[0]);
+
+            // upload request
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function alertContents() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        // success, inject markdown snippet
+                        injectImageMarkdown(bodyElem, name, xhr.responseURL);
+                    } else {
+                        alert('Image could not be uploaded. ' + xhr.responseText);
+                    }
+
+                    // re-enable textarea
+                    bodyElem.disabled = false;
+
+                    // update status message
+                    document.getElementById('js-status').innerText = '';
+                } else {
+                    // this branch runs first
+                    // uplading, so disable textarea and show status message
+                    bodyElem.disabled = true;
+                    document.getElementById('js-status').innerText = 'UPLOADING...';
+                }
+            };
+
+            xhr.open('POST', '/images/?raw=true');
+            xhr.setRequestHeader('X-CSRFToken', getCsrf());
+            xhr.send(formData);
+        }
+    });
 </script>
 {% endblock %}
