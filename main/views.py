@@ -136,9 +136,13 @@ class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         if not form.cleaned_data.get("custom_domain"):
             return super().form_valid(form)
 
-        if models.User.objects.filter(
-            custom_domain=form.cleaned_data.get("custom_domain")
-        ).exists():
+        if (
+            models.User.objects.filter(
+                custom_domain=form.cleaned_data.get("custom_domain")
+            )
+            .exclude(id=self.request.user.id)  # exclude current user
+            .exists()
+        ):
             form.add_error(
                 "custom_domain",
                 "This domain name is already connected to a mataroa blog.",
