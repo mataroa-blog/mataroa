@@ -183,3 +183,40 @@ class RSSFeedTestCase(TestCase):
         self.assertContains(response, self.data["title"])
         self.assertContains(response, self.data["slug"])
         self.assertContains(response, self.data["body"])
+
+
+class RSSFeedDraftsTestCase(TestCase):
+    """Tests draft posts do not appear in the RSS feed."""
+
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.user.set_password("abcdef123456")
+        self.user.save()
+        self.client.login(username="alice", password="abcdef123456")
+        self.post_published = {
+            "title": "Welcome post",
+            "slug": "welcome-post",
+            "body": "Content sentence.",
+        }
+        models.Post.objects.create(owner=self.user, **self.post_published)
+        self.post_draft = {
+            "title": "Hidden post",
+            "slug": "hidden-post",
+            "body": "Hidden sentence.",
+            "published_at": None,
+        }
+        models.Post.objects.create(owner=self.user, **self.post_draft)
+
+    def test_rss_feed(self):
+        response = self.client.get(
+            reverse("rss_feed"),
+            HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["Content-Type"], "application/rss+xml; charset=utf-8")
+        self.assertContains(response, self.post_published["title"])
+        self.assertContains(response, self.post_published["slug"])
+        self.assertContains(response, self.post_published["body"])
+        self.assertNotContains(response, self.post_draft["title"])
+        self.assertNotContains(response, self.post_draft["slug"])
+        self.assertNotContains(response, self.post_draft["body"])

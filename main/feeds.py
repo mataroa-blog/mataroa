@@ -1,5 +1,6 @@
 from django.contrib.syndication.views import Feed
 from django.http import Http404
+from django.utils import timezone
 
 from main import models
 
@@ -20,9 +21,11 @@ class RSSBlogFeed(Feed):
         return super(RSSBlogFeed, self).__call__(request, *args, **kwargs)
 
     def items(self):
-        return models.Post.objects.filter(owner__username=self.subdomain).order_by(
-            "-created_at"
-        )
+        return models.Post.objects.filter(
+            owner__username=self.subdomain,
+            published_at__isnull=False,
+            published_at__lte=timezone.now().date(),
+        ).order_by("-created_at")
 
     def item_title(self, item):
         return item.title
