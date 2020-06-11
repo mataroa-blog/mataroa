@@ -303,6 +303,10 @@ td {
     padding: 4px;
 }
 
+pre {
+	background: var(--light-grey-color);
+}
+
 code {
 	background: var(--light-grey-color);
 	padding: 2px;
