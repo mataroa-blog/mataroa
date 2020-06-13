@@ -94,6 +94,9 @@ def syntax_highlight(text):
                     except ClassNotFound:
                         # can't find lexer, just use C lang as default
                         lexer = get_lexer_by_name("c")
+
+                    # continue because we don't want to add backticks in the processed text
+                    continue
                 else:
                     # no lang, so just a generic block (non-code)
                     lexer = None
@@ -106,7 +109,9 @@ def syntax_highlight(text):
                 )
                 processed_text += highlighted_block
                 code_block = ""  # reset code_block variable
-            continue
+
+                # continue because we don't want to add backticks in the processed text
+                continue
 
         if within_code_block:
             code_block += line + "\n"
