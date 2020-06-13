@@ -7,7 +7,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 
-from main import validators
+from main import helpers, validators
 
 
 class User(AbstractUser):
@@ -59,7 +59,7 @@ class Post(models.Model):
     @property
     def as_html(self):
         return markdown.markdown(
-            self.body,
+            helpers.syntax_highlight(self.body),
             extensions=[
                 "markdown.extensions.fenced_code",
                 "markdown.extensions.tables",
@@ -131,7 +131,7 @@ class Page(models.Model):
     @property
     def as_html(self):
         return markdown.markdown(
-            self.body,
+            helpers.syntax_highlight(self.body),
             extensions=[
                 "markdown.extensions.fenced_code",
                 "markdown.extensions.tables",
