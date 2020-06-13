@@ -5,3 +5,4 @@ whitenoise
 uwsgi
 django-dotenv
 markdown
+pygments

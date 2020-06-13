@@ -11,6 +11,7 @@ django==3.0.7             # via -r requirements.in
 importlib-metadata==1.6.1  # via markdown
 markdown==3.2.2           # via -r requirements.in
 psycopg2-binary==2.8.5    # via -r requirements.in
+pygments==2.6.1           # via -r requirements.in
 pytz==2020.1              # via django
 sqlparse==0.3.1           # via django
 uwsgi==2.0.18             # via -r requirements.in
