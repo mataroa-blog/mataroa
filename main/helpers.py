@@ -3,7 +3,7 @@ import uuid
 import pygments
 from django.utils.text import slugify
 from pygments.formatters import HtmlFormatter
-from pygments.lexers import get_lexer_for_filename
+from pygments.lexers import ClassNotFound, get_lexer_by_name, get_lexer_for_filename
 
 from main import models
 
@@ -73,29 +73,44 @@ def get_post_slug(post_title, owner):
 
 def syntax_highlight(text):
     """Highlights markdown codeblocks within a markdown text."""
-    highlighted_text = ""
-    within_codeblock = False
+    processed_text = ""
+    within_code_block = False
     lexer = None
     code_block = ""
     for line in text.split("\n"):
-        if within_codeblock and lexer:
-            if line[:3] == "```":
-                # end of code block, highlight it now
-                within_codeblock = False
-                highlighted_codeblock = pygments.highlight(
+        if line[:3] == "```":
+            # code block backticks found, either begin or end
+            if not within_code_block:
+                # this is the beginning of a block
+                lang = line[3:].strip()
+                if lang:
+                    # then this is a *code* block
+                    within_code_block = True
+                    lang_filename = "file." + lang
+                    try:
+                        lexer = get_lexer_for_filename(lang_filename)
+                    except ClassNotFound:
+                        lexer = get_lexer_by_name(lang)
+                    except ClassNotFound:
+                        # can't find lexer, just use C lang as default
+                        lexer = get_lexer_by_name("c")
+                else:
+                    # no lang, so just a generic block (non-code)
+                    lexer = None
+            else:
+                # then this is the end of a code block
+                # actual highlighting happens here
+                within_code_block = False
+                highlighted_block = pygments.highlight(
                     code_block, lexer, HtmlFormatter(noclasses=True, cssclass="")
                 )
-                highlighted_text += highlighted_codeblock
-                continue
-            else:
-                code_block += line
+                processed_text += highlighted_block
+                code_block = ""  # reset code_block variable
+            continue
+
+        if within_code_block:
+            code_block += line + "\n"
         else:
-            if line[:3] != "```":
-                highlighted_text += line
+            processed_text += line + "\n"
 
-        if line[:3] == "```" and not within_codeblock:
-            lang_ext = "file." + line[3:].strip()
-            lexer = get_lexer_for_filename(lang_ext)
-            within_codeblock = True
-
-    return highlighted_text
+    return processed_text
