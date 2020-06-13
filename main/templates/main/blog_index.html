@@ -32,6 +32,7 @@
         {% endfor %}
     </ul>
 </main>
+
 <footer>
     ---
     <br>
@@ -43,5 +44,8 @@
     {% else %}
     <a href="{% url 'rss_feed' %}">RSS »</a>
     {% endif %}
+	{% if blog_user.footer_note %}
+	<br>{{ blog_user.footer_note|safe }}
+	{% endif %}
 </footer>
 {% endblock %}

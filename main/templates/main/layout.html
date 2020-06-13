@@ -33,6 +33,9 @@
             {% endif %}
             | <a href="{% url 'dashboard' %}">Dashboard</a>
             | <a href="{% url 'post_create' %}">New post</a>
+			{% if blog_user.custom_domain %}
+			| <a href="//{{ blog_user.custom_domain }}">Go to custom domain</a>
+			{% endif %}
             {% if request.user.is_superuser %}
             | <a href="{% url 'admin:index' %}">Admin</a>
             {% endif %}

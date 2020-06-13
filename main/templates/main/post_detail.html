@@ -1,13 +1,13 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}{{ post.title}} — {{ blog_title }}{% endblock %}
+{% block title %}{{ post.title}} — {{ blog_user.blog_title }}{% endblock %}
 
 {% block meta_description %}{{ post.body|truncatewords:16 }}{% endblock %}
 
 {% block content %}
 <main>
-    {% if blog_title %}
-    <a href="{% url 'index' %}" class="posts-item-brand">{{ blog_title }}</a>
+    {% if blog_user.blog_title %}
+    <a href="{% url 'index' %}" class="posts-item-brand">{{ blog_user.blog_title }}</a>
     {% endif %}
 
     <article itemscope itemtype="http://schema.org/BlogPosting">
@@ -31,10 +31,23 @@
             {{ post.as_html|safe }}
         </div>
     </article>
-
-    <br>
-    <a href="{% url 'index' %}">← archive</a>
 </main>
+
+<footer>
+    ---
+    <br>
+    {% if pages %}
+    <a href="{% url 'rss_feed' %}">RSS.</a>
+    {% for page in pages %}
+    <a href="{% url 'page_detail' page.slug %}">{{ page.title }}</a>.
+    {% endfor %}
+    {% else %}
+    <a href="{% url 'rss_feed' %}">RSS »</a>
+    {% endif %}
+	{% if blog_user.footer_note %}
+	<br>{{ blog_user.footer_note|safe }}
+	{% endif %}
+</footer>
 {% endblock %}
 
 {% block scripts %}

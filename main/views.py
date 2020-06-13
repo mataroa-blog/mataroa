@@ -120,6 +120,7 @@ class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         "email",
         "blog_title",
         "blog_byline",
+        "footer_note",
         "custom_domain",
         "about",
     ]
@@ -171,9 +172,12 @@ class PostDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super(PostDetail, self).get_context_data(**kwargs)
         if hasattr(self.request, "subdomain"):
-            context["blog_title"] = models.User.objects.get(
+            context["blog_user"] = models.User.objects.get(
                 username=self.request.subdomain
-            ).blog_title
+            )
+            context["pages"] = models.Page.objects.filter(
+                owner__username=self.request.subdomain, is_hidden=False
+            )
         return context
 
     def dispatch(self, request, *args, **kwargs):
@@ -422,9 +426,12 @@ class PageDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super(PageDetail, self).get_context_data(**kwargs)
         if hasattr(self.request, "subdomain"):
-            context["blog_title"] = models.User.objects.get(
+            context["blog_user"] = models.User.objects.get(
                 username=self.request.subdomain
-            ).blog_title
+            )
+            context["pages"] = models.Page.objects.filter(
+                owner__username=self.request.subdomain, is_hidden=False
+            )
         return context
 
     def dispatch(self, request, *args, **kwargs):

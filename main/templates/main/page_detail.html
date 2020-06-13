@@ -1,13 +1,13 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}{{ page.title}} — {{ blog_title }}{% endblock %}
+{% block title %}{{ page.title}} — {{ blog_user.blog_title }}{% endblock %}
 
 {% block meta_description %}{{ page.body|truncatewords:16 }}{% endblock %}
 
 {% block content %}
 <main>
-    {% if blog_title %}
-    <a href="{% url 'index' %}" class="pages-item-brand">{{ blog_title }}</a>
+    {% if blog_user.blog_title %}
+    <a href="{% url 'index' %}" class="pages-item-brand">{{ blog_user.blog_title }}</a>
     {% endif %}
 
     <h1 class="pages-item-title">{{ page.title }}</h1>
@@ -24,6 +24,22 @@
         {{ page.as_html|safe }}
     </div>
 </main>
+
+<footer>
+    ---
+    <br>
+    {% if pages %}
+    <a href="{% url 'rss_feed' %}">RSS.</a>
+    {% for page in pages %}
+    <a href="{% url 'page_detail' page.slug %}">{{ page.title }}</a>.
+    {% endfor %}
+    {% else %}
+    <a href="{% url 'rss_feed' %}">RSS »</a>
+    {% endif %}
+	{% if blog_user.footer_note %}
+	<br>{{ blog_user.footer_note|safe }}
+	{% endif %}
+</footer>
 {% endblock %}
 
 {% block scripts %}

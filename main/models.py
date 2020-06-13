@@ -21,6 +21,7 @@ class User(AbstractUser):
     about = models.TextField(blank=True, null=True)
     blog_title = models.CharField(max_length=500, blank=True, null=True)
     blog_byline = models.CharField(max_length=500, blank=True, null=True)
+    footer_note = models.CharField(max_length=500, blank=True, null=True, default=None)
     custom_domain = models.CharField(
         max_length=150,
         blank=True,
