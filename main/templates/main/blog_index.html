@@ -33,19 +33,6 @@
     </ul>
 </main>
 
-<footer>
-    ---
-    <br>
-    {% if pages %}
-    <a href="{% url 'rss_feed' %}">RSS.</a>
-    {% for page in pages %}
-    <a href="{% url 'page_detail' page.slug %}">{{ page.title }}</a>.
-    {% endfor %}
-    {% else %}
-    <a href="{% url 'rss_feed' %}">RSS »</a>
-    {% endif %}
-	{% if blog_user.footer_note %}
-	<br>{{ blog_user.footer_note|safe }}
-	{% endif %}
-</footer>
+{% include 'partials/footer.html' %}
+
 {% endblock %}
