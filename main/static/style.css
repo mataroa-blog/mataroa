@@ -479,7 +479,7 @@ form .helptext {
 }
 
 .posts-item-brand::before {
-    content: "» ";
+    content: "« ";
 }
 
 .posts-item-body img {
