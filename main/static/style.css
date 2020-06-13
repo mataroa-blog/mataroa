@@ -522,6 +522,16 @@ form .helptext {
     row-gap: 16px;
     margin-top: 16px;
 }
+@media (max-width: 490px) {
+  .pages-generic-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 340px) {
+  .pages-generic-grid {
+    grid-template-columns: 1fr;
+  }
+}
 
 /* dashboard */
 .dashboard-list {
