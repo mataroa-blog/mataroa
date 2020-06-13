@@ -1,5 +1,6 @@
 from django.conf import settings
-from django.http import HttpResponseBadRequest
+from django.http import Http404, HttpResponseBadRequest
+from django.shortcuts import redirect
 
 from main import models
 
@@ -29,6 +30,15 @@ def host_middleware(get_response):
             # validation will happen inside views
             # the indexes are different because settings.CANONICAL_HOST has no subdomain
             request.subdomain = host_parts[0]
+
+            # check if subdomain exists
+            if models.User.objects.filter(username=request.subdomain).exists():
+                # if not logged in, always redirect to the custom domain
+                blog_user = models.User.objects.get(username=request.subdomain)
+                if not request.user.is_authenticated and blog_user.custom_domain:
+                    return redirect("//" + blog_user.custom_domain + request.path_info)
+            else:
+                raise Http404()
         elif models.User.objects.filter(custom_domain=host).exists():
             # custom domain case
             request.subdomain = models.User.objects.get(custom_domain=host).username
