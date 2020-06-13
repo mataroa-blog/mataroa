@@ -305,6 +305,7 @@ td {
 
 pre {
 	background: var(--light-grey-color);
+    overflow-x: scroll;
 }
 
 code {
