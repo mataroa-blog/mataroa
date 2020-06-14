@@ -508,7 +508,7 @@ form .helptext {
 }
 
 .pages-item-brand::before {
-    content: "» ";
+    content: "« ";
 }
 
 .pages-item-body img {
