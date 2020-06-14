@@ -11,16 +11,14 @@ def host_middleware(get_response):
 
         # probably in testing there is no Host http header
         if not host:
-            response = get_response(request)
-            return response
+            return get_response(request)
 
         host_parts = host.split(".")
         canonical_parts = settings.CANONICAL_HOST.split(".")
 
         if host == settings.CANONICAL_HOST:
             # if on mataroa.blog, don't set request.subdomain, and just return
-            response = get_response(request)
-            return response
+            return get_response(request)
         elif (
             len(host_parts) == 3
             and host_parts[1] == canonical_parts[0]  # should be "mataroa"
@@ -30,6 +28,10 @@ def host_middleware(get_response):
             # validation will happen inside views
             # the indexes are different because settings.CANONICAL_HOST has no subdomain
             request.subdomain = host_parts[0]
+
+            # if subdomain is 'random', let it through
+            if request.subdomain == "random":
+                return get_response(request)
 
             # check if subdomain exists
             if models.User.objects.filter(username=request.subdomain).exists():
@@ -45,7 +47,6 @@ def host_middleware(get_response):
         else:
             return HttpResponseBadRequest()
 
-        response = get_response(request)
-        return response
+        return get_response(request)
 
     return middleware
