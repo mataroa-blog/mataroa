@@ -457,6 +457,10 @@ class PageUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     fields = ["title", "slug", "is_hidden", "body"]
     success_message = "page updated"
 
+    def get_queryset(self):
+        queryset = models.Page.objects.filter(owner__username=self.request.subdomain)
+        return queryset
+
     def form_valid(self, form):
         if models.Page.objects.filter(
             owner=self.request.user, slug=form.cleaned_data.get("slug")
@@ -475,6 +479,10 @@ class PageUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 class PageDelete(LoginRequiredMixin, DeleteView):
     model = models.Page
     success_url = reverse_lazy("page_list")
+
+    def get_queryset(self):
+        queryset = models.Page.objects.filter(owner__username=self.request.subdomain)
+        return queryset
 
     def dispatch(self, request, *args, **kwargs):
         page = self.get_object()
