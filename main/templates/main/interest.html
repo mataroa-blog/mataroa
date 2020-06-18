@@ -5,17 +5,20 @@
 {% block content %}
 <main>
     <h1>Get invite for premium</h1>
-    <p>Our premium offering costs $25 per year and includes:</p>
+    <p>Our premium offering costs $25 per year and includes all basic features plus:</p>
     <ul>
         <li>Comments</li>
         <li>Backend-based analytics</li>
-        <li>Draft posts</li>
-        <li>Post creation via email</li>
         <li>Image hosting up to 1GB</li>
         <ul>
             <li>Bandwidth 100GB per month</li>
         </ul>
+        <li>Draft posts</li>
+        <li>Post creation via email</li>
     </ul>
+    <p>
+        Register here to get an invite.
+    </p>
     <form method="post">
         {{ form.as_p }}
         {% csrf_token %}
