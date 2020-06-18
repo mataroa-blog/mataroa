@@ -123,15 +123,6 @@
 
 </main>
 
-<footer>
-    <em>
-        Mataroa was directly inspired by <a href="https://bearblog.dev/">Bear Blog</a>.
-        Praise&nbsp;<a href="https://herman.bearblog.dev/">Herman</a>.
-    </em>
-    <br>
-    <br><a href="{{ request.host }}{% url 'index' %}">Home</a>
-    | <a href="{% url 'ethics' %}">Ethics</a>
-    | <a href="https://sr.ht/~sirodoht/mataroa">Source code</a>
-    | <a href="mailto:admin@mataroa.blog">Contact</a>
-</footer>
+{% include 'partials/footer.html' with praise=True %}
+
 {% endblock %}

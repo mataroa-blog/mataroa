@@ -1,0 +1,16 @@
+<footer>
+    ---
+    <br>
+    {% if request.subdomain %}
+    <a href="{% url 'index' %}">Blog</a>.
+    {% else %}
+    <a href="//{{ request.user.username }}.{{ request.get_host }}">Blog</a>
+    {% endif %}
+    <a href="{% url 'rss_feed' %}">RSS</a>.
+    {% for page in pages %}
+    <a href="{% url 'page_detail' page.slug %}">{{ page.title }}</a>.
+    {% endfor %}
+    {% if blog_user.footer_note %}
+    <br>{{ blog_user.footer_note|safe }}
+    {% endif %}
+</footer>

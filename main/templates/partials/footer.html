@@ -1,16 +1,14 @@
 <footer>
-    ---
-    <br>
-	{% if request.subdomain %}
-	<a href="{% url 'index' %}">Blog</a>.
-	{% else %}
-	<a href="//{{ request.user.username }}.{{ request.get_host }}">Blog</a>
-	{% endif %}
-    <a href="{% url 'rss_feed' %}">RSS</a>.
-    {% for page in pages %}
-    <a href="{% url 'page_detail' page.slug %}">{{ page.title }}</a>.
-    {% endfor %}
-	{% if blog_user.footer_note %}
-	<br>{{ blog_user.footer_note|safe }}
-	{% endif %}
+    {% if praise %}
+    <div class="footer-comment">
+        <em>
+            Mataroa was directly inspired by <a href="https://bearblog.dev/">Bear Blog</a>.
+            Praise&nbsp;<a href="https://herman.bearblog.dev/">Herman</a>.
+        </em>
+    </div>
+    {% endif %}
+    <a href="{% url 'index' %}">Home</a>
+    | <a href="{% url 'modus' %}">Modus operandi</a>
+    | <a href="https://github.com/sirodoht/mataroa/">Source code</a>
+    | <a href="mailto:admin@mataroa.blog">Contact</a>
 </footer>

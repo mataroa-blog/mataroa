@@ -328,6 +328,10 @@ footer {
     }
 }
 
+.footer-comment {
+	margin-bottom: 8px;
+}
+
 .help {
     cursor: help;
     text-decoration: dotted underline;
