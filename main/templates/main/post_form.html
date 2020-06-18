@@ -23,7 +23,7 @@
                     <span class="form-error">{{ error|escape }}</span>
                 {% endfor %}
             {% endif %}
-            <input type="text" name="title" id="id_title" maxlength="300" required value="{{ form.title.value|default_if_none:'' }}">
+            <input type="text" name="title" id="id_title" maxlength="300" required autofocus value="{{ form.title.value|default_if_none:'' }}">
         </p>
 
         {% if form.initial %}
@@ -68,9 +68,6 @@
 
 {% block scripts %}
 <script>
-    // when page loads, focus on title
-    document.querySelector('input[name="title"]').focus();
-
     {% include "partials/get-csrf.js" %}
 
     {% include "partials/drag-and-drop-upload.js" %}
