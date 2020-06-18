@@ -410,6 +410,11 @@ class PageCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     success_message = "'%(title)s' was created"
 
     def form_valid(self, form):
+        if models.Page.objects.filter(
+            owner=self.request.user, slug=form.cleaned_data.get("slug")
+        ).exists():
+            form.add_error("slug", "This slug is already defined as one of your pages.")
+            return self.render_to_response(self.get_context_data(form=form))
         self.object = form.save(commit=False)
         self.object.owner = self.request.user
         self.object.save()
@@ -451,6 +456,14 @@ class PageUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = models.Page
     fields = ["title", "slug", "is_hidden", "body"]
     success_message = "page updated"
+
+    def form_valid(self, form):
+        if models.Page.objects.filter(
+            owner=self.request.user, slug=form.cleaned_data.get("slug")
+        ).exists():
+            form.add_error("slug", "This slug is already defined as one of your pages.")
+            return self.render_to_response(self.get_context_data(form=form))
+        return super().form_valid(form)
 
     def dispatch(self, request, *args, **kwargs):
         page = self.get_object()
