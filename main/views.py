@@ -491,8 +491,8 @@ class PageDelete(LoginRequiredMixin, DeleteView):
         return super().dispatch(request, *args, **kwargs)
 
 
-def ethics(request):
-    return render(request, "main/ethics.html")
+def modus(request):
+    return render(request, "main/modus.html")
 
 
 class Interest(SuccessMessageMixin, FormView):
