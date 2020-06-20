@@ -475,7 +475,7 @@ form .helptext {
 }
 
 .webring {
-    margin-top: 32px;
+    margin-top: 64px;
     display: flex;
     justify-content: space-between;
 }

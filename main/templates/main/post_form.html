@@ -28,7 +28,11 @@
 
         {% if form.initial %}
         <p>
-            <label for="id_slug">Slug / permalink (<a href="https://yoast.com/what-is-a-permalink/">think SEO</a> before changing that)</label>
+            <label for="id_slug">
+                Slug / permalink (think about
+                <a href="https://en.wikipedia.org/wiki/Link_rot">broken links</a>
+                before changing that)
+            </label>
             {% if form.slug.errors %}
                 {% for error in form.slug.errors %}
                     <span class="form-error">{{ error|escape }}</span>
