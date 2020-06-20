@@ -6,3 +6,4 @@ uwsgi
 django-dotenv
 markdown
 pygments
+bleach

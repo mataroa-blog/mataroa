@@ -1,5 +1,6 @@
 import uuid
 
+import bleach
 import pygments
 from django.utils.text import slugify
 from pygments.formatters import HtmlFormatter
@@ -119,3 +120,48 @@ def syntax_highlight(text):
             processed_text += line + "\n"
 
     return processed_text
+
+
+def clean_html(dirty_html):
+    return bleach.clean(
+        dirty_html,
+        tags=[
+            "a",
+            "abbr",
+            "acronym",
+            "article",
+            "b",
+            "blockquote",
+            "code",
+            "div",
+            "em",
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "h6",
+            "i",
+            "iframe",
+            "img",
+            "li",
+            "ol",
+            "p",
+            "pre",
+            "section",
+            "span",
+            "strong",
+            "ul",
+        ],
+        attributes=[
+            "class",
+            "height",
+            "href",
+            "seamless",
+            "src",
+            "style",
+            "title",
+            "width",
+        ],
+        styles=["border", "width", "height", "color", "background", "display"],
+    )

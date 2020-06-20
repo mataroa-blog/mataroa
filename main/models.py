@@ -21,7 +21,13 @@ class User(AbstractUser):
     about = models.TextField(blank=True, null=True)
     blog_title = models.CharField(max_length=500, blank=True, null=True)
     blog_byline = models.CharField(max_length=500, blank=True, null=True)
-    footer_note = models.CharField(max_length=500, blank=True, null=True, default=None)
+    footer_note = models.CharField(
+        max_length=500,
+        blank=True,
+        null=True,
+        default=None,
+        help_text="Supports markdown",
+    )
 
     # custom domain related
     custom_domain = models.CharField(
@@ -55,6 +61,17 @@ class User(AbstractUser):
         help_text="URL for your webring's next website.",
     )
 
+    @property
+    def footer_note_as_html(self):
+        dirty_html = markdown.markdown(
+            helpers.syntax_highlight(self.footer_note),
+            extensions=[
+                "markdown.extensions.fenced_code",
+                "markdown.extensions.tables",
+            ],
+        )
+        return helpers.clean_html(dirty_html)
+
     def get_absolute_url(self):
         return reverse("user_detail", kwargs={"pk": self.pk})
 
@@ -82,13 +99,14 @@ class Post(models.Model):
 
     @property
     def as_html(self):
-        return markdown.markdown(
+        dirty_html = markdown.markdown(
             helpers.syntax_highlight(self.body),
             extensions=[
                 "markdown.extensions.fenced_code",
                 "markdown.extensions.tables",
             ],
         )
+        return helpers.clean_html(dirty_html)
 
     def get_absolute_url(self):
         path = reverse("post_detail", kwargs={"slug": self.slug})
@@ -154,13 +172,14 @@ class Page(models.Model):
 
     @property
     def as_html(self):
-        return markdown.markdown(
+        dirty_html = markdown.markdown(
             helpers.syntax_highlight(self.body),
             extensions=[
                 "markdown.extensions.fenced_code",
                 "markdown.extensions.tables",
             ],
         )
+        return helpers.clean_html(dirty_html)
 
     def get_absolute_url(self):
         path = reverse("page_detail", kwargs={"slug": self.slug})

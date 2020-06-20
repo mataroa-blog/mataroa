@@ -118,6 +118,24 @@ class PostDetailTestCase(TestCase):
         self.assertContains(response, self.data["body"])
 
 
+class PostSanitizeHTMLTestCase(TestCase):
+    """Test is bleach is sanitizing illegal tags."""
+
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.data = {
+            "title": "New post",
+            "slug": "new-post",
+            "body": "Content sentence. <script>alert(1)</script>",
+        }
+        models.Post.objects.create(owner=self.user, **self.data)
+
+    def test_get_sanitized(self):
+        post = models.Post.objects.get(slug=self.data["slug"])
+        self.assertTrue("&lt;script&gt;" in post.as_html)
+        self.assertFalse("<script>" in post.as_html)
+
+
 class PostUpdateTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
