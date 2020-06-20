@@ -491,6 +491,22 @@ class PageDelete(LoginRequiredMixin, DeleteView):
         return super().dispatch(request, *args, **kwargs)
 
 
+class WebringUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    model = models.User
+    fields = [
+        "webring_name",
+        "webring_url",
+        "webring_prev_url",
+        "webring_next_url",
+    ]
+    template_name = "main/blog_webring_update.html"
+    success_message = "webring settings updated"
+    success_url = reverse_lazy("dashboard")
+
+    def get_object(self):
+        return models.User.objects.get(pk=self.request.user.id)
+
+
 def modus(request):
     return render(request, "main/modus.html")
 
