@@ -154,6 +154,7 @@ def clean_html(dirty_html):
             "ul",
         ],
         attributes=[
+            "alt",
             "class",
             "height",
             "href",
@@ -163,5 +164,13 @@ def clean_html(dirty_html):
             "title",
             "width",
         ],
-        styles=["border", "width", "height", "color", "background", "display"],
+        styles=[
+            "background",
+            "border",
+            "border-radius",
+            "color",
+            "display",
+            "height",
+            "width",
+        ],
     )
