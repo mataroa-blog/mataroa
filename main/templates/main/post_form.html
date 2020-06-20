@@ -43,7 +43,7 @@
         {% endif %}
 
         <p>
-            <label for="id_published_at">Publication date (format e.g. 2006-01-30)</label>
+            <label for="id_published_at">Publication date (format e.g. 2006-01-30)<span id="set-today"></span></label>
             {% if form.published_at.errors %}
                 {% for error in form.published_at.errors %}
                     <span class="form-error">{{ error|escape }}</span>
@@ -75,5 +75,17 @@
     {% include "partials/get-csrf.js" %}
 
     {% include "partials/drag-and-drop-upload.js" %}
+    
+    // add 'set to today' functionality on publication date
+    var setTodaySpan = document.getElementById('set-today');
+    var setTodayAnchor = document.createElement('a');
+    setTodayAnchor.innerText = 'set to today';
+    setTodayAnchor.href='javascript:';
+    setTodaySpan.appendChild(document.createTextNode(' — '));
+    setTodaySpan.appendChild(setTodayAnchor);
+    setTodaySpan.addEventListener('click', function () {
+        var isoDate = new Date().toISOString().substring(0,10);
+        document.querySelector('input[name="published_at"]').value = isoDate;
+    });
 </script>
 {% endblock %}
