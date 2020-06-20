@@ -46,13 +46,13 @@ class User(AbstractUser):
         blank=True,
         null=True,
         verbose_name="Webring previous URL",
-        help_text="URL to get webring's previous website.",
+        help_text="URL for your webring's previous website.",
     )
     webring_next_url = models.URLField(
         blank=True,
         null=True,
         verbose_name="Webring next URL",
-        help_text="URL to get webring's next website.",
+        help_text="URL for your webring's next website.",
     )
 
     def get_absolute_url(self):
