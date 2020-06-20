@@ -24,7 +24,15 @@
         <li>
             <a href="{% url 'post_detail' p.slug %}">{{ p.title }}</a>
             {% if p.published_at %}
-            <small>— <time datetime="{{ p.published_at|date:'F j, Y' }}" itemprop="datePublished">{{ p.published_at|date:'F j, Y' }}</time></small>
+            <small>
+                —
+                <time datetime="{{ p.published_at|date:'F j, Y' }}" itemprop="datePublished">
+                    {{ p.published_at|date:'F j, Y' }}
+                </time>
+                {% if p.is_published %}
+                — SCHEDULED
+                {% endif %}
+            </small>
             {% else %}
             <small>— DRAFT</small>
             {% endif %}

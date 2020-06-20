@@ -108,6 +108,16 @@ class Post(models.Model):
         )
         return helpers.clean_html(dirty_html)
 
+    @property
+    def is_published(self):
+        if not self.published_at:
+            # draft case
+            return False
+        if self.published_at < timezone.now().date():
+            # future publishing date case
+            return False
+        return True
+
     def get_absolute_url(self):
         path = reverse("post_detail", kwargs={"slug": self.slug})
         return f"//{self.owner.username}.{settings.CANONICAL_HOST}{path}"
