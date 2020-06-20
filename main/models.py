@@ -22,6 +22,8 @@ class User(AbstractUser):
     blog_title = models.CharField(max_length=500, blank=True, null=True)
     blog_byline = models.CharField(max_length=500, blank=True, null=True)
     footer_note = models.CharField(max_length=500, blank=True, null=True, default=None)
+
+    # custom domain related
     custom_domain = models.CharField(
         max_length=150,
         blank=True,
@@ -31,6 +33,27 @@ class User(AbstractUser):
     )
     custom_domain_cert = models.TextField(blank=True, null=True)
     custom_domain_key = models.TextField(blank=True, null=True)
+
+    # webring related
+    webring_name = models.CharField(max_length=200, blank=True, null=True)
+    webring_url = models.URLField(
+        blank=True,
+        null=True,
+        verbose_name="Webring info URL",
+        help_text="Informational URL.",
+    )
+    webring_prev_url = models.URLField(
+        blank=True,
+        null=True,
+        verbose_name="Webring previous URL",
+        help_text="URL to get webring's previous website.",
+    )
+    webring_next_url = models.URLField(
+        blank=True,
+        null=True,
+        verbose_name="Webring next URL",
+        help_text="URL to get webring's next website.",
+    )
 
     def get_absolute_url(self):
         return reverse("user_detail", kwargs={"pk": self.pk})
