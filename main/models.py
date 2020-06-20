@@ -113,7 +113,7 @@ class Post(models.Model):
         if not self.published_at:
             # draft case
             return False
-        if self.published_at < timezone.now().date():
+        if self.published_at <= timezone.now().date():
             # future publishing date case
             return False
         return True
