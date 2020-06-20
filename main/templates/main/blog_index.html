@@ -29,7 +29,7 @@
                 <time datetime="{{ p.published_at|date:'F j, Y' }}" itemprop="datePublished">
                     {{ p.published_at|date:'F j, Y' }}
                 </time>
-                {% if p.is_published %}
+                {% if not p.is_published %}
                 — SCHEDULED
                 {% endif %}
             </small>
