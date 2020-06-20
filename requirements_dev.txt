@@ -1,3 +1,4 @@
+ipdb
 ipython
 isort
 flake8
