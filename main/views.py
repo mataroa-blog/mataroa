@@ -462,9 +462,13 @@ class PageUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return queryset
 
     def form_valid(self, form):
-        if models.Page.objects.filter(
-            owner=self.request.user, slug=form.cleaned_data.get("slug")
-        ).exists():
+        if (
+            models.Page.objects.filter(
+                owner=self.request.user, slug=form.cleaned_data.get("slug")
+            )
+            .exclude(id=self.object.id)
+            .exists()
+        ):
             form.add_error("slug", "This slug is already defined as one of your pages.")
             return self.render_to_response(self.get_context_data(form=form))
         return super().form_valid(form)
