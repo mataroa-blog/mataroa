@@ -1,0 +1,23 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Webring integration — Mataroa{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Webring integration</h1>
+    <p>
+        A <a href="https://en.wikipedia.org/wiki/Webring">webring</a> is a list of
+        website links in a cicular structure, with a common theme.
+    </p>
+    <p>
+        We recommend <a href="https://mxb.dev/blog/webring-kit/">Max Böck</a>'s excellent
+        <a href="https://github.com/sirodoht/webring">Webring Kit</a> to start your own
+        webring.
+    </p>
+    <form method="post">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <input type="submit" value="Save">
+    </form>
+</main>
+{% endblock %}
