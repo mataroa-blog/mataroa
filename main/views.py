@@ -72,7 +72,7 @@ def index(request):
             return redirect("//" + settings.CANONICAL_HOST + reverse("index"))
 
     if request.user.is_authenticated:
-        return redirect("dashboard")
+        return redirect("blog_index")
 
     return render(request, "main/landing.html")
 
