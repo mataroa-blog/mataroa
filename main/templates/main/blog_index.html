@@ -33,6 +33,25 @@
     </ul>
 </main>
 
+<section class="webring">
+    {% if blog_user.webring_prev_url %}
+    <a href="{{ blog_user.webring_prev_url }}">← Previous</a>
+    {% endif %}
+    <div>
+        ○
+        {% if blog_user.webring_url %}
+        <a href="{{ blog_user.webring_url }}" class="webring-name">
+            {{ blog_user.webring_name|default_if_none:'Webring' }}
+        </a>
+        {% else %}
+        {{ blog_user.webring_name|default_if_none:'' }}
+        {% endif %}
+    </div>
+    {% if blog_user.webring_next_url %}
+    <a href="{{ blog_user.webring_next_url }}">Next →</a>
+    {% endif %}
+</section>
+
 {% include 'partials/footer_blog.html' %}
 
 {% endblock %}

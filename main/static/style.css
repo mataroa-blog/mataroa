@@ -252,6 +252,19 @@ aside {
     }
 }
 
+section {
+    max-width: 500px;
+    margin-bottom: 16px;
+    margin-left: auto;
+    margin-right: auto;
+}
+@media (max-width: 500px) {
+    section {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+}
+
 nav {
     max-width: 500px;
     margin-top: 16px;
@@ -316,7 +329,7 @@ code {
 footer {
     margin-left: auto;
     margin-right: auto;
-    margin-top: 64px;
+    margin-top: 32px;
     margin-bottom: 16px;
     max-width: 500px;
 	color: var(--dark-grey-color);
@@ -459,6 +472,16 @@ form .helptext {
 
 .byline::before {
     content: "» ";
+}
+
+.webring {
+    margin-top: 32px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.webring-name {
+    color: #000;
 }
 
 /* post detail */
