@@ -3,8 +3,8 @@
     <a href="{{ blog_user.webring_prev_url }}">← Previous</a>
     {% endif %}
     <div>
-        ○
         {% if blog_user.webring_url %}
+        ○
         <a href="{{ blog_user.webring_url }}" class="webring-name">
             {{ blog_user.webring_name|default_if_none:'Webring' }}
         </a>
