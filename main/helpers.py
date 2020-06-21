@@ -131,6 +131,7 @@ def clean_html(dirty_html):
             "acronym",
             "article",
             "b",
+            "br",
             "blockquote",
             "code",
             "div",
