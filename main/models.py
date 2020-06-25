@@ -61,6 +61,9 @@ class User(AbstractUser):
         help_text="URL for your webring's next website.",
     )
 
+    class Meta:
+        ordering = ["-id"]
+
     @property
     def footer_note_as_html(self):
         dirty_html = markdown.markdown(
