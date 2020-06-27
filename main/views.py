@@ -319,7 +319,7 @@ class ImageList(LoginRequiredMixin, FormView):
             for f in files:
                 name_ext_parts = f.name.rsplit(".", 1)
                 name = name_ext_parts[0].replace(".", "-")
-                self.extension = name_ext_parts[1]
+                self.extension = name_ext_parts[1].casefold()
                 if self.extension == "jpg":
                     self.extension = "jpeg"
                 data = f.read()
