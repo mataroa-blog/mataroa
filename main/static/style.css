@@ -567,6 +567,7 @@ form .helptext {
 
 /* images */
 .images-grid {
+	max-width: 100%;
     margin-top: 32px;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -587,6 +588,7 @@ form .helptext {
 
 /* image detail */
 .images-item {
+	max-width: 100%;
     margin-top: 32px;
     margin-bottom: 32px;
     text-align: center;
