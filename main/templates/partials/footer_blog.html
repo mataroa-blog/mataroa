@@ -30,6 +30,6 @@
     <a href="{% url 'page_detail' page.slug %}">{{ page.title }}</a>.
     {% endfor %}
     {% if blog_user.footer_note %}
-    <br>{{ blog_user.footer_note|safe }}
+    <br>{{ blog_user.footer_note_as_html|safe }}
     {% endif %}
 </footer>
