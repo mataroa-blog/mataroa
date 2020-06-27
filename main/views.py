@@ -2,6 +2,7 @@ import uuid
 
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView as DjLogoutView
@@ -100,17 +101,24 @@ class UserDetail(LoginRequiredMixin, DetailView):
         return super().dispatch(request, *args, **kwargs)
 
 
-class UserCreate(SuccessMessageMixin, CreateView):
+class UserCreate(CreateView):
     form_class = forms.UserCreationForm
-    success_url = reverse_lazy("login")
+    success_url = reverse_lazy("dashboard")
     template_name = "main/user_create.html"
-    success_message = "welcome! login with your new credentials"
+    success_message = "welcome to mataroa :)"
 
     def form_valid(self, form):
         if helpers.is_disallowed(form.cleaned_data.get("username")):
             form.add_error("username", "This username is not available.")
             return self.render_to_response(self.get_context_data(form=form))
-        return super().form_valid(form)
+        self.object = form.save()
+        user = authenticate(
+            username=form.cleaned_data.get("username"),
+            password=form.cleaned_data.get("password1"),
+        )
+        login(self.request, user)
+        messages.success(self.request, self.success_message)
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
