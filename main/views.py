@@ -250,12 +250,18 @@ class PostUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 class PostDelete(LoginRequiredMixin, DeleteView):
     model = models.Post
     success_url = reverse_lazy("index")
+    success_message = "post '%(title)s' deleted"
 
     def get_queryset(self):
         queryset = models.Post.objects.filter(
             owner__username=self.request.user.username
         )
         return queryset
+
+    def delete(self, request, *args, **kwargs):
+        obj = self.get_object()
+        messages.success(self.request, self.success_message % obj.__dict__)
+        return super(PostDelete, self).delete(request, *args, **kwargs)
 
     def dispatch(self, request, *args, **kwargs):
         if not hasattr(request, "subdomain"):
