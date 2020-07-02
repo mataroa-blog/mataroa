@@ -18,7 +18,7 @@ class RSSBlogFeed(Feed):
         self.title = user.blog_title
         self.description = user.blog_byline
         self.subdomain = request.subdomain
-        return super(RSSBlogFeed, self).__call__(request, *args, **kwargs)
+        return super().__call__(request, *args, **kwargs)
 
     def items(self):
         return models.Post.objects.filter(

@@ -178,7 +178,7 @@ class PostDetail(DetailView):
         return queryset
 
     def get_context_data(self, **kwargs):
-        context = super(PostDetail, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         if hasattr(self.request, "subdomain"):
             context["blog_user"] = models.User.objects.get(
                 username=self.request.subdomain
@@ -261,7 +261,7 @@ class PostDelete(LoginRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         obj = self.get_object()
         messages.success(self.request, self.success_message % obj.__dict__)
-        return super(PostDelete, self).delete(request, *args, **kwargs)
+        return super().delete(request, *args, **kwargs)
 
     def dispatch(self, request, *args, **kwargs):
         if not hasattr(request, "subdomain"):
@@ -321,7 +321,7 @@ class ImageList(LoginRequiredMixin, FormView):
     success_url = reverse_lazy("image_list")
 
     def get_context_data(self, **kwargs):
-        context = super(ImageList, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context["images"] = models.Image.objects.filter(owner=self.request.user)
         return context
 
@@ -373,14 +373,14 @@ class ImageList(LoginRequiredMixin, FormView):
         ):
             return HttpResponseBadRequest(" ".join(form.errors["file"]))
         else:
-            return super(ImageList, self).form_invalid(form)
+            return super().form_invalid(form)
 
 
 class ImageDetail(LoginRequiredMixin, DetailView):
     model = models.Image
 
     def get_context_data(self, **kwargs):
-        context = super(ImageDetail, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context["used_by_posts"] = []
         for post in models.Post.objects.filter(owner=self.request.user):
             if self.object.get_absolute_url() in post.body:
@@ -443,7 +443,7 @@ class PageDetail(DetailView):
         return queryset
 
     def get_context_data(self, **kwargs):
-        context = super(PageDetail, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         if hasattr(self.request, "subdomain"):
             context["blog_user"] = models.User.objects.get(
                 username=self.request.subdomain
