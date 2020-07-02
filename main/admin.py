@@ -51,6 +51,21 @@ class PostAdmin(admin.ModelAdmin):
 admin.site.register(models.Post, PostAdmin)
 
 
+class PageAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "title",
+        "slug",
+        "owner",
+        "created_at",
+        "updated_at",
+        "is_hidden",
+    )
+
+
+admin.site.register(models.Page, PageAdmin)
+
+
 class ImageAdmin(admin.ModelAdmin):
     list_display = (
         "id",
