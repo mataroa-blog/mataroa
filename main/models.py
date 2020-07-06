@@ -107,6 +107,7 @@ class Post(models.Model):
             extensions=[
                 "markdown.extensions.fenced_code",
                 "markdown.extensions.tables",
+                "markdown.extensions.footnotes",
             ],
         )
         return helpers.clean_html(dirty_html)
