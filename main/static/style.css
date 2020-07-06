@@ -326,6 +326,10 @@ code {
 	padding: 2px;
 }
 
+hr {
+    border-top: 1px solid var(--light-grey-color);
+}
+
 footer {
     margin-left: auto;
     margin-right: auto;
