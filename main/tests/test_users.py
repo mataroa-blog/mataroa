@@ -231,7 +231,7 @@ class UserDeleteNotOwnTestCase(TestCase):
         self.assertTrue(models.User.objects.filter(id=self.victim.id).exists())
 
 
-#class UserUpdateCustomDomainTestCase(TestCase):
+# class UserUpdateCustomDomainTestCase(TestCase):
 #    def setUp(self):
 #        self.user = models.User.objects.create(username="alice")
 #        self.user.set_password("abcdef123456")
@@ -249,7 +249,7 @@ class UserDeleteNotOwnTestCase(TestCase):
 #        self.assertEqual(updated_user.custom_domain, data["custom_domain"])
 #
 #
-#class UserUpdateCustomDomainUniqueTestCase(TestCase):
+# class UserUpdateCustomDomainUniqueTestCase(TestCase):
 #    def setUp(self):
 #        self.user_a = models.User.objects.create(
 #            username="alice", custom_domain="aliceblog.com"
@@ -276,7 +276,7 @@ class UserDeleteNotOwnTestCase(TestCase):
 #        )
 #
 #
-#class UserUpdateCustomDomainRemoveTestCase(TestCase):
+# class UserUpdateCustomDomainRemoveTestCase(TestCase):
 #    def setUp(self):
 #        self.user = models.User.objects.create(
 #            username="alice", custom_domain="aliceblog.com"
