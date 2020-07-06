@@ -129,7 +129,7 @@ class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         "blog_title",
         "blog_byline",
         "footer_note",
-        "custom_domain",
+        #"custom_domain",
         "about",
     ]
     template_name = "main/user_update.html"
