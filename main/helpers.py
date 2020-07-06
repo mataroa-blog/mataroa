@@ -1,6 +1,7 @@
 import uuid
 
 import bleach
+import markdown
 import pygments
 from django.utils.text import slugify
 from pygments.formatters import HtmlFormatter
@@ -197,3 +198,15 @@ def clean_html(dirty_html):
             "width",
         ],
     )
+
+
+def md_to_html(markdown_string):
+    dirty_html = markdown.markdown(
+        syntax_highlight(markdown_string),
+        extensions=[
+            "markdown.extensions.fenced_code",
+            "markdown.extensions.tables",
+            "markdown.extensions.footnotes",
+        ],
+    )
+    return clean_html(dirty_html)

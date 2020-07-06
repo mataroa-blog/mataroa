@@ -1,6 +1,5 @@
 import base64
 
-import markdown
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -66,14 +65,7 @@ class User(AbstractUser):
 
     @property
     def footer_note_as_html(self):
-        dirty_html = markdown.markdown(
-            helpers.syntax_highlight(self.footer_note),
-            extensions=[
-                "markdown.extensions.fenced_code",
-                "markdown.extensions.tables",
-            ],
-        )
-        return helpers.clean_html(dirty_html)
+        return helpers.md_to_html(self.footer_note)
 
     def get_absolute_url(self):
         return reverse("user_detail", kwargs={"pk": self.pk})
@@ -102,15 +94,7 @@ class Post(models.Model):
 
     @property
     def as_html(self):
-        dirty_html = markdown.markdown(
-            helpers.syntax_highlight(self.body),
-            extensions=[
-                "markdown.extensions.fenced_code",
-                "markdown.extensions.tables",
-                "markdown.extensions.footnotes",
-            ],
-        )
-        return helpers.clean_html(dirty_html)
+        return helpers.md_to_html(self.body)
 
     @property
     def is_published(self):
@@ -186,14 +170,7 @@ class Page(models.Model):
 
     @property
     def as_html(self):
-        dirty_html = markdown.markdown(
-            helpers.syntax_highlight(self.body),
-            extensions=[
-                "markdown.extensions.fenced_code",
-                "markdown.extensions.tables",
-            ],
-        )
-        return helpers.clean_html(dirty_html)
+        return helpers.md_to_html(self.body)
 
     def get_absolute_url(self):
         path = reverse("page_detail", kwargs={"slug": self.slug})
