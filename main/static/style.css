@@ -328,6 +328,9 @@ code {
 
 hr {
     border-top: 1px solid var(--light-grey-color);
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
 }
 
 footer {
