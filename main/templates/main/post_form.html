@@ -60,7 +60,7 @@
                     <span class="form-error">{{ error|escape }}</span>
                 {% endfor %}
             {% endif %}
-            <textarea name="body" id="id_body" cols="60" rows="20">{{ form.body.value|default_if_none:'' }}</textarea>
+            <textarea name="body" id="id_body" cols="60" rows="20" style="height: calc(100vh - 450px);">{{ form.body.value|default_if_none:'' }}</textarea>
             <span class="helptext" id="js-show" style="display: none;">Attach images by dragging & dropping.</span>
         </p>
 
