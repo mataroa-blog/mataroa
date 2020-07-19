@@ -118,7 +118,7 @@ python manage.py test
 ## Code linting & formatting
 
 ```sh
-black . && isort -y && flake8
+black . && isort --profile black . && flake8
 ```
 
 ## Deployment
