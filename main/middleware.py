@@ -9,7 +9,7 @@ def host_middleware(get_response):
     def middleware(request):
         host = request.META.get("HTTP_HOST")
 
-        # probably in testing there is no Host http header
+        # no http Host header in testing
         if not host:
             return get_response(request)
 
