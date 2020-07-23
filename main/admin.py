@@ -79,3 +79,14 @@ class ImageAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.Image, ImageAdmin)
+
+
+class AnalyticAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "post",
+        "created_at",
+    )
+
+
+admin.site.register(models.Analytic, AnalyticAdmin)
