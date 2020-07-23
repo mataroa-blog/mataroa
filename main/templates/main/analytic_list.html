@@ -1,0 +1,23 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Analytics — {{ request.user.username }} at Mataroa{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Analytics</h1>
+    {% if post_list %}
+    <p>
+        List of posts:
+    </p>
+    <ul>
+        {% for post in post_list %}
+        <li>
+            <a href="{% url 'analytic_detail' post.slug %}">
+                {{ post.title }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</main>
+{% endblock %}

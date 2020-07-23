@@ -367,6 +367,15 @@ footer {
     border-color: var(--red-color) !important;
 }
 
+/* svg */
+rect {
+    fill: var(--link-color);
+}
+
+rect:hover {
+    fill: var(--ascent-color);
+}
+
 /* form */
 label {
     display: block;
@@ -608,4 +617,10 @@ form .helptext {
 
 .images-item-byline {
     color: var(--dark-grey-color);
+}
+
+/* analytics */
+.analytics-chart {
+    background: var(--light-grey-color);
+    line-height: 0;
 }
