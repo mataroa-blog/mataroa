@@ -112,7 +112,7 @@ class Post(models.Model):
         days = defaultdict(int)
         for analytic in self.analytic_set.all():
             days[analytic.created_at.date()] += 1
-        return max(days.values())
+        return max(days.values()) if days else 0
 
     def get_absolute_url(self):
         path = reverse("post_detail", kwargs={"slug": self.slug})

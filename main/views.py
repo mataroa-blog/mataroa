@@ -564,10 +564,9 @@ class AnalyticDetail(LoginRequiredMixin, DetailView):
             ).count()
 
             # normalize day count to percentage for svg drawing
-            count_percent = day_count * 100 / self.object.highest_day_count
-            # in case of 0, change to 1 percent/pixel to make it visible
-            if day_count == 0:
-                count_percent = 1
+            count_percent = 1  # keep lowest value to 1 so as it's visible
+            if self.object.highest_day_count != 0 and day_count != 0:
+                count_percent = day_count * 100 / self.object.highest_day_count
 
             context["post_analytics"][current_date] = {
                 "count": day_count,
