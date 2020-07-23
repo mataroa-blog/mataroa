@@ -186,6 +186,7 @@ class PostDetail(DetailView):
             context["pages"] = models.Page.objects.filter(
                 owner__username=self.request.subdomain, is_hidden=False
             )
+
         # do not record analytic if post is authed user's
         if (
             self.request.user.is_authenticated
@@ -193,16 +194,22 @@ class PostDetail(DetailView):
         ):
             return context
         models.Analytic.objects.create(post=self.object)
+
         return context
 
     def dispatch(self, request, *args, **kwargs):
+        # if there is no subdomain on this request
         if not hasattr(request, "subdomain"):
             if request.user.is_authenticated:
+                # if post is requested without subdomain and authed
+                # then redirect them to the subdomain'ed post
                 subdomain = request.user.username
                 return redirect(
                     f"//{subdomain}.{settings.CANONICAL_HOST}{request.path}"
                 )
             else:
+                # if post is requested without subdomain and non-authed
+                # then redirect to index
                 return redirect("index")
 
         return super().dispatch(request, *args, **kwargs)
