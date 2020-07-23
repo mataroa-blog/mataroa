@@ -186,6 +186,13 @@ class PostDetail(DetailView):
             context["pages"] = models.Page.objects.filter(
                 owner__username=self.request.subdomain, is_hidden=False
             )
+        # do not record analytic if post is authed user's
+        if (
+            self.request.user.is_authenticated
+            and self.request.user == self.object.owner
+        ):
+            return context
+        models.Analytic.objects.create(post=self.object)
         return context
 
     def dispatch(self, request, *args, **kwargs):
