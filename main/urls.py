@@ -68,7 +68,17 @@ urlpatterns += [
     ),
 ]
 
-# pages
+# analytics
+urlpatterns += [
+    path("analytics/", views.AnalyticList.as_view(), name="analytic_list"),
+    path(
+        "analytics/<slug:post_slug>/",
+        views.AnalyticDetail.as_view(),
+        name="analytic_detail",
+    ),
+]
+
+# pages - needs to be last due to <slug>
 urlpatterns += [
     path("pages/", views.PageList.as_view(), name="page_list"),
     path("pages/create/", views.PageCreate.as_view(), name="page_create"),
