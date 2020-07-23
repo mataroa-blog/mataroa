@@ -1,4 +1,5 @@
 import base64
+from collections import defaultdict
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
@@ -106,6 +107,13 @@ class Post(models.Model):
             return False
         return True
 
+    @property
+    def highest_day_count(self):
+        days = defaultdict(int)
+        for analytic in self.analytic_set.all():
+            days[analytic.created_at.date()] += 1
+        return max(days.values())
+
     def get_absolute_url(self):
         path = reverse("post_detail", kwargs={"slug": self.slug})
         return f"//{self.owner.username}.{settings.CANONICAL_HOST}{path}"
@@ -178,10 +186,14 @@ class Page(models.Model):
 
     def __str__(self):
         return self.title
+
+
 class Analytic(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+
     class Meta:
         ordering = ["-created_at"]
+
     def __str__(self):
         return self.created_at.strftime("%c") + ": " + self.post.title
