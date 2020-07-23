@@ -1,4 +1,5 @@
 import uuid
+from datetime import timedelta
 
 from django.conf import settings
 from django.contrib import messages
@@ -539,8 +540,44 @@ class WebringUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return models.User.objects.get(pk=self.request.user.id)
 
 
-def modus(request):
-    return render(request, "main/modus.html")
+class AnalyticList(LoginRequiredMixin, ListView):
+    model = models.Post
+    template_name = "main/analytic_list.html"
+
+    def get_queryset(self):
+        return models.Post.objects.filter(owner=self.request.user)
+
+
+class AnalyticDetail(LoginRequiredMixin, DetailView):
+    model = models.Post
+    template_name = "main/analytic_detail.html"
+    slug_url_kwarg = "post_slug"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["post_analytics"] = {}
+        current_date = timezone.now().date()
+        current_x_offset = 0
+        while self.object.created_at.date() <= current_date:
+            day_count = models.Analytic.objects.filter(
+                post=self.object, created_at__date=current_date
+            ).count()
+
+            # normalize day count to percentage for svg drawing
+            count_percent = day_count * 100 / self.object.highest_day_count
+            # in case of 0, change to 1 percent/pixel to make it visible
+            if day_count == 0:
+                count_percent = 1
+
+            context["post_analytics"][current_date] = {
+                "count": day_count,
+                "x_offset": current_x_offset,
+                "count_percent": count_percent,
+                "negative_count_percent": 100 - count_percent,
+            }
+            current_date = current_date - timedelta(days=1)
+            current_x_offset += 20
+        return context
 
 
 class Interest(SuccessMessageMixin, FormView):
@@ -552,6 +589,10 @@ class Interest(SuccessMessageMixin, FormView):
     def form_valid(self, form):
         form.send_email()
         return super().form_valid(form)
+
+
+def modus(request):
+    return render(request, "main/modus.html")
 
 
 def markdown_guide(request):
