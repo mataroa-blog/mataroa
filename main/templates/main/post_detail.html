@@ -16,8 +16,10 @@
         </h1>
 
         <div class="posts-item-byline">
-            {% if post.published_at %}
+            {% if post.published_at and post.is_published %}
             Published on <time datetime="{{ post.published_at|date:'F j, Y' }}" itemprop="datePublished">{{ post.published_at|date:'F j, Y' }}</time>
+            {% elif post.published_at and not post.is_published %}
+            SCHEDULED for <time datetime="{{ post.published_at|date:'F j, Y' }}" itemprop="datePublished">{{ post.published_at|date:'F j, Y' }}</time>
             {% else %}
             DRAFT — Last updated on <time datetime="{{ post.updated_at|date:'F j, Y' }}" itemprop="dateModified">{{ post.updated_at|date:'F j, Y' }}</time>
             {% endif %}
