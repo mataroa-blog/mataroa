@@ -39,6 +39,20 @@ urlpatterns += [
     path("rss/", feeds.RSSBlogFeed(), name="rss_feed"),
 ]
 
+# comments
+urlpatterns += [
+    path(
+        "blog/<slug:slug>/comments/create/",
+        views.CommentCreate.as_view(),
+        name="comment_create",
+    ),
+    path(
+        "blog/<slug:slug>/comments/<int:pk>/delete/",
+        views.CommentDelete.as_view(),
+        name="comment_delete",
+    ),
+]
+
 # blog settings
 urlpatterns += [
     path("webring/", views.WebringUpdate.as_view(), name="blog_webring"),

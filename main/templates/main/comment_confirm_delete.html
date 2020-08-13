@@ -1,0 +1,29 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Deleting comment — {{ request.user.username }} at Mataroa{% endblock %}
+
+{% block content %}
+<main class="delete">
+    <h1>
+        Are you absolutely sure 100% positive that you want to delete this
+        {% if comment.name %}
+        comment by {{ comment.name }}?
+        {% else %}
+        comment?
+        {% endif %}
+    </h1>
+    <blockquote>{{ comment.body }}</blockquote>
+    {% if comment.name or comment.email %}
+    <p>
+        by {{ comment.name|default:'' }} {{ comment.email|default:'' }}
+    </p>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" value="Yes, definitely delete this comment" class="type-danger">
+    </form>
+    <p>
+        NB: There is no coming back, it will really be deleted.
+    </p>
+</main>
+{% endblock %}

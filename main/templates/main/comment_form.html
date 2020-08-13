@@ -1,0 +1,61 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}
+    {% if form.initial %}
+    Editing {{ form.title.value }}
+    {% else %}
+    Post a comment for {{ post.title }}
+    {% endif %}
+{% endblock %}
+
+{% block head_viewport %}
+<meta name="viewport" content="width=device-width, user-scalable=no">
+{% endblock %}
+
+{% block content %}
+<main>
+    <h1>
+        {% if form.initial %}
+        Editing comment
+        {% else %}
+        Post a comment for {{ post.title }}
+        {% endif %}
+    </h1>
+    <form method="post">
+        {{ form.non_field_errors }}
+
+        <p>
+            <label for="id_name">Name (optional):</label>
+            {% if form.name.errors %}
+                {% for error in form.name.errors %}
+                    <span class="form-error">{{ error|escape }}</span>
+                {% endfor %}
+            {% endif %}
+            <input type="text" name="name" id="id_name" maxlength="150" value="{{ form.name.value|default_if_none:'' }}">
+        </p>
+
+        <p>
+            <label for="id_email">Email (optional and private):</label>
+            {% if form.email.errors %}
+                {% for error in form.email.errors %}
+                    <span class="form-error">{{ error|escape }}</span>
+                {% endfor %}
+            {% endif %}
+            <input type="text" name="email" id="id_email" value="{{ form.slug.value|default_if_none:'' }}">
+        </p>
+
+        <p>
+            <label for="id_body">Comment:</label>
+            {% if form.body.errors %}
+                {% for error in form.body.errors %}
+                    <span class="form-error">{{ error|escape }}</span>
+                {% endfor %}
+            {% endif %}
+            <textarea name="body" id="id_body" cols="60" rows="5">{{ form.body.value|default_if_none:'' }}</textarea>
+        </p>
+
+        {% csrf_token %}
+        <input type="submit" value="Publish comment">
+    </form>
+</main>
+{% endblock %}

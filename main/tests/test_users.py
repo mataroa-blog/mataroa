@@ -231,66 +231,19 @@ class UserDeleteNotOwnTestCase(TestCase):
         self.assertTrue(models.User.objects.filter(id=self.victim.id).exists())
 
 
-# class UserUpdateCustomDomainTestCase(TestCase):
-#    def setUp(self):
-#        self.user = models.User.objects.create(username="alice")
-#        self.user.set_password("abcdef123456")
-#        self.user.save()
-#        self.client.login(username="alice", password="abcdef123456")
-#
-#    def test_user_custom_domain_add(self):
-#        data = {
-#            "username": "alice",
-#            "custom_domain": "aliceblog.com",
-#        }
-#        response = self.client.post(reverse("user_update", args=(self.user.id,)), data)
-#        self.assertEqual(response.status_code, 302)
-#        updated_user = models.User.objects.get(id=self.user.id)
-#        self.assertEqual(updated_user.custom_domain, data["custom_domain"])
-#
-#
-# class UserUpdateCustomDomainUniqueTestCase(TestCase):
-#    def setUp(self):
-#        self.user_a = models.User.objects.create(
-#            username="alice", custom_domain="aliceblog.com"
-#        )
-#
-#        self.user_b = models.User.objects.create(username="bob")
-#        self.user_b.set_password("abcdef123456")
-#        self.user_b.save()
-#        self.client.login(username="bob", password="abcdef123456")
-#
-#    def test_user_custom_domain_unique(self):
-#        data = {
-#            "username": "bob",
-#            "custom_domain": "aliceblog.com",
-#        }
-#        response = self.client.post(
-#            reverse("user_update", args=(self.user_b.id,)), data
-#        )
-#        self.assertEqual(response.status_code, 200)
-#        updated_user_b = models.User.objects.get(id=self.user_b.id)
-#        self.assertEqual(updated_user_b.custom_domain, None)
-#        self.assertContains(
-#            response, "This domain name is already connected to a mataroa blog"
-#        )
-#
-#
-# class UserUpdateCustomDomainRemoveTestCase(TestCase):
-#    def setUp(self):
-#        self.user = models.User.objects.create(
-#            username="alice", custom_domain="aliceblog.com"
-#        )
-#        self.user.set_password("abcdef123456")
-#        self.user.save()
-#        self.client.login(username="alice", password="abcdef123456")
-#
-#    def test_user_custom_domain_remove(self):
-#        data = {
-#            "username": "alice",
-#            "custom_domain": "",
-#        }
-#        response = self.client.post(reverse("user_update", args=(self.user.id,)), data)
-#        self.assertEqual(response.status_code, 302)
-#        updated_user = models.User.objects.get(id=self.user.id)
-#        self.assertEqual(updated_user.custom_domain, None)
+class UserUpdateCommentsOnTestCase(TestCase):
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.user.set_password("abcdef123456")
+        self.user.save()
+        self.client.login(username="alice", password="abcdef123456")
+
+    def test_user_comments_on(self):
+        data = {
+            "username": "alice",
+            "comments_on": True,
+        }
+        response = self.client.post(reverse("user_update", args=(self.user.id,)), data)
+        self.assertEqual(response.status_code, 302)
+        updated_user = models.User.objects.get(id=self.user.id)
+        self.assertEqual(updated_user.comments_on, data["comments_on"])

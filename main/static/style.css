@@ -529,6 +529,23 @@ form .helptext {
     max-width: 100%;
 }
 
+/* comments */
+.comments {
+    margin-top: 64px;
+}
+
+.comments-title {
+    margin-top: 32px;
+    font-size: 19px;
+    padding-bottom: 4px;
+    border-bottom: 2px solid var(--light-grey-color);
+}
+
+.comments-body {
+    margin-top: 4px;
+    margin-bottom: 16px;
+}
+
 /* page detail */
 .pages-item-title {
     margin-bottom: 8px;

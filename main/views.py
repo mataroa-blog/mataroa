@@ -130,7 +130,7 @@ class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         "blog_title",
         "blog_byline",
         "footer_note",
-        # "custom_domain",
+        "comments_on",
         "about",
     ]
     template_name = "main/user_update.html"
@@ -187,6 +187,7 @@ class PostDetail(DetailView):
             context["pages"] = models.Page.objects.filter(
                 owner__username=self.request.subdomain, is_hidden=False
             )
+            context["comments"] = models.Comment.objects.filter(post=self.object)
 
         # do not record analytic if post is authed user's
         if (
@@ -291,6 +292,60 @@ class PostDelete(LoginRequiredMixin, DeleteView):
         if request.user.username != request.subdomain:
             raise PermissionDenied()
 
+        return super().dispatch(request, *args, **kwargs)
+
+
+class CommentCreate(SuccessMessageMixin, CreateView):
+    model = models.Comment
+    fields = ["name", "email", "body"]
+    success_message = "your comment was published"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["post"] = models.Post.objects.get(
+            owner__username=self.request.subdomain, slug=self.kwargs["slug"]
+        )
+        return context
+
+    def form_valid(self, form):
+        # prevent comment creation on comments_on=False blogs
+        if not models.User.objects.get(username=self.request.subdomain).comments_on:
+            form.add_error(None, "No comments allowed on this blog.")
+            return self.render_to_response(self.get_context_data(form=form))
+
+        self.object = form.save(commit=False)
+        self.object.post = models.Post.objects.get(
+            owner__username=self.request.subdomain, slug=self.kwargs["slug"]
+        )
+        self.object.save()
+        messages.add_message(self.request, messages.INFO, self.success_message)
+        return HttpResponseRedirect(
+            reverse_lazy("post_detail", kwargs={"slug": self.object.post.slug})
+        )
+
+    def dispatch(self, request, *args, **kwargs):
+        if hasattr(request, "subdomain") and request.method == "POST":
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            return redirect("//" + settings.CANONICAL_HOST)
+
+
+class CommentDelete(LoginRequiredMixin, DeleteView):
+    model = models.Comment
+    success_message = "comment deleted"
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.delete()
+        messages.success(self.request, self.success_message % self.object.__dict__)
+        return HttpResponseRedirect(
+            reverse("post_detail", kwargs={"slug": kwargs["slug"]})
+        )
+
+    def dispatch(self, request, *args, **kwargs):
+        comment = self.get_object()
+        if request.user != comment.post.owner:
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 

@@ -23,7 +23,7 @@
             {% else %}
             DRAFT — Last updated on <time datetime="{{ post.updated_at|date:'F j, Y' }}" itemprop="dateModified">{{ post.updated_at|date:'F j, Y' }}</time>
             {% endif %}
-            {% if request.user.is_authenticated and request.subdomain == user.username %}
+            {% if request.user.is_authenticated and request.subdomain == request.user.username %}
             | <a href="{% url 'post_update' post.slug %}">Edit post</a>
             | <a href="{% url 'post_delete' post.slug %}">Del</a>
             {% endif %}
@@ -35,11 +35,78 @@
     </article>
 </main>
 
+{% include 'partials/webring.html' %}
+
+{% if blog_user.comments_on %}
+<section class="comments">
+    <div class="comments-title">Thoughts? Leave a comment</div>
+    <div class="comments-form">
+        <form method="post" action="{% url 'comment_create' post.slug %}">
+            {{ form.non_field_errors }}
+
+            <p>
+                <label for="id_name">Name (optional):</label>
+                {% if form.name.errors %}
+                    {% for error in form.name.errors %}
+                        <span class="form-error">{{ error|escape }}</span>
+                    {% endfor %}
+                {% endif %}
+                <input type="text" name="name" id="id_name" maxlength="150" value="">
+            </p>
+
+            <p>
+                <label for="id_email">Email (optional and private):</label>
+                {% if form.email.errors %}
+                    {% for error in form.email.errors %}
+                        <span class="form-error">{{ error|escape }}</span>
+                    {% endfor %}
+                {% endif %}
+                <input type="email" name="email" id="id_email" value="">
+            </p>
+
+            <p>
+                <label for="id_body">Comment:</label>
+                {% if form.body.errors %}
+                    {% for error in form.body.errors %}
+                        <span class="form-error">{{ error|escape }}</span>
+                    {% endfor %}
+                {% endif %}
+                <textarea name="body" id="id_body" cols="60" rows="5"></textarea>
+            </p>
+
+            {% csrf_token %}
+            <input type="submit" value="Publish comment">
+        </form>
+    </div>
+    {% if comments %}
+    <div class="comments-title">Comments</div>
+    <ol>
+        {% for comment in comments %}
+        <li id="comment-{{ comment.id}}">
+            <span class="comments-author">
+                {{ comment.name|default_if_none:"Anonymous" }}
+                {% if request.user.is_authenticated and request.subdomain == request.user.username and comment.email %}
+                    ({{ comment.email }})
+                {% endif %}—
+                <a href="#comment-{{ comment.id }}">{{ comment.created_at|date:'M j, Y'  }}</a>:
+            </span>
+            {% if request.user.is_authenticated and request.subdomain == request.user.username %}
+            (<a href="{% url 'comment_delete' post.slug comment.id %}" class="type-delete">del</a>)
+            {% endif %}
+            <p class="comments-body">{{ comment.body }}</p>
+        </li>
+        {% endfor %}
+    </ol>
+    {% endif %}
+</section>
+{% endif %}
+
 {% include 'partials/footer_blog.html' %}
 
 {% endblock %}
 
 {% block scripts %}
+{% if not blog_user.comments_on %}
 <script>
     window.addEventListener('keypress', function (evt) {
         if (evt.key === 'u') {
@@ -50,4 +117,5 @@
         }
     });
 </script>
+{% endif %}
 {% endblock %}
