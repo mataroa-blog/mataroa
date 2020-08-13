@@ -25,11 +25,14 @@
     </div>
 </main>
 
+{% include 'partials/webring.html' %}
+
 {% include 'partials/footer_blog.html' %}
 
 {% endblock %}
 
 {% block scripts %}
+{% if not blog_user.comments_on %}
 <script>
     window.addEventListener('keypress', function (evt) {
         if (evt.key === 'u') {
@@ -40,4 +43,5 @@
         }
     });
 </script>
+{% endif %}
 {% endblock %}
