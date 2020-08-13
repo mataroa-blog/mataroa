@@ -22,7 +22,7 @@
                 width="18"
                 height="{{ analytic.count_percent }}%"
                 >
-                <title>{{ analytic.count }} hits during {{ day }}</title>
+                <title>{{ analytic.count }} hits during {{ day|date:'F j, Y' }}</title>
             </rect>
             {% endfor %}
         </svg>
