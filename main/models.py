@@ -28,6 +28,9 @@ class User(AbstractUser):
         default=None,
         help_text="Supports markdown",
     )
+    comments_on = models.BooleanField(
+        default=False, help_text="Enable/disable comments for your blog",
+    )
 
     # custom domain related
     custom_domain = models.CharField(
@@ -194,6 +197,20 @@ class Analytic(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+
+    def __str__(self):
+        return self.created_at.strftime("%c") + ": " + self.post.title
+
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    body = models.TextField()
+    name = models.CharField(max_length=150, default="Anonymous", null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["created_at"]
 
     def __str__(self):
         return self.created_at.strftime("%c") + ": " + self.post.title
