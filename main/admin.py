@@ -90,3 +90,17 @@ class AnalyticAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.Analytic, AnalyticAdmin)
+
+
+class CommentAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "post",
+        "name",
+        "email",
+        "body",
+        "created_at",
+    )
+
+
+admin.site.register(models.Comment, CommentAdmin)
