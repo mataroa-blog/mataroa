@@ -86,6 +86,7 @@ class AnalyticAdmin(admin.ModelAdmin):
         "id",
         "post",
         "created_at",
+        "referer",
     )
 
 

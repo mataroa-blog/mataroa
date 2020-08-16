@@ -9,6 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView as DjLogoutView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import PermissionDenied
+from django.db.models import Count
 from django.http import (
     Http404,
     HttpResponse,
@@ -613,6 +614,12 @@ class AnalyticDetail(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["referers_count"] = (
+            models.Analytic.objects.filter(post=self.object)
+            .values("referer")
+            .annotate(Count("id"))
+            .order_by("-id__count")
+        )
         context["post_analytics"] = {}
         current_date = timezone.now().date()
         current_x_offset = 0

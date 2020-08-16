@@ -56,5 +56,24 @@
         </svg>
     </div>
 
+    <div>
+        <h2>Referers</h2>
+        <ul>
+            {% for rc in referers_count %}
+            {% if rc.referer is None %}
+            <li><strong>{{ rc.id__count }}</strong> visits without a referer</li>
+            {% else %}
+            <li>
+                <strong>{{ rc.id__count }}</strong>
+                visits from
+                <span style="font-family: monospace;">{{ rc.referer }}</span>
+            </li>
+            {% endif %}
+            {% empty %}
+            <li><i>No referers</i></li>
+            {% endfor %}
+        </ul>
+    </div>
+
 </main>
 {% endblock %}
