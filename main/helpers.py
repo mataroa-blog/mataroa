@@ -92,10 +92,11 @@ def syntax_highlight(text):
                     try:
                         lexer = get_lexer_for_filename(lang_filename)
                     except ClassNotFound:
-                        lexer = get_lexer_by_name(lang)
-                    except ClassNotFound:
-                        # can't find lexer, just use C lang as default
-                        lexer = get_lexer_by_name("c")
+                        try:
+                            lexer = get_lexer_by_name(lang)
+                        except:
+                            # can't find lexer, just use C lang as default
+                            lexer = get_lexer_by_name("c")
 
                     # continue because we don't want to add backticks in the processed text
                     continue
