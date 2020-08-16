@@ -194,6 +194,7 @@ class Page(models.Model):
 class Analytic(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    referer = models.URLField(blank=True, null=True)
 
     class Meta:
         ordering = ["-created_at"]

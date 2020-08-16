@@ -195,7 +195,10 @@ class PostDetail(DetailView):
             and self.request.user == self.object.owner
         ):
             return context
-        models.Analytic.objects.create(post=self.object)
+        referer = None
+        if "HTTP_REFERER" in self.request.META:
+            referer = self.request.META["HTTP_REFERER"]
+        models.Analytic.objects.create(post=self.object, referer=referer)
 
         return context
 
