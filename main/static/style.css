@@ -367,15 +367,6 @@ footer {
     border-color: var(--red-color) !important;
 }
 
-/* svg */
-rect {
-    fill: var(--link-color);
-}
-
-rect:hover {
-    fill: var(--ascent-color);
-}
-
 /* form */
 label {
     display: block;
@@ -640,4 +631,17 @@ form .helptext {
 .analytics-chart {
     background: var(--light-grey-color);
     line-height: 0;
+}
+
+svg .analytics-chart-bar {
+    fill: var(--link-color);
+}
+
+svg .analytics-chart-bar:hover {
+    fill: var(--ascent-color);
+}
+
+svg .analytics-chart-text {
+    font-family: monospace;
+    font-size: 10px;
 }
