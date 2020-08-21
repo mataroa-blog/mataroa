@@ -94,7 +94,7 @@ def syntax_highlight(text):
                     except ClassNotFound:
                         try:
                             lexer = get_lexer_by_name(lang)
-                        except:
+                        except ClassNotFound:
                             # can't find lexer, just use C lang as default
                             lexer = get_lexer_by_name("c")
 
