@@ -36,7 +36,22 @@ urlpatterns += [
     path("blog/<slug:slug>/", views.PostDetail.as_view(), name="post_detail"),
     path("blog/<slug:slug>/edit/", views.PostUpdate.as_view(), name="post_update"),
     path("blog/<slug:slug>/delete/", views.PostDelete.as_view(), name="post_delete"),
+]
+
+# blog extras
+urlpatterns += [
     path("rss/", feeds.RSSBlogFeed(), name="rss_feed"),
+    path("notifications/", views.Notification.as_view(), name="notification"),
+    path(
+        "notifications/unsubscribe/",
+        views.NotificationUnsubscribe.as_view(),
+        name="notification_unsubscribe",
+    ),
+    path(
+        "notifications/unsubscribe/<uuid:unsubscribe_key>/",
+        views.notification_unsubscribe_key,
+        name="notification_unsubscribe_key",
+    ),
 ]
 
 # comments
