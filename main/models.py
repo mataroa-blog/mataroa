@@ -1,4 +1,5 @@
 import base64
+import uuid
 from collections import defaultdict
 
 from django.conf import settings
@@ -30,6 +31,10 @@ class User(AbstractUser):
     )
     comments_on = models.BooleanField(
         default=False, help_text="Enable/disable comments for your blog",
+    )
+    notifications_on = models.BooleanField(
+        default=False,
+        help_text="Allow/disallow people subscribing for new posts notifications",
     )
 
     # custom domain related
@@ -215,3 +220,29 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.created_at.strftime("%c") + ": " + self.post.title
+
+
+class PostNotification(models.Model):
+    blog_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    email = models.EmailField()
+    unsubscribe_key = models.UUIDField(default=uuid.uuid4, unique=True)
+
+    class Meta:
+        ordering = ["email"]
+        unique_together = [["email", "blog_user"]]
+
+    def __str__(self):
+        return self.email + " – " + str(self.unsubscribe_key)
+
+
+class PostNotificationRecord(models.Model):
+    post_notification = models.ForeignKey(
+        PostNotification, on_delete=models.SET_NULL, null=True
+    )
+    sent_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ["-sent_at"]
+
+    def __str__(self):
+        return self.sent_at + " – " + self.post_notification.email

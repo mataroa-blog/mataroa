@@ -105,3 +105,26 @@ class CommentAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.Comment, CommentAdmin)
+
+
+class PostNotificationAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "email",
+        "blog_user",
+        "unsubscribe_key",
+    )
+
+
+admin.site.register(models.PostNotification, PostNotificationAdmin)
+
+
+class PostNotificationRecordAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "sent_at",
+        "post_notification",
+    )
+
+
+admin.site.register(models.PostNotificationRecord, PostNotificationRecordAdmin)
