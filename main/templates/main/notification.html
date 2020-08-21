@@ -1,0 +1,20 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}New post notifications — {{ blog_user.username }} at Mataroa{% endblock %}
+
+{% block content %}
+<main>
+    <h1>New post notifications</h1>
+    <p>Get an email notification when a new post is published at {{ blog_user.blog_title }}.</p>
+    <form method="post">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <input type="submit" value="Submit">
+    </form>
+
+    <br>
+    <p>
+        Or go here to <a href="{% url 'notification_unsubscribe' %}">unsubscribe</a>.
+    </p>
+</main>
+{% endblock %}
