@@ -4,6 +4,8 @@ from django.contrib.auth.forms import UserCreationForm as DjUserCreationForm
 from django.core import validators as dj_validators
 from django.core.mail import mail_admins
 
+from main import models
+
 
 class UserCreationForm(DjUserCreationForm):
     class Meta:
@@ -22,6 +24,12 @@ class InterestForm(forms.Form):
         body += "\nPython"
 
         mail_admins("Interest form response", body)
+
+
+class PostNotificationForm(forms.ModelForm):
+    class Meta:
+        model = models.PostNotification
+        fields = ["email"]
 
 
 class UploadTextFilesForm(forms.Form):
