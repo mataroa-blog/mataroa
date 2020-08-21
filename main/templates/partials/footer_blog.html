@@ -7,6 +7,9 @@
     <a href="//{{ request.user.username }}.{{ request.get_host }}">Blog</a>
     {% endif %}
     <a href="{% url 'rss_feed' %}">RSS</a>.
+    {% if blog_user.notifications_on %}
+    <a href="{% url 'notification' %}">Email notifications</a>.
+    {% endif %}
     {% for page in pages %}
     <a href="{% url 'page_detail' page.slug %}">{{ page.title }}</a>.
     {% endfor %}
