@@ -655,6 +655,11 @@ class Interest(SuccessMessageMixin, FormView):
         form.send_email()
         return super().form_valid(form)
 
+    def dispatch(self, request, *args, **kwargs):
+        if not hasattr(request, "subdomain"):
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            return redirect("index")
 
 def modus(request):
     return render(request, "main/modus.html")
