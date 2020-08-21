@@ -244,3 +244,61 @@ class BlogRandomTestCase(TestCase):
         )
         self.assertEqual(response.status_code, 302)
         self.assertTrue("alice" in response.url)
+
+
+class BlogPostNotificationSubscribeTestCase(TestCase):
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+
+    def test_blog_subscribe(self):
+        response = self.client.post(
+            reverse("notification"),
+            HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
+            data={"email": "s@example.com"},
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(
+            models.PostNotification.objects.filter(
+                blog_user=self.user, email="s@example.com"
+            ).exists()
+        )
+
+
+class BlogPostNotificationUnsubscribeTestCase(TestCase):
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.post_notification = models.PostNotification.objects.create(
+            blog_user=self.user, email="s@example.com",
+        )
+
+    def test_blog_unsubscribe(self):
+        response = self.client.post(
+            reverse("notification_unsubscribe"),
+            HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
+            data={"email": "s@example.com"},
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(
+            models.PostNotification.objects.filter(email="s@example.com").exists()
+        )
+
+
+class BlogPostNotificationUnsubscribeKeyTestCase(TestCase):
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.post_notification = models.PostNotification.objects.create(
+            blog_user=self.user, email="s@example.com",
+        )
+
+    def test_blog_unsubscribe_key(self):
+        response = self.client.get(
+            reverse(
+                "notification_unsubscribe_key",
+                args=(self.post_notification.unsubscribe_key,),
+            ),
+            HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(
+            models.PostNotification.objects.filter(email="s@example.com").exists()
+        )
