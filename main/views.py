@@ -661,6 +661,89 @@ class Interest(SuccessMessageMixin, FormView):
         else:
             return redirect("index")
 
+
+class Notification(SuccessMessageMixin, FormView):
+    form_class = forms.PostNotificationForm
+    template_name = "main/notification.html"
+    success_url = reverse_lazy("index")
+    success_message = "%(email)s will now receive new post notifications"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if hasattr(self.request, "subdomain"):
+            context["blog_user"] = models.User.objects.get(
+                username=self.request.subdomain
+            )
+        return context
+
+    def form_valid(self, form):
+        blog_user = models.User.objects.get(username=self.request.subdomain)
+
+        if models.PostNotification.objects.filter(
+            blog_user__username=self.request.subdomain,
+            email=form.cleaned_data.get("email"),
+        ).exists():
+            form.add_error(
+                "email", f"This email is already subscribed for {blog_user.blog_title}."
+            )
+            return self.render_to_response(self.get_context_data(form=form))
+
+        self.object = form.save(commit=False)
+        self.object.blog_user = models.User.objects.get(username=self.request.subdomain)
+        self.object.save()
+        return super().form_valid(form)
+
+    def dispatch(self, request, *args, **kwargs):
+        if hasattr(request, "subdomain"):
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            return redirect("index")
+
+
+class NotificationUnsubscribe(SuccessMessageMixin, FormView):
+    form_class = forms.PostNotificationForm
+    template_name = "main/notification_unsubscribe.html"
+    success_url = reverse_lazy("index")
+    success_message = "%(email)s will stop receiving post notifications"
+
+    def form_valid(self, form):
+        models.PostNotification.objects.filter(
+            blog_user__username=self.request.subdomain,
+            email=form.cleaned_data.get("email"),
+        ).delete()
+        return super().form_valid(form)
+
+    def dispatch(self, request, *args, **kwargs):
+        if hasattr(request, "subdomain"):
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            return redirect("index")
+
+
+def notification_unsubscribe_key(request, unsubscribe_key):
+    # handle lack of subdomain
+    if not hasattr(request, "subdomain"):
+        return redirect("index")
+
+    if models.PostNotification.objects.filter(unsubscribe_key=unsubscribe_key).exists():
+        post_notification = models.PostNotification.objects.get(
+            unsubscribe_key=unsubscribe_key
+        )
+        email = post_notification.email
+        post_notification.delete()
+        return render(
+            request,
+            "main/notification_unsubscribe_success.html",
+            {"unsubscribed": True, "email": email},
+        )
+    else:
+        return render(
+            request,
+            "main/notification_unsubscribe_success.html",
+            {"unsubscribed": False},
+        )
+
+
 def modus(request):
     return render(request, "main/modus.html")
 
