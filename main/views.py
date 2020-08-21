@@ -132,7 +132,6 @@ class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         "blog_byline",
         "footer_note",
         "comments_on",
-        "notifications_on",
         "about",
     ]
     template_name = "main/user_update.html"
