@@ -7,6 +7,8 @@ Minimal blogging platform with export as first-class feature.
 Feel free to open a PR on [GitHub](https://github.com/sirodoht/mataroa/fork) or
 send an email patch to [~sirodoht/mataroa-devel@lists.sr.ht](~sirodoht/mataroa-devel@lists.sr.ht).
 
+On how to contribute using email patches see [git-send-email.io](https://git-send-email.io/).
+
 ## Development
 
 This is a [Django](https://www.djangoproject.com/) codebase. Check out the
