@@ -148,8 +148,9 @@ EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = 587
 
-DEFAULT_FROM_EMAIL = "Wang Nui <admin@mataroa.blog>"
-SERVER_EMAIL = "Cornelius Manawatu <server@mataroa.blog>"
+DEFAULT_FROM_EMAIL = "Mataroa Admin <admin@mataroa.blog>"
+NOTIFICATIONS_FROM_EMAIL = "Mataroa Notifications <notifications@mataroa.blog>"
+SERVER_EMAIL = "D C Parlov <server@mataroa.blog>"
 EMAIL_SUBJECT_PREFIX = "[Mataroa Notification] "
 
 
