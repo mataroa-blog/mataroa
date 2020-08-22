@@ -11,6 +11,9 @@
     <p class="dashboard-list">
         <a href="{% url 'image_list' %}">Images</a>
         <br><a href="{% url 'page_list' %}">Pages</a>
+        {% if request.user.notifications_on %}
+        <br><a href="{% url 'subscriber_list' %}">Subscribers</a>
+        {% endif %}
         <br><a href="{% url 'analytic_list' %}">Analytics</a>
         <br><a href="{% url 'blog_import' %}">Import posts</a>
         <br><a href="{% url 'user_update' user.id %}">Blog settings</a>
