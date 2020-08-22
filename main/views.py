@@ -743,6 +743,13 @@ def notification_unsubscribe_key(request, unsubscribe_key):
         )
 
 
+class SubscriberList(LoginRequiredMixin, ListView):
+    model = models.PostNotification
+
+    def get_queryset(self):
+        return models.PostNotification.objects.filter(blog_user=self.request.user)
+
+
 def modus(request):
     return render(request, "main/modus.html")
 

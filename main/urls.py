@@ -52,6 +52,7 @@ urlpatterns += [
         views.notification_unsubscribe_key,
         name="notification_unsubscribe_key",
     ),
+    path("subscribers/", views.SubscriberList.as_view(), name="subscriber_list",),
 ]
 
 # comments
