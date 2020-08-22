@@ -585,6 +585,10 @@ form .helptext {
 }
 
 /* dashboard */
+.dashboard-cta {
+    font-size: 16px;
+}
+
 .dashboard-list {
     line-height: 1.6;
 }
