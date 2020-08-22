@@ -249,6 +249,8 @@ class BlogRandomTestCase(TestCase):
 class BlogPostNotificationSubscribeTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
+        self.user.notifications_on = True
+        self.user.save()
 
     def test_blog_subscribe(self):
         response = self.client.post(
