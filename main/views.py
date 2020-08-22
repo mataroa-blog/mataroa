@@ -695,6 +695,9 @@ class Notification(SuccessMessageMixin, FormView):
 
     def dispatch(self, request, *args, **kwargs):
         if hasattr(request, "subdomain"):
+            # check if notifications are enabled for this blog_user
+            if not models.User.objects.get(username=request.subdomain).notifications_on:
+                return redirect("index")
             return super().dispatch(request, *args, **kwargs)
         else:
             return redirect("index")
