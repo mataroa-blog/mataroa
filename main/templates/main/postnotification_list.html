@@ -1,0 +1,21 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Subscribers — {{ request.user.username }} at Mataroa{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Subscribers</h1>
+    <p>
+        These emails will receive a notification on new post publications.
+    </p>
+    <ul>
+        {% for pn in postnotification_list %}
+        <li>
+            {{ pn.email }}
+        </li>
+        {% empty %}
+        <li><i>No subscribers</i></li>
+        {% endfor %}
+    </ul>
+</main>
+{% endblock %}
