@@ -231,6 +231,10 @@ class PostNotification(models.Model):
         ordering = ["email"]
         unique_together = [["email", "blog_user"]]
 
+    def get_unsubscribe_url(self):
+        path = reverse("notification_unsubscribe_key", args={self.unsubscribe_key})
+        return f"//{self.blog_user.username}.{settings.CANONICAL_HOST}{path}"
+
     def __str__(self):
         return self.email + " – " + str(self.unsubscribe_key)
 
@@ -239,10 +243,12 @@ class PostNotificationRecord(models.Model):
     post_notification = models.ForeignKey(
         PostNotification, on_delete=models.SET_NULL, null=True
     )
-    sent_at = models.DateTimeField(default=timezone.now)
+    post = models.ForeignKey(Post, on_delete=models.SET_NULL, null=True)
+    sent_at = models.DateTimeField(default=timezone.now, null=True)
 
     class Meta:
         ordering = ["-sent_at"]
+        unique_together = [["post", "post_notification"]]
 
     def __str__(self):
         return self.sent_at + " – " + self.post_notification.email
