@@ -3,6 +3,7 @@ import uuid
 import bleach
 import markdown
 import pygments
+from django.conf import settings
 from django.utils.text import slugify
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import ClassNotFound, get_lexer_by_name, get_lexer_for_filename
@@ -209,3 +210,10 @@ def md_to_html(markdown_string):
         ],
     )
     return clean_html(dirty_html)
+
+
+def get_protocol():
+    if settings.DEBUG:
+        return "http:"
+    else:
+        return "https:"
