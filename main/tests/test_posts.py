@@ -132,8 +132,8 @@ class PostSanitizeHTMLTestCase(TestCase):
 
     def test_get_sanitized(self):
         post = models.Post.objects.get(slug=self.data["slug"])
-        self.assertTrue("&lt;script&gt;" in post.as_html)
-        self.assertFalse("<script>" in post.as_html)
+        self.assertTrue("&lt;script&gt;" in post.body_as_html)
+        self.assertFalse("<script>" in post.body_as_html)
 
 
 class PostUpdateTestCase(TestCase):

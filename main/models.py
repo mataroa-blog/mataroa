@@ -102,7 +102,7 @@ class Post(models.Model):
         unique_together = [["slug", "owner"]]
 
     @property
-    def as_html(self):
+    def body_as_html(self):
         return helpers.md_to_html(self.body)
 
     @property
@@ -185,7 +185,7 @@ class Page(models.Model):
         unique_together = [["slug", "owner"]]
 
     @property
-    def as_html(self):
+    def body_as_html(self):
         return helpers.md_to_html(self.body)
 
     def get_absolute_url(self):
