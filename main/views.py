@@ -670,10 +670,7 @@ class Notification(SuccessMessageMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if hasattr(self.request, "subdomain"):
-            context["blog_user"] = models.User.objects.get(
-                username=self.request.subdomain
-            )
+        context["blog_user"] = models.User.objects.get(username=self.request.subdomain)
         return context
 
     def form_valid(self, form):
@@ -709,6 +706,11 @@ class NotificationUnsubscribe(SuccessMessageMixin, FormView):
     success_url = reverse_lazy("index")
     success_message = "%(email)s will stop receiving post notifications"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["blog_user"] = models.User.objects.get(username=self.request.subdomain)
+        return context
+
     def form_valid(self, form):
         models.PostNotification.objects.filter(
             blog_user__username=self.request.subdomain,
@@ -737,13 +739,20 @@ def notification_unsubscribe_key(request, unsubscribe_key):
         return render(
             request,
             "main/notification_unsubscribe_success.html",
-            {"unsubscribed": True, "email": email},
+            {
+                "blog_user": models.User.objects.get(username=request.subdomain),
+                "unsubscribed": True,
+                "email": email,
+            },
         )
     else:
         return render(
             request,
             "main/notification_unsubscribe_success.html",
-            {"unsubscribed": False},
+            {
+                "blog_user": models.User.objects.get(username=request.subdomain),
+                "unsubscribed": False,
+            },
         )
 
 

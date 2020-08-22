@@ -4,6 +4,10 @@
 
 {% block content %}
 <main>
+    {% if blog_user.blog_title %}
+    <a href="{% url 'index' %}" class="pages-item-brand">{{ blog_user.blog_title }}</a>
+    {% endif %}
+
     <h1>New post notifications</h1>
     <p>Get an email notification when a new post is published at {{ blog_user.blog_title }}.</p>
     <form method="post">
