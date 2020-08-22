@@ -149,6 +149,18 @@ This project is also configured to deploy to [dokku](http://dokku.viewdocs.io/do
 * [app.json](app.json): predeploy tasks
 * [DOKKU_SCALE](DOKKU_SCALE): process scaling
 
+## Management
+
+Except for the standard Django management commands, there is also:
+
+* `process_notifications`: sends notification emails for new blog posts.
+
+To trigger:
+
+```sh
+python manage.py process_notifications
+```
+
 ## License
 
 This software is licensed under the MIT license.
