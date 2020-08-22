@@ -5,15 +5,19 @@
 {% block content %}
 <main>
     {% if unsubscribed %}
-    <h1>Unsubscribed successfully</h1>
+    <h1>Unsubscribed success</h1>
     <p>
-        {{ email }} was successfully deleted and will stop receiving email notifications.
+        <b>{{ email }}</b> was successfully deleted and will stop receiving email notifications.
     </p>
-    {% else %}
-    <h1>Not subscribed</h1>
-    {% endif %}
     <p>
         To re-subscribe go <a href="{% url 'notification' %}">here</a>.
     </p>
+    {% else %}
+    <h1>Not subscribed</h1>
+    <p>
+        <a href="{% url 'notification' %}">Subscribe</a>
+        to start receiving email notifications.
+    </p>
+    {% endif %}
 </main>
 {% endblock %}
