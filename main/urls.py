@@ -13,11 +13,6 @@ urlpatterns = [
     path("modus-operandi/", views.modus, name="modus"),
     path("premium/", views.Interest.as_view(), name="interest"),
     path("markdown-guide/", views.markdown_guide, name="markdown_guide"),
-    path(
-        ".well-known/acme-challenge/8Ztw4vrGMbl_ocZpth3LIjhKbnFYGwHeMym23v9CGxo",
-        views.acme_challenge,
-        name="acme_challenge",
-    ),
 ]
 
 # user system

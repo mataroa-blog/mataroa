@@ -769,7 +769,3 @@ def modus(request):
 
 def markdown_guide(request):
     return render(request, "main/markdown_guide.html")
-
-
-def acme_challenge(request):
-    return render(request, "main/acme_challenge.txt")
