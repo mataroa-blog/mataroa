@@ -9,6 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView as DjLogoutView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import PermissionDenied
+from django.core.mail import send_mail
 from django.db.models import Count
 from django.http import (
     Http404,
@@ -324,6 +325,20 @@ class CommentCreate(SuccessMessageMixin, CreateView):
         )
         self.object.save()
         messages.add_message(self.request, messages.INFO, self.success_message)
+
+        # inform blog_user
+        post_url = helpers.get_protocol() + self.object.post.get_absolute_url()
+        body = f"Someone commented on your post: {self.object.post.title}\n"
+        body += "\nComment follows:\n"
+        body += "\n" + self.object.body + "\n"
+        body += f"\n---\nSee at {post_url}\n"
+        send_mail(
+            f"New comment for on post: {self.object.post.title}",
+            body,
+            settings.NOTIFICATIONS_FROM_EMAIL,
+            [self.object.post.owner.email],
+        )
+
         return HttpResponseRedirect(
             reverse_lazy("post_detail", kwargs={"slug": self.object.post.slug})
         )
