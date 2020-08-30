@@ -29,15 +29,6 @@ class User(AbstractUser):
         default=None,
         help_text="Supports markdown",
     )
-    comments_on = models.BooleanField(
-        default=False, help_text="Enable/disable comments for your blog",
-    )
-    notifications_on = models.BooleanField(
-        default=False,
-        help_text="Allow/disallow people subscribing for new posts notifications",
-    )
-
-    # custom domain related
     custom_domain = models.CharField(
         max_length=150,
         blank=True,
@@ -45,8 +36,13 @@ class User(AbstractUser):
         help_text="DNS: CNAME your .mataroa.blog subdomain or A with IP 95.217.176.64",
         validators=[validators.validate_domain_name],
     )
-    custom_domain_cert = models.TextField(blank=True, null=True)
-    custom_domain_key = models.TextField(blank=True, null=True)
+    comments_on = models.BooleanField(
+        default=False, help_text="Enable/disable comments for your blog",
+    )
+    notifications_on = models.BooleanField(
+        default=False,
+        help_text="Allow/disallow people subscribing for new posts notifications",
+    )
 
     # webring related
     webring_name = models.CharField(max_length=200, blank=True, null=True)
