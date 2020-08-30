@@ -38,9 +38,9 @@ class Command(BaseCommand):
     help = "Processes new posts and sends email to subscribers"
 
     def handle(self, *args, **options):
-        if timezone.now().hour != 13:
-            self.stdout.write(self.style.NOTICE("No action. Current UTC is not 13:00."))
-            return
+        # if timezone.now().hour != 13:
+        #    self.stdout.write(self.style.NOTICE("No action. Current UTC is not 13:00."))
+        #    return
 
         yesterday = timezone.now().date() - timedelta(days=1)
         posts = models.Post.objects.filter(published_at=yesterday)
