@@ -37,7 +37,8 @@ class User(AbstractUser):
         validators=[validators.validate_domain_name],
     )
     comments_on = models.BooleanField(
-        default=False, help_text="Enable/disable comments for your blog",
+        default=False,
+        help_text="Enable/disable comments for your blog",
     )
     notifications_on = models.BooleanField(
         default=False,

@@ -10,7 +10,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterModelOptions(name="user", options={"ordering": ["-id"]},),
+        migrations.AlterModelOptions(
+            name="user",
+            options={"ordering": ["-id"]},
+        ),
         migrations.AlterField(
             model_name="user",
             name="footer_note",

@@ -10,6 +10,12 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(model_name="user", name="custom_domain_cert",),
-        migrations.RemoveField(model_name="user", name="custom_domain_key",),
+        migrations.RemoveField(
+            model_name="user",
+            name="custom_domain_cert",
+        ),
+        migrations.RemoveField(
+            model_name="user",
+            name="custom_domain_key",
+        ),
     ]

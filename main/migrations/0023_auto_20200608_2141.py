@@ -11,6 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterModelOptions(
-            name="image", options={"ordering": ["-uploaded_at"]},
+            name="image",
+            options={"ordering": ["-uploaded_at"]},
         ),
     ]

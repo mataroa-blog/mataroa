@@ -38,7 +38,9 @@ class ImageDetailTestCase(TestCase):
         self.image = models.Image.objects.get(name="vulf")
 
     def test_image_detail(self):
-        response = self.client.get(reverse("image_detail", args=(self.image.slug,)),)
+        response = self.client.get(
+            reverse("image_detail", args=(self.image.slug,)),
+        )
         self.assertEqual(response.status_code, 200)
         self.assertInHTML("<h1>vulf</h1>", response.content.decode("utf-8"))
         self.assertContains(response, "Uploaded on")

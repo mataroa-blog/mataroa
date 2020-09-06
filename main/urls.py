@@ -47,7 +47,11 @@ urlpatterns += [
         views.notification_unsubscribe_key,
         name="notification_unsubscribe_key",
     ),
-    path("subscribers/", views.SubscriberList.as_view(), name="subscriber_list",),
+    path(
+        "subscribers/",
+        views.SubscriberList.as_view(),
+        name="subscriber_list",
+    ),
 ]
 
 # comments
@@ -89,7 +93,9 @@ urlpatterns += [
     path("images/<slug:slug>/", views.ImageDetail.as_view(), name="image_detail"),
     path("images/<slug:slug>/edit/", views.ImageUpdate.as_view(), name="image_update"),
     path(
-        "images/<slug:slug>/delete/", views.ImageDelete.as_view(), name="image_delete",
+        "images/<slug:slug>/delete/",
+        views.ImageDelete.as_view(),
+        name="image_delete",
     ),
 ]
 

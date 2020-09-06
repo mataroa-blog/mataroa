@@ -11,6 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterUniqueTogether(
-            name="postnotification", unique_together={("email", "blog_user")},
+            name="postnotification",
+            unique_together={("email", "blog_user")},
         ),
     ]

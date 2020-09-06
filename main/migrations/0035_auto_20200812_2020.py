@@ -12,7 +12,8 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterModelOptions(
-            name="analytic", options={"ordering": ["-created_at"]},
+            name="analytic",
+            options={"ordering": ["-created_at"]},
         ),
         migrations.AddField(
             model_name="user",

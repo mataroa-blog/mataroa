@@ -9,7 +9,9 @@ class CommentFullCreateTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice", comments_on=True)
         self.post = models.Post.objects.create(
-            title="Hello world", slug="hello-world", owner=self.user,
+            title="Hello world",
+            slug="hello-world",
+            owner=self.user,
         )
 
     def test_comment_create(self):
@@ -35,7 +37,9 @@ class CommentNameCreateTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice", comments_on=True)
         self.post = models.Post.objects.create(
-            title="Hello world", slug="hello-world", owner=self.user,
+            title="Hello world",
+            slug="hello-world",
+            owner=self.user,
         )
 
     def test_comment_create(self):
@@ -59,7 +63,9 @@ class CommentEmailCreateTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice", comments_on=True)
         self.post = models.Post.objects.create(
-            title="Hello world", slug="hello-world", owner=self.user,
+            title="Hello world",
+            slug="hello-world",
+            owner=self.user,
         )
 
     def test_comment_create(self):
@@ -84,7 +90,9 @@ class CommentAnonCreateTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice", comments_on=True)
         self.post = models.Post.objects.create(
-            title="Hello world", slug="hello-world", owner=self.user,
+            title="Hello world",
+            slug="hello-world",
+            owner=self.user,
         )
 
     def test_comment_create(self):
@@ -107,7 +115,9 @@ class CommentNoBodyCreateTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice", comments_on=True)
         self.post = models.Post.objects.create(
-            title="Hello world", slug="hello-world", owner=self.user,
+            title="Hello world",
+            slug="hello-world",
+            owner=self.user,
         )
 
     def test_comment_create(self):
@@ -128,7 +138,9 @@ class CommentDisallowedCreateTestCase(TestCase):
         # user.comments_on=False is the default
         self.user = models.User.objects.create(username="alice")
         self.post = models.Post.objects.create(
-            title="Hello world", slug="hello-world", owner=self.user,
+            title="Hello world",
+            slug="hello-world",
+            owner=self.user,
         )
 
     def test_comment_create(self):
@@ -151,10 +163,15 @@ class CommentDeleteTestCase(TestCase):
         self.user.save()
         self.client.login(username="alice", password="abcdef123456")
         self.post = models.Post.objects.create(
-            title="Hello world", slug="hello-world", owner=self.user,
+            title="Hello world",
+            slug="hello-world",
+            owner=self.user,
         )
         self.comment = models.Comment.objects.create(
-            name="Jon", email="jon@wick.com", body="Content sentence.", post=self.post,
+            name="Jon",
+            email="jon@wick.com",
+            body="Content sentence.",
+            post=self.post,
         )
 
     def test_comment_delete(self):
@@ -170,10 +187,15 @@ class CommentNonOwnerDeleteTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice", comments_on=True)
         self.post = models.Post.objects.create(
-            title="Hello world", slug="hello-world", owner=self.user,
+            title="Hello world",
+            slug="hello-world",
+            owner=self.user,
         )
         self.comment = models.Comment.objects.create(
-            name="Jon", email="jon@wick.com", body="Content sentence.", post=self.post,
+            name="Jon",
+            email="jon@wick.com",
+            body="Content sentence.",
+            post=self.post,
         )
         self.non_owner = models.User.objects.create(username="bob")
         self.non_owner.set_password("abcdef123456")
@@ -193,10 +215,15 @@ class CommentAnonDeleteTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice", comments_on=True)
         self.post = models.Post.objects.create(
-            title="Hello world", slug="hello-world", owner=self.user,
+            title="Hello world",
+            slug="hello-world",
+            owner=self.user,
         )
         self.comment = models.Comment.objects.create(
-            name="Jon", email="jon@wick.com", body="Content sentence.", post=self.post,
+            name="Jon",
+            email="jon@wick.com",
+            body="Content sentence.",
+            post=self.post,
         )
 
     def test_comment_delete(self):

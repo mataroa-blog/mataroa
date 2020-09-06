@@ -55,18 +55,23 @@ class Command(BaseCommand):
 
                     # check if subscriber has already been notified
                     if models.PostNotificationRecord.objects.filter(
-                        post_notification=s, post=p, sent_at__isnull=False,
+                        post_notification=s,
+                        post=p,
+                        sent_at__isnull=False,
                     ).exists():
                         continue
 
                     record, _ = models.PostNotificationRecord.objects.get_or_create(
-                        post_notification=s, post=p, sent_at=None,
+                        post_notification=s, post=p, sent_at=None
                     )
 
                     subject = f"{p.owner.blog_title} new post publication: {p.title}"
                     body = get_email_body(p, s)
                     send_mail(
-                        subject, body, settings.NOTIFICATIONS_FROM_EMAIL, [s.email],
+                        subject,
+                        body,
+                        settings.NOTIFICATIONS_FROM_EMAIL,
+                        [s.email],
                     )
                     record.sent_at = timezone.now()
                     record.save()

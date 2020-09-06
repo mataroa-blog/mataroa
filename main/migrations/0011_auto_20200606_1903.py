@@ -11,6 +11,8 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RenameField(
-            model_name="user", old_name="cname", new_name="custom_domain",
+            model_name="user",
+            old_name="cname",
+            new_name="custom_domain",
         ),
     ]

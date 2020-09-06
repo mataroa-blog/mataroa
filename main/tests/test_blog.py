@@ -240,7 +240,8 @@ class BlogRandomTestCase(TestCase):
 
     def test_blog_random(self):
         response = self.client.get(
-            reverse("index"), HTTP_HOST="random." + settings.CANONICAL_HOST,
+            reverse("index"),
+            HTTP_HOST="random." + settings.CANONICAL_HOST,
         )
         self.assertEqual(response.status_code, 302)
         self.assertTrue("alice" in response.url)
@@ -270,7 +271,8 @@ class BlogPostNotificationUnsubscribeTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
         self.post_notification = models.PostNotification.objects.create(
-            blog_user=self.user, email="s@example.com",
+            blog_user=self.user,
+            email="s@example.com",
         )
 
     def test_blog_unsubscribe(self):
@@ -289,7 +291,8 @@ class BlogPostNotificationUnsubscribeKeyTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
         self.post_notification = models.PostNotification.objects.create(
-            blog_user=self.user, email="s@example.com",
+            blog_user=self.user,
+            email="s@example.com",
         )
 
     def test_blog_unsubscribe_key(self):
