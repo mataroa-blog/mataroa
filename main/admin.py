@@ -32,6 +32,7 @@ class UserAdmin(DjUserAdmin):
         ),
     )
 
+    ordering = ["-id"]
 
 admin.site.register(models.User, UserAdmin)
 
