@@ -248,4 +248,7 @@ class PostNotificationRecord(models.Model):
         unique_together = [["post", "post_notification"]]
 
     def __str__(self):
-        return self.sent_at + " – " + self.post_notification.email
+        if self.post_notification:
+            return self.sent_at.strftime("%c") + " – " + self.post_notification.email
+        else:
+            return self.sent_at.strftime("%c") + " – NULL"
