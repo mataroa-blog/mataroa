@@ -1,3 +1,4 @@
+pip-tools
 ipdb
 ipython
 isort
