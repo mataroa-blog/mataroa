@@ -76,7 +76,6 @@ class ImageAdmin(admin.ModelAdmin):
         "extension",
         "owner",
         "uploaded_at",
-        "data",
     )
 
 
