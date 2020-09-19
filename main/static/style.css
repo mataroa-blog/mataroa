@@ -181,13 +181,13 @@ template {
 
 /* general */
 :root {
-    --link-color: #0c7cf5;
+    --link-color: #1175e2;
     --ascent-color: #006cdf;
     --dark-grey-color: #757575;
     --light-grey-color: #eff1f5;
     --green-color: #26bd60;
     --red-color: #ff0000;
-    --purple-color: #e223e2;
+    --purple-color: #cd1ecd;
 }
 
 html,
