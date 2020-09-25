@@ -253,6 +253,19 @@ class PostUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         )
         return queryset
 
+    def form_valid(self, form):
+        if (
+            models.Post.objects.filter(
+                owner=self.request.user, slug=form.cleaned_data.get("slug")
+            )
+            .exclude(id=self.object.id)
+            .exists()
+        ):
+            form.add_error("slug", "This slug is used by another of your posts.")
+            return self.render_to_response(self.get_context_data(form=form))
+        self.object = form.save()
+        return super().form_valid(form)
+
     def dispatch(self, request, *args, **kwargs):
         if not hasattr(request, "subdomain"):
             if request.user.is_authenticated:
