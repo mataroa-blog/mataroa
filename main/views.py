@@ -254,6 +254,17 @@ class PostUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return queryset
 
     def form_valid(self, form):
+        # hidden code for slug: if slug is ":gen" then generate it from the title
+        if form.cleaned_data.get("slug") == ":gen":
+            self.object = form.save(commit=False)
+            self.object.slug = helpers.get_post_slug(
+                self.object.title, self.request.user
+            )
+            self.object.owner = self.request.user
+            self.object.save()
+            return super().form_valid(form)
+
+        # check if slug is unique among this user's posts
         if (
             models.Post.objects.filter(
                 owner=self.request.user, slug=form.cleaned_data.get("slug")
@@ -263,6 +274,7 @@ class PostUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         ):
             form.add_error("slug", "This slug is used by another of your posts.")
             return self.render_to_response(self.get_context_data(form=form))
+
         self.object = form.save()
         return super().form_valid(form)
 
