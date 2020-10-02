@@ -1,4 +1,5 @@
 import uuid
+from collections import defaultdict
 from datetime import timedelta
 
 from django.conf import settings
@@ -668,21 +669,37 @@ class AnalyticDetail(LoginRequiredMixin, DetailView):
         )
         context["post_analytics"] = {}
 
-        # calculate analytics count and percentages for each day
         current_date = timezone.now().date()
         current_x_offset = 0
-        while date_25d_ago <= current_date:
-            day_count = models.Analytic.objects.filter(
-                post=self.object, created_at__date=current_date
-            ).count()
 
+        # get all counts for the last 25 days
+        day_counts = (
+            models.Analytic.objects.filter(
+                post=self.object, created_at__gt=date_25d_ago
+            )
+            .values("created_at")
+            .annotate(Count("id"))
+        )
+
+        # transform day_counts into dict with date as key
+        count_per_day = defaultdict(int)
+        highest_day_count = 1
+        for item in day_counts:
+            count_per_day[item["created_at"].date()] += item["id__count"]
+
+            # find day with the most analytics counts (i.e. visits)
+            if highest_day_count < count_per_day[item["created_at"].date()]:
+                highest_day_count = count_per_day[item["created_at"].date()]
+
+        # calculate analytics count and percentages for each day
+        while date_25d_ago <= current_date:
             # normalize day count to percentage for svg drawing
             count_percent = 1  # keep lowest value to 1 so as it's visible
-            if self.object.highest_day_count != 0 and day_count != 0:
-                count_percent = day_count * 100 / self.object.highest_day_count
+            if highest_day_count != 0 and count_per_day[current_date] != 0:
+                count_percent = count_per_day[current_date] * 100 / highest_day_count
 
             context["post_analytics"][current_date] = {
-                "count": day_count,
+                "count": count_per_day[current_date],
                 "x_offset": current_x_offset,
                 "count_percent": count_percent,
                 "negative_count_percent": 100 - count_percent,

@@ -1,7 +1,5 @@
 import base64
 import uuid
-from collections import defaultdict
-from datetime import timedelta
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
@@ -112,14 +110,6 @@ class Post(models.Model):
             # future publishing date case
             return False
         return True
-
-    @property
-    def highest_day_count(self):
-        days = defaultdict(int)
-        date_25d_ago = timezone.now() - timedelta(days=24)
-        for analytic in self.analytic_set.filter(created_at__gt=date_25d_ago):
-            days[analytic.created_at.date()] += 1
-        return max(days.values()) if days else 0
 
     def get_absolute_url(self):
         path = reverse("post_detail", kwargs={"slug": self.slug})
