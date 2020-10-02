@@ -63,7 +63,6 @@ def speed_middleware(get_response):
 
         end = timer()
         response["X-Request-Time"] = end - request.start
-        print("X-Request-Time:", response["X-Request-Time"])
         return response
 
     return middleware
