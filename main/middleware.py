@@ -1,3 +1,5 @@
+from timeit import default_timer as timer
+
 from django.conf import settings
 from django.http import Http404, HttpResponseBadRequest
 from django.shortcuts import redirect
@@ -48,5 +50,18 @@ def host_middleware(get_response):
             return HttpResponseBadRequest()
 
         return get_response(request)
+
+    return middleware
+
+def speed_middleware(get_response):
+    def middleware(request):
+        request.start = timer()
+
+        response = get_response(request)
+
+        end = timer()
+        response["X-Request-Time"] = end - request.start
+        print("X-Request-Time:", response["X-Request-Time"])
+        return response
 
     return middleware
