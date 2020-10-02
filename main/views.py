@@ -655,16 +655,23 @@ class AnalyticDetail(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        # limit to 25 latest days of analytics
+        date_25d_ago = timezone.now().date() - timedelta(days=24)
         context["referers_count"] = (
-            models.Analytic.objects.filter(post=self.object)
+            models.Analytic.objects.filter(
+                post=self.object, created_at__gt=date_25d_ago
+            )
             .values("referer")
             .annotate(Count("id"))
             .order_by("-id__count")
         )
         context["post_analytics"] = {}
+
+        # calculate analytics count and percentages for each day
         current_date = timezone.now().date()
         current_x_offset = 0
-        while self.object.created_at.date() <= current_date:
+        while date_25d_ago <= current_date:
             day_count = models.Analytic.objects.filter(
                 post=self.object, created_at__date=current_date
             ).count()
@@ -682,6 +689,7 @@ class AnalyticDetail(LoginRequiredMixin, DetailView):
             }
             current_date = current_date - timedelta(days=1)
             current_x_offset += 20
+
         return context
 
 

@@ -1,6 +1,7 @@
 import base64
 import uuid
 from collections import defaultdict
+from datetime import timedelta
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
@@ -115,7 +116,8 @@ class Post(models.Model):
     @property
     def highest_day_count(self):
         days = defaultdict(int)
-        for analytic in self.analytic_set.all():
+        date_25d_ago = timezone.now() - timedelta(days=24)
+        for analytic in self.analytic_set.filter(created_at__gt=date_25d_ago):
             days[analytic.created_at.date()] += 1
         return max(days.values()) if days else 0
 

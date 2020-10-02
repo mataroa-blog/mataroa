@@ -53,6 +53,7 @@ def host_middleware(get_response):
 
     return middleware
 
+
 def speed_middleware(get_response):
     def middleware(request):
         request.start = timer()
