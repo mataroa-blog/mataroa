@@ -51,12 +51,11 @@ def index(request):
             )
 
         if models.User.objects.filter(username=request.subdomain).exists():
-            blog_user = models.User.objects.get(username=request.subdomain)
-            if request.user.is_authenticated and request.user == blog_user:
-                posts = models.Post.objects.filter(owner=blog_user)
+            if request.user.is_authenticated and request.user == request.blog_user:
+                posts = models.Post.objects.filter(owner=request.blog_user)
             else:
                 posts = models.Post.objects.filter(
-                    owner=blog_user,
+                    owner=request.blog_user,
                     published_at__isnull=False,
                     published_at__lte=timezone.now().date(),
                 ).order_by("-published_at")
@@ -66,10 +65,10 @@ def index(request):
                 "main/blog_index.html",
                 {
                     "subdomain": request.subdomain,
-                    "blog_user": blog_user,
+                    "blog_user": request.blog_user,
                     "posts": posts,
                     "pages": models.Page.objects.filter(
-                        owner=blog_user, is_hidden=False
+                        owner=request.blog_user, is_hidden=False
                     ),
                 },
             )
@@ -185,9 +184,7 @@ class PostDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if hasattr(self.request, "subdomain"):
-            context["blog_user"] = models.User.objects.get(
-                username=self.request.subdomain
-            )
+            context["blog_user"] = self.request.blog_user
             context["pages"] = models.Page.objects.filter(
                 owner__username=self.request.subdomain, is_hidden=False
             )
@@ -561,9 +558,7 @@ class PageDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if hasattr(self.request, "subdomain"):
-            context["blog_user"] = models.User.objects.get(
-                username=self.request.subdomain
-            )
+            context["blog_user"] = self.request.blog_user
             context["pages"] = models.Page.objects.filter(
                 owner__username=self.request.subdomain, is_hidden=False
             )
@@ -735,23 +730,21 @@ class Notification(SuccessMessageMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["blog_user"] = models.User.objects.get(username=self.request.subdomain)
+        context["blog_user"] = request.blog_user
         return context
 
     def form_valid(self, form):
-        blog_user = models.User.objects.get(username=self.request.subdomain)
-
         if models.PostNotification.objects.filter(
-            blog_user__username=self.request.subdomain,
+            blog_user=self.request.blog_user,
             email=form.cleaned_data.get("email"),
         ).exists():
             form.add_error(
-                "email", f"This email is already subscribed for {blog_user.blog_title}."
+                "email", f"This email is already subscribed for {self.request.blog_user.blog_title}."
             )
             return self.render_to_response(self.get_context_data(form=form))
 
         self.object = form.save(commit=False)
-        self.object.blog_user = models.User.objects.get(username=self.request.subdomain)
+        self.object.blog_user = request.blog_user
         self.object.save()
         return super().form_valid(form)
 
@@ -773,12 +766,12 @@ class NotificationUnsubscribe(SuccessMessageMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["blog_user"] = models.User.objects.get(username=self.request.subdomain)
+        context["blog_user"] = request.blog_user
         return context
 
     def form_valid(self, form):
         models.PostNotification.objects.filter(
-            blog_user__username=self.request.subdomain,
+            blog_user=self.request.subdomain,
             email=form.cleaned_data.get("email"),
         ).delete()
         return super().form_valid(form)
@@ -805,7 +798,7 @@ def notification_unsubscribe_key(request, unsubscribe_key):
             request,
             "main/notification_unsubscribe_success.html",
             {
-                "blog_user": models.User.objects.get(username=request.subdomain),
+                "blog_user": request.blog_user,
                 "unsubscribed": True,
                 "email": email,
             },
@@ -815,7 +808,7 @@ def notification_unsubscribe_key(request, unsubscribe_key):
             request,
             "main/notification_unsubscribe_success.html",
             {
-                "blog_user": models.User.objects.get(username=request.subdomain),
+                "blog_user": request.blog_user,
                 "unsubscribed": False,
             },
         )
