@@ -730,7 +730,7 @@ class Notification(SuccessMessageMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["blog_user"] = request.blog_user
+        context["blog_user"] = self.request.blog_user
         return context
 
     def form_valid(self, form):
@@ -744,7 +744,7 @@ class Notification(SuccessMessageMixin, FormView):
             return self.render_to_response(self.get_context_data(form=form))
 
         self.object = form.save(commit=False)
-        self.object.blog_user = request.blog_user
+        self.object.blog_user = self.request.blog_user
         self.object.save()
         return super().form_valid(form)
 
@@ -766,12 +766,12 @@ class NotificationUnsubscribe(SuccessMessageMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["blog_user"] = request.blog_user
+        context["blog_user"] = self.request.blog_user
         return context
 
     def form_valid(self, form):
         models.PostNotification.objects.filter(
-            blog_user=self.request.subdomain,
+            blog_user=self.request.blog_user,
             email=form.cleaned_data.get("email"),
         ).delete()
         return super().form_valid(form)
