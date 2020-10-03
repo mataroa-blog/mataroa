@@ -8,13 +8,13 @@
 {% endblock %}
 
 {% block content %}
-<main class="blog">
+<main class="blog" itemscope itemtype="http://schema.org/Blog">
     {% if blog_user.blog_title %}
-    <h1>{{ blog_user.blog_title }}</h1>
+    <h1 itemprop="name">{{ blog_user.blog_title }}</h1>
     {% endif %}
 
     {% if blog_user.blog_byline %}
-    <p class="byline">
+    <p class="byline" itemprop="about">
         {{ blog_user.blog_byline }}
     </p>
     {% endif %}
