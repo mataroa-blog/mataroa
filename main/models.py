@@ -115,6 +115,14 @@ class Post(models.Model):
         path = reverse("post_detail", kwargs={"slug": self.slug})
         return f"//{self.owner.username}.{settings.CANONICAL_HOST}{path}"
 
+    def get_proper_url(self):
+        """Returns custom domain URL if custom_domain exists, else subdomain URL."""
+        if self.owner.custom_domain:
+            path = reverse("post_detail", kwargs={"slug": self.slug})
+            return f"//{self.owner.custom_domain}{path}"
+        else:
+            return get_absolute_url(self)
+
     def __str__(self):
         return self.title
 
@@ -221,8 +229,9 @@ class PostNotification(models.Model):
         unique_together = [["email", "blog_user"]]
 
     def get_unsubscribe_url(self):
+        domain = self.blog_user.custom_domain or f"{self.blog_user.username}.{settings.CANONICAL_HOST}"
         path = reverse("notification_unsubscribe_key", args={self.unsubscribe_key})
-        return f"//{self.blog_user.username}.{settings.CANONICAL_HOST}{path}"
+        return f"//{domain}{path}"
 
     def __str__(self):
         return self.email + " – " + str(self.unsubscribe_key)

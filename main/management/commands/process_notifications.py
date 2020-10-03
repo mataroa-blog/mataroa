@@ -9,7 +9,7 @@ from main import helpers, models
 
 
 def get_email_body(post, post_notification):
-    post_url = helpers.get_protocol() + post.get_absolute_url()
+    post_url = helpers.get_protocol() + post.get_proper_url()
     unsubscribe_url = helpers.get_protocol() + post_notification.get_unsubscribe_url()
 
     body = (
