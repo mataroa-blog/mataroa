@@ -26,7 +26,7 @@
             {% if p.published_at %}
             <small>
                 —
-                <time datetime="{{ p.published_at|date:'F j, Y' }}" itemprop="datePublished">
+                <time datetime="{{ p.published_at|date:'Y-m-d' }}" itemprop="datePublished">
                     {{ p.published_at|date:'F j, Y' }}
                 </time>
                 {% if not p.is_published %}

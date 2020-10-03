@@ -14,7 +14,7 @@
 
     {% if request.user.is_authenticated and request.subdomain == user.username %}
     <div class="pages-item-byline">
-        Last updated on <time datetime="{{ page.updated_at|date:'F j, Y' }}">{{ page.updated_at|date:'F j, Y' }}</time>
+        Last updated on <time datetime="{{ page.updated_at|date:'Y-m-d' }}">{{ page.updated_at|date:'F j, Y' }}</time>
         | <a href="{% url 'page_update' page.slug %}">Edit page</a>
         | <a href="{% url 'page_delete' page.slug %}">Del</a>
     </div>
