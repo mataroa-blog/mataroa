@@ -12,6 +12,10 @@ from main import models
 
 
 def is_disallowed(username):
+    if username[0] == '_':
+        # do not allow leading underscores
+        return True
+
     disallowed_usernames = [
         "about",
         "abuse",
