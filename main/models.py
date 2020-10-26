@@ -127,7 +127,7 @@ class Post(models.Model):
             path = reverse("post_detail", kwargs={"slug": self.slug})
             return f"//{self.owner.custom_domain}{path}"
         else:
-            return get_absolute_url(self)
+            return self.get_absolute_url(self)
 
     def __str__(self):
         return self.title
