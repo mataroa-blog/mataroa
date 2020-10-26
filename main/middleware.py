@@ -39,8 +39,13 @@ def host_middleware(get_response):
             if models.User.objects.filter(username=request.subdomain).exists():
                 # if not logged in, always redirect to the custom domain
                 request.blog_user = models.User.objects.get(username=request.subdomain)
-                if not request.user.is_authenticated and request.blog_user.custom_domain:
-                    return redirect("//" + request.blog_user.custom_domain + request.path_info)
+                if (
+                    not request.user.is_authenticated
+                    and request.blog_user.custom_domain
+                ):
+                    return redirect(
+                        "//" + request.blog_user.custom_domain + request.path_info
+                    )
             else:
                 raise Http404()
         elif models.User.objects.filter(custom_domain=host).exists():

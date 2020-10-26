@@ -229,7 +229,10 @@ class PostNotification(models.Model):
         unique_together = [["email", "blog_user"]]
 
     def get_unsubscribe_url(self):
-        domain = self.blog_user.custom_domain or f"{self.blog_user.username}.{settings.CANONICAL_HOST}"
+        domain = (
+            self.blog_user.custom_domain
+            or f"{self.blog_user.username}.{settings.CANONICAL_HOST}"
+        )
         path = reverse("notification_unsubscribe_key", args={self.unsubscribe_key})
         return f"//{domain}{path}"
 

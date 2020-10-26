@@ -739,7 +739,8 @@ class Notification(SuccessMessageMixin, FormView):
             email=form.cleaned_data.get("email"),
         ).exists():
             form.add_error(
-                "email", f"This email is already subscribed for {self.request.blog_user.blog_title}."
+                "email",
+                f"This email is already subscribed for {self.request.blog_user.blog_title}.",
             )
             return self.render_to_response(self.get_context_data(form=form))
 
