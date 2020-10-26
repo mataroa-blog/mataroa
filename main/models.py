@@ -1,6 +1,7 @@
 import base64
 import uuid
 
+import bleach
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -100,6 +101,11 @@ class Post(models.Model):
     @property
     def body_as_html(self):
         return helpers.md_to_html(self.body)
+
+    @property
+    def body_as_text(self):
+        as_html = helpers.md_to_html(self.body)
+        return bleach.clean(as_html, strip=True, tags=[])
 
     @property
     def is_published(self):
