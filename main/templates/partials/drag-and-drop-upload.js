@@ -76,7 +76,7 @@ bodyElem.addEventListener('drop', function (e) {
         };
 
         xhr.open('POST', '/images/?raw=true');
-        xhr.setRequestHeader('X-CSRFToken', {{csrf_token}});
+        xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
         xhr.send(formData);
     }
 });
