@@ -191,6 +191,7 @@ def clean_html(dirty_html):
         "style",
         "title",
         "width",
+        "frameborder",
     ]
     styles = [
         "background",
