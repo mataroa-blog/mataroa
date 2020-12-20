@@ -25,8 +25,6 @@ class UserAdmin(DjUserAdmin):
                     "blog_title",
                     "blog_byline",
                     "custom_domain",
-                    "custom_domain_cert",
-                    "custom_domain_key",
                 ),
             },
         ),
