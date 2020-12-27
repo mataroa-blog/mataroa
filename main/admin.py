@@ -47,6 +47,8 @@ class PostAdmin(admin.ModelAdmin):
         "published_at",
     )
 
+    ordering = ["-id"]
+
 
 admin.site.register(models.Post, PostAdmin)
 
@@ -62,6 +64,8 @@ class PageAdmin(admin.ModelAdmin):
         "is_hidden",
     )
 
+    ordering = ["-id"]
+
 
 admin.site.register(models.Page, PageAdmin)
 
@@ -76,6 +80,8 @@ class ImageAdmin(admin.ModelAdmin):
         "uploaded_at",
     )
 
+    ordering = ["-id"]
+
 
 admin.site.register(models.Image, ImageAdmin)
 
@@ -87,6 +93,8 @@ class AnalyticAdmin(admin.ModelAdmin):
         "created_at",
         "referer",
     )
+
+    ordering = ["-id"]
 
 
 admin.site.register(models.Analytic, AnalyticAdmin)
@@ -102,6 +110,8 @@ class CommentAdmin(admin.ModelAdmin):
         "created_at",
     )
 
+    ordering = ["-id"]
+
 
 admin.site.register(models.Comment, CommentAdmin)
 
@@ -114,6 +124,8 @@ class PostNotificationAdmin(admin.ModelAdmin):
         "unsubscribe_key",
     )
 
+    ordering = ["-id"]
+
 
 admin.site.register(models.PostNotification, PostNotificationAdmin)
 
@@ -124,6 +136,8 @@ class PostNotificationRecordAdmin(admin.ModelAdmin):
         "sent_at",
         "post_notification",
     )
+
+    ordering = ["-id"]
 
 
 admin.site.register(models.PostNotificationRecord, PostNotificationRecordAdmin)
