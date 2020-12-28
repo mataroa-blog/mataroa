@@ -29,6 +29,13 @@ class User(AbstractUser):
         default=None,
         help_text="Supports markdown",
     )
+    redirect_domain = models.CharField(
+        max_length=150,
+        blank=True,
+        null=True,
+        help_text="Retiring your mataroa blog? We can redirect to your new domain.",
+        validators=[validators.validate_domain_name],
+    )
     custom_domain = models.CharField(
         max_length=150,
         blank=True,

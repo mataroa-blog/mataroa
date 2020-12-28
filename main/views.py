@@ -135,6 +135,7 @@ class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         "comments_on",
         "notifications_on",
         "about",
+        "redirect_domain",
     ]
     template_name = "main/user_update.html"
     success_message = "settings updated"
