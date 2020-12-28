@@ -15,6 +15,12 @@
         <li><a href="#export-hugo">Hugo</a>: very popular and reliable static site generators</li>
     </ul>
 
+	<p>
+		If you're retiring your mataroa blog, we can also <strong>redirect to your new domain</strong>.
+		You can configure this in the bottom field of your
+		<a href="{% url 'user_update' request.user.id %}">blog settings</a>.
+	</p>
+
     <h2 id="export-markdown">Markdown</h2>
     <form method="post" action="{% url 'blog_export_markdown' %}">
         {% csrf_token %}

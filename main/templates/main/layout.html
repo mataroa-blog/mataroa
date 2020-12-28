@@ -27,6 +27,7 @@
         {% endif %}
 
         {% if request.user.is_authenticated %}
+
         {% if not request.subdomain or request.subdomain == request.user.username %}
         <nav>
             {% if request.subdomain %}
@@ -44,6 +45,17 @@
             {% endif %}
         </nav>
         {% endif %}
+
+		{% if request.user.redirect_domain %}
+		<aside class="type-delete">
+			<div>
+				Your mataroa blog is currently retired and inaccessible. All traffic is
+				redirected to <code>{{ request.user.redirect_domain }}</code> as per your
+				<a href="{% url 'user_update' request.user.id %}">settings</a>.
+			</div>
+		</aside>
+        {% endif %}
+
         {% else %}
         {% if not request.subdomain %}
         <nav>
