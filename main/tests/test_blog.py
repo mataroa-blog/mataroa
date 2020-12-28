@@ -6,6 +6,8 @@ from main import models
 
 
 class IndexTestCase(TestCase):
+    """ Test canonical mataroa.blog works."""
+
     def test_index(self):
         response = self.client.get(reverse("index"))
         self.assertEqual(response.status_code, 200)
@@ -13,6 +15,8 @@ class IndexTestCase(TestCase):
 
 
 class BlogIndexTestCase(TestCase):
+    """Test blog index works for logged in."""
+
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
         self.user.blog_title = "Blog of Alice"
@@ -36,6 +40,8 @@ class BlogIndexTestCase(TestCase):
 
 
 class BlogIndexAnonTestCase(TestCase):
+    """Test blog index works for anon."""
+
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
         self.user.blog_title = "Blog of Alice"
@@ -57,6 +63,8 @@ class BlogIndexAnonTestCase(TestCase):
 
 
 class BlogIndexRedirTestCase(TestCase):
+    """Test logged in user is redirected from canonical to blog index."""
+
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
         self.user.blog_title = "Blog of Alice"
@@ -102,7 +110,7 @@ class BlogRetiredRedirTestCase(TestCase):
             HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
         )
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(f"//{self.user.redirect_domain}/", response.url)
+        self.assertEqual(f"//{self.user.redirect_domain}", response.url)
 
 
 class BlogRetiredRedirProtocolTestCase(TestCase):
@@ -129,7 +137,7 @@ class BlogRetiredRedirProtocolTestCase(TestCase):
             HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
         )
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(self.user.redirect_domain + "/", response.url)
+        self.assertEqual(self.user.redirect_domain, response.url)
 
 
 class BlogImportTestCase(TestCase):

@@ -24,7 +24,7 @@ class PostCreateTestCase(TestCase):
 
 
 class PostCreateAnonTestCase(TestCase):
-    """Tests non logged in user cannot create post."""
+    """Test non logged in user cannot create post."""
 
     def test_post_create_anon(self):
         data = {
@@ -167,7 +167,7 @@ class PostUpdateTestCase(TestCase):
 
 
 class PostUpdateNotOwnTestCase(TestCase):
-    """Tests user cannot update other user's post."""
+    """Test user cannot update other user's post."""
 
     def setUp(self):
         self.victim = models.User.objects.create(username="bob")
@@ -197,7 +197,7 @@ class PostUpdateNotOwnTestCase(TestCase):
 
 
 class PostUpdateAnonTestCase(TestCase):
-    """Tests non logged in user cannot update post."""
+    """Test non logged in user cannot update post."""
 
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
@@ -261,7 +261,7 @@ class PostDeleteTestCase(TestCase):
 
 
 class PostDeleteNoSubdomainTestCase(TestCase):
-    """Tests user cannot delete post without being in their subdomain."""
+    """Test user cannot delete post without being in their subdomain."""
 
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
@@ -283,7 +283,7 @@ class PostDeleteNoSubdomainTestCase(TestCase):
 
 
 class PostDeleteAnonTestCase(TestCase):
-    """Tests non logged in user cannot delete post."""
+    """Test non logged in user cannot delete post."""
 
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
@@ -302,7 +302,7 @@ class PostDeleteAnonTestCase(TestCase):
 
 
 class PostDeleteNotOwnTestCase(TestCase):
-    """Tests user cannot delete other's post."""
+    """Test user cannot delete other's post."""
 
     def setUp(self):
         self.victim = models.User.objects.create(username="bob")
