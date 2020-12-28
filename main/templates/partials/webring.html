@@ -1,3 +1,4 @@
+{% if blog_user.webring_prev_url or blog_user.webring_url or blog_user.webring_next_url %}
 <section class="webring">
     {% if blog_user.webring_prev_url %}
     <a href="{{ blog_user.webring_prev_url }}">← Previous</a>
@@ -16,3 +17,4 @@
     <a href="{{ blog_user.webring_next_url }}">Next →</a>
     {% endif %}
 </section>
+{% endif %}
