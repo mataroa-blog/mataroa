@@ -78,6 +78,60 @@ class BlogIndexRedirTestCase(TestCase):
         )
 
 
+class BlogRetiredRedirTestCase(TestCase):
+    """
+    Test anon user is redirected to redirect_domain,
+    when redirect_domain exists without protocol prefix.
+    """
+
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.user.blog_title = "Blog of Alice"
+        self.user.redirect_domain = "example.com"
+        self.user.save()
+        self.data = {
+            "title": "Welcome post",
+            "slug": "welcome-post",
+            "body": "Content sentence.",
+        }
+        self.post = models.Post.objects.create(owner=self.user, **self.data)
+
+    def test_blog_retired_redir(self):
+        response = self.client.get(
+            reverse("index"),
+            HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(f"//{self.user.redirect_domain}/", response.url)
+
+
+class BlogRetiredRedirProtocolTestCase(TestCase):
+    """
+    Test anon user is redirected to redirect_domain,
+    when redirect_domain exists with protocol prefix http.
+    """
+
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.user.blog_title = "Blog of Alice"
+        self.user.redirect_domain = "http://example.com"
+        self.user.save()
+        self.data = {
+            "title": "Welcome post",
+            "slug": "welcome-post",
+            "body": "Content sentence.",
+        }
+        self.post = models.Post.objects.create(owner=self.user, **self.data)
+
+    def test_blog_retired_redir(self):
+        response = self.client.get(
+            reverse("index"),
+            HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(self.user.redirect_domain + "/", response.url)
+
+
 class BlogImportTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
