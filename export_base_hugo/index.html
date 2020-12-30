@@ -9,7 +9,7 @@
     {{- end }}
 
     <ul class="posts">
-        {{ range (.Paginate .Pages).Pages }}
+        {{ range .Pages }}
         <li>
             <a href="{{ .Permalink }}">{{ .Title }}</a>
             <small>
