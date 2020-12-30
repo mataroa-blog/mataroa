@@ -177,7 +177,7 @@ class BlogExportMarkdownTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response["Content-Type"], "application/zip")
         self.assertContains(response, "export-markdown".encode("utf-8"))
-        self.assertContains(response, "Welcome post".encode("utf-8"))
+        self.assertContains(response, self.data["slug"].encode("utf-8"))
 
 
 class BlogExportZolaTestCase(TestCase):
@@ -198,7 +198,7 @@ class BlogExportZolaTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response["Content-Type"], "application/zip")
         self.assertContains(response, "export-zola".encode("utf-8"))
-        self.assertContains(response, "Welcome post".encode("utf-8"))
+        self.assertContains(response, self.data["slug"].encode("utf-8"))
 
 
 class BlogExportHugoTestCase(TestCase):
@@ -219,7 +219,7 @@ class BlogExportHugoTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response["Content-Type"], "application/zip")
         self.assertContains(response, "export-hugo".encode("utf-8"))
-        self.assertContains(response, "Welcome post".encode("utf-8"))
+        self.assertContains(response, self.data["slug"].encode("utf-8"))
 
 
 class RSSFeedTestCase(TestCase):

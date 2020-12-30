@@ -43,9 +43,10 @@ def blog_export_markdown(request):
         posts = models.Post.objects.filter(owner=request.user)
         export_posts = []
         for p in posts:
-            title = p.title.replace(":", "-") + ".md"
+            pub_date = p.published_at or p.created_at
+            title = p.slug + ".md"
             body = f"# {p.title}\n\n"
-            body += f"> Published on {p.created_at.strftime('%b %-d, %Y')}\n\n"
+            body += f"> Published on {pub_date.strftime('%b %-d, %Y')}\n\n"
             body += f"{p.body}\n"
             export_posts.append((title, io.BytesIO(body.encode())))
 
@@ -90,8 +91,9 @@ def blog_export_zola(request):
         posts = models.Post.objects.filter(owner=request.user)
         export_posts = []
         for p in posts:
-            title = p.title.replace(":", "-") + ".md"
-            body = prepend_zola_frontmatter(p.body, p.title, p.created_at.date())
+            pub_date = p.published_at or p.created_at.date()
+            title = p.slug + ".md"
+            body = prepend_zola_frontmatter(p.body, p.title, pub_date)
             export_posts.append((title, io.BytesIO(body.encode())))
 
         # create zip archive in memory
@@ -144,8 +146,9 @@ def blog_export_hugo(request):
         posts = models.Post.objects.filter(owner=request.user)
         export_posts = []
         for p in posts:
-            title = p.title.replace(":", "-") + ".md"
-            body = prepend_hugo_frontmatter(p.body, p.title, p.created_at.date())
+            title = p.slug + ".md"
+            pub_date = p.published_at or p.created_at.date()
+            body = prepend_hugo_frontmatter(p.body, p.title, pub_date)
             export_posts.append((title, io.BytesIO(body.encode())))
 
         # create zip archive in memory
