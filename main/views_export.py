@@ -86,6 +86,8 @@ def blog_export_zola(request):
             zola_index = zola_index_file.read()
         with open("./export_base_zola/post.html", "r") as zola_post_file:
             zola_post = zola_post_file.read()
+        with open("./export_base_zola/_index.md", "r") as zola_content_index_file:
+            zola_content_index = zola_content_index_file.read()
 
         # get all user posts and add them into export_posts encoded
         posts = models.Post.objects.filter(owner=request.user)
@@ -106,6 +108,9 @@ def blog_export_zola(request):
             export_archive.writestr(export_name + "/static/style.css", zola_styles)
             export_archive.writestr(export_name + "/templates/index.html", zola_index)
             export_archive.writestr(export_name + "/templates/post.html", zola_post)
+            export_archive.writestr(
+                export_name + "/content/_index.md", zola_content_index
+            )
             for file_name, data in export_posts:
                 export_archive.writestr(
                     export_name + "/content/" + file_name, data.getvalue()
