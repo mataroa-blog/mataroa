@@ -706,23 +706,6 @@ class AnalyticDetail(LoginRequiredMixin, DetailView):
         return context
 
 
-class Interest(SuccessMessageMixin, FormView):
-    form_class = forms.InterestForm
-    template_name = "main/interest.html"
-    success_url = reverse_lazy("index")
-    success_message = "thank you for your interest! we'll be in touch :)"
-
-    def form_valid(self, form):
-        form.send_email()
-        return super().form_valid(form)
-
-    def dispatch(self, request, *args, **kwargs):
-        if not hasattr(request, "subdomain"):
-            return super().dispatch(request, *args, **kwargs)
-        else:
-            return redirect("index")
-
-
 class Notification(SuccessMessageMixin, FormView):
     form_class = forms.PostNotificationForm
     template_name = "main/notification.html"

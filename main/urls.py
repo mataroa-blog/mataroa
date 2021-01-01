@@ -11,7 +11,6 @@ urlpatterns = [
     path("blog/", views.blog_index, name="blog_index"),
     path("dashboard/", views.dashboard, name="dashboard"),
     path("modus-operandi/", views.modus, name="modus"),
-    path("premium/", views.Interest.as_view(), name="interest"),
     path("markdown-guide/", views.markdown_guide, name="markdown_guide"),
 ]
 
