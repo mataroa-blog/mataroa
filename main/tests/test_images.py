@@ -46,6 +46,53 @@ class ImageDetailTestCase(TestCase):
         self.assertContains(response, "Uploaded on")
 
 
+class ImageRawTestCase(TestCase):
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.user.set_password("abcdef123456")
+        self.user.save()
+        self.client.login(username="alice", password="abcdef123456")
+        with open("main/tests/testdata/vulf.jpeg", "rb") as fp:
+            self.client.post(reverse("image_list"), {"file": fp})
+        self.image = models.Image.objects.get(name="vulf")
+
+    def test_image_raw(self):
+        response = self.client.get(
+            reverse("image_raw", args=(self.image.slug, self.image.extension)),
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.image.data.tobytes(), response.content)
+
+
+class ImageRawWrongExtTestCase(TestCase):
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.user.set_password("abcdef123456")
+        self.user.save()
+        self.client.login(username="alice", password="abcdef123456")
+        with open("main/tests/testdata/vulf.jpeg", "rb") as fp:
+            self.client.post(reverse("image_list"), {"file": fp})
+        self.image = models.Image.objects.get(name="vulf")
+
+    def test_image_raw(self):
+        response = self.client.get(
+            reverse("image_raw", args=(self.image.slug, "png")),
+        )
+        self.assertEqual(response.status_code, 404)
+
+
+class ImageRawNotFoundTestCase(TestCase):
+    def setUp(self):
+        self.slug = "nonexistent-slug"
+        self.extension = "jpeg"
+
+    def test_image_raw(self):
+        response = self.client.get(
+            reverse("image_raw", args=(self.slug, self.extension)),
+        )
+        self.assertEqual(response.status_code, 404)
+
+
 class ImageUpdateTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
