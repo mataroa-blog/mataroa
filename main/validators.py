@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 
 class AlphanumericHyphenValidator(dj_validators.RegexValidator):
     regex = r"^[a-z\d-]+\Z"
-    message = "Enter a valid username, it should include only lowercase letters, numbers, and -"
+    message = "Invalid value. Should include only lowercase letters, numbers, and -"
     flags = 0
 
 
