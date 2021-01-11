@@ -8,9 +8,9 @@ from django.utils import timezone
 from main import helpers, models
 
 
-def get_email_body(post, post_notification):
+def get_email_body(post, notification):
     post_url = helpers.get_protocol() + post.get_proper_url()
-    unsubscribe_url = helpers.get_protocol() + post_notification.get_unsubscribe_url()
+    unsubscribe_url = helpers.get_protocol() + notification.get_unsubscribe_url()
 
     body = (
         f"{post.owner.blog_title} has published a new blog post titled: {post.title}\n"
@@ -50,19 +50,19 @@ class Command(BaseCommand):
             if p.owner.notifications_on:  # if notifications_on for this blog
 
                 # get all subscriber emails
-                subscribers = models.PostNotification.objects.filter(blog_user=p.owner)
+                subscribers = models.Notification.objects.filter(blog_user=p.owner)
                 for s in subscribers:
 
                     # check if subscriber has already been notified
-                    if models.PostNotificationRecord.objects.filter(
-                        post_notification=s,
+                    if models.NotificationRecord.objects.filter(
+                        notification=s,
                         post=p,
                         sent_at__isnull=False,
                     ).exists():
                         continue
 
-                    record, _ = models.PostNotificationRecord.objects.get_or_create(
-                        post_notification=s, post=p, sent_at=None
+                    record, _ = models.NotificationRecord.objects.get_or_create(
+                        notification=s, post=p, sent_at=None
                     )
 
                     subject = f"{p.owner.blog_title} new post publication: {p.title}"

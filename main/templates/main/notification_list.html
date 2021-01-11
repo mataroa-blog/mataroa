@@ -9,9 +9,9 @@
         These emails will receive a notification on new post publications.
     </p>
     <ul>
-        {% for pn in postnotification_list %}
+        {% for n in notification_list %}
         <li>
-            {{ pn.email }}
+            {{ n.email }}
         </li>
         {% empty %}
         <li><i>No subscribers</i></li>

@@ -232,7 +232,7 @@ class Comment(models.Model):
         return self.created_at.strftime("%c") + ": " + self.post.title
 
 
-class PostNotification(models.Model):
+class Notification(models.Model):
     blog_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     email = models.EmailField()
     unsubscribe_key = models.UUIDField(default=uuid.uuid4, unique=True)
@@ -253,19 +253,17 @@ class PostNotification(models.Model):
         return self.email + " – " + str(self.unsubscribe_key)
 
 
-class PostNotificationRecord(models.Model):
-    post_notification = models.ForeignKey(
-        PostNotification, on_delete=models.SET_NULL, null=True
-    )
+class NotificationRecord(models.Model):
+    notification = models.ForeignKey(Notification, on_delete=models.SET_NULL, null=True)
     post = models.ForeignKey(Post, on_delete=models.SET_NULL, null=True)
     sent_at = models.DateTimeField(default=timezone.now, null=True)
 
     class Meta:
         ordering = ["-sent_at"]
-        unique_together = [["post", "post_notification"]]
+        unique_together = [["post", "notification"]]
 
     def __str__(self):
-        if self.post_notification:
-            return self.sent_at.strftime("%c") + " – " + self.post_notification.email
+        if self.notification:
+            return self.sent_at.strftime("%c") + " – " + self.notification.email
         else:
             return self.sent_at.strftime("%c") + " – NULL"

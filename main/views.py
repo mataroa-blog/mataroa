@@ -707,7 +707,7 @@ class AnalyticDetail(LoginRequiredMixin, DetailView):
 
 
 class Notification(SuccessMessageMixin, FormView):
-    form_class = forms.PostNotificationForm
+    form_class = forms.NotificationForm
     template_name = "main/notification.html"
     success_url = reverse_lazy("index")
     success_message = "%(email)s will now receive new post notifications"
@@ -718,7 +718,7 @@ class Notification(SuccessMessageMixin, FormView):
         return context
 
     def form_valid(self, form):
-        if models.PostNotification.objects.filter(
+        if models.Notification.objects.filter(
             blog_user=self.request.blog_user,
             email=form.cleaned_data.get("email"),
         ).exists():
@@ -744,7 +744,7 @@ class Notification(SuccessMessageMixin, FormView):
 
 
 class NotificationUnsubscribe(SuccessMessageMixin, FormView):
-    form_class = forms.PostNotificationForm
+    form_class = forms.NotificationForm
     template_name = "main/notification_unsubscribe.html"
     success_url = reverse_lazy("index")
     success_message = "%(email)s will stop receiving post notifications"
@@ -755,7 +755,7 @@ class NotificationUnsubscribe(SuccessMessageMixin, FormView):
         return context
 
     def form_valid(self, form):
-        models.PostNotification.objects.filter(
+        models.Notification.objects.filter(
             blog_user=self.request.blog_user,
             email=form.cleaned_data.get("email"),
         ).delete()
@@ -773,12 +773,10 @@ def notification_unsubscribe_key(request, unsubscribe_key):
     if not hasattr(request, "subdomain"):
         return redirect("index")
 
-    if models.PostNotification.objects.filter(unsubscribe_key=unsubscribe_key).exists():
-        post_notification = models.PostNotification.objects.get(
-            unsubscribe_key=unsubscribe_key
-        )
-        email = post_notification.email
-        post_notification.delete()
+    if models.Notification.objects.filter(unsubscribe_key=unsubscribe_key).exists():
+        notification = models.Notification.objects.get(unsubscribe_key=unsubscribe_key)
+        email = notification.email
+        notification.delete()
         return render(
             request,
             "main/notification_unsubscribe_success.html",
@@ -800,10 +798,10 @@ def notification_unsubscribe_key(request, unsubscribe_key):
 
 
 class SubscriberList(LoginRequiredMixin, ListView):
-    model = models.PostNotification
+    model = models.Notification
 
     def get_queryset(self):
-        return models.PostNotification.objects.filter(blog_user=self.request.user)
+        return models.Notification.objects.filter(blog_user=self.request.user)
 
 
 def modus(request):

@@ -12,9 +12,9 @@ class UserCreationForm(DjUserCreationForm):
         fields = ["username"]
 
 
-class PostNotificationForm(forms.ModelForm):
+class NotificationForm(forms.ModelForm):
     class Meta:
-        model = models.PostNotification
+        model = models.Notification
         fields = ["email"]
 
 

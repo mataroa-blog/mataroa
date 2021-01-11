@@ -116,7 +116,7 @@ class CommentAdmin(admin.ModelAdmin):
 admin.site.register(models.Comment, CommentAdmin)
 
 
-class PostNotificationAdmin(admin.ModelAdmin):
+class NotificationAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "email",
@@ -127,17 +127,17 @@ class PostNotificationAdmin(admin.ModelAdmin):
     ordering = ["-id"]
 
 
-admin.site.register(models.PostNotification, PostNotificationAdmin)
+admin.site.register(models.Notification, NotificationAdmin)
 
 
-class PostNotificationRecordAdmin(admin.ModelAdmin):
+class NotificationRecordAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "sent_at",
-        "post_notification",
+        "notification",
     )
 
     ordering = ["-id"]
 
 
-admin.site.register(models.PostNotificationRecord, PostNotificationRecordAdmin)
+admin.site.register(models.NotificationRecord, NotificationRecordAdmin)
