@@ -263,6 +263,8 @@ class NotificationRecord(models.Model):
         unique_together = [["post", "notification"]]
 
     def __str__(self):
+        if not self.sent_at:
+            return str(self.id)
         if self.notification:
             return self.sent_at.strftime("%c") + " – " + self.notification.email
         else:
