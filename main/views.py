@@ -765,7 +765,15 @@ class NotificationUnsubscribe(SuccessMessageMixin, FormView):
         if hasattr(request, "subdomain"):
             return super().dispatch(request, *args, **kwargs)
         else:
-            return redirect("index")
+            if request.user.is_authenticated:
+                subdomain = request.user.username
+                return redirect(
+                    f"//{subdomain}.{settings.CANONICAL_HOST}{request.path}"
+                )
+            else:
+                return redirect("index")
+
+        return super().dispatch(request, *args, **kwargs)
 
 
 def notification_unsubscribe_key(request, unsubscribe_key):
