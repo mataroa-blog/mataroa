@@ -17,5 +17,11 @@
         <li><i>No subscribers</i></li>
         {% endfor %}
     </ul>
+	{% if notification_list %}
+	<p>
+		To delete a subscriber, one can use the
+		<a href="{% url 'notification_unsubscribe' %}">unsubscribe form</a>.
+	</p>
+	{% endif %}
 </main>
 {% endblock %}
