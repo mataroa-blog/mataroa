@@ -1,0 +1,18 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Cancel email for {{ notificationrecord.notification.email }} — {{ request.user.username }} at Mataroa{% endblock %}
+
+{% block content %}
+<main class="delete">
+    <h1>Cancel sending this email to {{ notificationrecord.notification.email }}?</h1>
+	<p>
+		The email content is the post:
+		<a href="{% url 'post_detail' notificationrecord.post.slug %}">{{ notificationrecord.post.title }}</a>.
+	</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" value="Yes, do not send this" class="type-danger">
+    </form>
+</main>
+{% endblock %}

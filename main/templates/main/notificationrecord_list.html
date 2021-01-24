@@ -19,6 +19,7 @@
 			<time datetime"{{ nr.scheduled_at|date:'Y-m-d' }}">
 				{{ nr.scheduled_at|date:'F j, Y' }}
 			</time>
+            | <a href="{% url 'notificationrecord_delete' nr.id %}">Cancel</a>
         </li>
         {% empty %}
         <li><i>No records</i></li>

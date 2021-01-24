@@ -835,6 +835,31 @@ class NotificationRecordList(LoginRequiredMixin, ListView):
         return context
 
 
+class NotificationRecordDelete(LoginRequiredMixin, DeleteView):
+    model = models.Post
+    success_url = reverse_lazy("notificationrecord_list")
+    success_message = "email to '%(email)s' canceled"
+
+    def get_queryset(self):
+        queryset = models.NotificationRecord.objects.filter(
+            notification__blog_user__username=self.request.user.username
+        )
+        return queryset
+
+    def delete(self, request, *args, **kwargs):
+        obj = self.get_object()
+        messages.success(self.request, self.success_message % obj.notification.__dict__)
+        return super().delete(request, *args, **kwargs)
+
+    def dispatch(self, request, *args, **kwargs):
+        notificationrecord = self.get_object()
+        if request.user != notificationrecord.notification.blog_user:
+            raise PermissionDenied()
+        if notificationrecord.sent_at:
+            return HttpResponseBadRequest("Notification email has already been sent.")
+        return super().dispatch(request, *args, **kwargs)
+
+
 def modus(request):
     return render(request, "main/modus.html")
 

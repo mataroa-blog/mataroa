@@ -309,6 +309,23 @@ class BlogRandomTestCase(TestCase):
         self.assertTrue("alice" in response.url)
 
 
+class BlogNotificationListTestCase(TestCase):
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.user.set_password("abcdef123456")
+        self.user.save()
+        self.client.login(username="alice", password="abcdef123456")
+        self.notification = models.Notification.objects.create(
+            blog_user=self.user,
+            email="s@example.com",
+        )
+
+    def test_subscibers_list(self):
+        response = self.client.get(reverse("notification_list"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, b"s@example.com")
+
+
 class BlogNotificationSubscribeTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
@@ -368,4 +385,165 @@ class BlogNotificationUnsubscribeKeyTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertFalse(
             models.Notification.objects.filter(email="s@example.com").exists()
+        )
+
+
+class BlogNotificationRecordListTestCase(TestCase):
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.user.set_password("abcdef123456")
+        self.user.save()
+        self.client.login(username="alice", password="abcdef123456")
+        self.data = {
+            "title": "Welcome post",
+            "slug": "welcome-post",
+            "body": "Content sentence.",
+        }
+        self.post = models.Post.objects.create(owner=self.user, **self.data)
+        self.notification = models.Notification.objects.create(
+            blog_user=self.user,
+            email="s@example.com",
+        )
+        self.notificationrecord = models.NotificationRecord.objects.create(
+            notification=self.notification,
+            post=self.post,
+            sent_at="2020-01-01",
+        )
+
+    def test_notificationrecord_list(self):
+        response = self.client.get(reverse("notificationrecord_list"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, b"s@example.com")
+        self.assertContains(response, b"January 1, 2020")
+
+
+class BlogNotificationRecordConfirmDeleteTestCase(TestCase):
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.user.set_password("abcdef123456")
+        self.user.save()
+        self.client.login(username="alice", password="abcdef123456")
+        self.data = {
+            "title": "Welcome post",
+            "slug": "welcome-post",
+            "body": "Content sentence.",
+        }
+        self.post = models.Post.objects.create(owner=self.user, **self.data)
+        self.notification = models.Notification.objects.create(
+            blog_user=self.user,
+            email="s@example.com",
+        )
+        self.notificationrecord = models.NotificationRecord.objects.create(
+            notification=self.notification,
+            post=self.post,
+            sent_at=None,
+        )
+
+    def test_notificationrecord_delete(self):
+        response = self.client.get(
+            reverse("notificationrecord_delete", args=(self.notificationrecord.id,))
+        )
+        self.assertEqual(response.status_code, 200)
+
+
+class BlogNotificationRecordDeleteAnonTestCase(TestCase):
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.data = {
+            "title": "Welcome post",
+            "slug": "welcome-post",
+            "body": "Content sentence.",
+        }
+        self.post = models.Post.objects.create(owner=self.user, **self.data)
+        self.notification = models.Notification.objects.create(
+            blog_user=self.user,
+            email="s@example.com",
+        )
+        self.notificationrecord = models.NotificationRecord.objects.create(
+            notification=self.notification,
+            post=self.post,
+            sent_at=None,
+        )
+
+    def test_notificationrecord_delete(self):
+        response = self.client.post(
+            reverse("notificationrecord_delete", args=(self.notificationrecord.id,))
+        )
+        self.assertEqual(response.status_code, 404)
+        self.assertTrue(
+            models.NotificationRecord.objects.filter(
+                id=self.notificationrecord.id
+            ).exists()
+        )
+
+
+class BlogNotificationRecordDeleteTestCase(TestCase):
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.user.set_password("abcdef123456")
+        self.user.save()
+        self.client.login(username="alice", password="abcdef123456")
+        self.data = {
+            "title": "Welcome post",
+            "slug": "welcome-post",
+            "body": "Content sentence.",
+        }
+        self.post = models.Post.objects.create(owner=self.user, **self.data)
+        self.notification = models.Notification.objects.create(
+            blog_user=self.user,
+            email="s@example.com",
+        )
+        self.notificationrecord = models.NotificationRecord.objects.create(
+            notification=self.notification,
+            post=self.post,
+            sent_at=None,
+        )
+
+    def test_notificationrecord_delete(self):
+        self.client.post(
+            reverse("notificationrecord_delete", args=(self.notificationrecord.id,))
+        )
+        self.assertFalse(
+            models.NotificationRecord.objects.filter(
+                post=self.notificationrecord.post
+            ).exists()
+        )
+
+
+class BlogNotificationRecordDeletePastTestCase(TestCase):
+    """
+    Test that one cannot delete a notification record that has a sent_at date,
+    which means it has already been sent.
+    """
+
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.user.set_password("abcdef123456")
+        self.user.save()
+        self.client.login(username="alice", password="abcdef123456")
+        self.data = {
+            "title": "Welcome post",
+            "slug": "welcome-post",
+            "body": "Content sentence.",
+        }
+        self.post = models.Post.objects.create(owner=self.user, **self.data)
+        self.notification = models.Notification.objects.create(
+            blog_user=self.user,
+            email="s@example.com",
+        )
+        self.notificationrecord = models.NotificationRecord.objects.create(
+            notification=self.notification,
+            post=self.post,
+            sent_at="2000-01-01",
+        )
+
+    def test_notificationrecord_delete(self):
+        response = self.client.post(
+            reverse("notificationrecord_delete", args=(self.notificationrecord.id,))
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertTrue(
+            models.NotificationRecord.objects.filter(
+                id=self.notificationrecord.id
+            ).exists()
         )

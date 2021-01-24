@@ -52,6 +52,11 @@ urlpatterns += [
         name="notificationrecord_list",
     ),
     path(
+        "notifications/<int:pk>/delete/",
+        views.NotificationRecordDelete.as_view(),
+        name="notificationrecord_delete",
+    ),
+    path(
         "notifications/subscribers",
         views.NotificationList.as_view(),
         name="notification_list",
