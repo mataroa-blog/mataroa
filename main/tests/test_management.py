@@ -12,7 +12,74 @@ from main import models
 from main.management.commands import process_notifications
 
 
+class EnqueueNotificationsTest(TestCase):
+    """
+    Test that the enqueue_notifications management command, creates NotificationRecords
+    to the blog_user subscribers.
+    """
+
+    def setUp(self):
+        self.user = models.User.objects.create(
+            username="alice", email="alice@wonderland.com", notifications_on=True
+        )
+
+        post_data = {
+            "title": "Yesterday post",
+            "slug": "yesterday-post",
+            "body": "Content sentence.",
+            "published_at": timezone.make_aware(datetime(2020, 1, 1)),
+        }
+        models.Post.objects.create(owner=self.user, **post_data)
+
+        post_data = {
+            "title": "Today post",
+            "slug": "today-post",
+            "body": "Content sentence.",
+            "published_at": timezone.make_aware(datetime(2020, 1, 2)),
+        }
+        models.Post.objects.create(owner=self.user, **post_data)
+
+        self.notification = models.Notification.objects.create(
+            blog_user=self.user, email="s@example.com"
+        )
+
+    def test_command(self):
+        output = StringIO()
+
+        with patch.object(timezone, "now", return_value=datetime(2020, 1, 2, 9, 00)):
+            call_command("enqueue_notifications", stdout=output)
+
+        # notification record
+        self.assertEqual(len(models.NotificationRecord.objects.all()), 1)
+        self.assertEqual(
+            models.NotificationRecord.objects.first().notification.email,
+            self.notification.email,
+        )
+        self.assertEqual(
+            models.NotificationRecord.objects.first().post.title, "Today post"
+        )
+        self.assertIsNone(models.NotificationRecord.objects.first().sent_at)
+
+        # logging
+        self.assertIn("Enqueuing notifications started.", output.getvalue())
+        self.assertIn(
+            "Adding notification record for 'Today post' to 's@example.com'",
+            output.getvalue(),
+        )
+        self.assertIn("Enqueuing complete for 'Today post'", output.getvalue())
+        self.assertIn("Enqueuing finished.", output.getvalue())
+
+    def tearDown(self):
+        models.User.objects.all().delete()
+        models.Post.objects.all().delete()
+
+
 class ProcessNotificationsTest(TestCase):
+    """
+    Test process_notifications sends emails to the subscibers of the
+    NotificationRecords that exist.
+    """
+
     def setUp(self):
         self.user = models.User.objects.create(
             username="alice", email="alice@wonderland.com", notifications_on=True

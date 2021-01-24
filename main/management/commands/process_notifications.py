@@ -97,7 +97,7 @@ class Command(BaseCommand):
                 ).exists():
                     continue
 
-                record, _ = models.NotificationRecord.objects.get_or_create(
+                record, _ = models.NotificationRecord.objects.get(
                     notification=notification, post=p, sent_at=None
                 )
 

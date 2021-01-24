@@ -166,11 +166,13 @@ This project is also configured to deploy to [dokku](http://dokku.viewdocs.io/do
 
 Except for the standard Django management commands, there is also:
 
-* `process_notifications`: sends notification emails for new blog posts.
+* `enqueue_notifications`: create records for notification emails to be sent.
+* `process_notifications`: sends notification emails for new blog posts of existing records.
 
 To trigger:
 
 ```sh
+python manage.py enqueue_notifications
 python manage.py process_notifications
 ```
 
