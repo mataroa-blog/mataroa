@@ -1,4 +1,6 @@
 venv/
 db_data/
 *.pyc
+.coverage
+htmlcov/
 .env

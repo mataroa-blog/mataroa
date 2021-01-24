@@ -117,7 +117,20 @@ docker-compose up db
 python manage.py test
 ```
 
+For coverage, run:
+
+```sh
+coverage run --source='.' --omit 'venv/*' manage.py test
+coverage report -m
+```
+
 ## Code linting & formatting
+
+The following tools are used:
+
+* [black](https://github.com/psf/black) for code formatting.
+* [isort](https://github.com/pycqa/isort) for imports order consistency.
+* [flake8](https://gitlab.com/pycqa/flake8) for code linting.
 
 ```sh
 black . && isort --profile black . && flake8
