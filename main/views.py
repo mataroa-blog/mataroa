@@ -9,8 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView as DjLogoutView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core import mail
 from django.core.exceptions import PermissionDenied
-from django.core.mail import send_mail
 from django.db.models import Count
 from django.http import (
     Http404,
@@ -356,11 +356,11 @@ class CommentCreate(SuccessMessageMixin, CreateView):
         body += "\nComment follows:\n"
         body += "\n" + self.object.body + "\n"
         body += f"\n---\nSee at {post_url}\n"
-        send_mail(
-            f"New comment for on post: {self.object.post.title}",
-            body,
-            settings.NOTIFICATIONS_FROM_EMAIL,
-            [self.object.post.owner.email],
+        mail.send_mail(
+            subject=f"New comment for on post: {self.object.post.title}",
+            message=body,
+            from_email=settings.NOTIFICATIONS_FROM_EMAIL,
+            recipient_list=[self.object.post.owner.email],
         )
 
         return HttpResponseRedirect(
@@ -735,7 +735,7 @@ class Notification(SuccessMessageMixin, FormView):
 
     def dispatch(self, request, *args, **kwargs):
         if hasattr(request, "subdomain"):
-            # check if notifications are enabled for this blog_user
+            # check if newsletter is enabled for this blog_user
             if not models.User.objects.get(username=request.subdomain).notifications_on:
                 return redirect("index")
             return super().dispatch(request, *args, **kwargs)
@@ -805,11 +805,34 @@ def notification_unsubscribe_key(request, unsubscribe_key):
         )
 
 
-class SubscriberList(LoginRequiredMixin, ListView):
+class NotificationList(LoginRequiredMixin, ListView):
     model = models.Notification
 
     def get_queryset(self):
         return models.Notification.objects.filter(blog_user=self.request.user)
+
+
+class NotificationRecordList(LoginRequiredMixin, ListView):
+    model = models.NotificationRecord
+
+    def get_queryset(self):
+        return models.NotificationRecord.objects.filter(
+            notification__blog_user=self.request.user
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["notificationrecord_list_unsent"] = context[
+            "notificationrecord_list"
+        ].filter(sent_at__isnull=True)
+        for nr in context["notificationrecord_list_unsent"]:
+            nr.scheduled_at = nr.post.published_at + timedelta(days=1)
+
+        context["notificationrecord_list_sent"] = context[
+            "notificationrecord_list"
+        ].filter(sent_at__isnull=False)
+        return context
 
 
 def modus(request):

@@ -1,0 +1,52 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Newsletter records — {{ request.user.username }} at Mataroa{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Newsletter records</h1>
+
+    <p>
+        The following are emails records scheduled to be sent at 13:00 UTC.
+    </p>
+    <ul>
+        {% for nr in notificationrecord_list_unsent %}
+        <li>
+			<code>{{ nr.notification.email }}</code>
+			for
+			<a href="{% url 'post_detail' nr.post.slug %}">{{ nr.post.title }}</a>
+			on
+			<time datetime"{{ nr.scheduled_at|date:'Y-m-d' }}">
+				{{ nr.scheduled_at|date:'F j, Y' }}
+			</time>
+        </li>
+        {% empty %}
+        <li><i>No records</i></li>
+        {% endfor %}
+    </ul>
+
+    <p>
+        The following are emails records that have been sent in the past.
+    </p>
+    <ul>
+        {% for nr in notificationrecord_list_sent %}
+        <li>
+			<code>{{ nr.notification.email }}</code>
+			for
+			<a href="{% url 'post_detail' nr.post.slug %}">{{ nr.post.title }}</a>
+			on
+			<time datetime="{{ nr.sent_at|date:'Y-m-d' }}">
+				{{ nr.sent_at|date:'F j, Y' }}
+			</time>
+        </li>
+        {% empty %}
+        <li><i>No records</i></li>
+        {% endfor %}
+    </ul>
+
+    <p>
+        For the current list of registered emails, see
+        <a href="{% url 'notification_list' %}">Subscribers</a>.
+    </p>
+</main>
+{% endblock %}
