@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import datetime
 from io import StringIO
 from unittest.mock import patch
 
@@ -91,7 +91,7 @@ class ProcessNotificationsTest(TestCase):
             "body": "Content sentence.",
             "published_at": timezone.make_aware(datetime(2020, 1, 1)),
         }
-        models.Post.objects.create(owner=self.user, **post_data)
+        self.post_yesterday = models.Post.objects.create(owner=self.user, **post_data)
 
         post_data = {
             "title": "Today post",
@@ -99,10 +99,15 @@ class ProcessNotificationsTest(TestCase):
             "body": "Content sentence.",
             "published_at": timezone.make_aware(datetime(2020, 1, 2)),
         }
-        models.Post.objects.create(owner=self.user, **post_data)
+        self.post_today = models.Post.objects.create(owner=self.user, **post_data)
 
         self.notification = models.Notification.objects.create(
             blog_user=self.user, email="zf@sirodoht.com"
+        )
+        self.notificationrecord = models.NotificationRecord.objects.create(
+            notification=self.notification,
+            post=self.post_yesterday,
+            sent_at=None,
         )
 
     def test_mail_backend(self):
@@ -135,10 +140,7 @@ class ProcessNotificationsTest(TestCase):
         self.assertEqual(
             models.NotificationRecord.objects.first().post.title, "Yesterday post"
         )
-        self.assertEqual(
-            models.NotificationRecord.objects.first().sent_at.date(),
-            date(2020, 1, 2),
-        )
+        self.assertIsNotNone(models.NotificationRecord.objects.first().sent_at.date())
 
         # logging
         self.assertIn("Processing notifications.", output.getvalue())

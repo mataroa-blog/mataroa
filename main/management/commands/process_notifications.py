@@ -97,7 +97,14 @@ class Command(BaseCommand):
                 ).exists():
                     continue
 
-                record, _ = models.NotificationRecord.objects.get(
+                # check if there is no record for this combination
+                if not models.NotificationRecord.objects.filter(
+                    notification=notification,
+                    post=p,
+                ).exists():
+                    continue
+
+                record = models.NotificationRecord.objects.get(
                     notification=notification, post=p, sent_at=None
                 )
 
