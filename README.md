@@ -67,6 +67,12 @@ To create the database schema:
 python manage.py migrate
 ```
 
+Also, you can initialise your database with some sample development data with:
+
+```sh
+python manage.py populate_dev_data
+```
+
 ### Subdomains
 
 To develop locally with subdomains, you need to add something like that in your `/etc/hosts`:
@@ -168,12 +174,12 @@ Except for the standard Django management commands, there is also:
 
 * `enqueue_notifications`: create records for notification emails to be sent.
 * `process_notifications`: sends notification emails for new blog posts of existing records.
+* `populate_dev_data`: populate database with sample development data.
 
 To trigger:
 
 ```sh
 python manage.py enqueue_notifications
-python manage.py process_notifications
 ```
 
 ## License
