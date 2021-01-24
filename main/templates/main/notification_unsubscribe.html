@@ -1,6 +1,6 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}Unsubscribe from post notifications — {{ blog_user.username }} at Mataroa{% endblock %}
+{% block title %}Unsubscribe from the email newsletter — {{ blog_user.username }} at Mataroa{% endblock %}
 
 {% block content %}
 <main>
@@ -8,7 +8,7 @@
     <a href="{% url 'index' %}" class="pages-item-brand">{{ blog_user.blog_title }}</a>
     {% endif %}
 
-    <h1>Unsubscribe from post notifications</h1>
+    <h1>Unsubscribe from the email newsletter</h1>
 
     <form method="post">
         {{ form.as_p }}
@@ -18,8 +18,8 @@
 
     <br>
     <p>
-        Or to start receiving notifications,
-        <a href="{% url 'notification' %}">subscribe</a>.
+        Or to start receiving the email newsletter,
+        <a href="{% url 'notification_subscribe' %}">subscribe</a>.
     </p>
 </main>
 {% endblock %}

@@ -35,21 +35,26 @@ urlpatterns += [
 # blog extras
 urlpatterns += [
     path("rss/", feeds.RSSBlogFeed(), name="rss_feed"),
-    path("notifications/", views.Notification.as_view(), name="notification"),
+    path("newsletter/", views.Notification.as_view(), name="notification_subscribe"),
     path(
-        "notifications/unsubscribe/",
+        "newsletter/unsubscribe/",
         views.NotificationUnsubscribe.as_view(),
         name="notification_unsubscribe",
     ),
     path(
-        "notifications/unsubscribe/<uuid:unsubscribe_key>/",
+        "newsletter/unsubscribe/<uuid:unsubscribe_key>/",
         views.notification_unsubscribe_key,
         name="notification_unsubscribe_key",
     ),
     path(
-        "subscribers/",
-        views.SubscriberList.as_view(),
-        name="subscriber_list",
+        "notifications/",
+        views.NotificationRecordList.as_view(),
+        name="notificationrecord_list",
+    ),
+    path(
+        "notifications/subscribers",
+        views.NotificationList.as_view(),
+        name="notification_list",
     ),
 ]
 

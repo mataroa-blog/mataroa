@@ -1,6 +1,6 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}Unsubscribing from post notifications — {{ blog_user.username }} at Mataroa{% endblock %}
+{% block title %}Unsubscribing from the email newsletter — {{ blog_user.username }} at Mataroa{% endblock %}
 
 {% block content %}
 <main>
@@ -11,15 +11,15 @@
     {% if unsubscribed %}
     <h1>Unsubscribed success</h1>
     <p>
-        <b>{{ email }}</b> was successfully deleted and will stop receiving email notifications.
+        <b>{{ email }}</b> was successfully deleted and will stop receiving emails.
     </p>
     <p>
-        To re-subscribe go <a href="{% url 'notification' %}">here</a>.
+        To re-subscribe go <a href="{% url 'notification_subscribe' %}">here</a>.
     </p>
     {% else %}
     <h1>Not subscribed</h1>
     <p>
-        <a href="{% url 'notification' %}">Subscribe</a>
+        <a href="{% url 'notification_subscribe' %}">Subscribe</a>
         to start receiving email notifications.
     </p>
     {% endif %}

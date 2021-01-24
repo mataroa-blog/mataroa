@@ -8,7 +8,7 @@
     {% endif %}
     <a href="{% url 'rss_feed' %}">RSS</a>.
     {% if blog_user.notifications_on %}
-    <a href="{% url 'notification' %}">Email notifications</a>.
+    <a href="{% url 'notification_subscribe' %}">Email newsletter</a>.
     {% endif %}
     {% for page in pages %}
     <a href="{% url 'page_detail' page.slug %}">{{ page.title }}</a>.

@@ -317,7 +317,7 @@ class BlogNotificationSubscribeTestCase(TestCase):
 
     def test_blog_subscribe(self):
         response = self.client.post(
-            reverse("notification"),
+            reverse("notification_subscribe"),
             HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
             data={"email": "s@example.com"},
         )
