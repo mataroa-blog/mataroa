@@ -17,7 +17,7 @@ def get_mail_connection():
 
 def get_email_body(post, notification):
     post_url = helpers.get_protocol() + post.get_proper_url()
-    # unsubscribe_url = helpers.get_protocol() + notification.get_unsubscribe_url()
+    unsubscribe_url = helpers.get_protocol() + notification.get_unsubscribe_url()
     blog_title = post.owner.blog_title or post.owner.username
 
     body = f"{blog_title} has published a new blog post titled: {post.title}\n"
@@ -34,8 +34,8 @@ def get_email_body(post, notification):
     body += "\n"
     body += "---\n"
     body += "\n"
-    # body += "To unsubscribe click at:\n"
-    # body += unsubscribe_url + "\n"
+    body += "To unsubscribe click at:\n"
+    body += unsubscribe_url + "\n"
 
     return body
 
@@ -43,7 +43,7 @@ def get_email_body(post, notification):
 def get_email(post, notification):
     blog_title = post.owner.blog_title or post.owner.username
     subject = f"{blog_title} new post publication: {post.title}"
-    # unsubscribe_url = helpers.get_protocol() + notification.get_unsubscribe_url()
+    unsubscribe_url = helpers.get_protocol() + notification.get_unsubscribe_url()
     body = get_email_body(post, notification)
     email = mail.EmailMessage(
         subject=subject,
@@ -53,8 +53,8 @@ def get_email(post, notification):
         reply_to=[post.owner.email],
         headers={
             "X-PM-Message-Stream": "newsletters",
-            # "List-Unsubscribe": unsubscribe_url,
-            # "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+            "List-Unsubscribe": unsubscribe_url,
+            "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
         },
     )
     return email
