@@ -12,13 +12,13 @@
     <ul>
         {% for nr in notificationrecord_list_unsent %}
         <li>
-			<code>{{ nr.notification.email }}</code>
-			for
-			<a href="{% url 'post_detail' nr.post.slug %}">{{ nr.post.title }}</a>
-			on
-			<time datetime"{{ nr.scheduled_at|date:'Y-m-d' }}">
-				{{ nr.scheduled_at|date:'F j, Y' }}
-			</time>
+            <code>{{ nr.notification.email }}</code>
+            for
+            <a href="{% url 'post_detail' nr.post.slug %}">{{ nr.post.title }}</a>
+            on
+            <time datetime"{{ nr.scheduled_at|date:'Y-m-d' }}">
+                {{ nr.scheduled_at|date:'F j, Y' }}
+            </time>
             | <a href="{% url 'notificationrecord_delete' nr.id %}">Cancel</a>
         </li>
         {% empty %}
@@ -32,9 +32,9 @@
     <ul>
         {% for nr in notificationrecord_list_sent %}
         <li>
-			<a href="{% url 'post_detail' nr.post.slug %}">{{ nr.post.title }}</a>
-			[<time datetime="{{ nr.sent_at|date:'Y-m-d' }}">{{ nr.sent_at|date:'F j, Y' }}</time>]
-			<code>{{ nr.notification.email }}</code>
+            <a href="{% url 'post_detail' nr.post.slug %}">{{ nr.post.title }}</a>
+            [<time datetime="{{ nr.sent_at|date:'Y-m-d' }}">{{ nr.sent_at|date:'Y-m-d' }}</time>]
+            <code>{{ nr.notification.email }}</code>
         </li>
         {% empty %}
         <li><i>No records</i></li>
