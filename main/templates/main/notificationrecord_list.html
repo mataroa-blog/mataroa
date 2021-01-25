@@ -7,19 +7,24 @@
     <h1>Newsletter records</h1>
 
     <p>
+        For the current list of registered emails, see
+        <a href="{% url 'notification_list' %}">Subscribers</a>.
+    </p>
+
+    <p>
         The following are emails records scheduled to be sent at 13:00 UTC.
     </p>
     <ul>
         {% for nr in notificationrecord_list_unsent %}
         <li>
-            <code>{{ nr.notification.email }}</code>
+            {{ nr.notification.email }}
             for
             <a href="{% url 'post_detail' nr.post.slug %}">{{ nr.post.title }}</a>
             on
             <time datetime"{{ nr.scheduled_at|date:'Y-m-d' }}">
                 {{ nr.scheduled_at|date:'F j, Y' }}
             </time>
-            | <a href="{% url 'notificationrecord_delete' nr.id %}">Cancel</a>
+            | <a href="{% url 'notificationrecord_delete' nr.id %}" class="type-delete">cancel</a>
         </li>
         {% empty %}
         <li><i>No records</i></li>
@@ -30,20 +35,19 @@
         The following are emails records that have been sent in the past.
     </p>
     <ul>
-        {% for nr in notificationrecord_list_sent %}
+        {% regroup notificationrecord_list_sent by post as post_list %}
+        {% for post, notificationrecord_list in post_list %}
         <li>
-            <a href="{% url 'post_detail' nr.post.slug %}">{{ nr.post.title }}</a>
-            [<time datetime="{{ nr.sent_at|date:'Y-m-d' }}">{{ nr.sent_at|date:'Y-m-d' }}</time>]
-            <code>{{ nr.notification.email }}</code>
+            <a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a>
+            {% for nr in notificationrecord_list %}
+            <br><time datetime="{{ nr.sent_at|date:'Y-m-d' }}">{{ nr.sent_at|date:'Y-m-d' }}</time>:
+            {{ nr.notification.email }}
+            {% endfor %}
         </li>
         {% empty %}
         <li><i>No records</i></li>
         {% endfor %}
     </ul>
 
-    <p>
-        For the current list of registered emails, see
-        <a href="{% url 'notification_list' %}">Subscribers</a>.
-    </p>
 </main>
 {% endblock %}
