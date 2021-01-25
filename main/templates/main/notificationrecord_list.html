@@ -32,13 +32,9 @@
     <ul>
         {% for nr in notificationrecord_list_sent %}
         <li>
-			<code>{{ nr.notification.email }}</code>
-			for
 			<a href="{% url 'post_detail' nr.post.slug %}">{{ nr.post.title }}</a>
-			on
-			<time datetime="{{ nr.sent_at|date:'Y-m-d' }}">
-				{{ nr.sent_at|date:'F j, Y' }}
-			</time>
+			[<time datetime="{{ nr.sent_at|date:'Y-m-d' }}">{{ nr.sent_at|date:'F j, Y' }}</time>]
+			<code>{{ nr.notification.email }}</code>
         </li>
         {% empty %}
         <li><i>No records</i></li>
