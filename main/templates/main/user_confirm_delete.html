@@ -5,9 +5,9 @@
 {% block content %}
 <main class="delete">
     <h1>Delete {{ user.username }} forever?</h1>
-	<p>
-		No soft deletes here—we really delete everything and forever.
-	</p>
+    <p>
+        No soft deletes here—we really delete everything and forever.
+    </p>
     <form method="post">
         {% csrf_token %}
         <input type="submit" value="Affirmative, delete forever" class="type-danger">

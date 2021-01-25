@@ -317,13 +317,13 @@ td {
 }
 
 pre {
-	background: var(--light-grey-color);
+    background: var(--light-grey-color);
     overflow-x: scroll;
 }
 
 code {
-	background: var(--light-grey-color);
-	padding: 2px;
+    background: var(--light-grey-color);
+    padding: 2px;
 }
 
 hr {
@@ -339,7 +339,7 @@ footer {
     margin-top: 32px;
     margin-bottom: 16px;
     max-width: 500px;
-	color: var(--dark-grey-color);
+    color: var(--dark-grey-color);
 }
 @media (max-width: 500px) {
     footer {
@@ -349,7 +349,7 @@ footer {
 }
 
 .footer-comment {
-	margin-bottom: 8px;
+    margin-bottom: 8px;
 }
 
 .help {
@@ -407,7 +407,7 @@ input[type="submit"]:active {
 }
 
 form .helptext {
-	color: var(--dark-grey-color);
+    color: var(--dark-grey-color);
 }
 
 .form-error {
@@ -595,7 +595,7 @@ form .helptext {
 
 /* images */
 .images-grid {
-	max-width: 100%;
+    max-width: 100%;
     margin-top: 32px;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -616,7 +616,7 @@ form .helptext {
 
 /* image detail */
 .images-item {
-	max-width: 100%;
+    max-width: 100%;
     margin-top: 32px;
     margin-bottom: 32px;
     text-align: center;

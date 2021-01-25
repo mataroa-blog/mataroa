@@ -5,10 +5,10 @@
 {% block content %}
 <main class="delete">
     <h1>Cancel sending this email to {{ notificationrecord.notification.email }}?</h1>
-	<p>
-		The email content is the post:
-		<a href="{% url 'post_detail' notificationrecord.post.slug %}">{{ notificationrecord.post.title }}</a>.
-	</p>
+    <p>
+        The email content is the post:
+        <a href="{% url 'post_detail' notificationrecord.post.slug %}">{{ notificationrecord.post.title }}</a>.
+    </p>
 
     <form method="post">
         {% csrf_token %}

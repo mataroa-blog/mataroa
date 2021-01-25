@@ -37,24 +37,24 @@
             {% endif %}
             | <a href="{% url 'dashboard' %}">Dashboard</a>
             | <a href="{% url 'post_create' %}">New post</a>
-			{% if blog_user.custom_domain %}
+            {% if blog_user.custom_domain %}
             | <a href="//{{ blog_user.custom_domain }}{{ request.path }}">See in {{ blog_user.custom_domain }}</a>
-			{% endif %}
+            {% endif %}
             {% if request.user.is_superuser %}
             | <a href="{% url 'admin:index' %}">Admin</a>
             {% endif %}
         </nav>
         {% endif %}
 
-		{% if request.user.redirect_domain %}
-		<aside class="type-delete">
-			<div>
-				Your mataroa blog (<code>{{ request.user.username }}.mataroa.blog</code>) is
-				currently retired and inaccessible. All traffic is redirected to
-				<code>{{ request.user.redirect_domain }}</code> as per your
-				<a href="{% url 'user_update' request.user.id %}">settings</a>.
-			</div>
-		</aside>
+        {% if request.user.redirect_domain %}
+        <aside class="type-delete">
+            <div>
+                Your mataroa blog (<code>{{ request.user.username }}.mataroa.blog</code>) is
+                currently retired and inaccessible. All traffic is redirected to
+                <code>{{ request.user.redirect_domain }}</code> as per your
+                <a href="{% url 'user_update' request.user.id %}">settings</a>.
+            </div>
+        </aside>
         {% endif %}
 
         {% else %}
