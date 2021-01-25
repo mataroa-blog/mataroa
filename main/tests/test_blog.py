@@ -414,7 +414,7 @@ class BlogNotificationRecordListTestCase(TestCase):
         response = self.client.get(reverse("notificationrecord_list"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, b"s@example.com")
-        self.assertContains(response, b"January 1, 2020")
+        self.assertContains(response, b"2020-01-01")
 
 
 class BlogNotificationRecordConfirmDeleteTestCase(TestCase):
