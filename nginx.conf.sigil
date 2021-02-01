@@ -12,10 +12,6 @@ server {
   access_log  {{ $.NGINX_ACCESS_LOG_PATH }};
   error_log   {{ $.NGINX_ERROR_LOG_PATH }};
 
-  location ^~ /.well-known/acme-challenge/ {
-    root /var/www/_letsencrypt;
-  }
-
 {{ if (and (eq $listen_port "80") ($.SSL_INUSE)) }}
   return 301 https://$host:{{ $.PROXY_SSL_PORT }}$request_uri;
 {{ else }}
@@ -181,6 +177,10 @@ server {
   location /502-error.html {
     root {{ $.DOKKU_LIB_ROOT }}/data/nginx-vhosts/dokku-errors;
     internal;
+  }
+
+  location ^~ /.well-known/acme-challenge/ {
+    root /var/www/_letsencrypt;
   }
 }
 server {
