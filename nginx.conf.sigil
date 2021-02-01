@@ -11,6 +11,11 @@ server {
   {{ if $.NOSSL_SERVER_NAME }}server_name {{ $.NOSSL_SERVER_NAME }}; {{ end }}
   access_log  {{ $.NGINX_ACCESS_LOG_PATH }};
   error_log   {{ $.NGINX_ERROR_LOG_PATH }};
+
+  location ^~ /.well-known/acme-challenge/ {
+    root /var/www/_letsencrypt;
+  }
+
 {{ if (and (eq $listen_port "80") ($.SSL_INUSE)) }}
   return 301 https://$host:{{ $.PROXY_SSL_PORT }}$request_uri;
 {{ else }}
