@@ -4,19 +4,19 @@
 #
 #    pip-compile
 #
-asgiref==3.2.10           # via django
-bleach==3.1.5             # via -r requirements.in
+asgiref==3.3.1            # via django
+bleach==3.3.0             # via -r requirements.in
 dj-database-url==0.5.0    # via -r requirements.in
 django-dotenv==1.4.2      # via -r requirements.in
-django==3.1               # via -r requirements.in
-markdown==3.2.2           # via -r requirements.in
-packaging==20.4           # via bleach
-psycopg2-binary==2.8.5    # via -r requirements.in
-pygments==2.6.1           # via -r requirements.in
+django==3.1.6             # via -r requirements.in
+markdown==3.3.3           # via -r requirements.in
+packaging==20.9           # via bleach
+psycopg2-binary==2.8.6    # via -r requirements.in
+pygments==2.7.4           # via -r requirements.in
 pyparsing==2.4.7          # via packaging
-pytz==2020.1              # via django
-six==1.15.0               # via bleach, packaging
-sqlparse==0.3.1           # via django
+pytz==2021.1              # via django
+six==1.15.0               # via bleach
+sqlparse==0.4.1           # via django
 uwsgi==2.0.19.1           # via -r requirements.in
 webencodings==0.5.1       # via bleach
 whitenoise==5.2.0         # via -r requirements.in
