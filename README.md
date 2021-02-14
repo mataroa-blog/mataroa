@@ -34,15 +34,27 @@ dependencies management.
 
 ### Environment variables
 
-You need to create a new file named `.env` in the root of this project once you cloned it.
+A file named `.env` is used to define the environment variables required for this
+project to function. There is an example environment file one can copy as base:
 
-`.env` should contain the following env variables:
+```sh
+cp .env.example .env
+```
+
+`.env` should contain the following variables:
 
 ```sh
 SECRET_KEY="thisisthesecretkey"
-DATABASE_URL="postgres://username:password@localhost:5432/db_name"
+DATABASE_URL="postgres://mataroa:password@db:5432/mataroa"
 EMAIL_HOST_USER="smtp_user"
 EMAIL_HOST_PASSWORD="smtp_password"
+```
+
+When on production, also include the following variable
+(though not using `.env`; see [Deployment](#Deployment)):
+
+```
+NODEBUG=1
 ```
 
 ### Database
@@ -50,16 +62,15 @@ EMAIL_HOST_PASSWORD="smtp_password"
 This project uses PostgreSQL. See above on how to configure access to it using
 the `.env` file.
 
-There is no need to create manually one if you're using Docker and
-[Docker Compose](https://docs.docker.com/compose/). Run this to spin up the
-database in the background:
+If on Docker, there is a also [Docker Compose](https://docs.docker.com/compose/)
+configuration that can be used to spin up a database in the background:
 
 ```sh
 docker-compose up -d db
 ```
 
-The database data will be saved in a gitignored directory, `db_data`, in the root of
-the project.
+The database data will be saved in the git-ignored directory `db_data`,
+located in the root of the project.
 
 To create the database schema:
 
@@ -67,7 +78,7 @@ To create the database schema:
 python manage.py migrate
 ```
 
-Also, you can initialise your database with some sample development data with:
+Also, initialising the database with some sample development data is possible with:
 
 ```sh
 python manage.py populate_dev_data
@@ -75,14 +86,17 @@ python manage.py populate_dev_data
 
 ### Subdomains
 
-To develop locally with subdomains, you need to add something like that in your `/etc/hosts`:
+To develop locally with subdomains, one needs something like that in `/etc/hosts`:
 
 ```
 127.0.0.1 mataroalocal.blog
-127.0.0.1 yourlocaluser.mataroalocal.blog
 127.0.0.1 random.mataroalocal.blog
 127.0.0.1 test.mataroalocal.blog 
+127.0.0.1 mylocalusername.mataroalocal.blog
 ```
+
+As `/etc/hosts` does not support wildcard entries, there needs to be one
+entry for each mataroa user/blog.
 
 ### Serve
 
@@ -92,32 +106,34 @@ To run the Django development server:
 python manage.py runserver
 ```
 
-Or, if you prefer to run the web server under Docker:
+Or, if Docker is preferred for running the web server:
 
 ```sh
 docker-compose up web
 ```
 
-In which case, `DATABASE_URL` in `.env` should be like this:
+If opting for the Docker case, `DATABASE_URL` in `.env` should be like this:
 
 ```sh
 DATABASE_URL="postgres://postgres:postgres@db:5432/postgres"
 ```
 
-You can also run just the database using Docker and the webserver without,
-in which case `.env` would be like this:
+There is also the alternative of running just the database using Docker and
+the webserver without. In this case `.env` should be like this:
 
 ```sh
 DATABASE_URL="postgres://postgres:postgres@127.0.0.1:5432/postgres"
 ```
 
-and you would start the database like so:
+And the database would start like so:
 
 ```sh
 docker-compose up db
 ```
 
 ## Testing
+
+Using the Django test runner:
 
 ```sh
 python manage.py test
@@ -132,7 +148,7 @@ coverage report -m
 
 ## Code linting & formatting
 
-The following tools are used:
+The following tools are used for code linting and formatting:
 
 * [black](https://github.com/psf/black) for code formatting.
 * [isort](https://github.com/pycqa/isort) for imports order consistency.
@@ -151,18 +167,31 @@ Deployment [is configured](uwsgi.ini) using the production-grade
 uwsgi --ini=uwsgi.ini -H venv/
 ```
 
-You also need to populate your shell environment:
+The shell environmental need also be populated, as `uwsgi` does not read
+the `.env` file:
 
 ```sh
 export SECRET_KEY="thisisthesecretkey"
 export DATABASE_URL="postgres://username:password@localhost:5432/db_name"
 export EMAIL_HOST_USER="smtp_user"
 export EMAIL_HOST_PASSWORD="smtp_password"
+export NODEBUG=1
 ```
+
+Also, two cronjobs (used by the email newsletter feature) are needed to be
+installed. The schedule is subject to the administrator's preference. Indicatively:
+
+```
+*/5 * * * * /usr/bin/dokku run mataroa python manage.py enqueue_notifications
+*/10 * * * * /usr/bin/dokku run mataroa python manage.py process_notifications
+```
+
+Documentation about the commands can be found in section [Management](#Management).
 
 ## Dokku
 
-This project is also configured to deploy to [dokku](http://dokku.viewdocs.io/dokku/).
+The project is also configured to deploy to a 
+[dokku](http://dokku.viewdocs.io/dokku/) server.
 
 * [Procfile](Procfile): app init command
 * [app.json](app.json): predeploy tasks
@@ -170,13 +199,13 @@ This project is also configured to deploy to [dokku](http://dokku.viewdocs.io/do
 
 ## Management
 
-Except for the standard Django management commands, there is also:
+In addition to the standard Django management commands, there are also:
 
 * `enqueue_notifications`: create records for notification emails to be sent.
 * `process_notifications`: sends notification emails for new blog posts of existing records.
 * `populate_dev_data`: populate database with sample development data.
 
-To trigger:
+They are triggered using the standard `manage.py` Django way:
 
 ```sh
 python manage.py enqueue_notifications
