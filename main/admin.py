@@ -128,6 +128,7 @@ class NotificationAdmin(admin.ModelAdmin):
         "email",
         "blog_user",
         "unsubscribe_key",
+        "is_active",
     )
 
     ordering = ["-id"]
