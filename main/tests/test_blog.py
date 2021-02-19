@@ -341,7 +341,7 @@ class BlogNotificationSubscribeTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertTrue(
             models.Notification.objects.filter(
-                blog_user=self.user, email="s@example.com"
+                blog_user=self.user, email="s@example.com", is_active=True
             ).exists()
         )
 
@@ -384,7 +384,37 @@ class BlogNotificationUnsubscribeKeyTestCase(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertFalse(
-            models.Notification.objects.filter(email="s@example.com").exists()
+            models.Notification.objects.filter(
+                email="s@example.com", is_active=False
+            ).exists()
+        )
+
+
+class BlogNotificationResubscribeTestCase(TestCase):
+    """Test one can subscribe after having unsubscribed."""
+
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.user.notifications_on = True
+        self.user.save()
+
+        self.notification = models.Notification.objects.create(
+            blog_user=self.user,
+            email="s@example.com",
+            is_active=False,
+        )
+
+    def test_blog_resubscribe(self):
+        response = self.client.post(
+            reverse("notification_subscribe"),
+            HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
+            data={"email": "s@example.com"},
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(
+            models.Notification.objects.filter(
+                email="s@example.com", is_active=True
+            ).exists()
         )
 
 

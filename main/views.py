@@ -697,9 +697,11 @@ class Notification(SuccessMessageMixin, FormView):
         return context
 
     def form_valid(self, form):
+        # handle case already subscribed
         if models.Notification.objects.filter(
             blog_user=self.request.blog_user,
             email=form.cleaned_data.get("email"),
+            is_active=True,
         ).exists():
             form.add_error(
                 "email",
@@ -707,6 +709,20 @@ class Notification(SuccessMessageMixin, FormView):
             )
             return self.render_to_response(self.get_context_data(form=form))
 
+        # handle case subscribed but not active
+        if models.Notification.objects.filter(
+            blog_user=self.request.blog_user,
+            email=form.cleaned_data.get("email"),
+            is_active=False,
+        ).exists():
+            notification = models.Notification.objects.get(
+                blog_user=self.request.blog_user, email=form.cleaned_data.get("email")
+            )
+            notification.is_active = True
+            notification.save()
+            return super().form_valid(form)
+
+        # handle normal case email does not exist
         self.object = form.save(commit=False)
         self.object.blog_user = self.request.blog_user
         self.object.save()
