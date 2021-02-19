@@ -755,10 +755,12 @@ class NotificationUnsubscribe(SuccessMessageMixin, FormView):
         return context
 
     def form_valid(self, form):
-        models.Notification.objects.filter(
+        notification = models.Notification.objects.get(
             blog_user=self.request.blog_user,
             email=form.cleaned_data.get("email"),
-        ).delete()
+        )
+        notification.is_active = False
+        notification.save()
         return super().form_valid(form)
 
     def dispatch(self, request, *args, **kwargs):

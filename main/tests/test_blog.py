@@ -362,7 +362,7 @@ class BlogNotificationUnsubscribeTestCase(TestCase):
         )
         self.assertEqual(response.status_code, 302)
         self.assertFalse(
-            models.Notification.objects.filter(email="s@example.com").exists()
+            models.Notification.objects.get(email="s@example.com").is_active
         )
 
 

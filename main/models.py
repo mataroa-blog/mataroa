@@ -238,6 +238,7 @@ class Notification(models.Model):
     blog_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     email = models.EmailField()
     unsubscribe_key = models.UUIDField(default=uuid.uuid4, unique=True)
+    is_active = models.BooleanField(default=True)
 
     class Meta:
         ordering = ["email"]

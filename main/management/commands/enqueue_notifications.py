@@ -16,15 +16,17 @@ class Command(BaseCommand):
         # for every post that was published today
         for p in posts:
 
-            # ignore if notifications are not on for this blog
+            # ignore blog if notifications are not on
             if not p.owner.notifications_on:
                 continue
 
-            # get all subscriber emails
-            notification_list = models.Notification.objects.filter(blog_user=p.owner)
+            # get all active subscriber emails
+            notification_list = models.Notification.objects.filter(
+                blog_user=p.owner, is_active=True
+            )
             for notification in notification_list:
 
-                # check if subscriber has already been notified
+                # verify subscriber has not already been notified
                 if models.NotificationRecord.objects.filter(
                     notification=notification,
                     post=p,
@@ -32,6 +34,7 @@ class Command(BaseCommand):
                 ).exists():
                     continue
 
+                # create actual notification record, i.e. enqueue it
                 models.NotificationRecord.objects.get_or_create(
                     notification=notification, post=p, sent_at=None
                 )

@@ -9,6 +9,7 @@ from main import helpers, models
 
 
 def get_mail_connection():
+    """Returns the default EmailBackend but instantiated with a custom host."""
     return mail.get_connection(
         "django.core.mail.backends.smtp.EmailBackend",
         host=settings.EMAIL_HOST_BROADCASTS,
@@ -70,54 +71,45 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.NOTICE("Processing notifications."))
 
-        yesterday = timezone.now().date() - timedelta(days=1)
-        posts = models.Post.objects.filter(published_at=yesterday)
+        # list of messages to sent out
+        message_list = []
 
-        connection = get_mail_connection()
+        # get all notification records without sent_at
+        # which means they have not been sent out already
+        notification_records = models.NotificationRecord.objects.filter(sent_at=None)
+        for record in notification_records:
 
-        # for every post that was published yesterday
-        for p in posts:
-
-            # ignore if notifications are not on for this blog
-            if not p.owner.notifications_on:
+            # verify blog still has notifications on
+            if not record.post.owner.notifications_on:
                 continue
 
-            # list of messages
-            message_list = []
+            # verify post is still published the day before
+            yesterday = timezone.now().date() - timedelta(days=1)
+            if record.post.published_at != yesterday:
+                continue
 
-            # get all subscriber emails
-            notification_list = models.Notification.objects.filter(blog_user=p.owner)
-            for notification in notification_list:
+            # verify user has not unsubscribed since enqueuing records
+            if not record.notification.is_active:
+                continue
 
-                # check if subscriber has already been notified
-                if models.NotificationRecord.objects.filter(
-                    notification=notification,
-                    post=p,
-                    sent_at__isnull=False,
-                ).exists():
-                    continue
+            # add email object to list
+            email = get_email(record.post, record.notification)
+            message_list.append(email)
 
-                # check if there is no record for this combination
-                if not models.NotificationRecord.objects.filter(
-                    notification=notification,
-                    post=p,
-                ).exists():
-                    continue
-
-                record = models.NotificationRecord.objects.get(
-                    notification=notification, post=p, sent_at=None
+            # log time email was added to the send-out list
+            # ideally we would like to log when each one was sent
+            # which is infeasible given the mass send strategy of newsletters
+            record.sent_at = timezone.now()
+            record.save()
+            self.stdout.write(
+                self.style.SUCCESS(
+                    f"Adding notification record for '{record.post.title}' to '{record.notification.email}'"
                 )
+            )
 
-                email = get_email(p, notification)
-                message_list.append(email)
-
-                record.sent_at = timezone.now()
-                record.save()
-                self.stdout.write(
-                    self.style.SUCCESS(
-                        f"Adding notification record for '{p.title}' to '{notification.email}'"
-                    )
-                )
-
-            connection.send_messages(message_list)
-            self.stdout.write(self.style.SUCCESS(f"Sent broadcast for '{p.title}'"))
+        # sent out messages
+        connection = get_mail_connection()
+        connection.send_messages(message_list)
+        self.stdout.write(
+            self.style.SUCCESS(f"Broadcast sent. Total {len(message_list)} emails.")
+        )
