@@ -52,7 +52,7 @@
                 Your mataroa blog (<code>{{ request.user.username }}.mataroa.blog</code>) is
                 currently retired and inaccessible. All traffic is redirected to
                 <code>{{ request.user.redirect_domain }}</code> as per your
-                <a href="{% url 'user_update' request.user.id %}">settings</a>.
+                <a href="{% url 'user_update' %}">settings</a>.
             </div>
         </aside>
         {% endif %}

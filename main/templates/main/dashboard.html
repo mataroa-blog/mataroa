@@ -16,7 +16,7 @@
         {% endif %}
         <br><a href="{% url 'analytic_list' %}">Analytics</a>
         <br><a href="{% url 'blog_import' %}">Import posts</a>
-        <br><a href="{% url 'user_update' user.id %}">Blog settings</a>
+        <br><a href="{% url 'user_update' %}">Blog settings</a>
         <br><a href="{% url 'blog_webring' %}">Webring</a>
         <br><a href="{% url 'password_change' %}">Change password</a>
         <br><a href="{% url 'blog_export' %}">Export blog</a>
@@ -24,7 +24,7 @@
         <br><a href="{% url 'logout' %}">Log out</a>
     </p>
     <p>
-        <a href="{% url 'user_delete' user.id %}" class="type-delete">Delete account</a>
+        <a href="{% url 'user_delete' %}" class="type-delete">Delete account</a>
     </p>
     </ul>
 </main>

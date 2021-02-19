@@ -87,23 +87,6 @@ class Logout(DjLogoutView):
         return super().dispatch(request, *args, **kwargs)
 
 
-class UserDetail(LoginRequiredMixin, DetailView):
-    model = models.User
-
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.id != kwargs["pk"]:
-            raise PermissionDenied()
-
-        if hasattr(request, "subdomain"):
-            return redirect(
-                "//"
-                + settings.CANONICAL_HOST
-                + reverse("user_detail", args=(request.user.id,))
-            )
-
-        return super().dispatch(request, *args, **kwargs)
-
-
 class UserCreate(CreateView):
     form_class = forms.UserCreationForm
     success_url = reverse_lazy("dashboard")
@@ -141,10 +124,8 @@ class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = "settings updated"
     success_url = reverse_lazy("dashboard")
 
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.id != kwargs["pk"]:
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+    def get_object(self):
+        return self.request.user
 
     def form_valid(self, form):
         if not form.cleaned_data.get("custom_domain"):
@@ -169,10 +150,8 @@ class UserDelete(LoginRequiredMixin, DeleteView):
     model = models.User
     success_url = reverse_lazy("index")
 
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.id != kwargs["pk"]:
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+    def get_object(self):
+        return self.request.user
 
 
 class PostDetail(DetailView):

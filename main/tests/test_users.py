@@ -88,44 +88,6 @@ class LogoutTestCase(TestCase):
         self.assertFalse(user.is_authenticated)
 
 
-class UserDetailTestCase(TestCase):
-    def setUp(self):
-        user = models.User.objects.create(username="alice")
-        user.set_password("abcdef123456")
-        user.save()
-        data = {
-            "username": "alice",
-            "password": "abcdef123456",
-        }
-        self.client.post(reverse("login"), data)
-        self.user = models.User.objects.get(username=data["username"])
-
-    def test_user_detail(self):
-        response = self.client.get(reverse("user_detail", args=(self.user.id,)))
-        self.assertEqual(response.status_code, 200)
-
-
-class UserDetailNotOwnTestCase(TestCase):
-    """Tests user cannot access another user's detail page."""
-
-    def setUp(self):
-        attacker_data = {
-            "username": "alice",
-            "password": "abcdef123456",
-        }
-        attacker = models.User.objects.create(username=attacker_data["username"])
-        attacker.set_password(attacker_data["password"])
-        attacker.save()
-        self.client.post(reverse("login"), attacker_data)
-        self.attacker = models.User.objects.get(username=attacker_data["username"])
-
-        self.victim = models.User.objects.create(username="bob")
-
-    def test_user_detail_not_own(self):
-        response = self.client.get(reverse("user_detail", args=(self.victim.id,)))
-        self.assertEqual(response.status_code, 403)
-
-
 class UserUpdateTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
@@ -139,48 +101,11 @@ class UserUpdateTestCase(TestCase):
             "email": "alice_updated@example.com",
             "blog_title": "Updated title",
         }
-        response = self.client.post(reverse("user_update", args=(self.user.id,)), data)
+        response = self.client.post(reverse("user_update"), data)
         self.assertEqual(response.status_code, 302)
         updated_user = models.User.objects.get(id=self.user.id)
         self.assertEqual(updated_user.username, data["username"])
         self.assertEqual(updated_user.email, data["email"])
-
-
-class UserUpdateNotOwnTestCase(TestCase):
-    """Tests user cannot update another user's details."""
-
-    def setUp(self):
-        attacker_data = {
-            "username": "alice",
-            "password": "abcdef123456",
-        }
-        attacker = models.User.objects.create(username=attacker_data["username"])
-        attacker.set_password(attacker_data["password"])
-        attacker.save()
-        self.client.post(reverse("login"), attacker_data)
-        self.attacker = models.User.objects.get(username=attacker_data["username"])
-
-        victim_data = {
-            "username": "bob",
-            "email": "bob@example.com",
-            "blog_title": "Bob blog",
-        }
-        self.victim = models.User.objects.create(**victim_data)
-
-    def test_user_update_not_own(self):
-        data = {
-            "username": "bob_sucks",
-            "email": "bob_sucks@example.com",
-            "blog_title": "Bob blog sucks",
-        }
-        response = self.client.post(
-            reverse("user_update", args=(self.victim.id,)), data
-        )
-        self.assertEqual(response.status_code, 403)
-        victim_now = models.User.objects.get(id=self.victim.id)
-        self.assertEqual(victim_now.username, self.victim.username)
-        self.assertEqual(victim_now.email, self.victim.email)
-        self.assertEqual(victim_now.blog_title, self.victim.blog_title)
 
 
 class UserPasswordChangeTestCase(TestCase):
@@ -209,26 +134,9 @@ class UserDeleteTestCase(TestCase):
         self.client.login(username="alice", password="abcdef123456")
 
     def test_user_delete(self):
-        response = self.client.post(reverse("user_delete", args=(self.user.id,)))
+        response = self.client.post(reverse("user_delete"))
         self.assertEqual(response.status_code, 302)
         self.assertFalse(models.User.objects.filter(id=self.user.id).exists())
-
-
-class UserDeleteNotOwnTestCase(TestCase):
-    """Tests user cannot delete other user."""
-
-    def setUp(self):
-        self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
-
-        self.victim = models.User.objects.create(username="bob")
-
-    def test_user_delete(self):
-        response = self.client.post(reverse("user_delete", args=(self.victim.id,)))
-        self.assertEqual(response.status_code, 403)
-        self.assertTrue(models.User.objects.filter(id=self.victim.id).exists())
 
 
 class UserUpdateCommentsOnTestCase(TestCase):
@@ -243,7 +151,7 @@ class UserUpdateCommentsOnTestCase(TestCase):
             "username": "alice",
             "comments_on": True,
         }
-        response = self.client.post(reverse("user_update", args=(self.user.id,)), data)
+        response = self.client.post(reverse("user_update"), data)
         self.assertEqual(response.status_code, 302)
         updated_user = models.User.objects.get(id=self.user.id)
         self.assertEqual(updated_user.comments_on, data["comments_on"])

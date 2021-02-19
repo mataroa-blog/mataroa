@@ -82,9 +82,6 @@ class User(AbstractUser):
     def footer_note_as_html(self):
         return helpers.md_to_html(self.footer_note)
 
-    def get_absolute_url(self):
-        return reverse("user_detail", kwargs={"pk": self.pk})
-
     def __str__(self):
         return self.username
 
