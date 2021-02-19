@@ -142,6 +142,7 @@ class NotificationRecordAdmin(admin.ModelAdmin):
         "id",
         "sent_at",
         "notification",
+        "post",
     )
 
     ordering = ["-id"]
