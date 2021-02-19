@@ -13,7 +13,6 @@ class UserAdmin(DjUserAdmin):
         "last_login",
         "blog_title",
         "blog_byline",
-        "custom_domain",
     )
 
     fieldsets = DjUserAdmin.fieldsets + (
@@ -24,7 +23,14 @@ class UserAdmin(DjUserAdmin):
                     "about",
                     "blog_title",
                     "blog_byline",
+                    "footer_note",
+                    "redirect_domain",
                     "custom_domain",
+                    "comments_on",
+                    "notifications_on",
+                    "webring_name",
+                    "webring_prev_url",
+                    "webring_next_url",
                 ),
             },
         ),
