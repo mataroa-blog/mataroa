@@ -24,18 +24,18 @@ class EnqueueNotificationsTest(TestCase):
         )
 
         post_data = {
-            "title": "Yesterday post",
-            "slug": "yesterday-post",
+            "title": "Old post",
+            "slug": "old-post",
             "body": "Content sentence.",
-            "published_at": timezone.make_aware(datetime(2020, 1, 1)),
+            "published_at": timezone.make_aware(datetime(2019, 1, 2)),
         }
         models.Post.objects.create(owner=self.user, **post_data)
 
         post_data = {
-            "title": "Today post",
-            "slug": "today-post",
+            "title": "Yesterday post",
+            "slug": "yesterday-post",
             "body": "Content sentence.",
-            "published_at": timezone.make_aware(datetime(2020, 1, 2)),
+            "published_at": timezone.make_aware(datetime(2020, 1, 1)),
         }
         models.Post.objects.create(owner=self.user, **post_data)
 
@@ -63,17 +63,17 @@ class EnqueueNotificationsTest(TestCase):
             self.notification.email,
         )
         self.assertEqual(
-            models.NotificationRecord.objects.first().post.title, "Today post"
+            models.NotificationRecord.objects.first().post.title, "Yesterday post"
         )
         self.assertIsNone(models.NotificationRecord.objects.first().sent_at)
 
         # logging
         self.assertIn("Enqueuing notifications started.", output.getvalue())
         self.assertIn(
-            "Adding notification record for 'Today post' to 's@example.com'",
+            "Adding notification record for 'Yesterday post' to 's@example.com'",
             output.getvalue(),
         )
-        self.assertIn("Enqueuing complete for 'Today post'", output.getvalue())
+        self.assertIn("Enqueuing complete for 'Yesterday post'", output.getvalue())
         self.assertIn("Enqueuing finished.", output.getvalue())
 
     def tearDown(self):
@@ -111,9 +111,16 @@ class ProcessNotificationsTest(TestCase):
         self.notification = models.Notification.objects.create(
             blog_user=self.user, email="zf@sirodoht.com"
         )
-        self.notificationrecord = models.NotificationRecord.objects.create(
+
+        # notification records
+        self.notificationrecord_yesterday = models.NotificationRecord.objects.create(
             notification=self.notification,
             post=self.post_yesterday,
+            sent_at=None,
+        )
+        self.notificationrecord_today = models.NotificationRecord.objects.create(
+            notification=self.notification,
+            post=self.post_today,
             sent_at=None,
         )
 
@@ -138,21 +145,36 @@ class ProcessNotificationsTest(TestCase):
         ):
             call_command("process_notifications", stdout=output)
 
-        # notification record
-        self.assertEqual(len(models.NotificationRecord.objects.all()), 1)
+        # notification records
+        records = models.NotificationRecord.objects.all()
+        self.assertEqual(len(records), 2)
+
+        # notification record for yesterday's post
         self.assertEqual(
-            models.NotificationRecord.objects.first().notification.email,
-            self.notification.email,
+            records.filter(sent_at__isnull=False).first().notification.email,
+            self.notificationrecord_today.notification.email,
         )
         self.assertEqual(
-            models.NotificationRecord.objects.first().post.title, "Yesterday post"
+            records.filter(sent_at__isnull=False).first().post.title, "Yesterday post"
         )
-        self.assertIsNotNone(models.NotificationRecord.objects.first().sent_at.date())
+
+        # notification record for today's post
+        records = models.NotificationRecord.objects.all()
+        self.assertEqual(
+            records.filter(sent_at__isnull=True).first().notification.email,
+            self.notificationrecord_today.notification.email,
+        )
+        self.assertEqual(
+            records.filter(sent_at__isnull=True).first().post.title, "Today post"
+        )
 
         # logging
         self.assertIn("Processing notifications.", output.getvalue())
         self.assertIn("Broadcast sent. Total 1 emails.", output.getvalue())
-        self.assertNotIn("Today post", output.getvalue())
+        self.assertIn(
+            "Adding notification record for 'Yesterday post' to 'zf@sirodoht.com'",
+            output.getvalue(),
+        )
 
         # email
         self.assertEqual(len(mail.outbox), 1)
