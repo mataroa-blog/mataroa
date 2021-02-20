@@ -79,16 +79,18 @@ class Command(BaseCommand):
         notification_records = models.NotificationRecord.objects.filter(sent_at=None)
         for record in notification_records:
 
-            # verify blog still has notifications on
+            # don't send, if blog hasn't turned notifications off
             if not record.post.owner.notifications_on:
+                # TODO: cancel queued record
                 continue
 
-            # verify post is still published the day before
+            # don't send, if post publication date is not the day before
             yesterday = timezone.now().date() - timedelta(days=1)
             if record.post.published_at != yesterday:
+                # TODO: cancel queued record
                 continue
 
-            # verify user has not unsubscribed since enqueuing records
+            # don't send, if email was unsubscribed since records were enqueued
             if not record.notification.is_active:
                 continue
 

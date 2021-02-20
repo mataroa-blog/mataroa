@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
@@ -10,8 +12,10 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.stdout.write(self.style.NOTICE("Enqueuing notifications started."))
 
-        today = timezone.now().date()
-        posts = models.Post.objects.filter(published_at=today)
+        yesterday = timezone.now() - timedelta(days=1)
+        posts = models.Post.objects.filter(published_at__isnull=False).exclude(
+            published_at__lt=yesterday
+        )
 
         # for every post that was published today
         for p in posts:
@@ -24,6 +28,7 @@ class Command(BaseCommand):
             notification_list = models.Notification.objects.filter(
                 blog_user=p.owner, is_active=True
             )
+
             for notification in notification_list:
 
                 # verify subscriber has not already been notified
@@ -35,15 +40,22 @@ class Command(BaseCommand):
                     continue
 
                 # create actual notification record, i.e. enqueue it
-                models.NotificationRecord.objects.get_or_create(
+                _, created = models.NotificationRecord.objects.get_or_create(
                     notification=notification, post=p, sent_at=None
                 )
 
-                self.stdout.write(
-                    self.style.SUCCESS(
-                        f"Adding notification record for '{p.title}' to '{notification.email}'"
+                if created:
+                    self.stdout.write(
+                        self.style.SUCCESS(
+                            f"Adding notification record for '{p.title}' to '{notification.email}'"
+                        )
                     )
-                )
+                else:
+                    self.stdout.write(
+                        self.style.SUCCESS(
+                            f"Exists for '{p.title}' to '{notification.email}'"
+                        )
+                    )
 
             self.stdout.write(self.style.SUCCESS(f"Enqueuing complete for '{p.title}'"))
 
