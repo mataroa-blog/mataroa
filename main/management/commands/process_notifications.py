@@ -65,7 +65,7 @@ class Command(BaseCommand):
     help = "Processes new posts and sends email to subscribers"
 
     def handle(self, *args, **options):
-        if timezone.now().hour != 13:
+        if timezone.now().hour != 15:
             self.stdout.write(self.style.NOTICE("No action. Current UTC is not 13:00."))
             return
 
