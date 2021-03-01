@@ -418,6 +418,37 @@ class BlogNotificationResubscribeTestCase(TestCase):
         )
 
 
+class BlogNotificationUnsubscriberNotShownTestCase(TestCase):
+    """Test someone who unsubscribes does not appear on list."""
+
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.user.set_password("abcdef123456")
+        self.user.notifications_on = True
+        self.user.save()
+        self.client.login(username="alice", password="abcdef123456")
+
+        self.notification_active = models.Notification.objects.create(
+            blog_user=self.user,
+            email="active@example.com",
+            is_active=True,
+        )
+        self.notification_inactive = models.Notification.objects.create(
+            blog_user=self.user,
+            email="inactive@example.com",
+            is_active=False,
+        )
+
+    def test_blog_unsubscribed_not_shown(self):
+        response = self.client.get(
+            reverse("notification_list"),
+            HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.notification_active.email)
+        self.assertNotContains(response, self.notification_inactive.email)
+
+
 class BlogNotificationRecordListTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
