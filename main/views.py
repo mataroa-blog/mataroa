@@ -824,6 +824,9 @@ class NotificationRecordList(LoginRequiredMixin, ListView):
             "notificationrecord_list"
         ].filter(sent_at__isnull=True)
         for nr in context["notificationrecord_list_unsent"]:
+            if not nr.post.published_at:
+                nr.scheduled_at = None
+                continue
             nr.scheduled_at = nr.post.published_at + timedelta(days=1)
 
         context["notificationrecord_list_sent"] = context[

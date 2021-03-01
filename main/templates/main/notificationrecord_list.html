@@ -15,18 +15,30 @@
         The following are emails records scheduled to be sent at 13:00 UTC on the day
         after their publication date.
     </p>
+
     <ul>
-        {% for nr in notificationrecord_list_unsent %}
+        {% regroup notificationrecord_list_unsent by post as post_list %}
+        {% for post, notificationrecord_list in post_list %}
+
         <li>
-            {{ nr.notification.email }}
-            for
-            <a href="{% url 'post_detail' nr.post.slug %}">{{ nr.post.title }}</a>
-            on
-            <time datetime"{{ nr.scheduled_at|date:'Y-m-d' }}">
-                {{ nr.scheduled_at|date:'F j, Y' }}
+            <a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a>
+
+            {% if notificationrecord_list.0.scheduled_at %}
+            scheduled for
+            <time datetime="{{ post.first.scheduled_at|date:'Y-m-d' }}">
+                {{ notificationrecord_list.0.scheduled_at|date:'Y-m-d' }}
             </time>
+            to:
+            {% else %}
+            to be cancelled as unpublished:
+            {% endif %}
+
+            {% for nr in notificationrecord_list %}
+            <br>{{ nr.notification.email }}
             | <a href="{% url 'notificationrecord_delete' nr.id %}" class="type-delete">cancel</a>
+            {% endfor %}
         </li>
+
         {% empty %}
         <li><i>No records</i></li>
         {% endfor %}
@@ -35,14 +47,21 @@
     <p>
         The following are emails records that have been sent in the past.
     </p>
+
     <ul>
         {% regroup notificationrecord_list_sent by post as post_list %}
         {% for post, notificationrecord_list in post_list %}
         <li>
             <a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a>
+
+            sent at
+            <time datetime="{{ notificationrecord_list.0.sent_at|date:'Y-m-d' }}">
+                {{ notificationrecord_list.0.sent_at|date:'Y-m-d' }}
+            </time>
+            to:
+
             {% for nr in notificationrecord_list %}
-            <br><time datetime="{{ nr.sent_at|date:'Y-m-d' }}">{{ nr.sent_at|date:'Y-m-d' }}</time>:
-            {{ nr.notification.email }}
+            <br>{{ nr.notification.email }}
             {% endfor %}
         </li>
         {% empty %}
