@@ -629,6 +629,10 @@ class AnalyticDetail(LoginRequiredMixin, DetailView):
     template_name = "main/analytic_detail.html"
     slug_url_kwarg = "post_slug"
 
+    def get_queryset(self):
+        queryset = models.Post.objects.filter(owner=self.request.user)
+        return queryset
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
