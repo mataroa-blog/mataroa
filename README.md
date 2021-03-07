@@ -154,8 +154,11 @@ The following tools are used for code linting and formatting:
 * [isort](https://github.com/pycqa/isort) for imports order consistency.
 * [flake8](https://gitlab.com/pycqa/flake8) for code linting.
 
+To use:
+
 ```sh
-black . && isort --profile black . && flake8
+make format
+make lint
 ```
 
 ## Deployment
