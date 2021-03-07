@@ -185,6 +185,7 @@ template {
     --ascent-color: #006cdf;
     --dark-grey-color: #757575;
     --light-grey-color: #eff1f5;
+    --airy-grey-color: #fafafa;
     --green-color: #26bd60;
     --red-color: #ff0000;
     --purple-color: #cd1ecd;
@@ -317,7 +318,7 @@ td {
 }
 
 pre {
-    background: var(--light-grey-color);
+    background: var(--airy-grey-color);
     overflow-x: scroll;
 }
 
