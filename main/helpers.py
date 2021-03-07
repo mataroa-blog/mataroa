@@ -117,7 +117,9 @@ def syntax_highlight(text):
                 # actual highlighting happens here
                 within_code_block = False
                 highlighted_block = pygments.highlight(
-                    code_block, lexer, HtmlFormatter(noclasses=True, cssclass="")
+                    code_block,
+                    lexer,
+                    HtmlFormatter(style="solarized-light", noclasses=True, cssclass=""),
                 )
                 processed_text += highlighted_block
                 code_block = ""  # reset code_block variable
