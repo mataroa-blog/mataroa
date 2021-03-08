@@ -64,6 +64,7 @@ def is_disallowed(username):
         "signup",
         "smtp",
         "static",
+        "status",
         "support",
         "terms",
         "test",
