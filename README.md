@@ -191,6 +191,12 @@ installed. The schedule is subject to the administrator's preference. Indicative
 
 Documentation about the commands can be found in section [Management](#Management).
 
+Finally, certain [setting variables](mataroa/settings.py) may need to be redefined:
+
+* `ADMINS`
+* `CANONICAL_HOST`
+* `EMAIL_HOST` and `EMAIL_HOST_BROADCAST`
+
 ## Dokku
 
 The project is also configured to deploy to a 
