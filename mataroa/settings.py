@@ -100,7 +100,7 @@ SESSION_COOKIE_DOMAIN = CANONICAL_HOST.split(":")[0]  # session visible in subdo
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-database_url = os.environ["DATABASE_URL"]
+database_url = os.environ.get("DATABASE_URL", "")
 database_url = parse.urlparse(database_url)
 # e.g. postgres://mataroa:password@127.0.0.1:5432/mataroa
 database_name = database_url.path[1:]  # url.path is '/mataroa'
