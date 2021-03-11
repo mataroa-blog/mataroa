@@ -115,6 +115,7 @@ class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         "blog_title",
         "blog_byline",
         "footer_note",
+        "custom_domain",
         "comments_on",
         "notifications_on",
         "about",
@@ -636,8 +637,12 @@ class AnalyticDetail(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        # limit to 25 latest days of analytics
+        # calculate dates
+        current_date = timezone.now().date()
         date_25d_ago = timezone.now().date() - timedelta(days=24)
+        context["date_25d_ago"] = date_25d_ago
+
+        # limit to 25 latest days of analytics
         context["referers_count"] = (
             models.Analytic.objects.filter(
                 post=self.object, created_at__gt=date_25d_ago
@@ -646,9 +651,8 @@ class AnalyticDetail(LoginRequiredMixin, DetailView):
             .annotate(Count("id"))
             .order_by("-id__count")
         )
-        context["post_analytics"] = {}
 
-        current_date = timezone.now().date()
+        context["post_analytics"] = {}
         current_x_offset = 0
 
         # get all counts for the last 25 days
