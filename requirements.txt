@@ -6,7 +6,6 @@
 #
 asgiref==3.3.1            # via django
 bleach==3.3.0             # via -r requirements.in
-dj-database-url==0.5.0    # via -r requirements.in
 django-dotenv==1.4.2      # via -r requirements.in
 django==3.1.6             # via -r requirements.in
 markdown==3.3.3           # via -r requirements.in

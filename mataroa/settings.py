@@ -11,11 +11,11 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-
-import dj_database_url
+from pathlib import Path
+from urllib import parse
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -32,7 +32,6 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     ".mataroa.blog",
     ".mataroalocal.blog",
-    "95.217.176.64",
     "*",
 ]
 
@@ -101,9 +100,21 @@ SESSION_COOKIE_DOMAIN = CANONICAL_HOST.split(":")[0]  # session visible in subdo
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {"default": {"ENGINE": "django.db.backends.postgresql"}}
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES["default"].update(db_from_env)
+database_url = os.environ["DATABASE_URL"]
+database_url = parse.urlparse(database_url)
+# e.g. postgres://mataroa:password@127.0.0.1:5432/mataroa
+database_name = database_url.path[1:]  # url.path is '/mataroa'
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": parse.unquote(database_name or ""),
+        "USER": parse.unquote(database_url.username or ""),
+        "PASSWORD": parse.unquote(database_url.password or ""),
+        "HOST": database_url.hostname,
+        "PORT": database_url.port or "",
+        "CONN_MAX_AGE": 500,
+    }
+}
 
 
 # Password validation
