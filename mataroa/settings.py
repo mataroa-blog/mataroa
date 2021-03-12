@@ -163,6 +163,7 @@ EMAIL_PORT = 587
 
 DEFAULT_FROM_EMAIL = "Mataroa Admin <admin@mataroa.blog>"
 NOTIFICATIONS_FROM_EMAIL = "Mataroa Notifications <notifications@mataroa.blog>"
+EMAIL_FROM_HOST = "mataroa.blog"
 SERVER_EMAIL = "DC Parlov <server@mataroa.blog>"
 EMAIL_SUBJECT_PREFIX = "[Mataroa Notification] "
 
