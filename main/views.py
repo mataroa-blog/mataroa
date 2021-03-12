@@ -115,7 +115,7 @@ class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         "blog_title",
         "blog_byline",
         "footer_note",
-        "custom_domain",
+        # "custom_domain",
         "comments_on",
         "notifications_on",
         "about",

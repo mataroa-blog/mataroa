@@ -40,7 +40,7 @@ class User(AbstractUser):
         max_length=150,
         blank=True,
         null=True,
-        help_text="DNS: CNAME your .mataroa.blog subdomain or A with IP 95.217.176.64",
+        help_text="To setup: Add an A record in your domain's DNS with IP 95.217.177.163",
         validators=[validators.validate_domain_name],
     )
     comments_on = models.BooleanField(
