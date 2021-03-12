@@ -49,7 +49,7 @@ def get_email(post, notification):
     email = mail.EmailMessage(
         subject=subject,
         body=body,
-        from_email=settings.NOTIFICATIONS_FROM_EMAIL,
+        from_email=f"{blog_title} <{post.owner.username}>",
         to=[notification.email],
         reply_to=[post.owner.email],
         headers={
