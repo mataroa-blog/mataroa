@@ -178,15 +178,16 @@ class ProcessNotificationsTest(TestCase):
 
         # email
         self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(
-            mail.outbox[0].subject, "alice new post publication: Yesterday post"
-        )
+        self.assertEqual(mail.outbox[0].subject, "Yesterday post")
         self.assertIn("To unsubscribe", mail.outbox[0].body)
 
         # email headers
         self.assertEqual(mail.outbox[0].to, [self.notification.email])
         self.assertEqual(mail.outbox[0].reply_to, [self.user.email])
-        self.assertEqual(mail.outbox[0].from_email, settings.NOTIFICATIONS_FROM_EMAIL)
+        self.assertEqual(
+            mail.outbox[0].from_email,
+            f"{self.user.username} <{self.user.username}@{settings.EMAIL_FROM_HOST}>",
+        )
 
         self.assertEqual(
             mail.outbox[0].extra_headers["X-PM-Message-Stream"], "newsletters"
