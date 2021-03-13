@@ -36,7 +36,10 @@ jobs:
     - name: Run Tests
       run: |
         python manage.py test
-        make lint
       env:
         SECRET_KEY: "thisisthesecretkey"
         DATABASE_URL: "postgres://postgres:postgres@localhost:5432/postgres"
+    - name: Lint
+      run: |
+        pip install -r requirements_dev.txt
+        make lint

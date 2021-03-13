@@ -12,4 +12,6 @@ tasks:
       sudo -u postgres psql -U postgres -d postgres -c "ALTER USER postgres WITH PASSWORD 'postgres';"
       export DATABASE_URL='postgres://postgres:postgres@localhost:5432/postgres'
       python3 manage.py test
+  - lint: |
+      pip3 install -r requirements_dev.txt
       make lint
