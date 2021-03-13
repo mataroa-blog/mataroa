@@ -6,13 +6,13 @@
 #
 asgiref==3.3.1            # via django
 bleach==3.3.0             # via -r requirements.in
-django-dotenv==1.4.2      # via -r requirements.in
 django==3.1.6             # via -r requirements.in
 markdown==3.3.3           # via -r requirements.in
 packaging==20.9           # via bleach
 psycopg2-binary==2.8.6    # via -r requirements.in
 pygments==2.7.4           # via -r requirements.in
 pyparsing==2.4.7          # via packaging
+python-dotenv==0.15.0     # via -r requirements.in
 pytz==2021.1              # via django
 six==1.15.0               # via bleach
 sqlparse==0.4.1           # via django

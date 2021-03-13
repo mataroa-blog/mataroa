@@ -2,7 +2,7 @@ django
 psycopg2-binary
 whitenoise
 uwsgi
-django-dotenv
+python-dotenv
 markdown
 pygments
 bleach

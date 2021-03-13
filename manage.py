@@ -2,15 +2,17 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+from os.path import dirname, join
 
-import dotenv
+from dotenv import load_dotenv
 
 
 def main():
     """Run administrative tasks."""
-    dotenv.read_dotenv()
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mataroa.settings")
+    dotenv_path = join(dirname(__file__), ".env")
+    load_dotenv(dotenv_path)
 
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mataroa.settings")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
