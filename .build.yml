@@ -13,5 +13,6 @@ tasks:
       export DATABASE_URL='postgres://postgres:postgres@localhost:5432/postgres'
       python3 manage.py test
   - lint: |
+      cd mataroa
       pip3 install -r requirements_dev.txt
       make lint
