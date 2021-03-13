@@ -15,4 +15,5 @@ tasks:
   - lint: |
       cd mataroa
       pip3 install -r requirements_dev.txt
+      export PATH=/home/build/.local/bin:$PATH
       make lint
