@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.syndication.views import Feed
 from django.http import Http404
 from django.utils import timezone
@@ -25,7 +27,7 @@ class RSSBlogFeed(Feed):
             owner__username=self.subdomain,
             published_at__isnull=False,
             published_at__lte=timezone.now().date(),
-        ).order_by("-created_at")
+        ).order_by("-published_at")
 
     def item_title(self, item):
         return item.title
@@ -34,4 +36,5 @@ class RSSBlogFeed(Feed):
         return item.body_as_html
 
     def item_pubdate(self, item):
-        return item.created_at
+        # set time to 00:00 because we don't store time for published_at field
+        return datetime.combine(item.published_at, datetime.min.time())

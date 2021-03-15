@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
+from django.utils import timezone
 
 from main import models
 
@@ -232,6 +233,7 @@ class RSSFeedTestCase(TestCase):
             "title": "Welcome post",
             "slug": "welcome-post",
             "body": "Content sentence.",
+            "published_at": timezone.now(),
         }
         self.post = models.Post.objects.create(owner=self.user, **self.data)
 
@@ -259,6 +261,7 @@ class RSSFeedDraftsTestCase(TestCase):
             "title": "Welcome post",
             "slug": "welcome-post",
             "body": "Content sentence.",
+            "published_at": timezone.now(),
         }
         models.Post.objects.create(owner=self.user, **self.post_published)
         self.post_draft = {
