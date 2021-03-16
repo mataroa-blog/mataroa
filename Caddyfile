@@ -1,0 +1,39 @@
+*.mataroa.blog,mataroa.blog {
+    route {
+        file_server /static/* {
+            root /home/roa/mataroa
+        }
+        reverse_proxy 127.0.0.1:5000
+    }
+
+    tls /etc/letsencrypt/live/mataroa.blog/fullchain.pem /etc/letsencrypt/live/mataroa.blog/privkey.pem
+
+    log {
+            output file /var/log/caddy-mataroa.log {
+            roll_size 1gb
+            roll_keep 5
+            roll_keep_for 720h
+        }
+    }
+}
+
+:443 {
+    route {
+        file_server /static/* {
+            root /home/roa/mataroa
+        }
+        reverse_proxy 127.0.0.1:5000
+    }
+
+    tls zf+caddy@sirodoht.com {
+        on_demand
+    }
+
+    log {
+            output file /var/log/caddy-catchall.log {
+            roll_size 1gb
+            roll_keep 5
+            roll_keep_for 720h
+        }
+    }
+}
