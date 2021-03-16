@@ -164,29 +164,20 @@ make lint
 ## Deployment
 
 Deployment [is configured](uwsgi.ini) using the production-grade
-[uwsgi](https://uwsgi-docs.readthedocs.io/en/latest/) server.
+[uWSGI](https://uwsgi-docs.readthedocs.io/en/latest/) server. However, to support custom domains
+we use [Caddy](https://caddyserver.com/) in front of uWSGI.
 
 ```sh
-uwsgi --ini=uwsgi.ini -H venv/
-```
-
-The shell environmental need also be populated, as `uwsgi` does not read
-the `.env` file:
-
-```sh
-export SECRET_KEY="thisisthesecretkey"
-export DATABASE_URL="postgres://username:password@localhost:5432/db_name"
-export EMAIL_HOST_USER="smtp_user"
-export EMAIL_HOST_PASSWORD="smtp_password"
-export NODEBUG=1
+uwsgi uwsgi.ini
+caddy start --config /home/roa/mataroa/Caddyfile
 ```
 
 Also, two cronjobs (used by the email newsletter feature) are needed to be
 installed. The schedule is subject to the administrator's preference. Indicatively:
 
 ```
-*/5 * * * * /usr/bin/dokku run mataroa python manage.py enqueue_notifications
-*/10 * * * * /usr/bin/dokku run mataroa python manage.py process_notifications
+*/5 * * * * python manage.py enqueue_notifications
+*/10 * * * * python manage.py process_notifications
 ```
 
 Documentation about the commands can be found in section [Management](#Management).
@@ -196,15 +187,6 @@ Finally, certain [setting variables](mataroa/settings.py) may need to be redefin
 * `ADMINS`
 * `CANONICAL_HOST`
 * `EMAIL_HOST` and `EMAIL_HOST_BROADCAST`
-
-## Dokku
-
-The project is also configured to deploy to a 
-[dokku](http://dokku.viewdocs.io/dokku/) server.
-
-* [Procfile](Procfile): app init command
-* [app.json](app.json): predeploy tasks
-* [DOKKU_SCALE](DOKKU_SCALE): process scaling
 
 ## Management
 
