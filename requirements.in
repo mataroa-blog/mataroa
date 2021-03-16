@@ -1,6 +1,5 @@
 django
 psycopg2-binary
-whitenoise
 uwsgi
 python-dotenv
 markdown
