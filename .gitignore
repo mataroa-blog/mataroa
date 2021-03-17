@@ -1,6 +1,9 @@
-venv/
-db_data/
+static/
 *.pyc
+venv/
+.env
+.env.prod
 .coverage
 htmlcov/
-.env
+uwsgi-log.txt
+mataroa.pid
