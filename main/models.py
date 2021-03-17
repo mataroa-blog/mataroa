@@ -26,7 +26,7 @@ class User(AbstractUser):
         max_length=500,
         blank=True,
         null=True,
-        default=None,
+        default="Powered&nbsp;by&nbsp;[mataroa.blog](https://mataroa.blog/).",
         help_text="Supports markdown",
     )
     theme_zialucia = models.BooleanField(
