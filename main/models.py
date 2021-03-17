@@ -29,6 +29,12 @@ class User(AbstractUser):
         default=None,
         help_text="Supports markdown",
     )
+    theme_zialucia = models.BooleanField(
+        default=False,
+        verbose_name="Theme Zia Lucia",
+        help_text="Enable/disable Zia Lucia theme with larger serif font.",
+    )
+
     redirect_domain = models.CharField(
         max_length=150,
         blank=True,
@@ -43,6 +49,7 @@ class User(AbstractUser):
         help_text="To setup: Add an A record in your domain's DNS with IP 95.217.177.163",
         validators=[validators.validate_domain_name],
     )
+
     comments_on = models.BooleanField(
         default=False,
         help_text="Enable/disable comments for your blog",
