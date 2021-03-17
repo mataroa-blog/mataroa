@@ -50,8 +50,7 @@ EMAIL_HOST_USER="smtp_user"
 EMAIL_HOST_PASSWORD="smtp_password"
 ```
 
-When on production, also include the following variable
-(though not using `.env`; see [Deployment](#Deployment)):
+When on production, also include the following variable (also see [Deployment](#Deployment)):
 
 ```
 NODEBUG=1
@@ -163,13 +162,27 @@ make lint
 
 ## Deployment
 
-Deployment [is configured](uwsgi.ini) using the production-grade
-[uWSGI](https://uwsgi-docs.readthedocs.io/en/latest/) server. However, to support custom domains
-we use [Caddy](https://caddyserver.com/) in front of uWSGI.
+Deployment is configured using [uWSGI](https://uwsgi-docs.readthedocs.io/en/latest/) 
+and [Caddy](https://caddyserver.com/).
+
+As uWSGI cannot read directly from the `.env` file, one needs to export the `.env` contents into
+their shell environment manually. One approach is to create a `.env.prod` which includes the
+`export` commands for every environment variable:
 
 ```sh
-uwsgi uwsgi.ini
-caddy start --config /home/roa/mataroa/Caddyfile
+export NODEBUG=1
+export DATABASE_URL=postgres://mataroa:password@localhost:5432/mataroa
+export EMAIL_HOST_PASSWORD=smtp-user
+export EMAIL_HOST_USER=smtp-password
+export SECRET_KEY=some-secret-key
+```
+
+And then source that before starting everything:
+
+```sh
+source .env.prod
+uwsgi uwsgi.ini  # start djago app
+caddy start --config /home/roa/mataroa/Caddyfile  # start caddy server
 ```
 
 Also, two cronjobs (used by the email newsletter feature) are needed to be
