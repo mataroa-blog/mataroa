@@ -31,13 +31,12 @@ def host_middleware(get_response):
             # the indexes are different because settings.CANONICAL_HOST has no subdomain
             request.subdomain = host_parts[0]
 
-            # if subdomain is 'random', let it through
-            if request.subdomain == "random":
-                return get_response(request)
-
             # check if subdomain exists
             if models.User.objects.filter(username=request.subdomain).exists():
                 request.blog_user = models.User.objects.get(username=request.subdomain)
+
+                # set theme
+                request.theme_zialucia = request.blog_user.theme_zialucia
 
                 # if not logged in, check if we need to redirect anon user
                 if not request.user.is_authenticated:
@@ -64,6 +63,7 @@ def host_middleware(get_response):
             # custom domain case
             request.blog_user = models.User.objects.get(custom_domain=host)
             request.subdomain = request.blog_user.username
+            request.theme_zialucia = request.blog_user.theme_zialucia
         else:
             return HttpResponseBadRequest()
 
