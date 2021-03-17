@@ -8,6 +8,8 @@
 
     tls /etc/letsencrypt/live/mataroa.blog/fullchain.pem /etc/letsencrypt/live/mataroa.blog/privkey.pem
 
+    encode zstd gzip
+
     log {
             output file /var/log/caddy-mataroa.log {
             roll_size 1gb
@@ -29,8 +31,10 @@
         on_demand
     }
 
+    encode zstd gzip
+
     log {
-            output file /var/log/caddy-catchall.log {
+            output file /var/log/caddy-customdomains.log {
             roll_size 1gb
             roll_keep 5
             roll_keep_for 720h
