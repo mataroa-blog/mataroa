@@ -540,6 +540,7 @@ form .helptext {
 
 .theme-zialucia .posts li {
     font-size: 21px;
+    margin-bottom: 32px;
 }
 
 @media(max-width: 490px) {
@@ -559,12 +560,12 @@ form .helptext {
 
 .byline {
     color: var(--dark-grey-color);
-    margin-top: 24px;
-    margin-bottom: 24px;
+    margin: 24px 0;
 }
 
 .theme-zialucia .byline {
     font-size: 19px;
+    margin: 32px 0;
 }
 
 @media(max-width: 490px) {
