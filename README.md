@@ -201,6 +201,15 @@ Finally, certain [setting variables](mataroa/settings.py) may need to be redefin
 * `CANONICAL_HOST`
 * `EMAIL_HOST` and `EMAIL_HOST_BROADCAST`
 
+## Backup
+
+To automate backup, there is [a script](backup-database.sh) which dumps the database and uploads
+it into AWS S3. To restore a dump:
+
+```sh
+pg_restore -v -h localhost -cO --if-exists -d mataroa -U mataroa -W mataroa.dump
+```
+
 ## Management
 
 In addition to the standard Django management commands, there are also:
