@@ -270,6 +270,10 @@ main {
     }
 }
 
+.theme-zialucia main {
+    max-width: 720px;
+}
+
 aside {
     max-width: 500px;
     border: 1px dashed #000;
@@ -286,6 +290,10 @@ aside {
     }
 }
 
+.theme-zialucia aside {
+    max-width: 720px;
+}
+
 section {
     max-width: 500px;
     margin-bottom: 16px;
@@ -299,6 +307,10 @@ section {
     }
 }
 
+.theme-zialucia section {
+    max-width: 720px;
+}
+
 nav {
     max-width: 500px;
     margin-top: 16px;
@@ -310,6 +322,10 @@ nav {
         padding-left: 8px;
         padding-right: 8px;
     }
+}
+
+.theme-zialucia nav {
+    max-width: 720px;
 }
 
 ol,
@@ -382,6 +398,10 @@ footer {
     }
 }
 
+.theme-zialucia footer {
+    max-width: 720px;
+}
+
 .footer-comment {
     margin-bottom: 8px;
 }
@@ -391,7 +411,8 @@ footer {
     text-decoration: dotted underline;
 }
 
-/* mods */
+/* mods
+ * they override specific classes with specific styles */
 .type-delete {
     color: var(--red-color) !important;
 }
@@ -400,6 +421,10 @@ footer {
     background: var(--red-color) !important;
     border-color: var(--red-color) !important;
 }
+
+/* themes
+ * if empty, they are used in combination with other rules */
+.theme-zialucia {}
 
 /* form */
 label {
@@ -425,6 +450,17 @@ textarea {
     textarea {
         width: 100%;
     }
+}
+
+.theme-zialucia input[type="text"],
+.theme-zialucia input[type="url"],
+.theme-zialucia input[type="email"],
+.theme-zialucia input[type="password"] {
+    width: 360px;
+}
+
+.theme-zialucia textarea {
+    width: 720px;
 }
 
 input[type="submit"] {
@@ -496,6 +532,10 @@ form .helptext {
     margin-bottom: 24px;
 }
 
+.theme-zialucia .posts li {
+    font-size: 21px;
+}
+
 .posts small {
     white-space: nowrap;
     color: var(--dark-grey-color);
@@ -509,6 +549,10 @@ form .helptext {
     color: var(--dark-grey-color);
     margin-top: 24px;
     margin-bottom: 24px;
+}
+
+.theme-zialucia .byline {
+    font-size: 19px;
 }
 
 .byline::before {
@@ -554,6 +598,12 @@ form .helptext {
     max-width: 100%;
 }
 
+.theme-zialucia .posts-item-body p {
+    max-width: 720px;
+    font-family: century_supra_t3, Georgia, serif;
+    font-size: 19px;
+}
+
 /* comments */
 .comments {
     margin-top: 64px;
@@ -594,6 +644,12 @@ form .helptext {
 
 .pages-item-brand::before {
     content: "« ";
+}
+
+.theme-zialucia .pages-item-body p {
+    max-width: 720px;
+    font-family: century_supra_t3, Georgia, serif;
+    font-size: 19px;
 }
 
 .pages-item-body img {

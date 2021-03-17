@@ -17,7 +17,8 @@
         {% block head_extra %}
         {% endblock %}
     </head>
-    <body>
+
+    <body class="{% if request.theme_zialucia %}theme-zialucia{% endif %}">
         {% if messages %}
         <aside>
             {% for message in messages %}
