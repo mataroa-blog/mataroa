@@ -596,6 +596,12 @@ form .helptext {
     font-size: 34px;
 }
 
+@media(max-width: 490px) {
+    .theme-zialucia .posts-item-title {
+        font-size: 30px;
+    }
+}
+
 .posts-item-byline {
     color: var(--dark-grey-color);
     margin-bottom: 8px;
