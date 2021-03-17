@@ -44,10 +44,10 @@ cp .env.example .env
 `.env` should contain the following variables:
 
 ```sh
-SECRET_KEY="thisisthesecretkey"
-DATABASE_URL="postgres://mataroa:password@db:5432/mataroa"
-EMAIL_HOST_USER="smtp_user"
-EMAIL_HOST_PASSWORD="smtp_password"
+SECRET_KEY=some-secret-key
+DATABASE_URL=postgres://mataroa:password@db:5432/mataroa
+EMAIL_HOST_USER=smtp-user
+EMAIL_HOST_PASSWORD=smtp-password
 ```
 
 When on production, also include the following variable (also see [Deployment](#Deployment)):
@@ -114,14 +114,14 @@ docker-compose up web
 If opting for the Docker case, `DATABASE_URL` in `.env` should be like this:
 
 ```sh
-DATABASE_URL="postgres://postgres:postgres@db:5432/postgres"
+DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
 ```
 
 There is also the alternative of running just the database using Docker and
 the webserver without. In this case `.env` should be like this:
 
 ```sh
-DATABASE_URL="postgres://postgres:postgres@127.0.0.1:5432/postgres"
+DATABASE_URL=postgres://postgres:postgres@127.0.0.1:5432/postgres
 ```
 
 And the database would start like so:
@@ -171,10 +171,10 @@ their shell environment manually. One approach is to create a `.env.prod` which 
 
 ```sh
 export NODEBUG=1
+export SECRET_KEY=some-secret-key
 export DATABASE_URL=postgres://mataroa:password@localhost:5432/mataroa
 export EMAIL_HOST_PASSWORD=smtp-user
 export EMAIL_HOST_USER=smtp-password
-export SECRET_KEY=some-secret-key
 ```
 
 And then source that before starting everything:
