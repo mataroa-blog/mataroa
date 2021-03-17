@@ -4,7 +4,7 @@ set -e
 set -x
 
 # pull latest changes
-ssh roa@mataroa.com 'cd mataroa && git pull'
+ssh roa@mataroa.blog 'cd mataroa && git pull'
 
 # sync requirements
 ssh roa@mataroa.blog 'cd mataroa && source venv/bin/activate && pip install -r requirements.txt'
