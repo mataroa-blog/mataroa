@@ -179,6 +179,39 @@ template {
     display: none;
 }
 
+/* font */
+@font-face {
+    font-family: century_supra_t3;
+    font-style: normal;
+    font-weight: normal;
+    font-stretch: normal;
+    src: url('/static/font/century_supra_t3_regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: century_supra_t3;
+    font-style: italic;
+    font-weight: normal;
+    font-stretch: normal;
+    src: url('/static/font/century_supra_t3_italic.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: century_supra_t3;
+    font-style: normal;
+    font-weight: bold;
+    font-stretch: normal;
+    src: url('/static/font/century_supra_t3_bold.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: century_supra_t3;
+    font-style: italic;
+    font-weight: bold;
+    font-stretch: normal;
+    src: url('/static/font/century_supra_t3_bold_italic.woff2') format('woff2');
+}
+
 /* general */
 :root {
     --link-color: #1175e2;
