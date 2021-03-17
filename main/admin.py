@@ -13,6 +13,7 @@ class UserAdmin(DjUserAdmin):
         "last_login",
         "blog_title",
         "blog_byline",
+        "custom_domain",
     )
 
     fieldsets = DjUserAdmin.fieldsets + (
@@ -24,6 +25,7 @@ class UserAdmin(DjUserAdmin):
                     "blog_title",
                     "blog_byline",
                     "footer_note",
+                    "theme_zialucia",
                     "redirect_domain",
                     "custom_domain",
                     "comments_on",
