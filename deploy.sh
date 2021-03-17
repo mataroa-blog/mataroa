@@ -13,7 +13,7 @@ ssh roa@mataroa.blog 'cd mataroa && source venv/bin/activate && pip install -r r
 ssh roa@mataroa.blog 'cd mataroa && source venv/bin/activate && python manage.py collectstatic --noinput'
 
 # migrate database
-ssh roa@mataroa.blog 'cd mataroa && source venv/bin/activate && DATABASE_URL=$DATABASE_URL python3 manage.py migrate'
+ssh roa@mataroa.blog 'cd mataroa && source venv/bin/activate && DATABASE_URL=$DATABASE_URL python manage.py migrate'
 
 # touch uwsgi ini to trigger reload
 ssh roa@mataroa.blog 'cd mataroa && source venv/bin/activate && uwsgi --reload mataroa.pid'
