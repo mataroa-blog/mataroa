@@ -596,10 +596,16 @@ form .helptext {
 
 .posts-item-body img {
     max-width: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .theme-zialucia .posts-item-body p {
     max-width: 720px;
+}
+
+.theme-zialucia .posts-item-body {
     font-family: century_supra_t3, Georgia, serif;
     font-size: 19px;
 }
@@ -648,6 +654,9 @@ form .helptext {
 
 .theme-zialucia .pages-item-body p {
     max-width: 720px;
+}
+
+.theme-zialucia .pages-item-body {
     font-family: century_supra_t3, Georgia, serif;
     font-size: 19px;
 }
