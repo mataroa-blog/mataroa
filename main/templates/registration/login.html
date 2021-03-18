@@ -16,8 +16,16 @@
     <h1>Log in</h1>
 
     <form method="post">
+        <p>
+            <label for="id_username">Username</label>
+            <input type="text" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" required id="id_username">
+            <span class="helptext">This is your blog subdomain.</span>
+        </p>
+        <p>
+            <label for="id_password">Password</label>
+            <input type="password" name="password" autocomplete="current-password" required id="id_password">
+        </p>
         {% csrf_token %}
-        {{ form.as_p }}
         <input type="submit" value="Login">
     </form>
 
