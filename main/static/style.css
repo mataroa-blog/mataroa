@@ -465,10 +465,6 @@ textarea {
     width: 360px;
 }
 
-.theme-zialucia textarea {
-    width: 720px;
-}
-
 input[type="submit"] {
     cursor: pointer;
     background: var(--link-color);
