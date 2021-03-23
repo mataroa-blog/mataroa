@@ -673,6 +673,10 @@ form .helptext {
     margin-bottom: 8px;
 }
 
+.theme-zialucia .pages-item-title {
+    font-size: 34px;
+}
+
 .pages-item-byline {
     color: var(--dark-grey-color);
     margin-bottom: 8px;
