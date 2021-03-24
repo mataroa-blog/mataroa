@@ -53,7 +53,7 @@ export EMAIL_HOST_PASSWORD=smtp-password
 
 When on production, also include the following variable (see [Deployment](#Deployment)):
 
-```
+```sh
 export NODEBUG=1
 ```
 
@@ -61,16 +61,6 @@ export NODEBUG=1
 
 This project uses PostgreSQL. See above on how to configure access to it using
 the `.envrc` file.
-
-If on Docker, there is a also [Docker Compose](https://docs.docker.com/compose/)
-configuration that can be used to spin up a database in the background:
-
-```sh
-docker-compose up -d db
-```
-
-The database data will be saved in the git-ignored directory `db_data`,
-located in the root of the project.
 
 To create the database schema:
 
@@ -95,8 +85,8 @@ To develop locally with subdomains, one needs something like that in `/etc/hosts
 127.0.0.1 mylocalusername.mataroalocal.blog
 ```
 
-As `/etc/hosts` does not support wildcard entries, there needs to be one
-entry for each mataroa user/blog.
+As `/etc/hosts` does not support wildcard entries, there needs to be one entry for each
+mataroa user/blog.
 
 ### Serve
 
@@ -106,30 +96,15 @@ To run the Django development server:
 python manage.py runserver
 ```
 
-Or, if Docker is preferred for running the web server:
+### Docker
 
-```sh
-docker-compose up web
-```
+If Docker and docker-compose are preferred, then:
 
-If opting for the Docker case, `DATABASE_URL` in `.envrc` should be like this:
+1. Set `DATABASE_URL` in `.envrc` to `postgres://postgres:postgres@db:5432/postgres`
+1. Run `docker-compose up -d`.
 
-```sh
-DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
-```
-
-There is also the alternative of running just the database using Docker and
-the webserver without. In this case `.envrc` should be like this:
-
-```sh
-DATABASE_URL=postgres://postgres:postgres@127.0.0.1:5432/postgres
-```
-
-And the database would start like so:
-
-```sh
-docker-compose up db
-```
+The database data will be saved in the git-ignored directory / Docker volume `db_data`,
+located in the root of the project.
 
 ## Testing
 
@@ -183,8 +158,8 @@ Also, two cronjobs (used by the email newsletter feature) are needed to be
 installed. The schedule is subject to the administrator's preference. Indicatively:
 
 ```
-*/5 * * * * python manage.py enqueue_notifications
-*/10 * * * * python manage.py process_notifications
+*/5 * * * * cd /home/roa/mataroa && source ./venv/bin/activate && source .envrc && python manage.py enqueue_notifications
+*/10 * * * * cd /home/roa/mataroa && source ./venv/bin/activate && source .envrc && python manage.py process_notifications
 ```
 
 Documentation about the commands can be found in section [Management](#Management).

@@ -4,5 +4,6 @@ venv/
 .envrc
 .coverage
 htmlcov/
+db_data/
 uwsgi-log.txt
 mataroa.pid
