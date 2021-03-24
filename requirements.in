@@ -1,7 +1,6 @@
 django
 psycopg2-binary
 uwsgi
-python-dotenv
 markdown
 pygments
 bleach

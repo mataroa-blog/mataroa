@@ -34,32 +34,33 @@ dependencies management.
 
 ### Environment variables
 
-A file named `.env` is used to define the environment variables required for this
-project to function. There is an example environment file one can copy as base:
+A file named `.envrc` is used to define the environment variables required for this project to
+function. One can either export it directly or use [direnv](https://github.com/direnv/direnv).
+There is an example environment file one can copy as base:
 
 ```sh
-cp .env.example .env
+cp .envrc.example .envrc
 ```
 
-`.env` should contain the following variables:
+`.envrc` should contain the following variables:
 
 ```sh
-SECRET_KEY=some-secret-key
-DATABASE_URL=postgres://mataroa:password@db:5432/mataroa
-EMAIL_HOST_USER=smtp-user
-EMAIL_HOST_PASSWORD=smtp-password
+export SECRET_KEY=some-secret-key
+export DATABASE_URL=postgres://mataroa:password@db:5432/mataroa
+export EMAIL_HOST_USER=smtp-user
+export EMAIL_HOST_PASSWORD=smtp-password
 ```
 
-When on production, also include the following variable (also see [Deployment](#Deployment)):
+When on production, also include the following variable (see [Deployment](#Deployment)):
 
 ```
-NODEBUG=1
+export NODEBUG=1
 ```
 
 ### Database
 
 This project uses PostgreSQL. See above on how to configure access to it using
-the `.env` file.
+the `.envrc` file.
 
 If on Docker, there is a also [Docker Compose](https://docs.docker.com/compose/)
 configuration that can be used to spin up a database in the background:
@@ -111,14 +112,14 @@ Or, if Docker is preferred for running the web server:
 docker-compose up web
 ```
 
-If opting for the Docker case, `DATABASE_URL` in `.env` should be like this:
+If opting for the Docker case, `DATABASE_URL` in `.envrc` should be like this:
 
 ```sh
 DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
 ```
 
 There is also the alternative of running just the database using Docker and
-the webserver without. In this case `.env` should be like this:
+the webserver without. In this case `.envrc` should be like this:
 
 ```sh
 DATABASE_URL=postgres://postgres:postgres@127.0.0.1:5432/postgres
@@ -165,25 +166,18 @@ make lint
 Deployment is configured using [uWSGI](https://uwsgi-docs.readthedocs.io/en/latest/) 
 and [Caddy](https://caddyserver.com/).
 
-As uWSGI cannot read directly from the `.env` file, one needs to export the `.env` contents into
-their shell environment manually. One approach is to create a `.env.prod` which includes the
-`export` commands for every environment variable:
+Remember to load the environment before starting `uwsgi`. Depending on what's one's deployment
+environment, this could mean directly exporting the variables or just sourcing the `.envrc`
+(with all production variables — including `NODEBUG`):
 
 ```sh
-export NODEBUG=1
-export SECRET_KEY=some-secret-key
-export DATABASE_URL=postgres://mataroa:password@localhost:5432/mataroa
-export EMAIL_HOST_PASSWORD=smtp-user
-export EMAIL_HOST_USER=smtp-password
-```
-
-And then source that before starting everything:
-
-```sh
-source .env.prod
+source .envrc
 uwsgi uwsgi.ini  # start djago app
 caddy start --config /home/roa/mataroa/Caddyfile  # start caddy server
 ```
+
+Note that the value of the `NODEBUG` variable is ignored. What matters is merely its existence
+in the environment.
 
 Also, two cronjobs (used by the email newsletter feature) are needed to be
 installed. The schedule is subject to the administrator's preference. Indicatively:

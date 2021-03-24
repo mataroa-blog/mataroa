@@ -1,8 +1,7 @@
 static/
 *.pyc
 venv/
-.env
-.env.prod
+.envrc
 .coverage
 htmlcov/
 uwsgi-log.txt

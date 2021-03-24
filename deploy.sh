@@ -12,7 +12,7 @@ ssh roa@95.217.177.163 'cd mataroa && source venv/bin/activate && pip install -r
 ssh roa@95.217.177.163 'cd mataroa && source venv/bin/activate && python manage.py collectstatic --noinput'
 
 # migrate database
-env $(cat .env.prod | xargs) ssh roa@95.217.177.163 'cd mataroa && source venv/bin/activate && python manage.py migrate'
+ssh roa@95.217.177.163 'cd mataroa && source venv/bin/activate && source .envrc && python manage.py migrate'
 
 # reload
 ssh roa@95.217.177.163 'cd mataroa && source venv/bin/activate && uwsgi --reload mataroa.pid'

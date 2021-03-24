@@ -12,7 +12,6 @@ packaging==20.9           # via bleach
 psycopg2-binary==2.8.6    # via -r requirements.in
 pygments==2.8.1           # via -r requirements.in
 pyparsing==2.4.7          # via packaging
-python-dotenv==0.15.0     # via -r requirements.in
 pytz==2021.1              # via django
 six==1.15.0               # via bleach
 sqlparse==0.4.1           # via django
