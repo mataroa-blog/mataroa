@@ -11,7 +11,7 @@
     </p>
     <ul>
         {% for post in post_list %}
-        <li>
+        <li style="{% if not post.is_published %}opacity: 0.75;{% endif %}">
             <a href="{% url 'analytic_detail' post.slug %}">
                 {{ post.title }}
             </a>
