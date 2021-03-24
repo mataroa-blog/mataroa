@@ -11,7 +11,7 @@ urlpatterns = [
     path("blog/", views.blog_index, name="blog_index"),
     path("dashboard/", views.dashboard, name="dashboard"),
     path("modus-operandi/", views.modus, name="modus"),
-    path("markdown-guide/", views.markdown_guide, name="markdown_guide"),
+    path("guides/markdown/", views.guides_markdown, name="guides_markdown"),
 ]
 
 # user system

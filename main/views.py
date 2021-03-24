@@ -855,5 +855,5 @@ def modus(request):
     return render(request, "main/modus.html")
 
 
-def markdown_guide(request):
-    return render(request, "main/markdown_guide.html")
+def guides_markdown(request):
+    return render(request, "main/guides_markdown.html")
