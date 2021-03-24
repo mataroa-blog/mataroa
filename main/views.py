@@ -172,10 +172,7 @@ class PostDetail(DetailView):
             and self.request.user == self.object.owner
         ):
             return context
-        referer = None
-        if "HTTP_REFERER" in self.request.META:
-            referer = self.request.META["HTTP_REFERER"]
-        models.Analytic.objects.create(post=self.object, referer=referer)
+        models.Analytic.objects.create(post=self.object)
 
         return context
 
@@ -636,17 +633,6 @@ class AnalyticDetail(LoginRequiredMixin, DetailView):
         current_date = timezone.now().date()
         date_25d_ago = timezone.now().date() - timedelta(days=24)
         context["date_25d_ago"] = date_25d_ago
-
-        # limit to 25 latest days of analytics
-        context["referers_count"] = (
-            models.Analytic.objects.filter(
-                post=self.object, created_at__gt=date_25d_ago
-            )
-            .values("referer")
-            .annotate(Count("id"))
-            .order_by("-id__count")
-        )
-
         context["post_analytics"] = {}
         current_x_offset = 0
 
