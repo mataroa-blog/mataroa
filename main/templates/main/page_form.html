@@ -44,7 +44,7 @@
         </p>
 
         <p>
-            <label for="id_body">Content (<a href="{% url 'markdown_guide' %}">supports markdown</a>) <span id="js-status"></span></label>
+            <label for="id_body">Content (<a href="{% url 'guides_markdown' %}">supports markdown</a>) <span id="js-status"></span></label>
             {% if form.body.errors %}
                 {% for error in form.body.errors %}
                     <span class="form-error">{{ error|escape }}</span>
