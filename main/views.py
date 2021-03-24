@@ -857,3 +857,7 @@ def modus(request):
 
 def guides_markdown(request):
     return render(request, "main/guides_markdown.html")
+
+
+def guides_images(request):
+    return render(request, "main/guides_images.html")

@@ -1,0 +1,45 @@
+{% extends 'main/layout.html' %}
+
+{% load static %}
+
+{% block title %}Images Guide — Mataroa{% endblock %}
+
+{% block content %}
+<main>
+
+    <h1>Images Guide</h1>
+    <p>
+        Even though we are very text focused, we do support image uploading and hosting.
+        The limits are:
+    </p>
+    <ul>
+        <li>Max file size is 5MB</li>
+        <li>Total hosting up to 1GB</li>
+        <li>Bandwidth 100GB per year</li>
+    </ul>
+
+    <h2>Upload</h2>
+    <p>
+        There are two ways to upload an image. Either via the
+        <a href="{% url 'image_list' %}">image dashboard</a>, or via any post or page editing page.
+    </p>
+    <p><b>Image dashboard</b>: To upload, use the file selector at the top.</p>
+    <p>
+        <b>Post/page edit</b>: To upload, just drag and drop onto the text area.
+    </p>
+
+    <h2>Show images</h2>
+    <p>
+        To show the uploaded images on a mataroa blog post or page, one can write the following:
+        <br><code>![image description here](https://mataroa.blog/images/896f9b41.png)</code>
+    </p>
+    <p>
+        This, of course, works with any image on the web:
+        <br><code>![lens](https://upload.wikimedia.org/wikipedia/commons/d/d8/BiconvexLens.jpg)</code>
+    </p>
+
+</main>
+
+{% include 'partials/footer.html' %}
+
+{% endblock %}
