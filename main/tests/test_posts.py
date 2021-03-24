@@ -149,6 +149,13 @@ class PostUpdateTestCase(TestCase):
         }
         self.post = models.Post.objects.create(owner=self.user, **self.data)
 
+    def test_get_update(self):
+        response = self.client.get(
+            reverse("post_update", args=(self.post.slug,)),
+            HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
+        )
+        self.assertEqual(response.status_code, 200)
+
     def test_post_update(self):
         new_data = {
             "title": "Updated post",

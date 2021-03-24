@@ -130,6 +130,13 @@ class PageUpdateTestCase(TestCase):
         }
         self.page = models.Page.objects.create(owner=self.user, **self.data)
 
+    def test_get_update(self):
+        response = self.client.get(
+            reverse("page_update", args=(self.page.slug,)),
+            HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
+        )
+        self.assertEqual(response.status_code, 200)
+
     def test_page_update(self):
         new_data = {
             "title": "Updated page",
