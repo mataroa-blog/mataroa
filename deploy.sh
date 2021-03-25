@@ -1,6 +1,7 @@
 #!/usr/local/bin/bash
 
 set -e
+set -x
 
 # pull latest changes
 ssh roa@95.217.177.163 'cd mataroa && git pull'
