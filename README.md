@@ -157,7 +157,7 @@ in the environment.
 Also, two cronjobs (used by the email newsletter feature) are needed to be
 installed. The schedule is subject to the administrator's preference. Indicatively:
 
-```crontab
+```sh
 */5 * * * * bash -c 'cd /home/roa/mataroa && source ./venv/bin/activate && source .envrc && python manage.py enqueue_notifications'
 */10 * * * * bash -c 'cd /home/roa/mataroa && source ./venv/bin/activate && source .envrc && python manage.py process_notifications'
 ```
