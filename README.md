@@ -46,23 +46,23 @@ cp .envrc.example .envrc
 
 ```sh
 export SECRET_KEY=some-secret-key
-export DATABASE_URL=postgres://mataroa:password@db:5432/mataroa
+export DATABASE_URL=postgres://mataroa:db-password@db:5432/mataroa
 export EMAIL_HOST_USER=smtp-user
 export EMAIL_HOST_PASSWORD=smtp-password
 ```
 
-When on production, also include the following variable (see [Deployment](#Deployment)):
+When on production, also include the following variables (see [Deployment](#Deployment) and
+[Backup](#Backup)):
 
 ```sh
 export NODEBUG=1
+export PGPASSWORD=db-password
 ```
 
 ### Database
 
-This project uses PostgreSQL. See above on how to configure access to it using
-the `.envrc` file.
-
-To create the database schema:
+This project uses PostgreSQL. Assuming one has set the `DATABASE_URL` (see above), to create the
+database schema:
 
 ```sh
 python manage.py migrate
@@ -141,9 +141,9 @@ make lint
 Deployment is configured using [uWSGI](https://uwsgi-docs.readthedocs.io/en/latest/) 
 and [Caddy](https://caddyserver.com/).
 
-Remember to load the environment before starting `uwsgi`. Depending on what's one's deployment
-environment, this could mean directly exporting the variables or just sourcing the `.envrc`
-(with all production variables — including `NODEBUG`):
+Remember to set the environment variables before starting `uwsgi`. Depending on the deployment
+environment, this could mean directly exporting the variables or just sourcing `.envrc` (with all
+production variables — including `NODEBUG`):
 
 ```sh
 source .envrc
@@ -157,9 +157,9 @@ in the environment.
 Also, two cronjobs (used by the email newsletter feature) are needed to be
 installed. The schedule is subject to the administrator's preference. Indicatively:
 
-```
-*/5 * * * * cd /home/roa/mataroa && source ./venv/bin/activate && source .envrc && python manage.py enqueue_notifications
-*/10 * * * * cd /home/roa/mataroa && source ./venv/bin/activate && source .envrc && python manage.py process_notifications
+```crontab
+*/5 * * * * bash -c 'cd /home/roa/mataroa && source ./venv/bin/activate && source .envrc && python manage.py enqueue_notifications'
+*/10 * * * * bash -c 'cd /home/roa/mataroa && source ./venv/bin/activate && source .envrc && python manage.py process_notifications'
 ```
 
 Documentation about the commands can be found in section [Management](#Management).
@@ -173,10 +173,23 @@ Finally, certain [setting variables](mataroa/settings.py) may need to be redefin
 ## Backup
 
 To automate backup, there is [a script](backup-database.sh) which dumps the database and uploads
-it into AWS S3. To restore a dump:
+it into AWS S3. The script also needs the database password as an environment variable. The
+key needs to be `PGPASSWORD`. The backup script assumes the variable lives in `.envrc` like so:
+
+```sh
+export PGPASSWORD=db-password
+```
+
+To restore a dump:
 
 ```sh
 pg_restore -v -h localhost -cO --if-exists -d mataroa -U mataroa -W mataroa.dump
+```
+
+To add on cron:
+
+```sh
+0 */6 * * * /home/roa/mataroa/backup-database.sh
 ```
 
 ## Management
