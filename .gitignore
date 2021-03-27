@@ -1,9 +1,21 @@
-static/
+# python
 *.pyc
 venv/
+
+# environment
 .envrc
+
+# generated static
+/static/
+
+# testing
 .coverage
 htmlcov/
-db_data/
+
+# uwsgi
 uwsgi-log.txt
 mataroa.pid
+
+# docker
+db_data/
+docker-compose.override.yml
