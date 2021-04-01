@@ -548,7 +548,6 @@ form .helptext {
     font-size: 21px;
     margin-bottom: 32px;
 }
-
 @media(max-width: 490px) {
     .theme-zialucia .posts li {
         font-size: 18px;
@@ -573,7 +572,6 @@ form .helptext {
     font-size: 19px;
     margin: 32px 0;
 }
-
 @media(max-width: 490px) {
     .theme-zialucia .byline {
         font-size: 17px;
@@ -602,7 +600,6 @@ form .helptext {
 .theme-zialucia .posts-item-title {
     font-size: 34px;
 }
-
 @media(max-width: 490px) {
     .theme-zialucia .posts-item-title {
         font-size: 30px;
@@ -640,7 +637,6 @@ form .helptext {
     font-family: var(--serif-font);
     font-size: 19px;
 }
-
 @media (max-width: 490px) {
     .theme-zialucia .posts-item-body {
         font-size: 17px;
@@ -709,6 +705,11 @@ form .helptext {
 .theme-zialucia .pages-item-body {
     font-family: var(--serif-font);
     font-size: 19px;
+}
+@media (max-width: 490px) {
+    .theme-zialucia .pages-item-body {
+        font-size: 17px;
+    }
 }
 
 .theme-zialucia .pages-item-body p {
