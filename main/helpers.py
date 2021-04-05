@@ -78,6 +78,8 @@ def is_disallowed(username):
 
 def get_post_slug(post_title, owner):
     slug = slugify(post_title)
+    if not slug:  # in case of post_title such as این متن است
+        slug = str(uuid.uuid4())[:8]
     if models.Post.objects.filter(owner=owner, slug=slug).exists():
         slug += "-" + str(uuid.uuid4())[:8]
     return slug
