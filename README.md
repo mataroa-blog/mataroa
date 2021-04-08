@@ -17,6 +17,8 @@ This is a [Django](https://www.djangoproject.com/) codebase. Check out the
 ### Structure
 
 The Django project is `mataroa`. There is one Django app, `main`,  with all business logic.
+Application CLI commands are generally divided into two categories, those under `python manage.py`
+and those under `make`.
 
 ### Dependencies
 
@@ -29,8 +31,8 @@ pip install -r requirements.txt
 pip install -r requirements_dev.txt
 ```
 
-This project also uses [pip-tools](https://github.com/jazzband/pip-tools) for
-dependencies management.
+This project also uses [pip-tools](https://github.com/jazzband/pip-tools) for dependency
+management.
 
 ### Environment variables
 
@@ -117,8 +119,7 @@ python manage.py test
 For coverage, run:
 
 ```sh
-coverage run --source='.' --omit 'venv/*' manage.py test
-coverage report -m
+make coverage
 ```
 
 ## Code linting & formatting

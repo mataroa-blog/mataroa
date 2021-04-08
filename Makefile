@@ -1,4 +1,4 @@
-.PHONY: format lint
+.PHONY: format lint cov
 
 lint:
 	flake8
@@ -8,3 +8,7 @@ lint:
 format:
 	black .
 	isort --profile black .
+
+cov:
+	coverage run --source='.' --omit 'venv/*' manage.py test
+	coverage report -m
