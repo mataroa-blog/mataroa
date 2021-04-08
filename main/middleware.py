@@ -64,6 +64,18 @@ def host_middleware(get_response):
             request.blog_user = models.User.objects.get(custom_domain=host)
             request.subdomain = request.blog_user.username
             request.theme_zialucia = request.blog_user.theme_zialucia
+
+            if request.blog_user.redirect_domain:
+                # user has retired their mataroa blog, redirect to new domain
+                redir_domain = request.blog_user.redirect_domain + request.path_info
+
+                if "://" not in redir_domain:
+                    # if there is no protocol prefix,
+                    # prepend double slashes to indicate other domain
+                    redir_domain = "//" + redir_domain
+
+                return redirect(redir_domain)
+
         else:
             return HttpResponseBadRequest()
 
