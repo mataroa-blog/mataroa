@@ -111,7 +111,7 @@ class BlogRetiredRedirTestCase(TestCase):
             HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
         )
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(f"//{self.user.redirect_domain}", response.url)
+        self.assertEqual(f"//{self.user.redirect_domain}/", response.url)
 
 
 class BlogRetiredRedirProtocolTestCase(TestCase):
@@ -138,7 +138,7 @@ class BlogRetiredRedirProtocolTestCase(TestCase):
             HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
         )
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(self.user.redirect_domain, response.url)
+        self.assertEqual(self.user.redirect_domain + "/", response.url)
 
 
 class BlogImportTestCase(TestCase):
