@@ -119,7 +119,7 @@ python manage.py test
 For coverage, run:
 
 ```sh
-make coverage
+make cov
 ```
 
 ## Code linting & formatting
