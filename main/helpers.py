@@ -143,7 +143,12 @@ def syntax_highlight(text):
     return processed_text
 
 
-def clean_html(dirty_html):
+def clean_html(dirty_html, strip_tags=False):
+    """Clean potentially evil HTML. strip_tags: true will strip everything, false will escape."""
+
+    if strip_tags:
+        return bleach.clean(dirty_html, strip=True)
+
     elements = [
         "a",
         "abbr",
@@ -194,6 +199,7 @@ def clean_html(dirty_html):
         "var",
         "wbr",
     ]
+
     attrs = [
         "alt",
         "class",
@@ -207,6 +213,7 @@ def clean_html(dirty_html):
         "width",
         "frameborder",
     ]
+
     styles = [
         "background",
         "border",
@@ -216,10 +223,11 @@ def clean_html(dirty_html):
         "height",
         "width",
     ]
+
     return bleach.clean(dirty_html, tags=elements, attributes=attrs, styles=styles)
 
 
-def md_to_html(markdown_string):
+def md_to_html(markdown_string, strip_tags=False):
     dirty_html = markdown.markdown(
         syntax_highlight(markdown_string),
         extensions=[
@@ -228,7 +236,7 @@ def md_to_html(markdown_string):
             "markdown.extensions.footnotes",
         ],
     )
-    return clean_html(dirty_html)
+    return clean_html(dirty_html, strip_tags)
 
 
 def get_protocol():

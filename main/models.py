@@ -86,6 +86,10 @@ class User(AbstractUser):
         ordering = ["-id"]
 
     @property
+    def blog_byline_as_html(self):
+        return helpers.md_to_html(self.blog_byline, strip_tags=True)
+
+    @property
     def footer_note_as_html(self):
         return helpers.md_to_html(self.footer_note)
 
