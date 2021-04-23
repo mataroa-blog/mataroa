@@ -32,7 +32,7 @@
         {% if not request.subdomain or request.subdomain == request.user.username %}
         <nav>
             {% if request.subdomain %}
-            <a href="{% url 'index' %}">Blog</a>
+            <a href="{% url 'index' %}">View blog</a>
             {% else %}
             <a href="//{{ request.user.username }}.{{ request.get_host }}">Blog</a>
             {% endif %}
