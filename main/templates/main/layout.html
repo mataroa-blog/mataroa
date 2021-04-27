@@ -6,8 +6,12 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>{% block title %}{% endblock %}</title>
+
+        {% if not request.subdomain %}
         <meta name="description" content="{% block meta_description %}Minimal blogging platform with export as first-class. Get your blog in 1 min.{% endblock %}">
         <meta name="keywords" content="blogs, platform, fast">
+        {% endif %}
+
         {% block head_viewport %}
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         {% endblock %}
