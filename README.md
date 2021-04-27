@@ -4,7 +4,7 @@ Minimal blogging platform with export as first-class feature.
 
 ## Contributing
 
-Feel free to open a PR on [GitHub](https://github.com/sirodoht/mataroa/fork) or
+Feel free to open a PR on [GitHub](https://github.com/sirodoht/mataroa) or
 send an email patch to [~sirodoht/public-inbox@lists.sr.ht](mailto:~sirodoht/public-inbox@lists.sr.ht).
 
 On how to contribute using email patches see [git-send-email.io](https://git-send-email.io/).
