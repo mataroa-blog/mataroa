@@ -31,6 +31,7 @@ def is_disallowed(username):
         "blog",
         "blogs",
         "cdn",
+        "collection",
         "config",
         "contact",
         "dash",
