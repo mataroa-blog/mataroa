@@ -7,7 +7,7 @@ from main import models
 
 
 class IndexTestCase(TestCase):
-    """ Test canonical mataroa.blog works."""
+    """Test canonical mataroa.blog works."""
 
     def test_index(self):
         response = self.client.get(reverse("index"))
