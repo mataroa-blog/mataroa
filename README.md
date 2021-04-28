@@ -83,7 +83,7 @@ To develop locally with subdomains, one needs something like that in `/etc/hosts
 ```
 127.0.0.1 mataroalocal.blog
 127.0.0.1 random.mataroalocal.blog
-127.0.0.1 test.mataroalocal.blog 
+127.0.0.1 test.mataroalocal.blog
 127.0.0.1 mylocalusername.mataroalocal.blog
 ```
 
@@ -139,7 +139,7 @@ make lint
 
 ## Deployment
 
-Deployment is configured using [uWSGI](https://uwsgi-docs.readthedocs.io/en/latest/) 
+Deployment is configured using [uWSGI](https://uwsgi.readthedocs.io/en/latest/)
 and [Caddy](https://caddyserver.com/).
 
 Remember to set the environment variables before starting `uwsgi`. Depending on the deployment
