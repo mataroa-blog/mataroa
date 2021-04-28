@@ -24,7 +24,7 @@ from django.utils import timezone
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 
-from main import forms, helpers, models
+from main import forms, models, util
 
 
 @login_required
@@ -88,7 +88,7 @@ class UserCreate(CreateView):
     success_message = "welcome to mataroa :)"
 
     def form_valid(self, form):
-        if helpers.is_disallowed(form.cleaned_data.get("username")):
+        if util.is_disallowed(form.cleaned_data.get("username")):
             form.add_error("username", "This username is not available.")
             return self.render_to_response(self.get_context_data(form=form))
         self.object = form.save()
@@ -201,7 +201,7 @@ class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        self.object.slug = helpers.get_post_slug(self.object.title, self.request.user)
+        self.object.slug = util.get_post_slug(self.object.title, self.request.user)
         self.object.owner = self.request.user
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
@@ -228,9 +228,7 @@ class PostUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         # hidden code for slug: if slug is ":gen" then generate it from the title
         if form.cleaned_data.get("slug") == ":gen":
             self.object = form.save(commit=False)
-            self.object.slug = helpers.get_post_slug(
-                self.object.title, self.request.user
-            )
+            self.object.slug = util.get_post_slug(self.object.title, self.request.user)
             self.object.owner = self.request.user
             self.object.save()
             return super().form_valid(form)
@@ -323,7 +321,7 @@ class CommentCreate(SuccessMessageMixin, CreateView):
         messages.add_message(self.request, messages.INFO, self.success_message)
 
         # inform blog_user
-        post_url = helpers.get_protocol() + self.object.post.get_absolute_url()
+        post_url = util.get_protocol() + self.object.post.get_absolute_url()
         body = f"Someone commented on your post: {self.object.post.title}\n"
         body += "\nComment follows:\n"
         body += "\n" + self.object.body + "\n"
@@ -384,7 +382,7 @@ class BlogImport(LoginRequiredMixin, FormView):
 
                 models.Post.objects.create(
                     title=f.name,
-                    slug=helpers.get_post_slug(f.name, request.user),
+                    slug=util.get_post_slug(f.name, request.user),
                     body=content,
                     owner=request.user,
                     published_at=None,

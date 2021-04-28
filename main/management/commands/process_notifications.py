@@ -5,7 +5,7 @@ from django.core import mail
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
-from main import helpers, models
+from main import models, util
 
 
 def get_mail_connection():
@@ -18,8 +18,8 @@ def get_mail_connection():
 
 def get_email_body(post, notification):
     """Returns the email body (which contains the post body) along with titles and links."""
-    post_url = helpers.get_protocol() + post.get_proper_url()
-    unsubscribe_url = helpers.get_protocol() + notification.get_unsubscribe_url()
+    post_url = util.get_protocol() + post.get_proper_url()
+    unsubscribe_url = util.get_protocol() + notification.get_unsubscribe_url()
     blog_title = post.owner.blog_title or post.owner.username
 
     body = f"{blog_title} has published a new blog post titled:\n{post.title}\n"
@@ -48,7 +48,7 @@ def get_email_body(post, notification):
 def get_email(post, notification):
     """Returns the email object, containing all info needed to be sent."""
     blog_title = post.owner.blog_title or post.owner.username
-    unsubscribe_url = helpers.get_protocol() + notification.get_unsubscribe_url()
+    unsubscribe_url = util.get_protocol() + notification.get_unsubscribe_url()
     body = get_email_body(post, notification)
     email = mail.EmailMessage(
         subject=post.title,

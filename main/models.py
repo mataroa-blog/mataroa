@@ -8,7 +8,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 
-from main import helpers, validators
+from main import util, validators
 
 
 class User(AbstractUser):
@@ -87,11 +87,11 @@ class User(AbstractUser):
 
     @property
     def blog_byline_as_html(self):
-        return helpers.md_to_html(self.blog_byline, strip_tags=True)
+        return util.md_to_html(self.blog_byline, strip_tags=True)
 
     @property
     def footer_note_as_html(self):
-        return helpers.md_to_html(self.footer_note)
+        return util.md_to_html(self.footer_note)
 
     def __str__(self):
         return self.username
@@ -117,11 +117,11 @@ class Post(models.Model):
 
     @property
     def body_as_html(self):
-        return helpers.md_to_html(self.body)
+        return util.md_to_html(self.body)
 
     @property
     def body_as_text(self):
-        as_html = helpers.md_to_html(self.body)
+        as_html = util.md_to_html(self.body)
         return bleach.clean(as_html, strip=True, tags=[])
 
     @property
@@ -206,7 +206,7 @@ class Page(models.Model):
 
     @property
     def body_as_html(self):
-        return helpers.md_to_html(self.body)
+        return util.md_to_html(self.body)
 
     def get_absolute_url(self):
         path = reverse("page_detail", kwargs={"slug": self.slug})
