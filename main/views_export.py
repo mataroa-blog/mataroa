@@ -30,7 +30,6 @@ def prepend_hugo_frontmatter(body, post_title, pub_date):
     return frontmatter + body
 
 
-@login_required
 def blog_export(request):
     if request.method == "GET":
         return render(request, "main/blog_export.html")

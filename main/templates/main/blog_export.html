@@ -15,17 +15,22 @@
         <li><a href="#export-hugo">Hugo</a>: very popular and reliable static site generators</li>
     </ul>
 
+    {% if not request.user.is_authenticated %}
+    <h2 id="redirect">Redirect</h2>
+    {% endif %}
     <p>
         If you're retiring your mataroa blog, we can also <strong>redirect to your new domain</strong>.
         You can configure this in the bottom field of your
         <a href="{% url 'user_update' %}">blog settings</a>.
     </p>
 
+    {% if request.user.is_authenticated %}
     <h2 id="export-markdown">Markdown</h2>
     <form method="post" action="{% url 'blog_export_markdown' %}">
         {% csrf_token %}
         <input type="submit" value="Export as markdown files">
     </form>
+    {% endif %}
 
     <h2 id="export-zola">Zola</h2>
     <p>
@@ -44,16 +49,24 @@
         <li>go to <code>http://127.0.0.1:1111</code> in your browser</li>
     </ol>
     <p>Ready!</p>
+
     <p>
-        You can also host it for free in <a href="https://www.netlify.com/">Netlify</a>.
-        Includes SSL, CDN distribution, auto-building, et al.
-        <a href="https://www.getzola.org/documentation/deployment/netlify/">See here</a>
-        for how-to.
+        You can also host it for free on a number of platforms. There are how-to guides on
+        <a href="https://www.getzola.org/">getzola.org</a> for
+        <a href="https://www.getzola.org/documentation/deployment/netlify/">Netlify</a>,
+        <a href="https://www.getzola.org/documentation/deployment/github-pages/">GitHub Pages</a>,
+        <a href="https://www.getzola.org/documentation/deployment/gitlab-pages/">GitLab Pages</a>,
+        <a href="https://www.getzola.org/documentation/deployment/vercel/">Vercel</a>,
+        <a href="https://www.getzola.org/documentation/deployment/cloudflare-pages/">Cloudflare Pages</a>,
+        and one can also use <a href="https://srht.site/">sourcehut pages</a>.
     </p>
+
+    {% if request.user.is_authenticated %}
     <form method="post" action="{% url 'blog_export_zola' %}">
         {% csrf_token %}
         <input type="submit" value="Export as Zola sources">
     </form>
+    {% endif %}
 
     <h2 id="export-hugo">Hugo</h2>
     <p>
@@ -71,15 +84,23 @@
         <li>go to <code>http://127.0.0.1:1313</code> in your browser</li>
     </ol>
     <p>Ready!</p>
+
     <p>
-        You can also host it for free in <a href="https://www.netlify.com/">Netlify</a>.
-        Includes SSL, CDN distribution, auto-building, et al.
-        <a href="https://gohugo.io/hosting-and-deployment/hosting-on-netlify/">See here</a>
-        for how-to.
+        You can also host it for free on a number of platforms. There in a large numner of guides on
+        <a href="https://gohugo.io/hosting-and-deployment/">gohugo.io</a> including
+        <a href="https://gohugo.io/hosting-and-deployment/hosting-on-netlify/">Netlify</a>,
+        <a href="https://gohugo.io/hosting-and-deployment/hosting-on-github/">GitHub</a>,
+        <a href="https://gohugo.io/hosting-and-deployment/hosting-on-gitlab/">GitLab</a>,
+        <a href="https://gohugo.io/hosting-and-deployment/hosting-on-render/">Render</a>,
+        and <a href="https://gohugo.io/hosting-and-deployment/">many others</a>.
     </p>
+
+    {% if request.user.is_authenticated %}
     <form method="post" action="{% url 'blog_export_hugo' %}">
         {% csrf_token %}
         <input type="submit" value="Export as Hugo sources">
     </form>
+    {% endif %}
+
 </main>
 {% endblock %}
