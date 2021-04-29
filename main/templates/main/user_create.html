@@ -6,8 +6,55 @@
 <main>
     <h1>Sign up to start your blog</h1>
     <form method="post">
-        {{ form.as_p }}
+        {{ form.non_field_errors }}
+
+        <p>
+            <label for="id_username">{{ form.username.label }}</label>
+            {% if form.username.errors %}
+                {% for error in form.username.errors %}
+                    <span class="form-error">{{ error|escape }}</span>
+                {% endfor %}
+            {% endif %}
+            {{ form.username }}
+            <span class="helptext">{{ form.username.help_text }}</span>
+        </p>
+
+        <p>
+            <label for="id_email">{{ form.email.label }}</label>
+            {% if form.email.errors %}
+                {% for error in form.email.errors %}
+                    <span class="form-error">{{ error|escape }}</span>
+                {% endfor %}
+            {% endif %}
+            {{ form.email }}
+            <span class="helptext">{{ form.email.help_text }}</span>
+        </p>
+
+        <p>
+            <label for="id_password1">{{ form.password1.label }}</label>
+            {% if form.password1.errors %}
+                {% for error in form.password1.errors %}
+                    <span class="form-error">{{ error|escape }}</span>
+                {% endfor %}
+            {% endif %}
+            {{ form.password1 }}
+        </p>
+        <!-- this goes outside p element because it contains a ul element -->
+        <span class="helptext">{{ form.password1.help_text }}</span>
+
+        <p>
+            <label for="id_password2">{{ form.password2.label }}</label>
+            {% if form.password2.errors %}
+                {% for error in form.password2.errors %}
+                    <span class="form-error">{{ error|escape }}</span>
+                {% endfor %}
+            {% endif %}
+            {{ form.password2 }}
+            <span class="helptext">{{ form.password2.help_text }}</span>
+        </p>
+
         {% csrf_token %}
+
         <input type="submit" value="Sign up">
     </form>
 </main>
