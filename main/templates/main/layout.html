@@ -22,7 +22,7 @@
         {% endblock %}
     </head>
 
-    <body class="{% if request.theme_zialucia %}theme-zialucia{% endif %}">
+    <body {% if request.theme_zialucia %}class="theme-zialucia"{% endif %}>
         {% if messages %}
         <aside>
             {% for message in messages %}
