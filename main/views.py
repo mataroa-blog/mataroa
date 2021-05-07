@@ -39,7 +39,13 @@ def dashboard(request):
     if hasattr(request, "subdomain"):
         return redirect("//" + settings.CANONICAL_HOST + reverse("dashboard"))
 
-    return render(request, "main/dashboard.html")
+    return render(
+        request,
+        "main/dashboard.html",
+        {
+            "billing_enabled": bool(settings.STRIPE_API_KEY),
+        },
+    )
 
 
 def index(request):
