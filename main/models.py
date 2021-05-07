@@ -87,6 +87,11 @@ class User(AbstractUser):
         help_text="URL for your webring's next website.",
     )
 
+    # billing
+    stripe_customer_id = models.CharField(max_length=100, blank=True, null=True)
+    is_premium = models.BooleanField(default=False)
+    is_grandfathered = models.BooleanField(default=False)
+
     class Meta:
         ordering = ["-id"]
 
