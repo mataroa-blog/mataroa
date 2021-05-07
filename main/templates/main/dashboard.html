@@ -9,18 +9,30 @@
         <a href="{% url 'post_create' %}"><b>New post »</b></a>
     </p>
 
+    <strong>Content</strong>
     <p class="dashboard-list">
         <a href="{% url 'image_list' %}">Images</a>
         <br><a href="{% url 'page_list' %}">Pages</a>
+
         {% if request.user.notifications_on %}
         <br><a href="{% url 'notificationrecord_list' %}">Newsletter records</a>
         {% endif %}
+
         <br><a href="{% url 'analytic_list' %}">Analytics</a>
-        <br><a href="{% url 'blog_import' %}">Import posts</a>
-        <br><a href="{% url 'user_update' %}">Blog settings</a>
+    </p>
+
+    <strong>Account</strong>
+    <p>
+        <a href="{% url 'user_update' %}">Blog settings</a>
+
+        {% if billing_enabled %}
+        <br><a href="{% url 'billing_index' %}">Billing</a>
+        {% endif %}
+
         <br><a href="{% url 'blog_webring' %}">Webring</a>
-        <br><a href="{% url 'password_change' %}">Change password</a>
+        <br><a href="{% url 'blog_import' %}">Import posts</a>
         <br><a href="{% url 'blog_export' %}">Export blog</a>
+        <br><a href="{% url 'password_change' %}">Change password</a>
         <br><a href="mailto:admin@mataroa.blog">Help and support</a>
         <br><a href="{% url 'logout' %}">Log out</a>
     </p>
