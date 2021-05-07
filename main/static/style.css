@@ -488,6 +488,11 @@ input[type="submit"]:active {
     background: var(--ascent-color);
 }
 
+input[type="submit"]:disabled {
+    pointer-events: none;
+    background: var(--ascent-color);
+}
+
 form .helptext {
     color: var(--dark-grey-color);
 }
@@ -498,6 +503,21 @@ form .helptext {
 
 .form-error::before {
     content: "» ";
+}
+
+.form-inline {
+    display: inline-block;
+}
+
+.form-inline input[type="submit"] {
+    border: none;
+    background: unset;
+    color: var(--link-color);
+    padding: 0;
+}
+
+.form-inline input[type="submit"]:hover {
+    text-decoration: underline;
 }
 
 /* landing */
@@ -811,4 +831,19 @@ svg .analytics-chart-bar:hover {
 svg .analytics-chart-text {
     font-family: monospace;
     font-size: 10px;
+}
+
+/* billing stripe */
+#subscription-form input[type="submit"] {
+    margin-top: 8px;
+}
+
+#card-element {
+    border: 1px solid var(--light-grey-color);
+    padding: 4px 8px;
+}
+
+#card-element-errors {
+    margin-top: 8px;
+    color: var(--red-color);
 }

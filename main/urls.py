@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import include, path, re_path
 
-from main import feeds, views, views_export
+from main import feeds, views, views_billing, views_export
 
 admin.site.site_header = "mataroa administration"
 
@@ -77,7 +77,12 @@ urlpatterns += [
     ),
 ]
 
-# blog settings
+# billing
+urlpatterns += [
+    path("billing/", views_billing.billing_index, name="billing_index"),
+]
+
+# blog import, export, webring
 urlpatterns += [
     path("webring/", views.WebringUpdate.as_view(), name="blog_webring"),
     path("import/", views.BlogImport.as_view(), name="blog_import"),
