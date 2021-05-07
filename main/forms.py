@@ -31,3 +31,7 @@ class UploadImagesForm(forms.Form):
             )
         ],
     )
+
+
+class StripeForm(forms.Form):
+    card_token = forms.CharField(max_length=100, widget=forms.HiddenInput())
