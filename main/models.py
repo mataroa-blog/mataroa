@@ -15,9 +15,14 @@ class User(AbstractUser):
     username = models.CharField(
         max_length=150,
         unique=True,
-        help_text="This will be your subdomain. Lowercase alphanumeric.",
+        help_text="This is your subdomain. Lowercase alphanumeric.",
         validators=[validators.AlphanumericHyphenValidator()],
         error_messages={"unique": "A user with that username already exists."},
+    )
+    email = models.EmailField(
+        blank=True,
+        null=True,
+        help_text="Optional, but also the only way to recover password if forgotten.",
     )
     about = models.TextField(blank=True, null=True)
     blog_title = models.CharField(max_length=500, blank=True, null=True)
