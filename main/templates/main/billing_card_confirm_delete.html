@@ -1,0 +1,24 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Deleting card — {{ request.user.username }} at Mataroa{% endblock %}
+
+{% block content %}
+<main class="delete">
+    <h1>Delete {{ card.brand|capfirst }} {{ card.last4 }} for sure?</h1>
+    <p>
+        Are you sure you want to oust this card from your account?
+    </p>
+    <blockquote>
+        {{ card.brand|capfirst }}
+        <br>Ends in {{ card.last4 }}
+        <br>Expires in {{ card.exp_month }}/{{ card.exp_year }}
+    </blockquote>
+    <p>
+        It's not such a big deal anyway, you can add it again later, should you want.
+    </p>
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" value="Yes, delete it" class="type-danger">
+    </form>
+</main>
+{% endblock %}

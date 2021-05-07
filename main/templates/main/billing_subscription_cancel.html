@@ -1,0 +1,14 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Cancel subscription — {{ request.user.username }} at Mataroa{% endblock %}
+
+{% block content %}
+<main class="delete">
+    <h1>Cancel Premium subscription for sure?</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" value="Yes 100%, cancel this shit" class="type-danger">
+    </form>
+</main>
+{% endblock %}

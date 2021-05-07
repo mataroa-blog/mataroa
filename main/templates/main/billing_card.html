@@ -15,10 +15,15 @@
     <h1>Subscribe to Premium</h1>
     {% endif %}
 
-    <form id="subscription-form">
+    <form method="post" id="subscription-form">
+        {{ form.non_field_errors }}
+
         <div id="card-element"></div>
         <div id="card-element-errors" role="alert"></div>
 
+        {{ form.card_token }}
+
+        {% csrf_token %}
         <input type="submit" value="Save">
     </form>
 
@@ -27,86 +32,43 @@
 
 {% block scripts %}
 <script>
-    const PRICE_ID = "{{ stripe_price_id }}";
-    const CUSTOMER_ID = "{{ stripe_customer_id }}";
+    var stripe = Stripe("{{ stripe_public_key }}");
+    var elements = stripe.elements();
 
-    let stripe = Stripe("{{ stripe_public_key }}");
-    let elements = stripe.elements();
-
-    let card = elements.create('card');
+    var card = elements.create('card');
     card.mount('#card-element');
-
     card.on('change', function (event) {
-        displayError(event);
-    });
-
-    function displayError(event) {
-        let errorContainer = document.getElementById('card-element-errors');
+        var errorContainer = document.getElementById('card-element-errors');
         if (event.error) {
             errorContainer.textContent = event.error.message;
         } else {
             errorContainer.textContent = '';
         }
-    }
-
-    let form = document.getElementById('subscription-form');
-    let submitButton = document.querySelector('input[type="submit"]');
-
-    form.addEventListener('submit', function (ev) {
-        // prevent default form submission
-        ev.preventDefault();
-
-        // update button
-        submitButton.value = "Please wait...";
-        submitButton.classList.add('type-danger');
-        submitButton.disabled = true;
-
-        // send card to stripe to get token
-        createPaymentMethod();
     });
 
-    function createPaymentMethod() {
-        stripe.createPaymentMethod({
-                type: 'card',
-                card: card,
-            })
-            .then((result) => {
+    var form = document.getElementById('subscription-form');
+    form.addEventListener('submit', function (ev) {
+        ev.preventDefault();
+
+        // disable submit button
+        var submitButton = document.querySelector('input[type="submit"]');
+        submitButton.disabled = true;
+
+        // get stripe token
+        stripe.createToken(card)
+            .then(function (result) {
+
                 if (result.error) {
-                    displayError(result);
+                    var errorContainer = document.getElementById('card-element-errors');
+                    errorContainer.textContent = result.error.message;
                 } else {
-                    saveCard(result.paymentMethod.id);
+                    document.getElementById('id_card_token').value = result.token.id;
+                    form.submit();
                 }
+
+                // re-enable submit button
+                submitButton.disabled = false;
             });
-    }
-
-    function saveCard(paymentMethodId) {
-        let formData = new FormData();
-        formData.append('payment_method_id', paymentMethodId);
-
-        return fetch('/billing/card/', {
-            method: 'post',
-            headers: {
-                'X-CSRFToken': '{{ csrf_token }}',
-            },
-            body: formData,
-        })
-
-        // If the card is declined, display an error to the user.
-        .then((result) => {
-            if (result.error) {
-                // The card had an error when trying to attach it to a customer.
-                throw result;
-            }
-            return result;
-        })
-
-        .then(() => document.location.assign('/billing/'))
-
-        .catch((error) => {
-            let errorContainer = document.getElementById('card-element-errors');
-            errorContainer.textContent = error;
-        });
-    }
-
+    });
 </script>
 {% endblock %}

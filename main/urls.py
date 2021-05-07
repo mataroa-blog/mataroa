@@ -80,6 +80,27 @@ urlpatterns += [
 # billing
 urlpatterns += [
     path("billing/", views_billing.billing_index, name="billing_index"),
+    path("billing/card/", views_billing.BillingCard.as_view(), name="billing_card"),
+    path(
+        "billing/card/<slug:stripe_payment_method_id>/delete/",
+        views_billing.BillingCardDelete.as_view(),
+        name="billing_card_delete",
+    ),
+    path(
+        "billing/card/<slug:stripe_payment_method_id>/default/",
+        views_billing.billing_card_default,
+        name="billing_card_default",
+    ),
+    path(
+        "billing/subscription/",
+        views_billing.billing_subscription,
+        name="billing_subscription",
+    ),
+    path(
+        "billing/subscription/cancel/",
+        views_billing.BillingCancel.as_view(),
+        name="billing_subscription_cancel",
+    ),
 ]
 
 # blog import, export, webring
