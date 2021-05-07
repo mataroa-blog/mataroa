@@ -6,14 +6,20 @@
 #
 asgiref==3.3.4            # via django
 bleach==3.3.0             # via -r requirements.in
+certifi==2020.12.5        # via requests
+chardet==4.0.0            # via requests
 django==3.2               # via -r requirements.in
+idna==2.10                # via requests
 markdown==3.3.4           # via -r requirements.in
 packaging==20.9           # via bleach
 psycopg2-binary==2.8.6    # via -r requirements.in
 pygments==2.8.1           # via -r requirements.in
 pyparsing==2.4.7          # via packaging
 pytz==2021.1              # via django
+requests==2.25.1          # via stripe
 six==1.15.0               # via bleach
 sqlparse==0.4.1           # via django
+stripe==2.56.0            # via -r requirements.in
+urllib3==1.26.4           # via requests
 uwsgi==2.0.19.1           # via -r requirements.in
 webencodings==0.5.1       # via bleach

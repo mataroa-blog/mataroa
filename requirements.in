@@ -4,3 +4,4 @@ uwsgi
 markdown
 pygments
 bleach
+stripe
