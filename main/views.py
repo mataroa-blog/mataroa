@@ -130,7 +130,9 @@ class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return self.request.user
 
     def form_valid(self, form):
+        # we need to check if more than one users have the same custom domain
         if not form.cleaned_data.get("custom_domain"):
+            # if it's not submitted, then just return
             return super().form_valid(form)
 
         if (
