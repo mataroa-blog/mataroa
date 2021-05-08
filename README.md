@@ -210,9 +210,9 @@ python manage.py enqueue_notifications
 ## Billing
 
 One can deploy mataroa without setting up the billing functionalities. This is the default case.
-To handle payments and subscriptions the project uses [Stripe](https://stripe.com/). To enable
+To handle payments and subscriptions this project uses [Stripe](https://stripe.com/). To enable
 Stripe and payments, one needs to have a Stripe account with a single
-[Product](https://stripe.com/docs/billing/prices-guide).
+[Product](https://stripe.com/docs/billing/prices-guide) (eg. "Mataroa Premium Plan").
 
 To configure add the following variables to your `.envrc` from your Stripe account:
 
