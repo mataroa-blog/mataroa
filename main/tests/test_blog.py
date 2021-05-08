@@ -554,9 +554,10 @@ class BlogNotificationRecordDeletePastTestCase(TestCase):
 
     def test_notificationrecord_delete(self):
         response = self.client.post(
-            reverse("notificationrecord_delete", args=(self.notificationrecord.id,))
+            reverse("notificationrecord_delete", args=(self.notificationrecord.id,)),
+            follow=True,
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertContains(response, "this notification email has already been sent")
         self.assertTrue(
             models.NotificationRecord.objects.filter(
                 id=self.notificationrecord.id
