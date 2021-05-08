@@ -21,9 +21,8 @@ class BlogIndexTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
         self.user.blog_title = "Blog of Alice"
-        self.user.set_password("abcdef123456")
         self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         self.data = {
             "title": "Welcome post",
             "slug": "welcome-post",
@@ -69,9 +68,8 @@ class BlogIndexRedirTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
         self.user.blog_title = "Blog of Alice"
-        self.user.set_password("abcdef123456")
         self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         self.data = {
             "title": "Welcome post",
             "slug": "welcome-post",
@@ -145,9 +143,8 @@ class BlogImportTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
         self.user.blog_title = "Blog of Alice"
-        self.user.set_password("abcdef123456")
         self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
 
     def test_blog_import(self):
         filename = "main/tests/testdata/lorem.md"
@@ -163,9 +160,7 @@ class BlogImportTestCase(TestCase):
 class BlogExportMarkdownTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         self.data = {
             "title": "Welcome post",
             "slug": "welcome-post",
@@ -184,9 +179,7 @@ class BlogExportMarkdownTestCase(TestCase):
 class BlogExportZolaTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         self.data = {
             "title": "Welcome post",
             "slug": "welcome-post",
@@ -205,9 +198,7 @@ class BlogExportZolaTestCase(TestCase):
 class BlogExportHugoTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         self.data = {
             "title": "Welcome post",
             "slug": "welcome-post",
@@ -226,9 +217,7 @@ class BlogExportHugoTestCase(TestCase):
 class RSSFeedTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         self.data = {
             "title": "Welcome post",
             "slug": "welcome-post",
@@ -254,9 +243,7 @@ class RSSFeedDraftsTestCase(TestCase):
 
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         self.post_published = {
             "title": "Welcome post",
             "slug": "welcome-post",
@@ -290,9 +277,7 @@ class RSSFeedDraftsTestCase(TestCase):
 class BlogNotificationListTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         self.notification = models.Notification.objects.create(
             blog_user=self.user,
             email="s@example.com",
@@ -401,10 +386,9 @@ class BlogNotificationUnsubscriberNotShownTestCase(TestCase):
 
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
         self.user.notifications_on = True
         self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
 
         self.notification_active = models.Notification.objects.create(
             blog_user=self.user,
@@ -430,9 +414,7 @@ class BlogNotificationUnsubscriberNotShownTestCase(TestCase):
 class BlogNotificationRecordListTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         self.data = {
             "title": "Welcome post",
             "slug": "welcome-post",
@@ -459,9 +441,7 @@ class BlogNotificationRecordListTestCase(TestCase):
 class BlogNotificationRecordConfirmDeleteTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         self.data = {
             "title": "Welcome post",
             "slug": "welcome-post",
@@ -519,9 +499,7 @@ class BlogNotificationRecordDeleteAnonTestCase(TestCase):
 class BlogNotificationRecordDeleteTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         self.data = {
             "title": "Welcome post",
             "slug": "welcome-post",
@@ -557,9 +535,7 @@ class BlogNotificationRecordDeletePastTestCase(TestCase):
 
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         self.data = {
             "title": "Welcome post",
             "slug": "welcome-post",

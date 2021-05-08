@@ -91,9 +91,7 @@ class LogoutTestCase(TestCase):
 class UserUpdateTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
 
     def test_user_update(self):
         data = {
@@ -129,9 +127,7 @@ class UserPasswordChangeTestCase(TestCase):
 class UserDeleteTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
 
     def test_user_delete(self):
         response = self.client.post(reverse("user_delete"))
@@ -142,9 +138,7 @@ class UserDeleteTestCase(TestCase):
 class UserUpdateCommentsOnTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
 
     def test_user_comments_on(self):
         data = {

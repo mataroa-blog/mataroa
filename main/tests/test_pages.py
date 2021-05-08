@@ -8,9 +8,7 @@ from main import models
 class PageCreateTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
 
     def test_page_create(self):
         data = {
@@ -47,9 +45,7 @@ class PageCreateAnonTestCase(TestCase):
 class PageDetailTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         self.data = {
             "title": "New page",
             "slug": "new-page",
@@ -71,9 +67,7 @@ class PageDetailTestCase(TestCase):
 class PageNonHiddenTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         self.data = {
             "title": "New page",
             "slug": "new-page",
@@ -95,9 +89,7 @@ class PageNonHiddenTestCase(TestCase):
 class PageHiddenTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         self.data = {
             "title": "New page",
             "slug": "new-page",
@@ -119,9 +111,7 @@ class PageHiddenTestCase(TestCase):
 class PageUpdateTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         self.data = {
             "title": "New page",
             "slug": "new-page",
@@ -202,9 +192,7 @@ class PageUpdateNotOwnTestCase(TestCase):
         self.page = models.Page.objects.create(owner=self.victim, **self.data)
 
         self.attacker = models.User.objects.create(username="alice")
-        self.attacker.set_password("abcdef123456")
-        self.attacker.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.attacker)
 
     def test_page_update_not_own(self):
         new_data = {
@@ -228,9 +216,7 @@ class PageUpdateNotOwnTestCase(TestCase):
 class PageDeleteTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         self.data = {
             "title": "New page",
             "slug": "new-page",
@@ -286,9 +272,7 @@ class PageDeleteNotOwnTestCase(TestCase):
         self.page = models.Page.objects.create(owner=self.victim, **self.data)
 
         self.attacker = models.User.objects.create(username="alice")
-        self.attacker.set_password("abcdef123456")
-        self.attacker.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.attacker)
 
     def test_page_delete_not_own(self):
         self.client.post(

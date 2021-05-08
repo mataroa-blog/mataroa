@@ -159,9 +159,7 @@ class CommentDisallowedCreateTestCase(TestCase):
 class CommentDeleteTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice", comments_on=True)
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         self.post = models.Post.objects.create(
             title="Hello world",
             slug="hello-world",
@@ -198,9 +196,7 @@ class CommentNonOwnerDeleteTestCase(TestCase):
             post=self.post,
         )
         self.non_owner = models.User.objects.create(username="bob")
-        self.non_owner.set_password("abcdef123456")
-        self.non_owner.save()
-        self.client.login(username="bob", password="abcdef123456")
+        self.client.force_login(self.non_owner)
 
     def test_comment_delete(self):
         response = self.client.post(

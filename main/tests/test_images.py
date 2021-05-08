@@ -7,9 +7,7 @@ from main import models
 class ImageCreateTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
 
     def test_image_upload(self):
         with open("main/tests/testdata/vulf.jpeg", "rb") as fp:
@@ -30,9 +28,7 @@ class ImageCreateAnonTestCase(TestCase):
 class ImageDetailTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         with open("main/tests/testdata/vulf.jpeg", "rb") as fp:
             self.client.post(reverse("image_list"), {"file": fp})
         self.image = models.Image.objects.get(name="vulf")
@@ -49,9 +45,7 @@ class ImageDetailTestCase(TestCase):
 class ImageRawTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         with open("main/tests/testdata/vulf.jpeg", "rb") as fp:
             self.client.post(reverse("image_list"), {"file": fp})
         self.image = models.Image.objects.get(name="vulf")
@@ -67,9 +61,7 @@ class ImageRawTestCase(TestCase):
 class ImageRawWrongExtTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         with open("main/tests/testdata/vulf.jpeg", "rb") as fp:
             self.client.post(reverse("image_list"), {"file": fp})
         self.image = models.Image.objects.get(name="vulf")
@@ -96,9 +88,7 @@ class ImageRawNotFoundTestCase(TestCase):
 class ImageUpdateTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         with open("main/tests/testdata/vulf.jpeg", "rb") as fp:
             self.client.post(reverse("image_list"), {"file": fp})
         self.image = models.Image.objects.get(name="vulf")
@@ -117,9 +107,7 @@ class ImageUpdateAnonTestCase(TestCase):
 
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         with open("main/tests/testdata/vulf.jpeg", "rb") as fp:
             self.client.post(reverse("image_list"), {"file": fp})
         self.image = models.Image.objects.get(name="vulf")
@@ -139,18 +127,14 @@ class ImageUpdateNotOwnTestCase(TestCase):
 
     def setUp(self):
         self.victim = models.User.objects.create(username="bob")
-        self.victim.set_password("abcdef123456")
-        self.victim.save()
-        self.client.login(username="bob", password="abcdef123456")
+        self.client.force_login(self.victim)
         with open("main/tests/testdata/vulf.jpeg", "rb") as fp:
             self.client.post(reverse("image_list"), {"file": fp})
         self.image = models.Image.objects.get(name="vulf")
         self.client.logout()
 
         self.attacker = models.User.objects.create(username="alice")
-        self.attacker.set_password("abcdef123456")
-        self.attacker.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.attacker)
 
     def test_image_update_not_own(self):
         new_data = {
@@ -164,9 +148,7 @@ class ImageUpdateNotOwnTestCase(TestCase):
 class ImageDeleteTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         with open("main/tests/testdata/vulf.jpeg", "rb") as fp:
             self.client.post(reverse("image_list"), {"file": fp})
         self.image = models.Image.objects.get(name="vulf")
@@ -183,9 +165,7 @@ class ImageDeleteAnonTestCase(TestCase):
 
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         with open("main/tests/testdata/vulf.jpeg", "rb") as fp:
             self.client.post(reverse("image_list"), {"file": fp})
         self.image = models.Image.objects.get(name="vulf")
@@ -203,18 +183,14 @@ class ImageDeleteNotOwnTestCase(TestCase):
 
     def setUp(self):
         self.victim = models.User.objects.create(username="bob")
-        self.victim.set_password("abcdef123456")
-        self.victim.save()
-        self.client.login(username="bob", password="abcdef123456")
+        self.client.force_login(self.victim)
         with open("main/tests/testdata/vulf.jpeg", "rb") as fp:
             self.client.post(reverse("image_list"), {"file": fp})
         self.image = models.Image.objects.get(name="vulf")
         self.client.logout()
 
         self.attacker = models.User.objects.create(username="alice")
-        self.attacker.set_password("abcdef123456")
-        self.attacker.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.attacker)
 
     def test_image_delete_not_own(self):
         self.client.post(reverse("image_delete", args=(self.image.slug,)))

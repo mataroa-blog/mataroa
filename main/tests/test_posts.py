@@ -8,9 +8,7 @@ from main import models
 class PostCreateTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
 
     def test_post_create(self):
         data = {
@@ -40,9 +38,7 @@ class PostCreateAnonTestCase(TestCase):
 class PostCreateDraftTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         self.data = {
             "title": "New post",
             "slug": "new-post",
@@ -97,9 +93,7 @@ class PostCreateDraftAnonTestCase(TestCase):
 class PostDetailTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         self.data = {
             "title": "New post",
             "slug": "new-post",
@@ -139,9 +133,7 @@ class PostSanitizeHTMLTestCase(TestCase):
 class PostUpdateTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         self.data = {
             "title": "New post",
             "slug": "new-post",
@@ -186,9 +178,7 @@ class PostUpdateNotOwnTestCase(TestCase):
         self.post = models.Post.objects.create(owner=self.victim, **self.original_data)
 
         self.attacker = models.User.objects.create(username="alice")
-        self.attacker.set_password("abcdef123456")
-        self.attacker.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.attacker)
 
     def test_post_update_not_own(self):
         new_data = {
@@ -247,9 +237,7 @@ class PostUpdateAnonTestCase(TestCase):
 class PostDeleteTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         self.data = {
             "title": "New post",
             "slug": "new-post",
@@ -272,9 +260,7 @@ class PostDeleteNoSubdomainTestCase(TestCase):
 
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.user.set_password("abcdef123456")
-        self.user.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.user)
         self.data = {
             "title": "New post",
             "slug": "new-post",
@@ -321,9 +307,7 @@ class PostDeleteNotOwnTestCase(TestCase):
         self.post = models.Post.objects.create(owner=self.victim, **self.data)
 
         self.attacker = models.User.objects.create(username="alice")
-        self.attacker.set_password("abcdef123456")
-        self.attacker.save()
-        self.client.login(username="alice", password="abcdef123456")
+        self.client.force_login(self.attacker)
 
     def test_post_delete_not_own(self):
         self.client.post(
