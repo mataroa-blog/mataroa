@@ -1,20 +1,31 @@
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjUserAdmin
+from django.utils.html import format_html
 
-from main import models
+from main import models, util
 
 
 class UserAdmin(DjUserAdmin):
     list_display = (
         "id",
         "username",
+        "blog_url",
         "email",
         "date_joined",
         "last_login",
         "blog_title",
         "blog_byline",
-        "custom_domain",
     )
+
+    @admin.display
+    def blog_url(self, obj):
+        url = f"{util.get_protocol()}"
+        if obj.custom_domain:
+            url += f"//{obj.custom_domain}"
+        else:
+            url += f"//{obj.username}.{settings.CANONICAL_HOST}"
+        return format_html(f'<a href="{url}">{url}</a>')
 
     fieldsets = DjUserAdmin.fieldsets + (
         (
