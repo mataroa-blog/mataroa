@@ -147,6 +147,7 @@ class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
                 "This domain name is already connected to a mataroa blog.",
             )
             return self.render_to_response(self.get_context_data(form=form))
+
         return super().form_valid(form)
 
 
@@ -852,8 +853,13 @@ class NotificationRecordDelete(LoginRequiredMixin, DeleteView):
         notificationrecord = self.get_object()
         if request.user != notificationrecord.notification.blog_user:
             raise PermissionDenied()
+
         if notificationrecord.sent_at:
-            return HttpResponseBadRequest("Notification email has already been sent.")
+            messages.error(
+                request, "bad news — this notification email has already been sent :/"
+            )
+            return redirect("notificationrecord_list")
+
         return super().dispatch(request, *args, **kwargs)
 
 

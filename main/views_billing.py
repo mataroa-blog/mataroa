@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.mail import mail_admins
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
@@ -291,7 +292,15 @@ class BillingCardDelete(LoginRequiredMixin, View):
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.stripe_customer_id:
-            return HttpResponseBadRequest()
+            mail_admins(
+                "User tried to delete card without stripe_customer_id",
+                f"user.id={request.user.id}\nuser.username={request.user.username}",
+            )
+            messages.error(
+                request,
+                "something has gone terribly wrong but we were just notified about it",
+            )
+            return redirect("dashboard")
 
         self.stripe_payment_methods = _get_payment_methods(
             request.user.stripe_customer_id
@@ -300,10 +309,15 @@ class BillingCardDelete(LoginRequiredMixin, View):
         # check if card id is valid for user
         card_id = self.kwargs.get(self.slug_url_kwarg)
         if card_id not in self.stripe_payment_methods.keys():
-            # messages.error(request, "payment processor unresponsive; please try again")
-            # return redirect(reverse_lazy("billing_index"))
-            # TODO check what the below line does
-            return HttpResponseBadRequest("Invalid Card ID.")
+            mail_admins(
+                "User tried to delete card with invalid Stripe card ID",
+                f"user.id={request.user.id}\nuser.username={request.user.username}",
+            )
+            messages.error(
+                request,
+                "this is not a valid card ID",
+            )
+            return redirect("dashboard")
 
         return super().dispatch(request, *args, **kwargs)
 
