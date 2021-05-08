@@ -8,6 +8,22 @@ from django.urls import reverse
 from main import models, views_billing
 
 
+class BillingCannotChangeIsPremiumTestCase(TestCase):
+    """Test user cannot change their is_premium flag without going through billing."""
+
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.client.force_login(self.user)
+
+    def test_update_billing_settings(self):
+        data = {
+            "username": "alice",
+            "is_premium": True,
+        }
+        self.client.post(reverse("user_update"), data)
+        self.assertFalse(models.User.objects.get(id=self.user.id).is_premium)
+
+
 class BillingIndexGrandfatherTestCase(TestCase):
     """Test billing pages work accordingly for grandathered user."""
 
