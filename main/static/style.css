@@ -292,6 +292,10 @@ aside {
     }
 }
 
+.alert-error {
+    color: var(--red-color);
+}
+
 .theme-zialucia aside {
     max-width: 720px;
 }
