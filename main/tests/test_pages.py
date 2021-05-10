@@ -27,6 +27,17 @@ class PageCreateTestCase(TestCase):
             models.Page.objects.get(title=data["title"]).body, data["body"]
         )
 
+    def test_page_invalid_slug(self):
+        data = {
+            "title": "New page",
+            "slug": "rss",
+            "is_hidden": False,
+            "body": "Content sentence.",
+        }
+        response = self.client.post(reverse("page_create"), data)
+        self.assertContains(response, "slug is not allowed")
+        self.assertFalse(models.Page.objects.filter(title=data["title"]).exists())
+
 
 class PageCreateAnonTestCase(TestCase):
     def test_page_create_anon(self):

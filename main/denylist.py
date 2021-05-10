@@ -1,3 +1,4 @@
+# not allowed to create account with these as username
 DISALLOWED_USERNAMES = [
     "about",
     "abuse",
@@ -62,6 +63,7 @@ DISALLOWED_USERNAMES = [
     "www",
 ]
 
+# not allowed to create a blog page with these as slugs
 DISALLOWED_PAGE_SLUGS = [
     "blog",
     "dashboard",
@@ -78,6 +80,7 @@ DISALLOWED_PAGE_SLUGS = [
     "pages",
 ]
 
+# elements allowed to exist inside the HTML of a markdown text
 ALLOWED_HTML_ELEMENTS = [
     "a",
     "abbr",
@@ -129,6 +132,7 @@ ALLOWED_HTML_ELEMENTS = [
     "wbr",
 ]
 
+# attributes allowed to exist inside the elements of the HTML of a markdown text
 ALLOWED_HTML_ATTRS = [
     "alt",
     "class",
@@ -143,6 +147,7 @@ ALLOWED_HTML_ATTRS = [
     "frameborder",
 ]
 
+# css rules allowed to exist as inline styles on HTML elements of a markdown text
 ALLOWED_CSS_STYLES = [
     "background",
     "border",

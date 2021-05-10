@@ -24,7 +24,7 @@ from django.utils import timezone
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 
-from main import forms, models, util
+from main import forms, models, util, denylist
 
 
 @login_required
@@ -517,11 +517,16 @@ class PageCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     success_message = "'%(title)s' was created"
 
     def form_valid(self, form):
+        if form.cleaned_data.get("slug") in denylist.DISALLOWED_PAGE_SLUGS:
+            form.add_error("slug", "This slug is not allowed as a page slug.")
+            return self.render_to_response(self.get_context_data(form=form))
+
         if models.Page.objects.filter(
             owner=self.request.user, slug=form.cleaned_data.get("slug")
         ).exists():
             form.add_error("slug", "This slug is already defined as one of your pages.")
             return self.render_to_response(self.get_context_data(form=form))
+
         self.object = form.save(commit=False)
         self.object.owner = self.request.user
         self.object.save()
