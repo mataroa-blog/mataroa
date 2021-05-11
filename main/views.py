@@ -24,7 +24,7 @@ from django.utils import timezone
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 
-from main import forms, models, util, denylist
+from main import denylist, forms, models, util
 
 
 @login_required
