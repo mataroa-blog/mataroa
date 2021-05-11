@@ -378,7 +378,7 @@ class BillingCancel(LoginRequiredMixin, View):
         if not request.user.stripe_customer_id:
             return redirect("billing_index")
 
-        # if user has is not premium, redirect
+        # if user is not premium, redirect
         if not request.user.is_premium:
             return redirect("billing_index")
 
