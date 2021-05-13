@@ -180,8 +180,12 @@ def billing_index(request):
 
     # get subscription if exists
     subscription = _get_subscription(request.user.stripe_customer_id)
+    current_period_start = None
     current_period_end = None
     if subscription:
+        current_period_start = datetime.utcfromtimestamp(
+            subscription["current_period_start"]
+        )
         current_period_end = datetime.utcfromtimestamp(
             subscription["current_period_end"]
         )
@@ -208,6 +212,7 @@ def billing_index(request):
             "stripe_public_key": settings.STRIPE_PUBLIC_KEY,
             "stripe_price_id": settings.STRIPE_PRICE_ID,
             "current_period_end": current_period_end,
+            "current_period_start": current_period_start,
             "payment_methods": payment_methods,
         },
     )

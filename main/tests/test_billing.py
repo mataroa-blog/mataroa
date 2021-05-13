@@ -82,12 +82,16 @@ class BillingIndexPremiumTestCase(TestCase):
 
     def test_index(self):
         one_year_later = datetime.now() + timedelta(days=365)
+        subscription = {
+            "current_period_end": one_year_later.timestamp(),
+            "current_period_start": datetime.now().timestamp(),
+        }
         with patch.object(
             stripe.Customer, "create", return_value={"id": "cus_123abcdefg"}
         ), patch.object(
             views_billing,
             "_get_subscription",
-            return_value={"current_period_end": one_year_later.timestamp()},
+            return_value=subscription,
         ), patch.object(
             views_billing, "_get_payment_methods"
         ):
@@ -98,7 +102,7 @@ class BillingIndexPremiumTestCase(TestCase):
         self.assertContains(response, b"Premium Plan")
         self.assertContains(
             response,
-            f"Paid until {one_year_later.strftime('%b %-d, %Y')}".encode("utf-8"),
+            f"{one_year_later.strftime('%b %-d, %Y')}".encode("utf-8"),
         )
 
 
@@ -118,12 +122,16 @@ class BillingCardAddTestCase(TestCase):
 
     def test_card_add_post(self):
         one_year_later = datetime.now() + timedelta(days=365)
+        subscription = {
+            "current_period_end": one_year_later.timestamp(),
+            "current_period_start": datetime.now().timestamp(),
+        }
         with patch.object(
             stripe.Customer, "create", return_value={"id": "cus_123abcdefg"}
         ), patch.object(
             views_billing,
             "_get_subscription",
-            return_value={"current_period_end": one_year_later.timestamp()},
+            return_value=subscription,
         ), patch.object(
             views_billing, "_get_payment_methods"
         ), patch.object(
@@ -138,7 +146,7 @@ class BillingCardAddTestCase(TestCase):
         self.assertContains(response, b"Premium Plan")
         self.assertContains(
             response,
-            f"Paid until {one_year_later.strftime('%b %-d, %Y')}".encode("utf-8"),
+            f"{one_year_later.strftime('%b %-d, %Y')}".encode("utf-8"),
         )
 
 
@@ -154,10 +162,14 @@ class BillingCancelSubscriptionTestCase(TestCase):
 
     def test_cancel_subscription_get(self):
         one_year_later = datetime.now() + timedelta(days=365)
+        subscription = {
+            "current_period_end": one_year_later.timestamp(),
+            "current_period_start": datetime.now().timestamp(),
+        }
         with patch.object(
             views_billing,
             "_get_subscription",
-            return_value={"current_period_end": one_year_later.timestamp()},
+            return_value=subscription,
         ):
 
             response = self.client.get(reverse("billing_subscription_cancel"))
@@ -199,7 +211,8 @@ class BillingCancelSubscriptionTwiceTestCase(TestCase):
 
             response = self.client.get(reverse("billing_subscription_cancel"))
 
-            # need to check inside with context because billing_index needs _get_subscription patch
+            # need to check inside with context because billing_index needs
+            # _get_subscription patch
             self.assertRedirects(response, reverse("billing_index"))
 
     def test_cancel_subscription_post(self):
@@ -231,10 +244,14 @@ class BillingReenableSubscriptionTestCase(TestCase):
 
     def test_reenable_subscription_post(self):
         one_year_later = datetime.now() + timedelta(days=365)
+        subscription = {
+            "current_period_end": one_year_later.timestamp(),
+            "current_period_start": datetime.now().timestamp(),
+        }
         with patch.object(stripe.Subscription, "delete"), patch.object(
             views_billing,
             "_get_subscription",
-            return_value={"current_period_end": one_year_later.timestamp()},
+            return_value=subscription,
         ), patch.object(
             stripe.Customer, "create", return_value={"id": "cus_123abcdefg"}
         ), patch.object(
