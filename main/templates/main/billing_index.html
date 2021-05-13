@@ -15,11 +15,28 @@
     {% if not request.user.is_grandfathered %}
     {% if request.user.is_premium %}
     <p>
-        Currently on <strong>Premium Plan</strong>. Paid until {{ current_period_end|date }}.
+        Currently on <strong>Premium Plan</strong>.
     </p>
+    <ul>
+        <li>Last payment of $9 was charged {{ current_period_start|date }}.</li>
+        <li>Next payment will be at {{ current_period_end|date }}.</li>
+        <li>$0.45 — 5% of your previous payment was used to fund CO₂ removal.</li>
+    </ul>
+
     {% else %}
+
     <p>
         Currently on <strong>Free Plan</strong>.
+    </p>
+    <p>
+        Our Premium Plan costs $9 per year and includes all features including
+        the ability to set a custom domain.
+    </p>
+    <p>
+        mataroa.blog is also participating in
+        <a href="https://stripe.com/climate">Stripe Climate</a>
+        and will contribute 5% of its subscription revenues to remove CO₂ from
+        the atmosphere.
     </p>
     {% endif %}
     {% endif %}

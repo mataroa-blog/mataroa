@@ -152,13 +152,15 @@ def _get_payment_methods(stripe_customer_id):
 
 @login_required
 def billing_index(request):
-    """View method that shows the billing index, a summary of subscription and payment methods."""
-
+    """
+    View method that shows the billing index, a summary of subscription and
+    payment methods.
+    """
     # respond for grandfathered users first
     if request.user.is_grandfathered:
         return render(
             request,
-            "main/billing.html",
+            "main/billing_index.html",
             {
                 "is_grandfathered": True,
             },
@@ -199,7 +201,7 @@ def billing_index(request):
 
     return render(
         request,
-        "main/billing.html",
+        "main/billing_index.html",
         {
             "is_grandfathered": False,
             "stripe_customer_id": request.user.stripe_customer_id,
