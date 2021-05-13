@@ -1,0 +1,128 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Modus Privacy — Mataroa{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Modus Privacy</h1>
+    <p>
+        Details on our privacy and security approach.
+    </p>
+
+    <h2>Account Data </h2>
+    <p>
+        In order to have a functional mataroa.blog account a username and a
+        password are required. An email is also asked as it is the only way for
+        a user to restore their account in case of a forgotten password.
+        However, an email is not required.
+    </p>
+
+    <p>
+        A user is able to change their username and password and any other
+        details (eg. email) through their
+        <a href="{% url 'dashboard' %}">dashboard</a>.
+    </p>
+
+    <p>
+        A user is able to export all their data directly and at any point
+        through the <a href="{% url 'blog_export' %}">export</a> page.
+    </p>
+
+    <p>
+        A user is able to completely delete their account and all information
+        related to their account through the dashboard, and then navigating to
+        <a href="{% url 'user_update' %}">blog settings</a>, and scrolling all
+        the way down. In this case, the user account will be immediately
+        purged from our primary servers and a month later from our database
+        backups.
+    </p>
+
+    <h2>Third-parties</h2>
+    <p>
+        We have a strong commitment to never share any user data with any
+        third-parties. The only neccessary exception to this rule is the
+        payment processor we use to accept card payments. That processor is
+        <a href="https://stripe.com/">Stripe</a> and the data sent over are
+        card numbers. This enables us to never—not even temporarily—store card
+        details on our servers and benefit from Stripe’s secure payment
+        infrastructure.
+    </p>
+
+    <p>
+        Please bear in mind that Stripe may also collect other data including:
+        <ul>
+            <li>IP adress</li>
+            <li>Browser <a href="https://en.wikipedia.org/wiki/User_agent">user agent</a></li>
+        </ul>
+    </p>
+
+    <h2>Policies</h2>
+    <ul>
+        <li>Our backup retention policy is 30 days.</li>
+        <li>We store passwords in a hashed form.</li>
+        <li>All data center we use have an ISO 27001 certification.</li>
+        <li>
+            All rights under
+            <a href="https://gdpr.eu/tag/chapter-3/">GDPR</a>
+            are exercisable:
+            <ul>
+                <li>via the site</li>
+                <li>by emailing <a href="mailto:admin@mataroa.blog">admin@mataroa.blog</a></li>
+            </ul>
+        </li>
+    </ul>
+
+    <h2>Server Providers</h2>
+    <ul>
+        <li>
+            Our servers are operated by
+            <a href="https://www.hetzner.com/">Hetzner Online GmbH</a>,
+            an EU company based in Gunzenhausen, Germany.
+        </li>
+        <li>
+            The data center we use is
+            <a href="https://docs.hetzner.com/general/others/data-centers-and-connection/">HEL1-DC2</a>
+            and is located in Helsinki, Finland.
+        </li>
+        <li>
+            We take daily backups of our database and store it with
+            <a href="https://www.scaleway.com/">Scaleway</a>
+            in Paris, France.
+        </li>
+    </ul>
+
+    <h2>Technical Details</h2>
+    <ul>
+        <li>
+            All user passwords are stored
+            <a href="https://en.wikipedia.org/wiki/SHA-2">SHA256</a>-hashed
+            using
+            <a href="https://en.wikipedia.org/wiki/PBKDF2">PBKDF2</a>.
+        </li>
+        <li>
+            We support and require encryption in transit via
+            <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security">TLS</a>
+             1.2 and 1.3.
+        </li>
+        <li>We do not implement data encryption at rest.</li>
+        <li>
+            Developed publicly on <a href="https://sr.ht/~sirodoht/mataroa/">sr.ht</a>
+            and <a href="https://github.com/sirodoht/mataroa">GitHub</a>.
+        </li>
+    </ul>
+
+    <h2>Cookies</h2>
+    <p>
+        We do not use any cookies for analytics, advertising, preferences, or
+        for any third-party service.
+    </p>
+    <p>
+        We do use two cookies, one for account authentication (keeping you
+        logged in) and another for security (to prevent
+        <a href="https://en.wikipedia.org/wiki/Cross-site_request_forgery">CSRF</a>).
+    </p>
+</main>
+
+{% include 'partials/footer.html' %}
+
+{% endblock %}

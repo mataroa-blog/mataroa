@@ -1,10 +1,10 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}Modus operandi — Mataroa{% endblock %}
+{% block title %}Modus Operandi — Mataroa{% endblock %}
 
 {% block content %}
 <main>
-    <h1>Modus operandi</h1>
+    <h1>Modus Operandi</h1>
     <p>
         Details on the what and how of our mode of operation.
     </p>
@@ -17,92 +17,140 @@
         <li>No ads — ever.</li>
     </ul>
 
-    <h2>Code of content publication</h2>
+    <h2>Privacy</h2>
     <p>
-        Content in mataroa blogs is unfiltered and unmonitored. Users are free to publish
-        any combination of words and pixels. However, content of animosity or
-        disparagement of an individual or a group on account of a group characteristic
-        such as race, colour, national origin, sex, disability, religion, or sexual
-        orientation will be taken down immediately.
-    </p>
-    <p>
-        If you notice something along those lines in a mataroa blog please let us know
-        at <a href="mailto:admin@mataroa.blog">admin@mataroa.blog</a>.
+        We take privacy seriously. Details on how are available in our
+        <a href="{% url 'privacy' %}">Modus Privacy</a> page.
     </p>
 
-    <h2 id="data-privacy">Data privacy</h2>
-    <ul>
-        <li>
-            Mataroa does not require any personal details in order to be fully
-            functional (email is optional).
-        </li>
-        <li>
-            We do not use any third-party data processors or sub-processors except for
-            our two cloud hosting providers (see:
-            <a href="#technical">Technical details</a>).
-        </li>
-        <li>
-            We support and require encryption in transit via the TLS protocol
-            (versions 1.2 and 1.3).
-        </li>
-        <li>We do not implement data encryption at rest.</li>
-        <li>
-            All rights under
-            <a href="https://gdpr.eu/tag/chapter-3/">GDPR</a>
-            are exercisable:
-            <ul>
-                <li>via the site</li>
-                <li>by emailing <a href="mailto:admin@mataroa.blog">admin@mataroa.blog</a></li>
-            </ul>
-        </li>
-    </ul>
 
-    <h2>Cookies</h2>
+    <h2>Code of Content Publication</h2>
     <p>
-        We do not use any cookies for analytics, advertising, preferences, or for any third-party
-        service.
+        Content in mataroa blogs is unfiltered and unmonitored. Users are free
+        to publish any combination of words and pixels. However, content of
+        animosity or disparagement of an individual or a group on account of a
+        group characteristic such as race, colour, national origin, sex,
+        disability, religion, or sexual orientation will be taken down
+        immediately.
     </p>
     <p>
-        We do use two cookies, one for account authentication (keeping you logged in)
-        and another for security (to prevent
-        <a href="https://en.wikipedia.org/wiki/Cross-site_request_forgery">CSRF</a>).
+        If one notices something along those lines in a mataroa blog please let
+        us know at <a href="mailto:admin@mataroa.blog">admin@mataroa.blog</a>.
     </p>
 
     <h2>Liability</h2>
     <p>
-        You expressly understand and agree that the operators of this website shall not
-        be liable, in law or in equity, to you or to any third party for any direct,
-        indirect, incidental, lost profits, special, consequential, punitive or
-        exemplary damages.
+        The user expressly understands and agrees that the operators of
+        this website shall not be liable, in law or in equity, to them or to any
+        third party for any direct, indirect, incidental, lost profits,
+        special, consequential, punitive or exemplary damages.
     </p>
 
-    <h2 id="technical">Technical details</h2>
+    <h2>Account Terms</h2>
     <ul>
-        <li>Main server located in Helsinki by Hetzner Online GmbH.</li>
-        <li>Daily database backups in AWS Ireland.</li>
-        <li>Backup retention of 45 days.</li>
-        <li>User passwords are stored SHA256-hashed using PBKDF2.</li>
         <li>
-            Developed publicly on <a href="https://sr.ht/~sirodoht/mataroa/">sr.ht</a>
-            and <a href="https://github.com/sirodoht/mataroa">GitHub</a>.
+            The user is responsible for all content posted and all actions
+            performed with their account.
+        </li>
+        <li>
+            The user is responsible for maintaining the security of their
+            account and password.
+        </li>
+        <li>
+            A user's account may be disabled without notice at any time,
+            temporarily or permanently, for any reason.
+        </li>
+        <li>
+            We reserve the right to disable or delete a user's account for any
+            reason at any time. We have this clause because, statistically
+            speaking, there will be people trying to do something nefarious.
+        </li>
+        <li>
+            We do not require an email address to register an account. However,
+            it is the only way for us to contact the user in cases of any
+            service update or account access restoration. For this reason,
+            having an email registered is very useful.
         </li>
     </ul>
 
-    <h2>System Uptime</h2>
-    <ul>
-        <li>We aim for zero downtime, yet we make no promises.</li>
-        <li>
-            We keep a record of outages at
-            <a href="https://status.mataroa.blog/">status.mataroa.blog</a>.
-        </li>
-    </ul>
+    <h2>Payments</h2>
+    <p>
+        We offer a Premium Plan of our service which requires payment. If a
+        user opts for the Premium Plan they are billed immediately for the
+        next one year term, and automatically billed every year unless cancelled.
+    </p>
+    <p>
+        We accept card payments through <a href="https://stripe.com/">Stripe</a>,
+        but if one is not fond of this method we support alternatives. Please,
+        email <a href="mailto:admin@mataroa.blog">admin@mataroa.blog</a> for
+        and with details.
+    </p>
+    <p>
+        We also fund CO₂ removal from the atmosphere using 5% of our
+        subscription revenue through
+        <a href="https://stripe.com/climate">Stripe Climate</a>.
+    </p>
+
+    <h2>Refunds</h2>
+    <p>
+        We wouldn’t want to cause unhappiness. Any dissatisfied with our
+        service user can ask—and most probably get—a refund at
+        <a href="mailto:admin@mataroa.blog">admin@mataroa.blog</a>.
+    </p>
+
+    <h2>Service Availability</h2>
+    <p>
+        We provide the mataroa.blog service on an “as is” and “as available”
+        basis. We do not offer service-level agreements—but do take uptime
+        seriously. You can find a record of outages at
+        <a href="https://status.mataroa.blog/">status.mataroa.blog</a>.
+    </p>
+
+    <h2>Contact and Support</h2>
+    <p>
+        Email us at <a href="mailto:admin@mataroa.blog">admin@mataroa.blog</a>
+        with any queries.
+    </p>
+
+    <h2>Changes</h2>
+    <p>
+        Maybe we’ll change our minds for some of these statements. Users
+        with an email to their account will receive a notice 14 days prior.
+    </p>
 
     <h2>Acknowledgements</h2>
     <p>
         Mataroa was inspired by <a href="https://bearblog.dev/">Bear Blog</a>,
         another minimal blogging platform.
     </p>
+    <p>
+        Mataroa is built using many existing open source technologies,
+        which we deeply appreciate and want to thank for their beyond stellar
+        work.
+    </p>
 
+    <p>In somewhat particular order but not of importance:</p>
+    <ul>
+        <li>
+            The Django Project, community, and the
+            <a href="https://www.djangoproject.com/foundation/">Django Software Foundation</a>.
+        </li>
+        <li>The <a href="https://www.postgresql.org/">PostgreSQL</a> community.</li>
+        <li>The <a href="https://www.psycopg.org/">psycopg</a> team.</li>
+        <li>Unbit and the <a href="https://github.com/unbit/uwsgi">uWSGI</a> community.</li>
+        <li>The <a href="https://github.com/caddyserver/caddy">Caddy</a> community.</li>
+        <li>
+            The contributors of <a href="https://github.com/Python-Markdown/markdown">markdown</a>,
+            <a href="https://github.com/pygments/pygments">pygments</a>,
+            <a href="https://github.com/mozilla/bleach">bleach</a> packages.
+        </li>
+        <li>
+            and of course the creators and contributors of Python, Ubuntu, Debian, Linux kernel,
+            Bash, GNU Project, MinIO, Let’s Encrypt, C, Git, vim, and the list is never ending...
+        </li>
+    </ul>
+        
+    </p>
 </main>
 
 {% include 'partials/footer.html' %}

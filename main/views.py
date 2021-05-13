@@ -872,6 +872,10 @@ def modus(request):
     return render(request, "main/modus.html")
 
 
+def privacy(request):
+    return render(request, "main/privacy.html")
+
+
 def guides_markdown(request):
     return render(request, "main/guides_markdown.html")
 

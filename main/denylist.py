@@ -67,7 +67,6 @@ DISALLOWED_USERNAMES = [
 DISALLOWED_PAGE_SLUGS = [
     "blog",
     "dashboard",
-    "modus",
     "rss",
     "newsletter",
     "notifications",
