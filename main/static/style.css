@@ -351,6 +351,10 @@ code {
     padding: 2px;
 }
 
+.theme-zialucia code {
+    font-size: 16px;
+}
+
 hr {
     border-top: 1px solid var(--light-grey-color);
     border-bottom: none;
@@ -624,7 +628,7 @@ form .helptext {
 
 .theme-zialucia .posts-item-body {
     font-family: serif;
-    font-size: 19px;
+    font-size: 20px;
 }
 @media (max-width: 490px) {
     .theme-zialucia .posts-item-body {
@@ -693,7 +697,7 @@ form .helptext {
 
 .theme-zialucia .pages-item-body {
     font-family: serif;
-    font-size: 19px;
+    font-size: 20px;
 }
 @media (max-width: 490px) {
     .theme-zialucia .pages-item-body {
