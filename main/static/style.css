@@ -207,10 +207,6 @@ a:hover {
     text-decoration: underline;
 }
 
-p {
-    max-width: 500px;
-}
-
 h1 {
     font-weight: 500;
     padding-bottom: 4px;
