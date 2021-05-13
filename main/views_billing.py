@@ -25,7 +25,7 @@ def _attach_card(user, card_token):
     # create stripe customer for user if it does not exist
     if not user.stripe_customer_id:
         try:
-            stripe_response = stripe.Customer.create(email=user.email)
+            stripe_response = stripe.Customer.create()
         except stripe.error.StripeError as ex:
             logger.error(str(ex))
             return False
@@ -171,7 +171,7 @@ def billing_index(request):
     # create stripe customer for user if it does not exist
     if not request.user.stripe_customer_id:
         try:
-            stripe_response = stripe.Customer.create(email=request.user.email)
+            stripe_response = stripe.Customer.create()
         except stripe.error.StripeError as ex:
             logger.error(str(ex))
             raise Exception("Failed to create customer on Stripe.")
