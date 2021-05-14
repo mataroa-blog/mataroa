@@ -3,7 +3,7 @@
 {% block title %}{% if request.user.is_premium %}Add card{% else %}Subscribe to Premium{% endif %} — Mataroa{% endblock %}
 
 {% block head_extra %}
-<script src="https://js.stripe.com/v3/"></script>
+<script src="https://js.stripe.com/v3/?advancedFraudSignals=false"></script>
 {% endblock %}
 
 {% block content %}
