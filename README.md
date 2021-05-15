@@ -152,6 +152,24 @@ uwsgi uwsgi.ini  # start djago app
 caddy start --config /home/roa/mataroa/Caddyfile  # start caddy server
 ```
 
+To reload or stop the uWSGI process:
+
+```sh
+uwsgi --reload mataroa.pid
+uwsgi --stop mataroa.pid
+
+# or find the PID and kill that directly
+ps aux|grep uwsgi
+kill -9 <PID>
+```
+
+To reload or store the Caddy webserver:
+
+```sh
+caddy reload --config /home/roa/mataroa/Caddyfile
+caddy stop
+```
+
 Note that the value of the `NODEBUG` variable is ignored. What matters is merely its existence
 in the environment.
 
