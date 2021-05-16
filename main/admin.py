@@ -16,6 +16,9 @@ class UserAdmin(DjUserAdmin):
         "last_login",
         "blog_title",
         "blog_byline",
+        "stripe_customer_id",
+        "is_premium",
+        "is_grandfathered",
     )
 
     @admin.display
