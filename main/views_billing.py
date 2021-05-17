@@ -403,7 +403,7 @@ def billing_subscription(request):
     given they already have a card registered.
     """
     if request.method == "POST":
-        # redirectly grandfathered users to dashboard
+        # redirect grandfathered users to dashboard
         if request.user.is_grandfathered:
             return redirect("dashboard")
 
