@@ -30,6 +30,7 @@ DISALLOWED_USERNAMES = [
     "images",
     "img",
     "index",
+    "irc",
     "knowledgebase",
     "legal",
     "login",
