@@ -300,3 +300,15 @@ class NotificationRecord(models.Model):
             return self.sent_at.strftime("%c") + " – " + self.notification.email
         else:
             return self.sent_at.strftime("%c") + " – NULL"
+
+
+class ExportRecord(models.Model):
+    name = models.CharField(max_length=150)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    sent_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-sent_at"]
+
+    def __str__(self):
+        return self.export_name
