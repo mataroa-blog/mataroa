@@ -119,6 +119,7 @@ class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         "custom_domain",
         "comments_on",
         "notifications_on",
+        "mail_export_on",
         "about",
         "redirect_domain",
     ]
