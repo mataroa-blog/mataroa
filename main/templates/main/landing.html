@@ -1,12 +1,12 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}Mataroa — Blogging platform{% endblock %}
+{% block title %}Mataroa — Blogging platform for minimalists{% endblock %}
 
 {% block content %}
 <main>
     <h1>Mataroa blog</h1>
     <p>
-        Clean blogging platform. <em>Just write.</em>
+        Naked blogging platform. <em>Just write.</em>
     </p>
     <ul class="lead">
         <li><b>Get your own simple blog in 1 minute</b> → <a href="{% url 'user_create' %}">Sign up</a></li>
@@ -33,7 +33,7 @@
         <li>No platform lock-in</li>
         <ul>
             <li><a href="{% url 'blog_export' %}">Export blog anytime</a></li>
-            <li>Monthly auto-exports via email (premium feature)</li>
+            <li><a href="https://hey.mataroa.blog/blog/monthly-auto-exports-via-email/">Monthly auto-exports via email</a> (premium feature)</li>
             <li>Redirect to new domain</li>
         </ul>
         <li>Custom domain (premium feature)</li>
