@@ -9,7 +9,7 @@ from django.test import TestCase
 from django.utils import timezone
 
 from main import models
-from main.management.commands import process_notifications
+from main.management.commands import mail_exports, process_notifications
 
 
 class EnqueueNotificationsTest(TestCase):
@@ -194,6 +194,95 @@ class ProcessNotificationsTest(TestCase):
         )
         self.assertIn(
             "/newsletter/unsubscribe/",
+            mail.outbox[0].extra_headers["List-Unsubscribe"],
+        )
+        self.assertEqual(
+            mail.outbox[0].extra_headers["List-Unsubscribe-Post"],
+            "List-Unsubscribe=One-Click",
+        )
+
+    def tearDown(self):
+        models.User.objects.all().delete()
+        models.Post.objects.all().delete()
+
+
+class MailExportsTest(TestCase):
+    """
+    Test mail_export sends emails to users with `mail_export_on` enabled.
+    """
+
+    def setUp(self):
+        self.user = models.User.objects.create(
+            username="alice", email="alice@wonderland.com", mail_export_on=True
+        )
+
+        post_data = {
+            "title": "A post",
+            "slug": "a-post",
+            "body": "Content sentence.",
+            "published_at": timezone.make_aware(datetime(2020, 1, 1)),
+        }
+        self.post_a = models.Post.objects.create(owner=self.user, **post_data)
+
+        post_data = {
+            "title": "Second post",
+            "slug": "second-post",
+            "body": "Content sentence two.",
+            "published_at": timezone.make_aware(datetime(2020, 1, 2)),
+        }
+        self.post_b = models.Post.objects.create(owner=self.user, **post_data)
+
+    def test_mail_backend(self):
+        connection = mail_exports.get_mail_connection()
+        self.assertEqual(connection.host, settings.EMAIL_HOST_BROADCASTS)
+
+    def test_command(self):
+        output = StringIO()
+
+        with patch.object(
+            timezone, "now", return_value=datetime(2020, 1, 3, 00, 00)
+        ), patch.object(
+            # Django default test runner overrides SMTP EmailBackend with locmem,
+            # but because we re-import the SMTP backend in
+            # process_notifications.get_mail_connection, we need to mock it here too.
+            mail_exports,
+            "get_mail_connection",
+            return_value=mail.get_connection(
+                "django.core.mail.backends.locmem.EmailBackend"
+            ),
+        ):
+            call_command("mail_exports", stdout=output)
+
+        # export records
+        records = models.ExportRecord.objects.all()
+        self.assertEqual(len(records), 1)
+        self.assertEqual(records[0].user, self.user)
+        self.assertIn("export-markdown-", records[0].name)
+
+        # logging
+        self.assertIn("Processing email exports.", output.getvalue())
+        self.assertIn(f"Processing user {self.user.username}.", output.getvalue())
+        self.assertIn(f"Export sent to {self.user.username}.", output.getvalue())
+        self.assertIn(
+            f"Logging export record for '{records[0].name}'.", output.getvalue()
+        )
+        self.assertIn("Emailing all exports complete.", output.getvalue())
+
+        # email
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn("Mataroa export", mail.outbox[0].subject)
+        self.assertIn("Unsubscribe", mail.outbox[0].body)
+
+        # email headers
+        self.assertEqual(mail.outbox[0].to, [self.user.email])
+        self.assertEqual(
+            mail.outbox[0].from_email,
+            settings.DEFAULT_FROM_EMAIL,
+        )
+
+        self.assertEqual(mail.outbox[0].extra_headers["X-PM-Message-Stream"], "exports")
+        self.assertIn(
+            "/export/unsubscribe/",
             mail.outbox[0].extra_headers["List-Unsubscribe"],
         )
         self.assertEqual(
