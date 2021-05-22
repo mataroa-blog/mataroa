@@ -57,13 +57,18 @@ class User(AbstractUser):
 
     comments_on = models.BooleanField(
         default=False,
-        help_text="Enable/disable comments for your blog",
+        help_text="Enable/disable comments for your blog.",
         verbose_name="Comments",
     )
     notifications_on = models.BooleanField(
         default=False,
-        help_text="Allow/disallow people subscribing for email newsletter for new posts",
+        help_text="Allow/disallow people subscribing for email newsletter for new posts.",
         verbose_name="Newsletter",
+    )
+    mail_export_on = models.BooleanField(
+        default=False,
+        help_text="Enable/disable auto emailing of account exports every month.",
+        verbose_name="Mail export",
     )
 
     # webring related
