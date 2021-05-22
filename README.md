@@ -179,6 +179,7 @@ installed. The schedule is subject to the administrator's preference. Indicative
 ```sh
 */5 * * * * bash -c 'cd /home/roa/mataroa && source ./venv/bin/activate && source .envrc && python manage.py enqueue_notifications'
 */10 * * * * bash -c 'cd /home/roa/mataroa && source ./venv/bin/activate && source .envrc && python manage.py process_notifications'
+0 0 * * * bash -c 'cd /home/roa/mataroa && source ./venv/bin/activate && source .envrc && python manage.py mail_exports'
 ```
 
 Documentation about the commands can be found in section [Management](#Management).
@@ -217,6 +218,7 @@ In addition to the standard Django management commands, there are also:
 
 * `enqueue_notifications`: create records for notification emails to be sent.
 * `process_notifications`: sends notification emails for new blog posts of existing records.
+* `mail_exports`: emails users of their blog exports.
 * `populate_dev_data`: populate database with sample development data.
 
 They are triggered using the standard `manage.py` Django way:
