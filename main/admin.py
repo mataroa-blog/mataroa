@@ -20,6 +20,7 @@ class UserAdmin(DjUserAdmin):
         "is_premium",
         "is_grandfathered",
     )
+    list_display_links = ("id", "username")
 
     @admin.display
     def blog_url(self, obj):
@@ -44,6 +45,8 @@ class UserAdmin(DjUserAdmin):
                     "custom_domain",
                     "comments_on",
                     "notifications_on",
+                    "mail_export_on",
+                    "export_unsubscribe_key",
                     "webring_name",
                     "webring_prev_url",
                     "webring_next_url",
@@ -167,3 +170,18 @@ class NotificationRecordAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.NotificationRecord, NotificationRecordAdmin)
+
+
+class ExportRecordAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "name",
+        "sent_at",
+        "user",
+    )
+    list_display_links = ("id", "name")
+
+    ordering = ["-id"]
+
+
+admin.site.register(models.ExportRecord, ExportRecordAdmin)
