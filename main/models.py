@@ -70,6 +70,7 @@ class User(AbstractUser):
         help_text="Enable/disable auto emailing of account exports every month.",
         verbose_name="Mail export",
     )
+    export_unsubscribe_key = models.UUIDField(default=uuid.uuid4, unique=True)
 
     # webring related
     webring_name = models.CharField(max_length=200, blank=True, null=True)
@@ -113,6 +114,11 @@ class User(AbstractUser):
     @property
     def footer_note_as_html(self):
         return util.md_to_html(self.footer_note)
+
+    def get_export_unsubscribe_url(self):
+        domain = self.custom_domain or f"{self.username}.{settings.CANONICAL_HOST}"
+        path = reverse("export_unsubscribe_key", args={self.export_unsubscribe_key})
+        return f"//{domain}{path}"
 
     def __str__(self):
         return self.username
@@ -311,4 +317,4 @@ class ExportRecord(models.Model):
         ordering = ["-sent_at"]
 
     def __str__(self):
-        return self.export_name
+        return self.name
