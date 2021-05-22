@@ -116,6 +116,11 @@ urlpatterns += [
     ),
     path("export/zola/", views_export.blog_export_zola, name="blog_export_zola"),
     path("export/hugo/", views_export.blog_export_hugo, name="blog_export_hugo"),
+    path(
+        "export/unsubscribe/<uuid:unsubscribe_key>/",
+        views_export.export_unsubscribe_key,
+        name="export_unsubscribe_key",
+    ),
 ]
 
 # images

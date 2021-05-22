@@ -190,3 +190,29 @@ def blog_export_hugo(request):
         response = HttpResponse(zip_buffer.getvalue(), content_type="application/zip")
         response["Content-Disposition"] = f"attachment; filename={export_name}.zip"
         return response
+
+
+def export_unsubscribe_key(request, unsubscribe_key):
+    if models.User.objects.filter(export_unsubscribe_key=unsubscribe_key).exists():
+        user = models.User.objects.get(export_unsubscribe_key=unsubscribe_key)
+        user.mail_export_on = False
+        user.export_unsubscribe_key = uuid.uuid4()
+        user.save()
+        return render(
+            request,
+            "main/export_unsubscribe_success.html",
+            {
+                "blog_user": request.blog_user,
+                "unsubscribed": True,
+                "email": user.email,
+            },
+        )
+    else:
+        return render(
+            request,
+            "main/export_unsubscribe_success.html",
+            {
+                "blog_user": request.blog_user,
+                "unsubscribed": False,
+            },
+        )

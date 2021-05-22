@@ -1,0 +1,26 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Unsubscribing from monthly mail exports — {{ blog_user.username }} at Mataroa{% endblock %}
+
+{% block content %}
+<main>
+    {% if blog_user.blog_title %}
+    <a href="{% url 'index' %}" class="pages-item-brand">{{ blog_user.blog_title }}</a>
+    {% endif %}
+
+    {% if unsubscribed %}
+    <h1>Unsubscribed success</h1>
+    <p>
+    You ({{ email }}) will stop receiving monthly blog exports on your email.
+    </p>
+    <p>
+        To re-enable go to your <a href="{% url 'user_update' %}">blog settings</a>.
+    </p>
+    {% else %}
+    <h1>Not subscribed</h1>
+    <p>
+        Email not subscribed to auto email exports.
+    </p>
+    {% endif %}
+</main>
+{% endblock %}
