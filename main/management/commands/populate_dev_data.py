@@ -27,6 +27,7 @@ class Command(BaseCommand):
         user.blog_byline = "stuff"
         user.footer_note = "[Public domain](/license). Powered&nbsp;by&nbsp;[mataroa.blog](https://mataroa.blog/)."
         user.notifications_on = True
+        user.mail_export_on = True
         user.webring_name = "Tech makers webring"
         user.save()
 
