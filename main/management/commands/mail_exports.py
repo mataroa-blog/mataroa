@@ -6,6 +6,7 @@ from datetime import datetime
 from django.conf import settings
 from django.core import mail
 from django.core.management.base import BaseCommand
+from django.utils import timezone
 
 from main import models, util
 
@@ -45,9 +46,9 @@ class Command(BaseCommand):
     help = "Generate zip account exports and email them to users."
 
     def handle(self, *args, **options):
-        # if timezone.now().hour != 00:
-        #    self.stdout.write(self.style.NOTICE("No action. Current UTC is not 00:00."))
-        #    return
+        if timezone.now().hour != 0:
+            self.stdout.write(self.style.NOTICE("No action. Current UTC is not 00:00."))
+            return
 
         self.stdout.write(self.style.NOTICE("Processing email exports."))
 
