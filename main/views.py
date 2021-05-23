@@ -182,7 +182,7 @@ class PostDetail(DetailView):
             and self.request.user == self.object.owner
         ):
             return context
-        models.Analytic.objects.create(post=self.object)
+        models.AnalyticPost.objects.create(post=self.object)
 
         return context
 
@@ -651,7 +651,7 @@ class AnalyticDetail(LoginRequiredMixin, DetailView):
 
         # get all counts for the last 25 days
         day_counts = (
-            models.Analytic.objects.filter(
+            models.AnalyticPost.objects.filter(
                 post=self.object, created_at__gt=date_25d_ago
             )
             .values("created_at")
