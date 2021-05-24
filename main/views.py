@@ -633,7 +633,7 @@ class AnalyticList(LoginRequiredMixin, ListView):
 
 def populate_analytics_context(context, date_25d_ago, current_date, day_counts):
     context["date_25d_ago"] = date_25d_ago
-    context["post_analytics"] = {}
+    context["analytics_per_day"] = {}
     current_x_offset = 0
 
     # transform day_counts into dict with date as key
@@ -653,7 +653,7 @@ def populate_analytics_context(context, date_25d_ago, current_date, day_counts):
         if highest_day_count != 0 and count_per_day[current_date] != 0:
             count_percent = count_per_day[current_date] * 100 / highest_day_count
 
-        context["post_analytics"][current_date] = {
+        context["analytics_per_day"][current_date] = {
             "count": count_per_day[current_date],
             "x_offset": current_x_offset,
             "count_percent": count_percent,

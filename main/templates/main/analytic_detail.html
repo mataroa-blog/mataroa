@@ -8,7 +8,7 @@
 
     <a href="{% url 'analytic_list' %}">« all analytics</a>
 
-    <h2>Post analytics since {{ date_25d_ago }}</h2>
+    <h2>Analytics since {{ date_25d_ago }}</h2>
     <p>
         Note: Graph does not include visits when one is logged in on their blog.
     </p>
@@ -22,7 +22,7 @@
                 style="fill: #fff;"
                 >
             </rect>
-            {% for day, analytic in post_analytics.items %}
+            {% for day, analytic in analytics_per_day.items %}
             <rect
                 x="{{ analytic.x_offset }}"
                 y="{{ analytic.negative_count_percent }}"
