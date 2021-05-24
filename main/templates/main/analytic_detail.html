@@ -1,12 +1,12 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}Analytics for {{ post.title }} — {{ request.user.username }} at Mataroa{% endblock %}
+{% block title %}Analytics for {{ title }} — {{ request.user.username }} at Mataroa{% endblock %}
 
 {% block content %}
 <main>
-    <h1>{{ post.title }}</h1>
+    <h1>{{ title }}</h1>
 
-    <a href="{% url 'analytic_list' %}">« all post analytics</a>
+    <a href="{% url 'analytic_list' %}">« all analytics</a>
 
     <h2>Post analytics since {{ date_25d_ago }}</h2>
     <p>

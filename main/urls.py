@@ -145,8 +145,13 @@ urlpatterns += [
     path("analytics/", views.AnalyticList.as_view(), name="analytic_list"),
     path(
         "analytics/post/<slug:post_slug>/",
-        views.AnalyticDetail.as_view(),
-        name="analytic_detail",
+        views.AnalyticPostDetail.as_view(),
+        name="analytic_post_detail",
+    ),
+    path(
+        "analytics/page/<slug:page_path>/",
+        views.AnalyticPageDetail.as_view(),
+        name="analytic_page_detail",
     ),
 ]
 

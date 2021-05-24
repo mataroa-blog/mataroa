@@ -20,6 +20,9 @@ class RSSBlogFeed(Feed):
         self.title = user.blog_title
         self.description = user.blog_byline
         self.subdomain = request.subdomain
+
+        models.AnalyticPage.objects.create(user=user, path="rss")
+
         return super().__call__(request, *args, **kwargs)
 
     def items(self):

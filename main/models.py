@@ -243,6 +243,18 @@ class Page(models.Model):
         return self.title
 
 
+class AnalyticPage(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    path = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return self.created_at.strftime("%c") + ": " + self.user.username
+
+
 class AnalyticPost(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)

@@ -5,6 +5,13 @@
 {% block content %}
 <main>
     <h1>Analytics</h1>
+    <p>
+        List of pages:
+    </p>
+    <ul>
+        <li><a href="{% url 'analytic_page_detail' 'index' %}">index</a></li>
+        <li><a href="{% url 'analytic_page_detail' 'rss' %}">rss</a></li>
+    </ul>
     {% if post_list %}
     <p>
         List of posts:
@@ -12,7 +19,7 @@
     <ul>
         {% for post in post_list %}
         <li style="{% if not post.is_published %}opacity: 0.75;{% endif %}">
-            <a href="{% url 'analytic_detail' post.slug %}">
+            <a href="{% url 'analytic_post_detail' post.slug %}">
                 {{ post.title }}
             </a>
         </li>

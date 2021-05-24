@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('main', '0066_add_uuid_field_export_unsubscribe'),
+        ("main", "0066_add_uuid_field_export_unsubscribe"),
     ]
 
     operations = [
         migrations.RenameModel(
-            old_name='Analytic',
-            new_name='AnalyticPost',
+            old_name="Analytic",
+            new_name="AnalyticPost",
         ),
     ]
