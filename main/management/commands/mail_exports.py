@@ -50,6 +50,10 @@ class Command(BaseCommand):
             self.stdout.write(self.style.NOTICE("No action. Current UTC is not 00:00."))
             return
 
+        if timezone.now().day != 1:
+            self.stdout.write(self.style.NOTICE("No action. Not the first day of the month."))
+            return
+
         self.stdout.write(self.style.NOTICE("Processing email exports."))
 
         # gather all user posts for all users
