@@ -124,7 +124,7 @@ class AnalyticAdmin(admin.ModelAdmin):
     ordering = ["-id"]
 
 
-admin.site.register(models.Analytic, AnalyticAdmin)
+admin.site.register(models.AnalyticPost, AnalyticAdmin)
 
 
 class CommentAdmin(admin.ModelAdmin):

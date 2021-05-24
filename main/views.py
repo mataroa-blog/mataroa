@@ -54,6 +54,7 @@ def index(request):
             if request.user.is_authenticated and request.user == request.blog_user:
                 posts = models.Post.objects.filter(owner=request.blog_user)
             else:
+                models.AnalyticPage.objects.create(user=request.blog_user, path="index")
                 posts = models.Post.objects.filter(
                     owner=request.blog_user,
                     published_at__isnull=False,
@@ -182,7 +183,7 @@ class PostDetail(DetailView):
             and self.request.user == self.object.owner
         ):
             return context
-        models.Analytic.objects.create(post=self.object)
+        models.AnalyticPost.objects.create(post=self.object)
 
         return context
 
@@ -630,7 +631,41 @@ class AnalyticList(LoginRequiredMixin, ListView):
         return models.Post.objects.filter(owner=self.request.user)
 
 
-class AnalyticDetail(LoginRequiredMixin, DetailView):
+def populate_analytics_context(context, date_25d_ago, current_date, day_counts):
+    context["date_25d_ago"] = date_25d_ago
+    context["post_analytics"] = {}
+    current_x_offset = 0
+
+    # transform day_counts into dict with date as key
+    count_per_day = defaultdict(int)
+    highest_day_count = 1
+    for item in day_counts:
+        count_per_day[item["created_at"].date()] += item["id__count"]
+
+        # find day with the most analytics counts (i.e. visits)
+        if highest_day_count < count_per_day[item["created_at"].date()]:
+            highest_day_count = count_per_day[item["created_at"].date()]
+
+    # calculate analytics count and percentages for each day
+    while date_25d_ago <= current_date:
+        # normalize day count to percentage for svg drawing
+        count_percent = 1  # keep lowest value to 1 so as it's visible
+        if highest_day_count != 0 and count_per_day[current_date] != 0:
+            count_percent = count_per_day[current_date] * 100 / highest_day_count
+
+        context["post_analytics"][current_date] = {
+            "count": count_per_day[current_date],
+            "x_offset": current_x_offset,
+            "count_percent": count_percent,
+            "negative_count_percent": 100 - count_percent,
+        }
+        current_date = current_date - timedelta(days=1)
+        current_x_offset += 20
+
+    return context
+
+
+class AnalyticPostDetail(LoginRequiredMixin, DetailView):
     model = models.Post
     template_name = "main/analytic_detail.html"
     slug_url_kwarg = "post_slug"
@@ -645,46 +680,55 @@ class AnalyticDetail(LoginRequiredMixin, DetailView):
         # calculate dates
         current_date = timezone.now().date()
         date_25d_ago = timezone.now().date() - timedelta(days=24)
-        context["date_25d_ago"] = date_25d_ago
-        context["post_analytics"] = {}
-        current_x_offset = 0
 
         # get all counts for the last 25 days
         day_counts = (
-            models.Analytic.objects.filter(
+            models.AnalyticPost.objects.filter(
                 post=self.object, created_at__gt=date_25d_ago
             )
             .values("created_at")
             .annotate(Count("id"))
         )
 
-        # transform day_counts into dict with date as key
-        count_per_day = defaultdict(int)
-        highest_day_count = 1
-        for item in day_counts:
-            count_per_day[item["created_at"].date()] += item["id__count"]
+        context["title"] = self.object.title
 
-            # find day with the most analytics counts (i.e. visits)
-            if highest_day_count < count_per_day[item["created_at"].date()]:
-                highest_day_count = count_per_day[item["created_at"].date()]
+        return populate_analytics_context(
+            context=context,
+            date_25d_ago=date_25d_ago,
+            current_date=current_date,
+            day_counts=day_counts,
+        )
 
-        # calculate analytics count and percentages for each day
-        while date_25d_ago <= current_date:
-            # normalize day count to percentage for svg drawing
-            count_percent = 1  # keep lowest value to 1 so as it's visible
-            if highest_day_count != 0 and count_per_day[current_date] != 0:
-                count_percent = count_per_day[current_date] * 100 / highest_day_count
 
-            context["post_analytics"][current_date] = {
-                "count": count_per_day[current_date],
-                "x_offset": current_x_offset,
-                "count_percent": count_percent,
-                "negative_count_percent": 100 - count_percent,
-            }
-            current_date = current_date - timedelta(days=1)
-            current_x_offset += 20
+class AnalyticPageDetail(LoginRequiredMixin, DetailView):
+    template_name = "main/analytic_detail.html"
 
-        return context
+    def get_object(self):
+        date_25d_ago = timezone.now().date() - timedelta(days=24)
+        return models.AnalyticPage.objects.filter(
+            user=self.request.user,
+            path=self.kwargs["page_path"],
+            created_at__gt=date_25d_ago,
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # calculate dates
+        current_date = timezone.now().date()
+        date_25d_ago = current_date - timedelta(days=24)
+
+        # get all counts for the last 25 days
+        day_counts = self.object.values("created_at").annotate(Count("id"))
+
+        context["title"] = self.kwargs["page_path"]
+
+        return populate_analytics_context(
+            context=context,
+            date_25d_ago=date_25d_ago,
+            current_date=current_date,
+            day_counts=day_counts,
+        )
 
 
 class Notification(SuccessMessageMixin, FormView):
