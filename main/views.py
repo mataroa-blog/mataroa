@@ -98,7 +98,9 @@ class UserCreate(CreateView):
         if util.is_disallowed(form.cleaned_data.get("username")):
             form.add_error("username", "This username is not available.")
             return self.render_to_response(self.get_context_data(form=form))
-        self.object = form.save()
+        self.object = form.save(commit=False)
+        self.object.blog_title = self.object.username
+        self.object.save()
         user = authenticate(
             username=form.cleaned_data.get("username"),
             password=form.cleaned_data.get("password1"),
@@ -897,9 +899,14 @@ class NotificationRecordDelete(LoginRequiredMixin, DeleteView):
         return queryset
 
     def delete(self, request, *args, **kwargs):
-        obj = self.get_object()
-        messages.success(self.request, self.success_message % obj.notification.__dict__)
-        return super().delete(request, *args, **kwargs)
+        self.object = self.get_object()
+        self.object.is_canceled = True
+        self.object.save()
+        messages.success(
+            self.request, self.success_message % self.object.notification.__dict__
+        )
+        success_url = self.get_success_url()
+        return HttpResponseRedirect(success_url)
 
     def dispatch(self, request, *args, **kwargs):
         notificationrecord = self.get_object()

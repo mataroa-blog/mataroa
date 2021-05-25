@@ -497,6 +497,8 @@ class BlogNotificationRecordDeleteAnonTestCase(TestCase):
 
 
 class BlogNotificationRecordDeleteTestCase(TestCase):
+    """Test notification record is canceled when deleted."""
+
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
         self.client.force_login(self.user)
@@ -516,14 +518,19 @@ class BlogNotificationRecordDeleteTestCase(TestCase):
             sent_at=None,
         )
 
-    def test_notificationrecord_delete(self):
+    def test_notificationrecord_cancel(self):
         self.client.post(
             reverse("notificationrecord_delete", args=(self.notificationrecord.id,))
         )
-        self.assertFalse(
+        self.assertTrue(
             models.NotificationRecord.objects.filter(
                 post=self.notificationrecord.post
             ).exists()
+        )
+        self.assertTrue(
+            models.NotificationRecord.objects.get(
+                post=self.notificationrecord.post
+            ).is_canceled
         )
 
 
