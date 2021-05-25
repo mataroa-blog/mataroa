@@ -240,7 +240,7 @@ class MailExportsTest(TestCase):
         output = StringIO()
 
         with patch.object(
-            timezone, "now", return_value=datetime(2020, 1, 3, 00, 00)
+            timezone, "now", return_value=datetime(2020, 1, 1, 00, 00)
         ), patch.object(
             # Django default test runner overrides SMTP EmailBackend with locmem,
             # but because we re-import the SMTP backend in
