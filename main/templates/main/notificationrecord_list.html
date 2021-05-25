@@ -34,8 +34,15 @@
             {% endif %}
 
             {% for nr in notificationrecord_list %}
-            <br>{{ nr.notification.email }}
+            <br>
+
+            {% if nr.is_canceled %}
+            <s>{{ nr.notification.email }}</s>
+            {% else %}
+            {{ nr.notification.email }}
             | <a href="{% url 'notificationrecord_delete' nr.id %}" class="type-delete">cancel</a>
+            {% endif %}
+
             {% endfor %}
         </li>
 
