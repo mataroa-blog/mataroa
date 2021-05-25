@@ -868,9 +868,11 @@ class NotificationRecordList(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context["notificationrecord_list_unsent"] = context[
-            "notificationrecord_list"
-        ].filter(sent_at__isnull=True).order_by("post")
+        context["notificationrecord_list_unsent"] = (
+            context["notificationrecord_list"]
+            .filter(sent_at__isnull=True)
+            .order_by("post")
+        )
         for nr in context["notificationrecord_list_unsent"]:
             if not nr.post.published_at:
                 nr.scheduled_at = None
