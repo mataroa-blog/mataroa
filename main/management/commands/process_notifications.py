@@ -69,9 +69,15 @@ class Command(BaseCommand):
     help = "Processes new posts and sends email to subscribers"
 
     def handle(self, *args, **options):
+
+        # if false, then we do not actually send emails,
+        # only process the ones to be canceled
+        send_mode = True
+
         if timezone.now().hour != 13:
-            self.stdout.write(self.style.NOTICE("No action. Current UTC is not 13:00."))
-            return
+            msg = "Current UTC not 13:00. Will not send emails, only process canceled."
+            self.stdout.write(self.style.NOTICE(msg))
+            send_mode = False
 
         self.stdout.write(self.style.NOTICE("Processing notifications."))
 
@@ -102,6 +108,10 @@ class Command(BaseCommand):
                 record.delete()
                 continue
 
+            # don't queue for sending, if send mode is off
+            if not send_mode:
+                continue
+
             # add email object to list
             email = get_email(record.post, record.notification)
             message_list.append(email)
@@ -111,11 +121,15 @@ class Command(BaseCommand):
             # which is infeasible given the mass send strategy of newsletters
             record.sent_at = timezone.now()
             record.save()
+            msg = f"Adding record for '{record.post.title}' to '{record.notification.email}'"
+            self.stdout.write(self.style.SUCCESS(msg))
+
+        # return if send mode is off
+        if not send_mode:
             self.stdout.write(
-                self.style.SUCCESS(
-                    f"Adding notification record for '{record.post.title}' to '{record.notification.email}'"
-                )
+                self.style.SUCCESS("Notifications processed. No emails were sent.")
             )
+            return
 
         # sent out messages
         connection = get_mail_connection()
