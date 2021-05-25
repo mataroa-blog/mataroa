@@ -306,6 +306,7 @@ class NotificationRecord(models.Model):
     notification = models.ForeignKey(Notification, on_delete=models.SET_NULL, null=True)
     post = models.ForeignKey(Post, on_delete=models.SET_NULL, null=True)
     sent_at = models.DateTimeField(default=timezone.now, null=True)
+    is_canceled = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["-sent_at"]
