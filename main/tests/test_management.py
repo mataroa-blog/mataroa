@@ -172,7 +172,8 @@ class ProcessNotificationsTest(TestCase):
         self.assertIn("Processing notifications.", output.getvalue())
         self.assertIn("Broadcast sent. Total 1 emails.", output.getvalue())
         self.assertIn(
-            "Adding record for 'Yesterday post' to 'zf@sirodoht.com'", output.getvalue()
+            "Logging record for 'Yesterday post' to 'zf@sirodoht.com'",
+            output.getvalue(),
         )
         self.assertIn(
             "Skip as pub date is not yesterday: 'Today post' for 'zf@sirodoht.com'.",
@@ -203,6 +204,79 @@ class ProcessNotificationsTest(TestCase):
             mail.outbox[0].extra_headers["List-Unsubscribe-Post"],
             "List-Unsubscribe=One-Click",
         )
+
+    def tearDown(self):
+        models.User.objects.all().delete()
+        models.Post.objects.all().delete()
+
+
+class ProcessNotificationsCanceledTest(TestCase):
+    """
+    Test process_notifications does not send canceled notification record emails
+    """
+
+    def setUp(self):
+        self.user = models.User.objects.create(
+            username="alice", email="alice@wonderland.com", notifications_on=True
+        )
+
+        post_data = {
+            "title": "Yesterday post",
+            "slug": "yesterday-post",
+            "body": "Content sentence.",
+            "published_at": timezone.make_aware(datetime(2020, 1, 1)),
+        }
+        self.post = models.Post.objects.create(owner=self.user, **post_data)
+
+        self.notification = models.Notification.objects.create(
+            blog_user=self.user, email="zf@sirodoht.com"
+        )
+
+        self.notificationrecord = models.NotificationRecord.objects.create(
+            notification=self.notification,
+            post=self.post,
+            sent_at=None,
+            is_canceled=True,
+        )
+
+    def test_command(self):
+        output = StringIO()
+
+        with patch.object(
+            timezone, "now", return_value=datetime(2020, 1, 2, 13, 00)
+        ), patch.object(
+            # Django default test runner overrides SMTP EmailBackend with locmem,
+            # but because we re-import the SMTP backend in
+            # process_notifications.get_mail_connection, we need to mock it here too.
+            process_notifications,
+            "get_mail_connection",
+            return_value=mail.get_connection(
+                "django.core.mail.backends.locmem.EmailBackend"
+            ),
+        ):
+            call_command("process_notifications", stdout=output)
+
+        # notification records
+        records = models.NotificationRecord.objects.all()
+        self.assertEqual(len(records), 1)
+        self.assertEqual(
+            records.filter(sent_at__isnull=True).first().notification.email,
+            self.notificationrecord.notification.email,
+        )
+        self.assertEqual(
+            records.filter(sent_at__isnull=True).first().post.title, "Yesterday post"
+        )
+
+        # logging
+        self.assertIn("Processing notifications.", output.getvalue())
+        self.assertIn(
+            "Skip as record is canceled: 'Yesterday post' for 'zf@sirodoht.com'.",
+            output.getvalue(),
+        )
+        self.assertIn("Broadcast sent. Total 0 emails.", output.getvalue())
+
+        # email
+        self.assertEqual(len(mail.outbox), 0)
 
     def tearDown(self):
         models.User.objects.all().delete()

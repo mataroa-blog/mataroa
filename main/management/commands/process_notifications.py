@@ -112,6 +112,12 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.NOTICE(msg))
                 continue
 
+            # don't send, if notification record is canceled
+            if record.is_canceled:
+                msg = f"Skip as record is canceled: '{record.post.title}' for '{record.notification.email}'."
+                self.stdout.write(self.style.NOTICE(msg))
+                continue
+
             # don't queue for sending, if send mode is off
             if not send_mode:
                 continue
@@ -125,7 +131,7 @@ class Command(BaseCommand):
             # which is infeasible given the mass send strategy of newsletters
             record.sent_at = timezone.now()
             record.save()
-            msg = f"Adding record for '{record.post.title}' to '{record.notification.email}'."
+            msg = f"Logging record for '{record.post.title}' to '{record.notification.email}'."
             self.stdout.write(self.style.SUCCESS(msg))
 
         # return if send mode is off
