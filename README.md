@@ -9,6 +9,13 @@ send an email patch to [~sirodoht/public-inbox@lists.sr.ht](mailto:~sirodoht/pub
 
 On how to contribute using email patches see [git-send-email.io](https://git-send-email.io/).
 
+Also checkout our docs on:
+
+* [Git Commit Message Guidelines](docs/commit-messages.md)
+* [Dependencies](docs/dependencies.md)
+* [Code Walkthrough](docs/code-walkthrough.md)
+* [Server Playbook](docs/server-playbook.md)
+
 ## Development
 
 This is a [Django](https://www.djangoproject.com/) codebase. Check out the
