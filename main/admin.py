@@ -114,7 +114,21 @@ class ImageAdmin(admin.ModelAdmin):
 admin.site.register(models.Image, ImageAdmin)
 
 
-class AnalyticAdmin(admin.ModelAdmin):
+class AnalyticPageAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "user",
+        "path",
+        "created_at",
+    )
+
+    ordering = ["-id"]
+
+
+admin.site.register(models.AnalyticPage, AnalyticPageAdmin)
+
+
+class AnalyticPostAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "post",
@@ -124,7 +138,7 @@ class AnalyticAdmin(admin.ModelAdmin):
     ordering = ["-id"]
 
 
-admin.site.register(models.AnalyticPost, AnalyticAdmin)
+admin.site.register(models.AnalyticPost, AnalyticPostAdmin)
 
 
 class CommentAdmin(admin.ModelAdmin):
