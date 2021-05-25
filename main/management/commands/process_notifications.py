@@ -93,19 +93,23 @@ class Command(BaseCommand):
             if not record.post.owner.notifications_on:
                 # also delete record
                 record.delete()
-                continue
-
-            # don't send, if post publication date is not the day before
-            yesterday = timezone.now().date() - timedelta(days=1)
-            if record.post.published_at != yesterday:
-                # also delete record
-                record.delete()
+                msg = f"Deleted as notifications off: '{record.post.title}' for '{record.notification.email}'."
+                self.stdout.write(self.style.NOTICE(msg))
                 continue
 
             # don't send, if email has unsubscribed since records were enqueued
             if not record.notification.is_active:
                 # also delete record
                 record.delete()
+                msg = f"Deleted as email has unsubscribed: '{record.post.title}' for {record.notification.email}'."
+                self.stdout.write(self.style.NOTICE(msg))
+                continue
+
+            # don't send, if post publication date is not the day before
+            yesterday = timezone.now().date() - timedelta(days=1)
+            if record.post.published_at != yesterday:
+                msg = f"Skip as pub date is not yesterday: '{record.post.title}' for '{record.notification.email}'."
+                self.stdout.write(self.style.NOTICE(msg))
                 continue
 
             # don't queue for sending, if send mode is off
@@ -121,7 +125,7 @@ class Command(BaseCommand):
             # which is infeasible given the mass send strategy of newsletters
             record.sent_at = timezone.now()
             record.save()
-            msg = f"Adding record for '{record.post.title}' to '{record.notification.email}'"
+            msg = f"Adding record for '{record.post.title}' to '{record.notification.email}'."
             self.stdout.write(self.style.SUCCESS(msg))
 
         # return if send mode is off
