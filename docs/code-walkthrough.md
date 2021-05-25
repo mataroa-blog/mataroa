@@ -85,7 +85,7 @@ All urls are in this module. They are visually divided into several sections:
 * analytics list and details
 * pages CRUD
 
-## `main/views.py`
+## [`main/views.py`](/main/views.py)
 
 The significant majority of business logic is in the `views.py` module.
 
@@ -116,7 +116,7 @@ is also extremely readable:
 are used in cases where the CRUD/RESTful design pattern is not clear such as
 `notification_unsubscribe_key` where we unsubscribe an email via a GET operation.
 
-## `main/views_export.py`
+## [`main/views_export.py`](/main/views_export.py)
 
 This module contains all views related to the export capabilities of mataroa.
 
@@ -128,12 +128,12 @@ in-memory. Finally, we respond using `application/zip` content type and
 [Content-Disposition](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition)
 `attachment`.
 
-## `main/views_billing.py`
+## [`main/views_billing.py`](/main/views_billing.py)
 
 This module contains all billing and subscription related views. It’s design to
 support one payment processor, Stripe.
 
-## `main/tests/`
+## [`main/tests/`](/main/tests/)
 
 All tests are under this directory. They are divided into several modules,
 based on the functionality and the views they test.
@@ -141,7 +141,7 @@ based on the functionality and the views they test.
 Everything uses the built-in Python `unittest` module along with standard
 Django testing facilities.
 
-## `main/models.py` and `main/migrations/`
+## [`main/models.py`](/main/models.py) and [`main/migrations/`](/main/migrations/`)
 
 `main/models.py` is where the database schema is defined, translated into
 Django ORM-speak. This always displays the latest schema.
