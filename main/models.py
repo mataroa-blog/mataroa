@@ -245,7 +245,7 @@ class Page(models.Model):
 
 class AnalyticPage(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    path = models.TextField()
+    path = models.CharField(max_length=300)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

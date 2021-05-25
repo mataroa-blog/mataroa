@@ -51,7 +51,9 @@ class Command(BaseCommand):
             return
 
         if timezone.now().day != 1:
-            self.stdout.write(self.style.NOTICE("No action. Not the first day of the month."))
+            self.stdout.write(
+                self.style.NOTICE("No action. Not the first day of the month.")
+            )
             return
 
         self.stdout.write(self.style.NOTICE("Processing email exports."))
