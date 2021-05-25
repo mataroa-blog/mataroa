@@ -172,7 +172,10 @@ class ProcessNotificationsTest(TestCase):
         self.assertIn("Processing notifications.", output.getvalue())
         self.assertIn("Broadcast sent. Total 1 emails.", output.getvalue())
         self.assertIn(
-            "Adding notification record for 'Yesterday post' to 'zf@sirodoht.com'",
+            "Adding record for 'Yesterday post' to 'zf@sirodoht.com'", output.getvalue()
+        )
+        self.assertIn(
+            "Skip as pub date is not yesterday: 'Today post' for 'zf@sirodoht.com'.",
             output.getvalue(),
         )
 
