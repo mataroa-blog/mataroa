@@ -85,17 +85,21 @@ class Command(BaseCommand):
 
             # don't send, if blog hasn't turned notifications off
             if not record.post.owner.notifications_on:
-                # TODO: cancel queued record
+                # also delete record
+                record.delete()
                 continue
 
             # don't send, if post publication date is not the day before
             yesterday = timezone.now().date() - timedelta(days=1)
             if record.post.published_at != yesterday:
-                # TODO: cancel queued record
+                # also delete record
+                record.delete()
                 continue
 
-            # don't send, if email was unsubscribed since records were enqueued
+            # don't send, if email has unsubscribed since records were enqueued
             if not record.notification.is_active:
+                # also delete record
+                record.delete()
                 continue
 
             # add email object to list
