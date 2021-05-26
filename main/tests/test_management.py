@@ -20,7 +20,7 @@ class EnqueueNotificationsTest(TestCase):
 
     def setUp(self):
         self.user = models.User.objects.create(
-            username="alice", email="alice@wonderland.com", notifications_on=True
+            username="alice", email="alice@mataroa.blog", notifications_on=True
         )
 
         post_data = {
@@ -89,7 +89,7 @@ class ProcessNotificationsTest(TestCase):
 
     def setUp(self):
         self.user = models.User.objects.create(
-            username="alice", email="alice@wonderland.com", notifications_on=True
+            username="alice", email="alice@mataroa.blog", notifications_on=True
         )
 
         post_data = {
@@ -217,7 +217,7 @@ class ProcessNotificationsCanceledTest(TestCase):
 
     def setUp(self):
         self.user = models.User.objects.create(
-            username="alice", email="alice@wonderland.com", notifications_on=True
+            username="alice", email="alice@mataroa.blog", notifications_on=True
         )
 
         post_data = {
@@ -290,7 +290,7 @@ class MailExportsTest(TestCase):
 
     def setUp(self):
         self.user = models.User.objects.create(
-            username="alice", email="alice@wonderland.com", mail_export_on=True
+            username="alice", email="alice@mataroa.blog", mail_export_on=True
         )
 
         post_data = {
