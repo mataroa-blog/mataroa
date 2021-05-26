@@ -12,8 +12,8 @@ On how to contribute using email patches see [git-send-email.io](https://git-sen
 Also checkout our docs on:
 
 * [Git Commit Message Guidelines](docs/commit-messages.md)
-* [Dependencies](docs/dependencies.md)
 * [Code Walkthrough](docs/code-walkthrough.md)
+* [Dependencies](docs/dependencies.md)
 * [Server Playbook](docs/server-playbook.md)
 
 ## Development

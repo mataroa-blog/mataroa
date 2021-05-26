@@ -57,13 +57,15 @@ snap set certbot trust-plugin-with-root=ok
 
 ### DNSimple plugin for Let's Encrypt
 
+Only useful if DNS is managed by [DNSimple](https://dnsimple.com/).
+
 ```sh
 snap install certbot-dns-dnsimple
 vim /root/.secrets/certbot/dnsimple.ini
 chmod 600 /root/.secrets/certbot/dnsimple.ini
 ```
 
-# Disable root SSH
+## Disable root SSH
 
 ```sh
 vim /etc/ssh/sshd_config
@@ -72,7 +74,7 @@ vim /etc/ssh/sshd_config
 systemctl restart ssh
 ```
 
-# Clone and Start
+## Clone and Start
 
 ```sh
 sudo -i -u roa

@@ -11,7 +11,7 @@ Rules:
 published from community-trusted organisations or developers.
 * No JavaScript libraries / dependencies.
 
-Current list of PyPI dependencies:
+Current list of top-level PyPI dependencies:
 
 * [Django](https://pypi.org/project/Django/)
 * [psycopg2-binary](https://pypi.org/project/psycopg2-binary/)
