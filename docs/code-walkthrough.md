@@ -2,6 +2,8 @@
 
 Here, an overview of the project's code sources is presented.
 
+All business logic of the application is in one Django app: [`main`](/main).
+
 Condensed and commented sources file tree:
 
 ```
