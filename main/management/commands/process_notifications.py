@@ -89,20 +89,28 @@ class Command(BaseCommand):
         notification_records = models.NotificationRecord.objects.filter(sent_at=None)
         for record in notification_records:
 
-            # don't send, if blog hasn't turned notifications off
+            # don't send, if blog has turned notifications off
             if not record.post.owner.notifications_on:
                 # also delete record
-                record.delete()
-                msg = f"Deleted as notifications off: '{record.post.title}' for '{record.notification.email}'."
+                msg = f"Delete as notifications off: '{record.post.title}' for '{record.notification.email}'."
                 self.stdout.write(self.style.NOTICE(msg))
+                record.delete()
                 continue
 
             # don't send, if email has unsubscribed since records were enqueued
             if not record.notification.is_active:
                 # also delete record
-                record.delete()
-                msg = f"Deleted as email has unsubscribed: '{record.post.title}' for {record.notification.email}'."
+                msg = f"Delete as email has unsubscribed: '{record.post.title}' for '{record.notification.email}'."
                 self.stdout.write(self.style.NOTICE(msg))
+                record.delete()
+                continue
+
+            # don't send, if post is on draft status
+            if not record.post.published_at:
+                # also delete record
+                msg = f"Delete as post is now a draft: '{record.post.title}' for '{record.notification.email}'."
+                self.stdout.write(self.style.NOTICE(msg))
+                record.delete()
                 continue
 
             # don't send, if post publication date is not the day before
