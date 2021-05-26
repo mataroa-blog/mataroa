@@ -2,13 +2,15 @@
 
 ## Dependency Policy
 
-The mataroa project has an unusually strict dependency policy.
+The mataroa project has an unusually strict yet usually unclear dependency policy.
 
-Rules:
+Vague rules include:
 
 * No third-party Django apps.
-* All Python / PyPI packages should be individually vetted and are ideally
-published from community-trusted organisations or developers.
+* All Python / PyPI packages should be individually vetted.
+    * Packages should be published from community-trusted organisations or developers.
+    * Packages should be actively maintained.
+    * Packages should hold a high quality of coding practices.
 * No JavaScript libraries / dependencies.
 
 Current list of top-level PyPI dependencies:
