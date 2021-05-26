@@ -149,6 +149,9 @@ make lint
 Deployment is configured using [uWSGI](https://uwsgi.readthedocs.io/en/latest/)
 and [Caddy](https://caddyserver.com/).
 
+A [server playbook](/docs/server-playbook.md) document is also available, based
+on Ubuntu 20.04.
+
 Remember to set the environment variables before starting `uwsgi`. Depending on the deployment
 environment, this could mean directly exporting the variables or just sourcing `.envrc` (with all
 production variables — including `NODEBUG`):
@@ -186,7 +189,7 @@ installed. The schedule is subject to the administrator's preference. Indicative
 ```sh
 */5 * * * * bash -c 'cd /home/roa/mataroa && source ./venv/bin/activate && source .envrc && python manage.py enqueue_notifications'
 */10 * * * * bash -c 'cd /home/roa/mataroa && source ./venv/bin/activate && source .envrc && python manage.py process_notifications'
-0 0 * * * bash -c 'cd /home/roa/mataroa && source ./venv/bin/activate && source .envrc && python manage.py mail_exports'
+0 0 1 * * bash -c 'cd /home/roa/mataroa && source ./venv/bin/activate && source .envrc && python manage.py mail_exports'
 ```
 
 Documentation about the commands can be found in section [Management](#Management).
