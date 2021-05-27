@@ -176,6 +176,7 @@ class NotificationRecordAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "sent_at",
+        "is_canceled",
         "notification",
         "post",
     )
