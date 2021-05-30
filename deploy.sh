@@ -3,6 +3,11 @@
 set -e
 set -x
 
+# make sure tests pass
+source venv/bin/activate
+python manage.py test
+deactivate
+
 # pull latest changes
 ssh roa@95.217.177.163 'cd mataroa && git pull'
 
