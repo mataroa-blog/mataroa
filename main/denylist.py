@@ -98,6 +98,8 @@ ALLOWED_HTML_ELEMENTS = [
     "div",
     "dfn",
     "em",
+    "figcaption",
+    "figure",
     "kbd",
     "h1",
     "h2",
@@ -138,6 +140,7 @@ ALLOWED_HTML_ELEMENTS = [
 ALLOWED_HTML_ATTRS = [
     "alt",
     "class",
+    "frameborder",
     "height",
     "href",
     "id",
@@ -146,7 +149,6 @@ ALLOWED_HTML_ATTRS = [
     "style",
     "title",
     "width",
-    "frameborder",
 ]
 
 # css rules allowed to exist as inline styles on HTML elements of a markdown text
