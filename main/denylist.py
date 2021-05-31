@@ -158,4 +158,6 @@ ALLOWED_CSS_STYLES = [
     "display",
     "height",
     "width",
+    "padding",
+    "margin",
 ]
