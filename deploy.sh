@@ -3,12 +3,15 @@
 set -e
 set -x
 
+# push origin
+git push origin master
+
 # make sure tests pass
 source venv/bin/activate
 python manage.py test
 deactivate
 
-# pull latest changes
+# pull changes on server
 ssh roa@95.217.177.163 'cd mataroa && git pull'
 
 # sync requirements
