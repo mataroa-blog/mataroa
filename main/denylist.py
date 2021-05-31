@@ -154,10 +154,11 @@ ALLOWED_CSS_STYLES = [
     "background",
     "border",
     "border-radius",
+    "box-shadow",
     "color",
     "display",
     "height",
-    "width",
-    "padding",
     "margin",
+    "padding",
+    "width",
 ]
