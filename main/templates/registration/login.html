@@ -26,7 +26,7 @@
             <label for="id_username">{{ form.username.label }}</label>
             {% if form.username.errors %}
                 {% for error in form.username.errors %}
-                    <span class="form-error">{{ error|escape }}</span>
+                    <span class="form-error">{{ error|escape }}</span><br>
                 {% endfor %}
             {% endif %}
             {{ form.username }}
@@ -37,7 +37,7 @@
             <label for="id_password">{{ form.password.label }}</label>
             {% if form.password.errors %}
                 {% for error in form.password.errors %}
-                    <span class="form-error">{{ error|escape }}</span>
+                    <span class="form-error">{{ error|escape }}</span><br>
                 {% endfor %}
             {% endif %}
             {{ form.password }}

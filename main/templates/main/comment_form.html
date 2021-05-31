@@ -28,7 +28,7 @@
             <label for="id_name">Name (optional):</label>
             {% if form.name.errors %}
                 {% for error in form.name.errors %}
-                    <span class="form-error">{{ error|escape }}</span>
+                    <span class="form-error">{{ error|escape }}</span><br>
                 {% endfor %}
             {% endif %}
             <input type="text" name="name" id="id_name" maxlength="150" value="{{ form.name.value|default_if_none:'' }}">
@@ -38,7 +38,7 @@
             <label for="id_email">Email (optional and private):</label>
             {% if form.email.errors %}
                 {% for error in form.email.errors %}
-                    <span class="form-error">{{ error|escape }}</span>
+                    <span class="form-error">{{ error|escape }}</span><br>
                 {% endfor %}
             {% endif %}
             <input type="text" name="email" id="id_email" value="{{ form.slug.value|default_if_none:'' }}">
@@ -48,7 +48,7 @@
             <label for="id_body">Comment:</label>
             {% if form.body.errors %}
                 {% for error in form.body.errors %}
-                    <span class="form-error">{{ error|escape }}</span>
+                    <span class="form-error">{{ error|escape }}</span><br>
                 {% endfor %}
             {% endif %}
             <textarea name="body" id="id_body" cols="60" rows="5">{{ form.body.value|default_if_none:'' }}</textarea>

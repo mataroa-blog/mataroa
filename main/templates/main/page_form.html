@@ -20,7 +20,7 @@
             <label for="id_title">Title</label>
             {% if form.title.errors %}
                 {% for error in form.title.errors %}
-                    <span class="form-error">{{ error|escape }}</span>
+                    <span class="form-error">{{ error|escape }}</span><br>
                 {% endfor %}
             {% endif %}
             <input type="text" name="title" id="id_title" maxlength="300" required value="{{ form.title.value|default_if_none:'' }}">
@@ -30,7 +30,7 @@
             <label for="id_slug">Slug</label>
             {% if form.slug.errors %}
                 {% for error in form.slug.errors %}
-                    <span class="form-error">{{ error|escape }}</span>
+                    <span class="form-error">{{ error|escape }}</span><br>
                 {% endfor %}
             {% endif %}
             <input type="text" name="slug" id="id_slug" maxlength="300" required value="{{ form.slug.value|default_if_none:'' }}">
@@ -47,7 +47,7 @@
             <label for="id_body">Content (<a href="{% url 'guides_markdown' %}">supports markdown</a>) <span id="js-status"></span></label>
             {% if form.body.errors %}
                 {% for error in form.body.errors %}
-                    <span class="form-error">{{ error|escape }}</span>
+                    <span class="form-error">{{ error|escape }}</span><br>
                 {% endfor %}
             {% endif %}
             <textarea name="body" id="id_body" cols="60" rows="20" style="min-height: 200px; height: calc(100vh - 450px);">{{ form.body.value|default_if_none:'' }}</textarea>
