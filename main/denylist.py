@@ -60,6 +60,8 @@ DISALLOWED_USERNAMES = [
     "test",
     "tests",
     "tmp",
+    "up",
+    "uptime",
     "wiki",
     "www",
 ]
