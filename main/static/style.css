@@ -307,6 +307,17 @@ blockquote {
     color: var(--dark-grey-color);
 }
 
+figure {
+    border: 1px var(--light-grey-color) solid;
+    margin: auto;
+    color: var(--dark-grey-color);
+}
+
+figcaption {
+    font-size: 12px;
+    text-align: center;
+}
+
 table {
     border-collapse: collapse;
     border: 1px solid var(--light-grey-color);
