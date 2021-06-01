@@ -102,7 +102,7 @@ class BillingIndexPremiumTestCase(TestCase):
         self.assertContains(response, b"Premium Plan")
         self.assertContains(
             response,
-            f"{one_year_later.strftime('%b %-d, %Y')}".encode("utf-8"),
+            f"{one_year_later.strftime('%B %-d, %Y')}".encode("utf-8"),
         )
 
 
@@ -139,14 +139,16 @@ class BillingCardAddTestCase(TestCase):
         ):
 
             response = self.client.post(
-                reverse("billing_card"), data={"card_token": "tok_123"}, follow=True
+                reverse("billing_card"),
+                data={"card_token": "tok_123"},
+                follow=True,
             )
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, b"Premium Plan")
         self.assertContains(
             response,
-            f"{one_year_later.strftime('%b %-d, %Y')}".encode("utf-8"),
+            f"{one_year_later.strftime('%B %-d, %Y')}".encode("utf-8"),
         )
 
 
