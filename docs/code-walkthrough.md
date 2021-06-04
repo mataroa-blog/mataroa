@@ -143,7 +143,7 @@ based on the functionality and the views they test.
 Everything uses the built-in Python `unittest` module along with standard
 Django testing facilities.
 
-## [`main/models.py`](/main/models.py) and [`main/migrations/`](/main/migrations/`)
+## [`main/models.py`](/main/models.py) and [`main/migrations/`](/main/migrations/)
 
 `main/models.py` is where the database schema is defined, translated into
 Django ORM-speak. This always displays the latest schema.
