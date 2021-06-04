@@ -70,11 +70,17 @@ class PostAdmin(admin.ModelAdmin):
         "id",
         "title",
         "slug",
+        "post_url",
         "owner",
         "created_at",
         "updated_at",
         "published_at",
     )
+
+    @admin.display
+    def post_url(self, obj):
+        url = util.get_protocol() + obj.get_proper_url()
+        return format_html(f'<a href="{url}">{url}</a>')
 
     ordering = ["-id"]
 
