@@ -9,7 +9,7 @@ Vague rules include:
 * No third-party Django apps.
 * All Python / PyPI packages should be individually vetted.
     * Packages should be published from community-trusted organisations or developers.
-    * Packages should be actively maintained.
+    * Packages should be actively maintained (though not actively developed).
     * Packages should hold a high quality of coding practices.
 * No JavaScript libraries / dependencies.
 
