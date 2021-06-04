@@ -1,5 +1,7 @@
 # Git Commit Message Guidelines
 
+We follow some simple non-austere git commit message guidelines.
+
 * Start with a verb
     * `add`
     * `change`
