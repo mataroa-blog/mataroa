@@ -36,7 +36,7 @@ def get_email_body(user):
     body += "Please find your blog’s zip archive in markdown format attached.\n"
     body += "\n"
     body += "---\n"
-    body += "Unsubscribe:\n"
+    body += "Stop receiving exports:\n"
     body += get_unsubscribe_url(user) + "\n"
 
     return body
