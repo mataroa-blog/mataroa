@@ -414,7 +414,7 @@ class MailExportsTest(TestCase):
         # email
         self.assertEqual(len(mail.outbox), 1)
         self.assertIn("Mataroa export", mail.outbox[0].subject)
-        self.assertIn("Unsubscribe", mail.outbox[0].body)
+        self.assertIn("Stop receiving exports", mail.outbox[0].body)
 
         # email headers
         self.assertEqual(mail.outbox[0].to, [self.user.email])
