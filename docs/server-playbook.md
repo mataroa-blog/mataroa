@@ -82,6 +82,7 @@ git clone https://github.com/sirodoht/mataroa.git
 cd mataroa/
 uwsgi uwsgi.ini
 caddy start --config /home/roa/mataroa/Caddyfile
+exit
 ```
 
 ## Cron
