@@ -53,6 +53,7 @@ apt install snapd
 snap install core && snap refresh core
 snap install --classic certbot
 snap set certbot trust-plugin-with-root=ok
+certbot certonly -d mataroa.blog,*.mataroa.blog -m zf@sirodoht.com --agree-tos
 ```
 
 ### DNSimple plugin for Let's Encrypt
