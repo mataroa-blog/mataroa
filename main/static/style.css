@@ -521,6 +521,35 @@ form .helptext {
     content: "» ";
 }
 
+/* comparisons */
+.comparisons {
+    max-width: 1000px;
+}
+
+.comparisons h1,
+.comparisons p,
+.comparisons ul {
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.comparisons-matrix {
+    overflow: scroll;
+}
+
+.comparisons table {
+    min-width: 800px;
+    white-space: nowrap;
+    margin-top: 32px;
+    margin-bottom: 32px;
+}
+
+.comparisons thead > tr > th:not(:first-child),
+.comparisons tbody > tr > td:not(:first-child) {
+    text-align: center;
+}
+
 /* blog index */
 .blog a:hover {
     text-decoration: underline;

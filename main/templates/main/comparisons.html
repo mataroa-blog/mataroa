@@ -1,0 +1,158 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Comparing with other platforms — Mataroa{% endblock %}
+
+{% block content %}
+<main class="comparisons">
+    <h1>Comparing Mataroa with other platforms</h1>
+
+    <p>
+        In this matrix we compare some of the features of various hosted
+        blogging platforms.
+    </p>
+    <p>
+        This is not a comprehensive list. It’s a selection to highlight the
+        differences that we think are interesting.
+    </p>
+
+    <div class="comparisons-matrix">
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th scope="col">Mataroa</th>
+                    <th scope="col">Substack</th>
+                    <th scope="col">WordPress</th>
+                    <th scope="col">Medium</th>
+                    <th scope="col">Ghost</th>
+                    <th scope="col">Write.as</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td scope="row">Core blogging features</td>
+                    <td>✓</td>
+                    <td>✓</td>
+                    <td>✓</td>
+                    <td>✓</td>
+                    <td>✓</td>
+                    <td>✓</td>
+                </tr>
+                <tr>
+                    <td scope="row">Comments</td>
+                    <td>✓</td>
+                    <td>✓</td>
+                    <td>✓</td>
+                    <td>(debatable)</td>
+                    <td>(via integrations)</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td scope="row">Open source</td>
+                    <td>✓</td>
+                    <td></td>
+                    <td>✓</td>
+                    <td></td>
+                    <td>✓</td>
+                    <td>✓</td>
+                </tr>
+                <tr>
+                    <td scope="row">Newsletter</td>
+                    <td>✓</td>
+                    <td>✓</td>
+                    <td>(via plugins)</td>
+                    <td></td>
+                    <td>✓</td>
+                    <td>✓</td>
+                </tr>
+                <tr>
+                    <td scope="row">Paid subscribers</td>
+                    <td></td>
+                    <td>✓</td>
+                    <td>(via plugins)</td>
+                    <td></td>
+                    <td>✓</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td scope="row">Ad revenue for author</td>
+                    <td></td>
+                    <td></td>
+                    <td>✓</td>
+                    <td></td>
+                    <td>(via integrations)</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td scope="row">Themes</td>
+                    <td></td>
+                    <td></td>
+                    <td>✓</td>
+                    <td></td>
+                    <td>✓</td>
+                    <td>✓</td>
+                </tr>
+                <tr>
+                    <td scope="row">Extensions</td>
+                    <td></td>
+                    <td></td>
+                    <td>✓</td>
+                    <td></td>
+                    <td>✓</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td scope="row">
+                        <a href="https://hey.mataroa.blog/blog/monthly-auto-exports-via-email/">Recurring auto-export</a>
+                    </td>
+                    <td>✓</td>
+                    <td></td>
+                    <td>(possible via plugins)</td>
+                    <td></td>
+                    <td>(possible via integrations)</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td scope="row">
+                        <a href="https://mataroa.blog/export/">Export for self-hosting</a>
+                    </td>
+                    <td>✓</td>
+                    <td></td>
+                    <td>(possible via plugins)</td>
+                    <td></td>
+                    <td>(possible via integrations)</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td scope="row">
+                        <a href="https://hey.mataroa.blog/blog/redirect-to-new-domain/">Redirect to new domain</a>
+                    </td>
+                    <td>✓</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <ul>
+        <li>We never plan to support anything related to ads.</li>
+        <li>
+            No themes or extensions is part of our minimalism philosophy.
+        </li>
+        <li>
+            We have a strong commitment to vendor independence, by offering
+            three features that make leaving mataroa possible, easy, and
+            risk-free.
+        </li>
+    </ul>
+
+</main>
+
+{% include 'partials/footer.html' %}
+
+{% endblock %}

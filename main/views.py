@@ -922,6 +922,10 @@ class NotificationRecordDelete(LoginRequiredMixin, DeleteView):
         return super().dispatch(request, *args, **kwargs)
 
 
+def comparisons(request):
+    return render(request, "main/comparisons.html")
+
+
 def modus(request):
     return render(request, "main/modus.html")
 
