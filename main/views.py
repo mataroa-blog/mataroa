@@ -856,7 +856,7 @@ class NotificationList(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return models.Notification.objects.filter(
             blog_user=self.request.user, is_active=True
-        )
+        ).order_by("id")
 
 
 class NotificationRecordList(LoginRequiredMixin, ListView):
