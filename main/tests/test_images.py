@@ -42,6 +42,24 @@ class ImageDetailTestCase(TestCase):
         self.assertContains(response, "Uploaded on")
 
 
+class ImageDetailNotOwnTestCase(TestCase):
+    """Tests user cannot open image detail page of another user's image."""
+
+    def setUp(self):
+        self.victim = models.User.objects.create(username="bob")
+        self.client.force_login(self.victim)
+        with open("main/tests/testdata/vulf.jpeg", "rb") as fp:
+            self.client.post(reverse("image_list"), {"file": fp})
+        self.image = models.Image.objects.get(name="vulf")
+        self.client.logout()
+
+        self.attacker = models.User.objects.create(username="alice")
+        self.client.force_login(self.attacker)
+
+    def test_image_detail_not_own(self):
+        response = self.client.get(reverse("image_detail", args=(self.image.slug,)))
+        self.assertEqual(response.status_code, 403)
+
 
 class ImageDetailUsedByTestCase(TestCase):
     """Tests used by posts feature works."""

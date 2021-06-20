@@ -487,6 +487,12 @@ class ImageDetail(LoginRequiredMixin, DetailView):
 
         return context
 
+    def dispatch(self, request, *args, **kwargs):
+        image = self.get_object()
+        if request.user != image.owner:
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class ImageUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = models.Image
