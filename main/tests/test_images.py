@@ -42,6 +42,33 @@ class ImageDetailTestCase(TestCase):
         self.assertContains(response, "Uploaded on")
 
 
+
+class ImageDetailUsedByTestCase(TestCase):
+    """Tests used by posts feature works."""
+
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.client.force_login(self.user)
+        with open("main/tests/testdata/vulf.jpeg", "rb") as fp:
+            self.client.post(reverse("image_list"), {"file": fp})
+        self.image = models.Image.objects.get(name="vulf")
+
+        self.data = {
+            "title": "New post",
+            "slug": "new-post",
+            "body": f'This is Vulfpeck\n<img src="/images/{self.image.filename}">',
+        }
+        self.post = models.Post.objects.create(owner=self.user, **self.data)
+
+    def test_image_detail(self):
+        response = self.client.get(
+            reverse("image_detail", args=(self.image.slug,)),
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Used by posts:")
+        self.assertContains(response, "New post")
+
+
 class ImageRawTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")

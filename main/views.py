@@ -478,10 +478,13 @@ class ImageDetail(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        # find posts that use this image
         context["used_by_posts"] = []
         for post in models.Post.objects.filter(owner=self.request.user):
-            if self.object.get_absolute_url() in post.body:
+            if "/images/" + self.object.filename in post.body:
                 context["used_by_posts"].append(post)
+
         return context
 
 
