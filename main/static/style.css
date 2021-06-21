@@ -528,6 +528,7 @@ form .helptext {
 
 .comparisons h1,
 .comparisons p,
+.comparisons ol,
 .comparisons ul {
     max-width: 500px;
     margin-left: auto;
@@ -541,8 +542,6 @@ form .helptext {
 .comparisons table {
     min-width: 800px;
     white-space: nowrap;
-    margin-top: 32px;
-    margin-bottom: 32px;
 }
 
 .comparisons thead > tr > th:not(:first-child),
