@@ -193,11 +193,16 @@ template {
 
 /* dark mode
  * create a new color (dark-mode-color)
- * override an existing color (dark-grey-color) */
+ * override three existing colors */
 @media (prefers-color-scheme: dark) {
     :root {
-        --dark-mode-color: #1c1b22;
+        --dark-mode-color: #212529;
+
+        --link-color: #3395ff;
         --dark-grey-color: #78828a;
+        --light-grey-color: #353535;
+        --airy-grey-color: #2b2b2b;
+        --purple-color: #dd47ec;
     }
 }
 
@@ -453,6 +458,16 @@ textarea {
         width: 100%;
     }
 }
+@media (prefers-color-scheme: dark) {
+    input[type="text"],
+    input[type="url"],
+    input[type="email"],
+    input[type="password"],
+    textarea {
+        color: #fff;
+        background: var(--light-grey-color);
+    }
+}
 
 .theme-zialucia input[type="text"],
 .theme-zialucia input[type="url"],
@@ -522,6 +537,11 @@ form .helptext {
     border: 1px dashed #000;
     padding-top: 8px;
     padding-bottom: 8px;
+}
+@media (prefers-color-scheme: dark) {
+    .lead {
+        border-color: #fff;
+    }
 }
 
 .cta {
