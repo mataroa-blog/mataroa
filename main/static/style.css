@@ -191,11 +191,27 @@ template {
     --purple-color: #cd1ecd;
 }
 
+/* dark mode
+ * create a new color (dark-mode-color)
+ * override an existing color (dark-grey-color) */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dark-mode-color: #1c1b22;
+        --dark-grey-color: #78828a;
+    }
+}
+
 html,
 body {
     font-family: sans-serif;
     font-size: 14px;
     line-height: 1.5;
+}
+@media (prefers-color-scheme: dark) {
+    body {
+        color: #fff;
+        background: var(--dark-mode-color);
+    }
 }
 
 a {
@@ -618,6 +634,11 @@ form .helptext {
 
 .webring-name {
     color: #000;
+}
+@media (prefers-color-scheme: dark) {
+    .webring-name {
+        color: #fff;
+    }
 }
 
 /* post detail */
