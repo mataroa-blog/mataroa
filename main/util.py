@@ -19,15 +19,24 @@ def is_disallowed(username):
     return username in denylist.DISALLOWED_USERNAMES
 
 
-def get_post_slug(post_title, owner):
-    """Generate slug given post title."""
+def get_post_slug(post_title, owner, post=None):
+    """
+    Generate slug given post title. Optional post arg for post that already
+    exists.
+    """
     slug = slugify(post_title)
 
     # in case of post_title such as این متن است
     if not slug:
         slug = str(uuid.uuid4())[:8]
 
-    # if slug exists, add a unique string suffix
+    # if post is not None, then this is an update op
+    if post is not None:
+        if models.Post.objects.filter(owner=owner, slug=slug).count() == 1:
+            return slug
+
+    # if post arg is None, then this is a new post
+    # if slug already exists for another post, add a suffix to make it unique
     if models.Post.objects.filter(owner=owner, slug=slug).exists():
         slug += "-" + str(uuid.uuid4())[:8]
 

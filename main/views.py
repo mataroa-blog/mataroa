@@ -241,14 +241,18 @@ class PostUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         # hidden code for slug: if slug is ":gen" then generate it from the title
         if form.cleaned_data.get("slug") == ":gen":
             self.object = form.save(commit=False)
-            self.object.slug = util.get_post_slug(self.object.title, self.request.user)
+            self.object.slug = util.get_post_slug(
+                self.object.title, self.request.user, post=self.object
+            )
             self.object.save()
             return super().form_valid(form)
 
         # normalise and validate slug
         self.object = form.save(commit=False)
         updated_slug = form.cleaned_data.get("slug")
-        self.object.slug = util.get_post_slug(updated_slug, self.request.user)
+        self.object.slug = util.get_post_slug(
+            updated_slug, self.request.user, post=self.object
+        )
         self.object.save()
 
         return super().form_valid(form)
