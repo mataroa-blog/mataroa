@@ -242,22 +242,15 @@ class PostUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         if form.cleaned_data.get("slug") == ":gen":
             self.object = form.save(commit=False)
             self.object.slug = util.get_post_slug(self.object.title, self.request.user)
-            self.object.owner = self.request.user
             self.object.save()
             return super().form_valid(form)
 
-        # check if slug is unique among this user's posts
-        if (
-            models.Post.objects.filter(
-                owner=self.request.user, slug=form.cleaned_data.get("slug")
-            )
-            .exclude(id=self.object.id)
-            .exists()
-        ):
-            form.add_error("slug", "This slug is used by another of your posts.")
-            return self.render_to_response(self.get_context_data(form=form))
+        # normalise and validate slug
+        self.object = form.save(commit=False)
+        updated_slug = form.cleaned_data.get("slug")
+        self.object.slug = util.get_post_slug(updated_slug, self.request.user)
+        self.object.save()
 
-        self.object = form.save()
         return super().form_valid(form)
 
     def dispatch(self, request, *args, **kwargs):
