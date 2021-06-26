@@ -1,6 +1,8 @@
 import io
 import uuid
 import zipfile
+from datetime import datetime
+from string import Template
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -216,3 +218,196 @@ def export_unsubscribe_key(request, unsubscribe_key):
                 "unsubscribed": False,
             },
         )
+
+
+def _get_epub_author(blog_user):
+    return f"""<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+    <title>{blog_user.username}</title>
+</head>
+<body>
+<h1>About the Author</h1>
+<p>{blog_user.about}</p>
+</body>
+</html>"""
+
+
+def _get_epub_titlepage(blog_user):
+    return f"""<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+    <title>{blog_user.blog_title}</title>
+</head>
+<body>
+<h1>{blog_user.blog_title}</h1>
+<p>{blog_user.blog_byline}</p>
+<br/>
+<p>~{blog_user.username}</p>
+</body>
+</html>"""
+
+
+def _get_epub_chapter(post):
+    return f"""<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head>
+    <title>{post.title}</title>
+</head>
+<body>
+<h2>{post.title}</h2>
+{post.body_as_xhtml}
+</body>
+</html>"""
+
+
+@login_required
+def export_epub(request):
+    if request.method == "POST":
+        # create uuid
+        epub_uuid = str(uuid.uuid4())
+
+        # load mimetype and container.xml
+        with open("./export_base_epub/mimetype", "r") as mimetype_file:
+            mimetype_content = mimetype_file.read()
+        with open("./export_base_epub/container.xml", "r") as container_xml_file:
+            container_xml_content = container_xml_file.read()
+
+        # process posts
+        posts = models.Post.objects.filter(owner=request.user)
+        content_chapters = []
+        for index, p in enumerate(posts):
+            chapter = {
+                "body": _get_epub_chapter(p),
+                "title": p.title,
+                "id": index + 1,  # +1 because we want to start from 1
+                "link": f"{str(index + 1)}.xhtml",
+            }
+            content_chapters.append(chapter)
+
+        # process content.opf
+        content_opf_manifest = ""
+        content_opf_spine = ""
+        for chapter in content_chapters:
+            content_opf_manifest += (
+                f'    <item id="{chapter["id"]}" href="{chapter["link"]}"'
+                + ' media-type="application/xhtml+xml"/>'
+                + "\n"
+            )
+            content_opf_spine += f'    <itemref idref="{chapter["id"]}"/>' + "\n"
+        with open("./export_base_epub/content.opf", "r") as opf_content_file:
+            content_opf_content = opf_content_file.read()
+
+            content_opf_content = content_opf_content.replace(
+                "<dc:title></dc:title>",
+                f"<dc:title>{request.user.blog_title}</dc:title>",
+            )
+            content_opf_content = content_opf_content.replace(
+                '<dc:creator opf:role="aut"></dc:creator>',
+                f'<dc:creator opf:role="aut">{request.user.username}</dc:creator>',
+            )
+            content_opf_content = content_opf_content.replace(
+                "<dc:language></dc:language>", "<dc:language>en</dc:language>"
+            )
+            content_opf_content = content_opf_content.replace(
+                "<dc:publisher></dc:publisher>",
+                f"<dc:publisher>{request.user.username}</dc:publisher>",
+            )
+            content_opf_content = content_opf_content.replace(
+                '<dc:identifier opf:scheme="UUID"></dc:identifier>',
+                f'<dc:identifier opf:scheme="UUID">{epub_uuid}</dc:identifier>',
+            )
+            content_opf_content = content_opf_content.replace(
+                "<dc:date></dc:date>",
+                f"<dc:date>{datetime.now().date().isoformat()}</dc:date>",
+            )
+
+            content_opf_content = content_opf_content.replace(
+                "<!-- manifest items -->", content_opf_manifest
+            )
+            content_opf_content = content_opf_content.replace(
+                "<!-- spine items -->", content_opf_spine
+            )
+
+        # process toc.xhtml
+        toc_xhtml_body = ""
+        for chapter in content_chapters:
+            toc_xhtml_body += (
+                f'      <li><a href="{chapter["link"]}">{chapter["title"]}</a></li>'
+                + "\n"
+            )
+        with open("./export_base_epub/toc.xhtml", "r") as toc_xhtml_file:
+            toc_xhtml_content = toc_xhtml_file.read()
+            toc_xhtml_content = toc_xhtml_content.replace(
+                "<!-- chapters list -->", toc_xhtml_body
+            )
+
+        # process toc.ncx
+        toc_ncx_body = ""
+        toc_ncx_html_item = Template(
+            """    <navPoint id="$chapter_id" playOrder="$chapter_playorder">
+      <navLabel><text>$chapter_title</text></navLabel>
+      <content src="$chapter_link"/>
+    </navPoint>
+"""
+        )
+        for chapter in content_chapters:
+            new_item = toc_ncx_html_item.substitute(
+                chapter_id=chapter["id"],
+                chapter_playorder=chapter["id"] + 2,  # +2 because of title+toc
+                chapter_title=chapter["title"],
+                chapter_link=chapter["link"],
+            )
+            toc_ncx_body += new_item + "\n"
+        toc_ncx_body += toc_ncx_html_item.substitute(
+            chapter_id="author",
+            chapter_playorder=len(content_chapters) + 3,
+            chapter_title="About the Author",
+            chapter_link="author.xhtml",
+        )
+        with open("./export_base_epub/toc.ncx", "r") as toc_ncx_file:
+            toc_ncx_content = toc_ncx_file.read()
+
+            toc_ncx_content = toc_ncx_content.replace(
+                "<text></text>",
+                f"<text>{request.user.blog_title}</text>",
+            )
+            toc_ncx_content = toc_ncx_content.replace(
+                '<meta name="dtb:uid" content=""/>',
+                f'<meta name="dtb:uid" content="{epub_uuid}"/>',
+            )
+            toc_ncx_content = toc_ncx_content.replace(
+                "<!-- nav points -->", toc_ncx_body
+            )
+
+        # create zip archive in memory
+        export_name = "export-book-" + epub_uuid[:8]
+        zip_buffer = io.BytesIO()
+        with zipfile.ZipFile(
+            zip_buffer, "a", zipfile.ZIP_DEFLATED, False
+        ) as export_archive:
+            # write meta pages
+            export_archive.writestr("mimetype", mimetype_content)
+            export_archive.writestr("META-INF/container.xml", container_xml_content)
+            export_archive.writestr("OEBPS/content.opf", content_opf_content)
+            export_archive.writestr("OEBPS/toc.xhtml", toc_xhtml_content)
+            export_archive.writestr("OEBPS/toc.ncx", toc_ncx_content)
+
+            # write content
+            for chapter in content_chapters:
+                export_archive.writestr(f'OEBPS/{chapter["link"]}', chapter["body"])
+
+            # write title and author page
+            export_archive.writestr(
+                "OEBPS/titlepage.xhtml", _get_epub_titlepage(request.user)
+            )
+            export_archive.writestr(
+                "OEBPS/author.xhtml", _get_epub_author(request.user)
+            )
+
+        response = HttpResponse(zip_buffer.getvalue(), content_type="application/epub")
+        response["Content-Disposition"] = f"attachment; filename={export_name}.epub"
+        return response
