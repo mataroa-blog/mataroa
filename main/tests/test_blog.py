@@ -176,6 +176,29 @@ class BlogExportMarkdownTestCase(TestCase):
         self.assertContains(response, self.data["slug"].encode("utf-8"))
 
 
+class BlogExportPrintTestCase(TestCase):
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.user.blog_title = "Alice Blog"
+        self.user.blog_byline = "a blog about wonderland"
+        self.user.save()
+        self.client.force_login(self.user)
+        self.data = {
+            "title": "Welcome post",
+            "slug": "welcome-post",
+            "body": "Content sentence.",
+        }
+        self.post = models.Post.objects.create(owner=self.user, **self.data)
+
+    def test_blog_export(self):
+        response = self.client.post(reverse("export_print"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.user.blog_title)
+        self.assertContains(response, self.user.blog_byline)
+        self.assertContains(response, self.user.username)
+        self.assertContains(response, self.data["title"].encode("utf-8"))
+
+
 class BlogExportZolaTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")

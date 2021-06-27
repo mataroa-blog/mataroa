@@ -12,6 +12,7 @@
     <ul>
         <li><a href="#export-markdown">Markdown</a>: all blog posts as .md files, zip archived</li>
         <li><a href="#export-book">Book</a>: all blog posts as chapters in an .epub book</li>
+        <li><a href="#export-print">Print</a>: render all blog posts in one page</li>
         <li><a href="#export-zola">Zola</a>: simple static site generator that we like</li>
         <li><a href="#export-hugo">Hugo</a>: very popular and reliable static site generators</li>
     </ul>
@@ -47,6 +48,16 @@
         {% csrf_token %}
         <input type="submit" value="Export as epub book">
     </form>
+    {% endif %}
+
+    <h2 id="export-print">Print</h2>
+    <p>
+        Renders all blog posts in one page. Useful for exporting the blog into PDF,
+        or printing in dead trees form, or anything else that might require bulk copying.
+    </p>
+
+    {% if request.user.is_authenticated %}
+    <a href="{% url 'export_print' %}" class="btn">Generate all posts in one page</a>
     {% endif %}
 
     <h2 id="export-zola">Zola</h2>

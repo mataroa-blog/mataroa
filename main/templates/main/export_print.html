@@ -1,0 +1,52 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}{{ request.user.blog_title|default:request.user.username }}{% endblock %}
+{% block meta_description %}{{ request.user.blog_byline|default:"" }}{% endblock %}
+
+{% block content %}
+<main class="blog">
+    {% if request.user.blog_title %}
+    <h1>{{ request.user.blog_title }}</h1>
+    {% endif %}
+
+    {% if request.user.blog_byline %}
+    <p>
+        {{ request.user.blog_byline_as_html|safe }}
+    </p>
+    {% endif %}
+
+    <p>
+        ~{{ request.user.username }}
+    </p>
+
+    {% for p in posts %}
+    <article>
+        <h1>{{ p.title }}</h1>
+
+        <div class="posts-item-byline">
+            {% if p.published_at and p.is_published %}
+            Published on <time datetime="{{ p.published_at|date:'Y-m-d' }}" itemprop="datePublished">{{ p.published_at|date:'F j, Y' }}</time>
+            {% elif p.published_at and not p.is_published %}
+            SCHEDULED for <time datetime="{{ p.published_at|date:'Y-m-d' }}" itemprop="datePublished">{{ p.published_at|date:'F j, Y' }}</time>
+            {% else %}
+            DRAFT — Last updated on <time datetime="{{ p.updated_at|date:'Y-m-d' }}" itemprop="dateModified">{{ p.updated_at|date:'F j, Y' }}</time>
+            {% endif %}
+        </div>
+
+        <div class="posts-item-body">
+            {{ p.body_as_html|safe }}
+        </div>
+    </article>
+    <br>
+    {% endfor %}
+
+    <article>
+        <h1>About the Author</h1>
+        <p>
+            {{ request.user.about_as_html|safe }}
+        </p>
+        <br>
+    </article>
+</main>
+
+{% endblock %}

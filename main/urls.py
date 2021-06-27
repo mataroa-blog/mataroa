@@ -118,6 +118,7 @@ urlpatterns += [
     path("export/zola/", views_export.export_zola, name="export_zola"),
     path("export/hugo/", views_export.export_hugo, name="export_hugo"),
     path("export/epub/", views_export.export_epub, name="export_epub"),
+    path("export/print/", views_export.export_print, name="export_print"),
     path(
         "export/unsubscribe/<uuid:unsubscribe_key>/",
         views_export.export_unsubscribe_key,

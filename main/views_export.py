@@ -221,6 +221,17 @@ def export_unsubscribe_key(request, unsubscribe_key):
         )
 
 
+@login_required
+def export_print(request):
+    return render(
+        request,
+        "main/export_print.html",
+        {
+            "posts": models.Post.objects.filter(owner=request.user),
+        },
+    )
+
+
 def _get_epub_author(blog_user):
     return f"""<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html>
