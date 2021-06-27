@@ -254,6 +254,15 @@ def _get_epub_titlepage(blog_user):
 
 
 def _get_epub_chapter(post):
+    chapter_body = post.body_as_html
+
+    # process image urls
+    image_url_like = util.get_protocol() + "//" + settings.CANONICAL_HOST + "/images/"
+    if image_url_like in chapter_body:
+        chapter_body = chapter_body.replace(image_url_like, "images/")
+
+    # xhtml replacements
+    chapter_body = chapter_body.replace("<br>", "<br/>").replace("<hr>", "<hr/>")
     return f"""<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html>
 <html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
@@ -262,9 +271,10 @@ def _get_epub_chapter(post):
 </head>
 <body>
 <h2>{post.title}</h2>
-{post.body_as_xhtml}
+{chapter_body}
 </body>
-</html>"""
+</html>
+"""
 
 
 @login_required
@@ -399,9 +409,13 @@ def export_epub(request):
             export_archive.writestr("OEBPS/toc.xhtml", toc_xhtml_content)
             export_archive.writestr("OEBPS/toc.ncx", toc_ncx_content)
 
-            # write content
+            # write post / chapter  files
             for chapter in content_chapters:
                 export_archive.writestr(f'OEBPS/{chapter["link"]}', chapter["body"])
+
+            # write images
+            for img in models.Image.objects.filter(owner=request.user):
+                export_archive.writestr(f"OEBPS/images/{img.filename}", img.data)
 
             # write title and author page
             export_archive.writestr(
