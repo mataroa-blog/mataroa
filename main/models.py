@@ -113,7 +113,7 @@ class User(AbstractUser):
 
     @property
     def about_as_html(self):
-        return util.md_to_html(self.about)
+        return util.md_to_html(self.about, strip_tags=True)
 
     @property
     def footer_note_as_html(self):

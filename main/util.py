@@ -117,6 +117,8 @@ def clean_html(dirty_html, strip_tags=False):
 
 def md_to_html(markdown_string, strip_tags=False):
     """Return HTML formatted string, given a markdown one."""
+    if not markdown_string:
+        return ""
     dirty_html = markdown.markdown(
         syntax_highlight(markdown_string),
         extensions=[
