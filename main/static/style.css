@@ -228,6 +228,27 @@ a:hover {
     text-decoration: underline;
 }
 
+a.btn {
+    display: inline-block;
+    cursor: pointer;
+    background: var(--link-color);
+    color: #fff;
+    border: 1px solid var(--ascent-color);
+    padding: 8px 24px;
+}
+
+a.btn:hover,
+a.btn:active {
+    background: var(--ascent-color);
+    text-decoration: none;
+}
+
+a.btn:disabled {
+    pointer-events: none;
+    background: var(--ascent-color);
+}
+
+
 h1 {
     font-weight: 500;
     padding-bottom: 4px;
@@ -253,9 +274,20 @@ main {
         padding-right: 8px;
     }
 }
+@media print {
+    main {
+        max-width: unset;
+    }
+}
 
 .theme-zialucia main {
     max-width: 720px;
+}
+
+@media print {
+    article {
+        page-break-before: always;
+    }
 }
 
 aside {
@@ -309,6 +341,11 @@ nav {
     nav {
         padding-left: 8px;
         padding-right: 8px;
+    }
+}
+@media print {
+    nav {
+        display: none;
     }
 }
 
