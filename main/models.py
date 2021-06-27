@@ -112,6 +112,10 @@ class User(AbstractUser):
         return util.md_to_html(self.blog_byline, strip_tags=True)
 
     @property
+    def about_as_html(self):
+        return util.md_to_html(self.about)
+
+    @property
     def footer_note_as_html(self):
         return util.md_to_html(self.footer_note)
 

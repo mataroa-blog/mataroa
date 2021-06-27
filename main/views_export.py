@@ -230,7 +230,7 @@ def _get_epub_author(blog_user):
 </head>
 <body>
 <h1>About the Author</h1>
-<p>{blog_user.about}</p>
+<p>{blog_user.about_as_html}</p>
 </body>
 </html>
 """
