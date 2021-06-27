@@ -26,9 +26,10 @@ def host_middleware(get_response):
             and host_parts[1] == canonical_parts[0]  # should be "mataroa"
             and host_parts[2] == canonical_parts[1]  # should be "blog"
         ):
-            # if on <subdomain>.mataroa.blog, and set subdomain to given
-            # validation will happen inside views
-            # the indexes are different because settings.CANONICAL_HOST has no subdomain
+            # if on <subdomain>.mataroa.blog:
+            # * set subdomain to given subdomain
+            # * the lists indexes are different because CANONICAL_HOST has no subdomain
+            # * also validation will happen inside views
             request.subdomain = host_parts[0]
 
             # check if subdomain exists
@@ -38,23 +39,28 @@ def host_middleware(get_response):
                 # set theme
                 request.theme_zialucia = request.blog_user.theme_zialucia
 
-                # if not logged in, check if we need to redirect anon user
-                if not request.user.is_authenticated:
+                # redirect to custom and/or retired urls for cases:
+                # * logged out / anon users
+                # * logged in but on other user's subdomain
+                if not request.user.is_authenticated or (
+                    request.user.is_authenticated
+                    and request.user.username != request.subdomain
+                ):
                     redir_domain = ""
                     if request.blog_user.custom_domain:  # user has set custom domain
                         redir_domain = (
                             request.blog_user.custom_domain + request.path_info
                         )
 
+                    # user has retired their mataroa blog, redirect to new domain
                     if request.blog_user.redirect_domain:
-                        # user has retired their mataroa blog, redirect to new domain
                         redir_domain = (
                             request.blog_user.redirect_domain + request.path_info
                         )
 
+                    # if there is no protocol prefix,
+                    # prepend double slashes to indicate other domain
                     if redir_domain and "://" not in redir_domain:
-                        # if there is no protocol prefix,
-                        # prepend double slashes to indicate other domain
                         redir_domain = "//" + redir_domain
 
                     if redir_domain:
@@ -67,13 +73,14 @@ def host_middleware(get_response):
             request.subdomain = request.blog_user.username
             request.theme_zialucia = request.blog_user.theme_zialucia
 
+            # if user has retired their mataroa blog (and keeps the custom domain)
+            # redirect to new domain
             if request.blog_user.redirect_domain:
-                # user has retired their mataroa blog, redirect to new domain
                 redir_domain = request.blog_user.redirect_domain + request.path_info
 
+                # if there is no protocol prefix,
+                # prepend double slashes to indicate other domain
                 if "://" not in redir_domain:
-                    # if there is no protocol prefix,
-                    # prepend double slashes to indicate other domain
                     redir_domain = "//" + redir_domain
 
                 return redirect(redir_domain)
