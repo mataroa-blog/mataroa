@@ -1,9 +1,5 @@
-from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
-from django.utils import timezone
-
-from main import models
 
 
 class StaticTestCase(TestCase):
