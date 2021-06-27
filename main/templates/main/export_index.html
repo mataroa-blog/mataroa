@@ -45,7 +45,7 @@
     {% if request.user.is_authenticated %}
     <form method="post" action="{% url 'export_epub' %}">
         {% csrf_token %}
-        <input type="submit" value="Export as epub file">
+        <input type="submit" value="Export as epub book">
     </form>
     {% endif %}
 
