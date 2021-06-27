@@ -4,11 +4,12 @@ import zipfile
 from datetime import datetime
 from string import Template
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from main import models
+from main import models, util
 
 
 def prepend_zola_frontmatter(body, post_title, pub_date):
@@ -32,13 +33,13 @@ def prepend_hugo_frontmatter(body, post_title, pub_date):
     return frontmatter + body
 
 
-def blog_export(request):
+def export_index(request):
     if request.method == "GET":
-        return render(request, "main/blog_export.html")
+        return render(request, "main/export_index.html")
 
 
 @login_required
-def blog_export_markdown(request):
+def export_markdown(request):
     if request.method == "POST":
         # get all user posts and add them into export_posts encoded
         posts = models.Post.objects.filter(owner=request.user)
@@ -69,7 +70,7 @@ def blog_export_markdown(request):
 
 
 @login_required
-def blog_export_zola(request):
+def export_zola(request):
     if request.method == "POST":
         # load zola templates
         with open("./export_base_zola/config.toml", "r") as zola_config_file:
@@ -123,7 +124,7 @@ def blog_export_zola(request):
 
 
 @login_required
-def blog_export_hugo(request):
+def export_hugo(request):
     if request.method == "POST":
         # load hugo templates
         with open("./export_base_hugo/config.toml", "r") as hugo_config_file:
@@ -231,7 +232,8 @@ def _get_epub_author(blog_user):
 <h1>About the Author</h1>
 <p>{blog_user.about}</p>
 </body>
-</html>"""
+</html>
+"""
 
 
 def _get_epub_titlepage(blog_user):
@@ -247,7 +249,8 @@ def _get_epub_titlepage(blog_user):
 <br/>
 <p>~{blog_user.username}</p>
 </body>
-</html>"""
+</html>
+"""
 
 
 def _get_epub_chapter(post):

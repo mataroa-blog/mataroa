@@ -109,14 +109,14 @@ urlpatterns += [
 urlpatterns += [
     path("webring/", views.WebringUpdate.as_view(), name="blog_webring"),
     path("import/", views.BlogImport.as_view(), name="blog_import"),
-    path("export/", views_export.blog_export, name="blog_export"),
+    path("export/", views_export.export_index, name="export_index"),
     path(
         "export/markdown/",
-        views_export.blog_export_markdown,
-        name="blog_export_markdown",
+        views_export.export_markdown,
+        name="export_markdown",
     ),
-    path("export/zola/", views_export.blog_export_zola, name="blog_export_zola"),
-    path("export/hugo/", views_export.blog_export_hugo, name="blog_export_hugo"),
+    path("export/zola/", views_export.export_zola, name="export_zola"),
+    path("export/hugo/", views_export.export_hugo, name="export_hugo"),
     path(
         "export/unsubscribe/<uuid:unsubscribe_key>/",
         views_export.export_unsubscribe_key,

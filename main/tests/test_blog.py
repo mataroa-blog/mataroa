@@ -169,7 +169,7 @@ class BlogExportMarkdownTestCase(TestCase):
         self.post = models.Post.objects.create(owner=self.user, **self.data)
 
     def test_blog_export(self):
-        response = self.client.post(reverse("blog_export_markdown"))
+        response = self.client.post(reverse("export_markdown"))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response["Content-Type"], "application/zip")
         self.assertContains(response, b"export-markdown")
@@ -188,7 +188,7 @@ class BlogExportZolaTestCase(TestCase):
         self.post = models.Post.objects.create(owner=self.user, **self.data)
 
     def test_blog_export(self):
-        response = self.client.post(reverse("blog_export_zola"))
+        response = self.client.post(reverse("export_zola"))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response["Content-Type"], "application/zip")
         self.assertContains(response, b"export-zola")
@@ -207,7 +207,7 @@ class BlogExportHugoTestCase(TestCase):
         self.post = models.Post.objects.create(owner=self.user, **self.data)
 
     def test_blog_export(self):
-        response = self.client.post(reverse("blog_export_hugo"))
+        response = self.client.post(reverse("export_hugo"))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response["Content-Type"], "application/zip")
         self.assertContains(response, b"export-hugo")
