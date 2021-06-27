@@ -11,6 +11,9 @@
     <ul>
         <li><a href="{% url 'analytic_page_detail' 'index' %}">index</a></li>
         <li><a href="{% url 'analytic_page_detail' 'rss' %}">rss</a></li>
+        {% for page in page_list %}
+        <li><a href="{% url 'analytic_page_detail' page.slug %}">{{ page.slug }}</a></li>
+        {% endfor %}
     </ul>
     {% if post_list %}
     <p>

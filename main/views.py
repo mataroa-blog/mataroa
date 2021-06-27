@@ -21,7 +21,7 @@ from django.http import (
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 
 from main import denylist, forms, models, util
@@ -557,6 +557,17 @@ class PageDetail(DetailView):
             context["pages"] = models.Page.objects.filter(
                 owner__username=self.request.subdomain, is_hidden=False
             )
+
+        # do not record analytic if post is authed user's
+        if (
+            self.request.user.is_authenticated
+            and self.request.user == self.object.owner
+        ):
+            return context
+        models.AnalyticPage.objects.create(
+            user=self.request.blog_user, path=self.request.path.strip("/")
+        )
+
         return context
 
     def dispatch(self, request, *args, **kwargs):
@@ -631,12 +642,14 @@ class WebringUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return models.User.objects.get(pk=self.request.user.id)
 
 
-class AnalyticList(LoginRequiredMixin, ListView):
-    model = models.Post
+class AnalyticList(LoginRequiredMixin, TemplateView):
     template_name = "main/analytic_list.html"
 
-    def get_queryset(self):
-        return models.Post.objects.filter(owner=self.request.user)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["post_list"] = models.Post.objects.filter(owner=self.request.user)
+        context["page_list"] = models.Page.objects.filter(owner=self.request.user)
+        return context
 
 
 def populate_analytics_context(context, date_25d_ago, current_date, day_counts):
