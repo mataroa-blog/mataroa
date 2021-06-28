@@ -34,8 +34,7 @@ def prepend_hugo_frontmatter(body, post_title, pub_date):
 
 
 def export_index(request):
-    if request.method == "GET":
-        return render(request, "main/export_index.html")
+    return render(request, "main/export_index.html")
 
 
 @login_required
