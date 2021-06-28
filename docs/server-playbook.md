@@ -2,7 +2,7 @@
 
 This is a basic playbook on how to setup a new server for hosting a mataroa instance.
 
-This playbook is based on Ubuntu 20.04.
+Based on Ubuntu 20.04.
 
 ## Timezone
 
