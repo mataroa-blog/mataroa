@@ -89,7 +89,7 @@ All urls are in this module. They are visually divided into several sections:
 
 ## [`main/views.py`](/main/views.py)
 
-The significant majority of business logic is in the `views.py` module.
+The majority of business logic is in the `views.py` module.
 
 It includes:
 
@@ -104,7 +104,7 @@ It includes:
 * notifications subscribe/unsubscribe
 
 Generally, [Django class-based generic views](https://docs.djangoproject.com/en/3.2/topics/class-based-views/generic-display/)
-are used most of the time as they provide useful functionality abtracted away.
+are used most of the time as they provide useful functionality abstracted away.
 
 The Django source code [for generic views](https://github.com/django/django/tree/main/django/views/generic)
 is also extremely readable:
@@ -123,7 +123,7 @@ are used in cases where the CRUD/RESTful design pattern is not clear such as
 This module contains all views related to the export capabilities of mataroa.
 
 The way the exports work is by reading the base files from the repository root:
-([export_base_hugo](export_base_hugo/) and [export_base_zola](export_base_zola/)
+[export_base_hugo](export_base_hugo/) and [export_base_zola](export_base_zola/)
 for Hugo and Zola respectively. After reading, we replace some strings on the
 configurations, generate posts as markdown strings, and zip-archive everything
 in-memory. Finally, we respond using `application/zip` content type and
@@ -132,7 +132,7 @@ in-memory. Finally, we respond using `application/zip` content type and
 
 ## [`main/views_billing.py`](/main/views_billing.py)
 
-This module contains all billing and subscription related views. It’s design to
+This module contains all billing and subscription related views. It’s designed to
 support one payment processor, Stripe.
 
 ## [`main/tests/`](/main/tests/)
@@ -149,14 +149,15 @@ Django testing facilities.
 Django ORM-speak. This always displays the latest schema.
 
 `main/migrations/` includes all incremental migrations required to reach
-the schema defined in `main/models.py`.
+the schema defined in `main/models.py` starting from an empty database.
 
-We use the built-in Django system to generate and execute mgirations:
-
-The steps to make a schema change would be something like:
+We use the built-in Django commands to generate and execute migrations, namely
+`makemigrations` and `migrate`. For example, the steps to make a schema change
+would be something like:
 
 1. Make the change in `main/models.py`. See
 [Django Model field reference](https://docs.djangoproject.com/en/3.2/ref/models/fields/).
 1. Run `python manage.py makemigrations` to auto-generate the migrations.
+1. Potentially refactor the auto-generated migration file (located at `main/migrations/XXXX_auto_XXXXXXXX.py`)
 1. Run `python manage.py migrate` to execute migrations.
 1. Also `make format` before committing.
