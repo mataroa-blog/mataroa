@@ -55,7 +55,10 @@
             </p>
 
             <p>
-                <label for="id_email">Email (optional and private):</label>
+                <label for="id_email">
+                    Email (optional and
+                    <span title="Only the blog author can see it." style="text-decoration: underline dashed;">private</span>):
+                </label>
                 {% if form.email.errors %}
                     {% for error in form.email.errors %}
                         <span class="form-error">{{ error|escape }}</span><br>
