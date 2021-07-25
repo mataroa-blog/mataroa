@@ -89,6 +89,17 @@ class Command(BaseCommand):
         notification_records = models.NotificationRecord.objects.filter(sent_at=None)
         for record in notification_records:
 
+            # if post has been deleted
+            # TODO: test case for this conditional
+            if not record.post:
+                # delete record
+                msg = (
+                    f"Delete as post does not exist: for '{record.notification.email}'."
+                )
+                self.stdout.write(self.style.NOTICE(msg))
+                record.delete()
+                continue
+
             # don't send, if blog has turned notifications off
             if not record.post.owner.notifications_on:
                 # also delete record
