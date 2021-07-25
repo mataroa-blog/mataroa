@@ -1,12 +1,12 @@
 .PHONY: format lint cov
 
 lint:
-	flake8
+	flake8 --exclude=.git/,venv/ --ignore=E203,E501,W503
 	isort --check-only --profile black .
-	black --check .
+	black --check --exclude '/(\.git|venv)/' .
 
 format:
-	black .
+	black --exclude '/(\.git|venv)/' .
 	isort --profile black .
 
 cov:
