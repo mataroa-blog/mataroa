@@ -1,0 +1,51 @@
+{% extends 'main/layout.html' %}
+
+{% load static %}
+
+{% block title %}Transparency — Mataroa{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Transparency</h1>
+    <p>
+        We are open source. We are also open metrics.
+    </p>
+
+    <section class="pages-generic-grid">
+        <article>
+            <strong>Total users</strong>
+            <div>{{ users }}</div>
+        </article>
+        <article>
+            <strong>Total premium users</strong>
+            <div>{{ premium_users }}</div>
+        </article>
+        <article>
+            <strong>Monthly revenue</strong>
+            <div>${{ monthly_revenue|floatformat:2 }}</div>
+        </article>
+
+        <article>
+            <strong>Total posts</strong>
+            <div>{{ posts }}</div>
+        </article>
+        <article>
+            <strong>Total published posts</strong>
+            <div>{{ published_posts }}</div>
+        </article>
+        <article>
+            <strong>Total pages</strong>
+            <div>{{ pages }}</div>
+        </article>
+
+        <!--<article style="grid-column: 1/3;">
+            <strong>Number of users who have edited at least one post in the last month</strong>
+            <div>{{ active_users }}</div>
+        </article>-->
+    </section>
+
+</main>
+
+{% include 'partials/footer.html' %}
+
+{% endblock %}

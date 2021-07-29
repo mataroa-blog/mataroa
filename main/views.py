@@ -949,6 +949,26 @@ def modus(request):
     return render(request, "main/modus.html")
 
 
+def transparency(request):
+    return render(
+        request,
+        "main/transparency.html",
+        {
+            "users": models.User.objects.all().count(),
+            "premium_users": models.User.objects.filter(is_premium=True).count(),
+            "monthly_revenue": models.User.objects.filter(is_premium=True).count()
+            * 9
+            / 12,
+            "posts": models.Post.objects.all().count(),
+            "published_posts": models.Post.objects.filter(
+                published_at__isnull=False
+            ).count(),
+            "pages": models.Page.objects.all().count(),
+            # "active_users": models.User.objects.raw("SELECT * FROM main_user JOIN main_post ON main_post.owner_id=main_user.id WHERE now() - INTERVAL '30' DAY > main_post.updated_at").count(),
+        },
+    )
+
+
 def privacy(request):
     return render(request, "main/privacy.html")
 
