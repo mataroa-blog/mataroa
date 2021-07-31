@@ -1,6 +1,7 @@
 import uuid
 from collections import defaultdict
 from datetime import datetime, timedelta
+from math import ceil
 
 from django.conf import settings
 from django.contrib import messages
@@ -958,17 +959,30 @@ def transparency(request):
     )
     active_users = len({post.owner.id for post in updated_posts})
 
+    monthly_costs = 5.82
+    monthly_costs_usd = 6.91
+    monthly_revenue_per_subscription = 0.75
+    break_even_diff = monthly_costs_usd - monthly_revenue
+    break_even_subscriptions = ceil(monthly_revenue_per_subscription * break_even_diff)
+
+    revenue_co2 = monthly_revenue * 0.05
+
     return render(
         request,
         "main/transparency.html",
         {
             "users": models.User.objects.all().count(),
             "premium_users": models.User.objects.filter(is_premium=True).count(),
-            "monthly_revenue": monthly_revenue,
             "posts": models.Post.objects.all().count(),
-            "published_posts": published_posts,
             "pages": models.Page.objects.all().count(),
             "active_users": active_users,
+            "published_posts": published_posts,
+            "monthly_revenue": monthly_revenue,
+            "monthly_costs": monthly_costs,
+            "monthly_costs_usd": monthly_costs_usd,
+            "break_even_diff": break_even_diff,
+            "break_even_subscriptions": break_even_subscriptions,
+            "revenue_co2": revenue_co2,
         },
     )
 
