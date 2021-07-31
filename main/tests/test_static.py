@@ -11,6 +11,11 @@ class StaticTestCase(TestCase):
         response = self.client.get(reverse("privacy"))
         self.assertEqual(response.status_code, 200)
 
+    def test_transparency(self):
+        response = self.client.get(reverse("transparency"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Total")
+
     def test_guides_markdown(self):
         response = self.client.get(reverse("guides_markdown"))
         self.assertEqual(response.status_code, 200)

@@ -1,6 +1,6 @@
 import uuid
 from collections import defaultdict
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from django.conf import settings
 from django.contrib import messages
@@ -950,21 +950,25 @@ def modus(request):
 
 
 def transparency(request):
+    monthly_revenue = models.User.objects.filter(is_premium=True).count() * 9 / 12
+    published_posts = models.Post.objects.filter(published_at__isnull=False).count()
+
+    updated_posts = models.Post.objects.filter(
+        updated_at__gt=datetime.now() - timedelta(days=30)
+    )
+    active_users = len({post.owner.id for post in updated_posts})
+
     return render(
         request,
         "main/transparency.html",
         {
             "users": models.User.objects.all().count(),
             "premium_users": models.User.objects.filter(is_premium=True).count(),
-            "monthly_revenue": models.User.objects.filter(is_premium=True).count()
-            * 9
-            / 12,
+            "monthly_revenue": monthly_revenue,
             "posts": models.Post.objects.all().count(),
-            "published_posts": models.Post.objects.filter(
-                published_at__isnull=False
-            ).count(),
+            "published_posts": published_posts,
             "pages": models.Page.objects.all().count(),
-            # "active_users": models.User.objects.raw("SELECT * FROM main_user JOIN main_post ON main_post.owner_id=main_user.id WHERE now() - INTERVAL '30' DAY > main_post.updated_at").count(),
+            "active_users": active_users,
         },
     )
 
