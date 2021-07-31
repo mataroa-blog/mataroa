@@ -17,5 +17,6 @@ ssh roa@95.217.177.163 'cd mataroa \
     && source venv/bin/activate \
     && pip install -r requirements.txt \
     && python manage.py collectstatic --noinput \
+    && source .envrc \
     && python manage.py migrate \
     && uwsgi --reload mataroa.pid'
