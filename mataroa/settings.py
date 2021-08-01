@@ -95,6 +95,8 @@ LOGOUT_REDIRECT_URL = "index"
 SESSION_COOKIE_AGE = 31449600  # 60 * 60 * 24 * 7 * 52 = 1 year in seconds
 SESSION_COOKIE_DOMAIN = CANONICAL_HOST.split(":")[0]  # session visible in subdomains
 
+DATE_FORMAT = "M j, Y"
+
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
