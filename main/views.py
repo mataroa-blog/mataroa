@@ -959,8 +959,8 @@ def transparency(request):
     )
     active_users = len({post.owner.id for post in updated_posts})
 
-    monthly_costs = 5.82
-    monthly_costs_usd = 6.91
+    monthly_costs = 5.49
+    monthly_costs_usd = 6.51
     monthly_revenue_per_subscription = 0.75
     break_even_diff = monthly_costs_usd - monthly_revenue
     break_even_subscriptions = ceil(monthly_revenue_per_subscription * break_even_diff)
