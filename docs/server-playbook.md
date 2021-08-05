@@ -53,7 +53,7 @@ apt install snapd
 snap install core && snap refresh core
 snap install --classic certbot
 snap set certbot trust-plugin-with-root=ok
-certbot certonly -d mataroa.blog,*.mataroa.blog -m zf@sirodoht.com --agree-tos
+certbot certonly -d mataroa.blog,*.mataroa.blog -m person@example.com --agree-tos
 ```
 
 ### DNSimple plugin for Let's Encrypt
@@ -93,7 +93,7 @@ apt install postfix # for cron log to send local emails
 apt install mailutils
 ```
 
-## minio / mc
+## MinIO
 
 ```sh
 wget https://dl.min.io/client/mc/release/linux-amd64/mc
