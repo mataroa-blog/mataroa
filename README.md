@@ -1,6 +1,6 @@
 # mataroa
 
-Minimal blogging platform with export as first-class feature.
+Naked blogging platform.
 
 ## Contributing
 
