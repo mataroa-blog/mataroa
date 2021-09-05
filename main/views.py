@@ -215,6 +215,7 @@ class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
+        # trim non printable characters of self.object.body
         self.object.slug = util.get_post_slug(self.object.title, self.request.user)
         self.object.owner = self.request.user
         self.object.save()
@@ -960,7 +961,7 @@ def transparency(request):
     active_users = len({post.owner.id for post in updated_posts})
 
     monthly_costs = 5.49
-    monthly_costs_usd = 6.51
+    monthly_costs_usd = 6.50
     monthly_revenue_per_subscription = 0.75
     break_even_diff = monthly_costs_usd - monthly_revenue
     break_even_subscriptions = ceil(monthly_revenue_per_subscription * break_even_diff)
