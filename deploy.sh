@@ -3,8 +3,11 @@
 set -e
 set -x
 
-# push origin
+# push origin srht
 git push origin master
+
+# push on github
+git push github master
 
 # make sure tests pass
 source venv/bin/activate
