@@ -9,11 +9,11 @@ Vague rules include:
 * No third-party Django apps.
 * All Python / PyPI packages should be individually vetted.
     * Packages should be published from community-trusted organisations or developers.
-    * Packages should be actively maintained (though not actively developed).
+    * Packages should be actively maintained (though not necessarily actively developed).
     * Packages should hold a high quality of coding practices.
 * No JavaScript libraries / dependencies.
 
-Current list of top-level PyPI dependencies:
+Current list of top-level PyPI dependencies (sourced from [requirements.in](/requirements.in):
 
 * [Django](https://pypi.org/project/Django/)
 * [psycopg2-binary](https://pypi.org/project/psycopg2-binary/)
