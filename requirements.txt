@@ -32,7 +32,7 @@ requests==2.26.0
     # via stripe
 six==1.16.0
     # via bleach
-sqlparse==0.4.1
+sqlparse==0.4.2
     # via django
 stripe==2.60.0
     # via -r requirements.in
