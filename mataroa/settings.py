@@ -37,7 +37,6 @@ ALLOWED_HOSTS = [
 
 ADMINS = [("Theodore Keloglou", "zf@sirodoht.com")]
 
-# leading slashes are important so that browser do not handle it as internal url
 CANONICAL_HOST = "mataroa.blog"
 if DEBUG:
     CANONICAL_HOST = "mataroalocal.blog:8000"
