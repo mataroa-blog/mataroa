@@ -50,19 +50,15 @@
             <li>DNS €0.50/mo</li>
             <li>Domain name €2.00/mo</li>
             <li>Programmer €0.00/mo</li>
-            <li>Total €5.49/mo</li>
         </ul>
         <strong>Financial Position</strong>
         <ul>
-            <li>Total service upkeep cost €{{ monthly_costs }}/mo ≈ ${{ monthly_costs_usd|floatformat:2 }}/mo</li>
             <li>Total revenue ${{ monthly_revenue|floatformat:2 }}/mo</li>
             <li>
                 Revenue used to
                 <a href="https://climate.stripe.com/QPSBFx">fund CO<sub>2</sub> removal</a>
                 ${{ revenue_co2|floatformat:2 }}/mo
             </li>
-            <li>Break even diff ${{ break_even_diff|floatformat:2 }}/mo</li>
-            <li>Additional subscriptions needed to break even: {{ break_even_subscriptions }}</li>
         </ul>
     </section>
 
