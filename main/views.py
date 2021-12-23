@@ -285,10 +285,11 @@ class PostDelete(LoginRequiredMixin, DeleteView):
         )
         return queryset
 
-    def delete(self, request, *args, **kwargs):
-        obj = self.get_object()
-        messages.success(self.request, self.success_message % obj.__dict__)
-        return super().delete(request, *args, **kwargs)
+    def form_view(self, request):
+        success_url = self.get_success_url()
+        self.object.delete()
+        messages.success(self.request, self.success_message % self.object.__dict__)
+        return HttpResponseRedirect(success_url)
 
     def dispatch(self, request, *args, **kwargs):
         if not hasattr(request, "subdomain"):
@@ -359,12 +360,12 @@ class CommentDelete(LoginRequiredMixin, DeleteView):
     model = models.Comment
     success_message = "comment deleted"
 
-    def delete(self, request, *args, **kwargs):
+    def form_valid(self, request):
         self.object = self.get_object()
         self.object.delete()
         messages.success(self.request, self.success_message % self.object.__dict__)
         return HttpResponseRedirect(
-            reverse("post_detail", kwargs={"slug": kwargs["slug"]})
+            reverse("post_detail", kwargs={"slug": self.kwargs["slug"]})
         )
 
     def dispatch(self, request, *args, **kwargs):
@@ -918,8 +919,7 @@ class NotificationRecordDelete(LoginRequiredMixin, DeleteView):
         )
         return queryset
 
-    def delete(self, request, *args, **kwargs):
-        self.object = self.get_object()
+    def form_valid(self, form):
         self.object.is_canceled = True
         self.object.save()
         messages.success(
