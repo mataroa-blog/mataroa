@@ -3,16 +3,17 @@
 set -e
 set -x
 
+# load ssh
+eval $(ssh-agent) && ssh-add ~/.ssh/id_ed25519
+
 # push origin srht
-git push origin master
+git push -v origin master
 
 # push on github
-git push github master
+git push -v github master
 
 # make sure tests pass
-source venv/bin/activate
 python manage.py test
-deactivate
 
 # pull on server and reload
 ssh roa@95.217.177.163 'cd mataroa \
