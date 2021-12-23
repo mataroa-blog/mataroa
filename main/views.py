@@ -1,7 +1,6 @@
 import uuid
 from collections import defaultdict
 from datetime import datetime, timedelta
-from math import ceil
 
 from django.conf import settings
 from django.contrib import messages
