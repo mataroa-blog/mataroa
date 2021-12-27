@@ -22,11 +22,9 @@ def get_email_body(post, notification):
     unsubscribe_url = util.get_protocol() + notification.get_unsubscribe_url()
     blog_title = post.owner.blog_title or post.owner.username
 
-    body = f"{blog_title} has published a new blog post titled:\n{post.title}\n"
+    body = f"{blog_title} has published:\n{post.title}\n"
     body += "\n"
-    body += f"Find the complete text at:\n{post_url}\n"
-    body += "\n"
-    body += "Or read it below:\n"
+    body += f"\n{post_url}\n"
     body += "\n"
     body += "# " + post.title + "\n"
     body += "\n"
@@ -35,11 +33,11 @@ def get_email_body(post, notification):
     body += "\n"
     body += "---\n"
     body += "\n"
-    body += f"Read at {post_url}\n"
+    body += f"Blog post URL:\n{post_url}\n"
     body += "\n"
     body += "---\n"
     body += "\n"
-    body += "To unsubscribe click at:\n"
+    body += "Unsubscribe:\n"
     body += unsubscribe_url + "\n"
 
     return body
