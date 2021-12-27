@@ -183,7 +183,7 @@ class ProcessNotificationsTest(TestCase):
         # email
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, "Yesterday post")
-        self.assertIn("To unsubscribe", mail.outbox[0].body)
+        self.assertIn("Unsubscribe", mail.outbox[0].body)
 
         # email headers
         self.assertEqual(mail.outbox[0].to, [self.notification.email])
