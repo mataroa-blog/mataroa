@@ -1,4 +1,4 @@
-*.mataroa.blog,mataroa.blog {
+*.mataroa.blog, mataroa.blog {
     route {
         file_server /static/* {
             root /home/roa/mataroa
