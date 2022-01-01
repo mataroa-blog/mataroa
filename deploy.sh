@@ -6,14 +6,17 @@ set -x
 # load ssh
 eval $(ssh-agent) && ssh-add ~/.ssh/id_ed25519
 
+# make sure latest requirements are installed
+pip install -r requirements.txt
+
+# make sure tests pass
+python manage.py test
+
 # push origin srht
 git push -v origin master
 
 # push on github
 git push -v github master
-
-# make sure tests pass
-python manage.py test
 
 # pull on server and reload
 ssh roa@95.217.177.163 'cd mataroa \
