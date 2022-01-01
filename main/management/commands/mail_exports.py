@@ -46,10 +46,6 @@ class Command(BaseCommand):
     help = "Generate zip account exports and email them to users."
 
     def handle(self, *args, **options):
-        if timezone.now().hour != 0:
-            self.stdout.write(self.style.NOTICE("No action. Current UTC is not 00:00."))
-            return
-
         if timezone.now().day != 1:
             self.stdout.write(
                 self.style.NOTICE("No action. Not the first day of the month.")
