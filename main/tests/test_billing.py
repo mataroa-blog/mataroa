@@ -102,7 +102,7 @@ class BillingIndexPremiumTestCase(TestCase):
         self.assertContains(response, b"Premium Plan")
         self.assertContains(
             response,
-            f"{one_year_later.strftime('%b %-d, %Y')}".encode("utf-8"),
+            f"{one_year_later.strftime('%B %-d, %Y')}".encode("utf-8"),
         )
 
 
@@ -148,7 +148,7 @@ class BillingCardAddTestCase(TestCase):
         self.assertContains(response, b"Premium Plan")
         self.assertContains(
             response,
-            f"{one_year_later.strftime('%b %-d, %Y')}".encode("utf-8"),
+            f"{one_year_later.strftime('%B %-d, %Y')}".encode("utf-8"),
         )
 
 
