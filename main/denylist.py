@@ -159,6 +159,7 @@ ALLOWED_CSS_STYLES = [
     "box-shadow",
     "color",
     "display",
+    "font-family",
     "height",
     "margin",
     "padding",
