@@ -549,10 +549,6 @@ form .helptext {
     color: var(--red-color);
 }
 
-.form-error::before {
-    content: "» ";
-}
-
 .form-inline {
     display: inline-block;
 }
@@ -588,10 +584,6 @@ form .helptext {
 
 .cta-link {
     font-size: 20px;
-}
-
-.cta-link::before {
-    content: "» ";
 }
 
 /* comparisons */
@@ -677,10 +669,6 @@ form .helptext {
     .theme-zialucia .byline {
         font-size: 17px;
     }
-}
-
-.byline::before {
-    content: "» ";
 }
 
 .webring {
