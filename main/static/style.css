@@ -658,7 +658,7 @@ form .helptext {
 
 .byline {
     color: var(--dark-grey-color);
-    margin: 24px 0;
+    margin: 16px 0 24px;
 }
 
 .theme-zialucia .byline {
