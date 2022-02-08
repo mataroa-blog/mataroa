@@ -35,6 +35,7 @@ jobs:
         pip install -r requirements.txt
     - name: Run Tests
       run: |
+        python manage.py collectstatic --noinput
         python manage.py test
       env:
         SECRET_KEY: "thisisthesecretkey"
