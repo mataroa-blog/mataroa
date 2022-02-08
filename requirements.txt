@@ -4,43 +4,43 @@
 #
 #    pip-compile requirements.in
 #
-asgiref==3.4.1
+asgiref==3.5.0
     # via django
 bleach==4.1.0
     # via -r requirements.in
 certifi==2021.10.8
     # via requests
-charset-normalizer==2.0.9
+charset-normalizer==2.0.11
     # via requests
-django==4.0
+django==4.0.2
     # via -r requirements.in
 idna==3.3
     # via requests
-importlib-metadata==4.10.0
+importlib-metadata==4.10.1
     # via markdown
 markdown==3.3.6
     # via -r requirements.in
 packaging==21.3
     # via bleach
-psycopg2-binary==2.9.2
+psycopg2-binary==2.9.3
     # via -r requirements.in
-pygments==2.10.0
+pygments==2.11.2
     # via -r requirements.in
-pyparsing==3.0.6
+pyparsing==3.0.7
     # via packaging
-requests==2.26.0
+requests==2.27.1
     # via stripe
 six==1.16.0
     # via bleach
 sqlparse==0.4.2
     # via django
-stripe==2.64.0
+stripe==2.65.0
     # via -r requirements.in
-urllib3==1.26.7
+urllib3==1.26.8
     # via requests
 uwsgi==2.0.20
     # via -r requirements.in
 webencodings==0.5.1
     # via bleach
-zipp==3.6.0
+zipp==3.7.0
     # via importlib-metadata
