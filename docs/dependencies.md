@@ -13,7 +13,7 @@ Vague rules include:
     * Packages should hold a high quality of coding practices.
 * No JavaScript libraries / dependencies.
 
-Current list of top-level PyPI dependencies (sourced from [requirements.in](/requirements.in):
+Current list of top-level PyPI dependencies (source at [requirements.in](/requirements.in)):
 
 * [Django](https://pypi.org/project/Django/)
 * [psycopg2-binary](https://pypi.org/project/psycopg2-binary/)
