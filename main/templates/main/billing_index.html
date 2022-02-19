@@ -6,13 +6,53 @@
 <main>
     <h1>Billing</h1>
 
+    {# grandfather case #}
     {% if request.user.is_grandfathered %}
         Currently and forever on the
         <strong><a href="https://dictionary.cambridge.org/dictionary/english/grandfathered">Grandfather Plan</a></strong>.
         Rejoice eternally.
     {% endif %}
 
-    {% if not request.user.is_grandfathered %}
+    {# monero case #}
+    {% if not request.user.is_grandfathered and request.user.monero_address %}
+    {% if request.user.is_premium %}
+    <p>
+        Currently on <strong>Premium Plan</strong>.
+    </p>
+    <p>
+        Our Premium Plan costs 0.05 XMR per year and includes all features including
+        the ability to set a custom domain.
+    </p>
+    <p>
+        Your Monero address is:
+    </p>
+    <code style="word-wrap: break-word; background: #ffd9c3;">
+        {{ request.user.monero_address }}
+    </code>
+    {% else %}
+    <p>
+        Currently on <strong>Free Plan</strong>.
+    </p>
+    <p>
+        Our Premium Plan costs 0.05 XMR per year and includes all features including
+        the ability to set a custom domain.
+    </p>
+    <p>
+        Subscribe by sending 0.05 XMR to the Monero address below.
+    </p>
+    <code style="word-wrap: break-word; background: #ffd9c3;">
+        {{ request.user.monero_address }}
+    </code>
+    <p>
+        Please allow 48H for the transaction to be verified and mataroa to get up-to-date.
+    </p>
+    {% endif %}
+    {% endif %}
+
+    {# stripe case #}
+    {% if not request.user.is_grandfathered and not request.user.monero_address %}
+
+    {# stripe case - premium intro #}
     {% if request.user.is_premium %}
     <p>
         Currently on <strong>Premium Plan</strong>.
@@ -22,9 +62,10 @@
         <li>Next payment will be at {{ current_period_end|date:"F j, Y" }}.</li>
         <li>$0.45 – 5% of your previous payment was used to <a href="https://climate.stripe.com/QPSBFx">fund CO₂ removal</a>.</li>
     </ul>
+    {% endif %}
 
-    {% else %}
-
+    {# stripe case - non-premium #}
+    {% if not request.user.is_premium %}
     <p>
         Currently on <strong>Free Plan</strong>.
     </p>
@@ -39,12 +80,11 @@
         the atmosphere.
     </p>
     {% endif %}
-    {% endif %}
 
+    {# stripe case - payment cards #}
     {% if payment_methods %}
-    <p>Your payment methods:</p>
+    <p>Payment methods:</p>
     <ul>
-
         <!-- this displays only the default card -->
         {% for pm in payment_methods %}
         {% if pm.is_default %}
@@ -63,22 +103,20 @@
         {% for pm in payment_methods %}
         {% if not pm.is_default %}
         <li>
-
             {{ pm.brand|capfirst }} {{ pm.last4 }} (exp. {{ pm.exp_month }}/{{ pm.exp_year }})
             — <form action="{% url 'billing_card_default' pm.id %}" method="post" class="form-inline">
                 {% csrf_token %}
                 <input type="submit" value="make default">
             </form>
             | <a href="{% url 'billing_card_delete' pm.id %}">remove</a>
-
         </li>
         {% endif %}
         {% endfor %}
-
     </ul>
     {% endif %}
 
-    {% if not request.user.is_grandfathered and request.user.is_premium %}
+    {# stripe case - premium controls #}
+    {% if request.user.is_premium %}
     <p>
         <a href="{% url 'billing_card' %}">Add new card »</a>
     </p>
@@ -87,7 +125,8 @@
     </p>
     {% endif %}
 
-    {% if not request.user.is_grandfathered and not request.user.is_premium %}
+    {# stripe case - non-premium controls #}
+    {% if not request.user.is_premium %}
     <p>
         {% if payment_methods %}
         <form action="{% url 'billing_subscription' %}" method="post" class="form-inline">
@@ -98,6 +137,7 @@
         <a href="{% url 'billing_card' %}">Subscribe to Premium »</a>
         {% endif %}
     </p>
+    {% endif %}
     {% endif %}
 
 </main>

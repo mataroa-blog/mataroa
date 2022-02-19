@@ -166,6 +166,10 @@ def billing_index(request):
             },
         )
 
+    # respond for monero case
+    if request.user.monero_address:
+        return render(request, "main/billing_index.html")
+
     stripe.api_key = settings.STRIPE_API_KEY
 
     # create stripe customer for user if it does not exist
@@ -207,7 +211,6 @@ def billing_index(request):
         request,
         "main/billing_index.html",
         {
-            "is_grandfathered": False,
             "stripe_customer_id": request.user.stripe_customer_id,
             "stripe_public_key": settings.STRIPE_PUBLIC_KEY,
             "stripe_price_id": settings.STRIPE_PRICE_ID,
@@ -377,7 +380,7 @@ class BillingCancel(LoginRequiredMixin, View):
         return render(request, self.template_name)
 
     def dispatch(self, request, *args, **kwargs):
-        # redirectly grandfathered users to dashboard
+        # redirect grandfathered users to dashboard
         if request.user.is_grandfathered:
             return redirect("dashboard")
 
