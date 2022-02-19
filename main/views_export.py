@@ -226,7 +226,9 @@ def export_print(request):
         request,
         "main/export_print.html",
         {
-            "posts": models.Post.objects.filter(owner=request.user),
+            "posts": models.Post.objects.filter(owner=request.user).order_by(
+                "-published_at"
+            ),
         },
     )
 
