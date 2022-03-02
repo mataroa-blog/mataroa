@@ -906,9 +906,11 @@ class NotificationRecordList(LoginRequiredMixin, ListView):
                 continue
             nr.scheduled_at = nr.post.published_at + timedelta(days=1)
 
-        context["notificationrecord_list_sent"] = context[
-            "notificationrecord_list"
-        ].filter(sent_at__isnull=False)
+        context["notificationrecord_list_sent"] = (
+            context["notificationrecord_list"]
+            .filter(sent_at__isnull=False)
+            .filter(post__isnull=False)  # do not show nr for deleted posts
+        )
         return context
 
 
