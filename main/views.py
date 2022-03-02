@@ -897,6 +897,10 @@ class NotificationRecordList(LoginRequiredMixin, ListView):
             .order_by("post")
         )
         for nr in context["notificationrecord_list_unsent"]:
+            if nr.post is None:
+                # post was deleted, delete nr as well
+                nr.delete()
+                continue
             if not nr.post.published_at:
                 nr.scheduled_at = None
                 continue
