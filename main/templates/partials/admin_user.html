@@ -1,0 +1,3 @@
+<a href="{% url 'admin:main_user_change' user.id %}">{{ user.username }}</a>
+/ <span style="color: #999">{{ user.email|default:"(no email)" }}</span>
+/ <small>{{ user.date_joined }}</small>

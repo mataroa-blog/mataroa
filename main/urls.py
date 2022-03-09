@@ -27,6 +27,11 @@ urlpatterns += [
     path("accounts/delete/", views.UserDelete.as_view(), name="user_delete"),
 ]
 
+# admin pages
+urlpatterns += [
+    path("atua/dashboard/", views.admin_dashboard, name="admin_dashboard"),
+]
+
 # blog posts
 urlpatterns += [
     path("blog/create/", views.PostCreate.as_view(), name="post_create"),

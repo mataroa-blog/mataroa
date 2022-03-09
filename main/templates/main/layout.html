@@ -46,7 +46,8 @@
             | <a href="//{{ blog_user.custom_domain }}{{ request.path }}">See in {{ blog_user.custom_domain }}</a>
             {% endif %}
             {% if request.user.is_superuser %}
-            | <a href="{% url 'admin:index' %}">Admin</a>
+            | <a href="{% url 'admin:index' %}">Whale</a>
+            | <a href="{% url 'admin_dashboard' %}">Atua</a>
             {% endif %}
         </nav>
         {% endif %}

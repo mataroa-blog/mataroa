@@ -1,0 +1,5 @@
+<a href="{{ page.owner.get_absolute_url }}">
+    <span style="color: #999">{{ page.owner }}</span>
+</a>
+/ <small>{{ page.created_at }}</small>
+/ <a href="{% url 'admin:main_page_change' page.id %}">{{ page.title }}</a>

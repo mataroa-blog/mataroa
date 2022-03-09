@@ -1,0 +1,101 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Admin Dashboard</h1>
+
+    <h2>New Users</h2>
+    <ul>
+        {% for user in new_users %}
+        <li>
+            {% include "partials/admin_user.html" with user=user %}
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Premium Users</h2>
+    <ul>
+        {% for user in premium_users %}
+        <li>
+            {% include "partials/admin_user.html" with user=user %}
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Grandfather Users</h2>
+    <ul>
+        {% for user in grandfather_users %}
+        <li>
+            {% include "partials/admin_user.html" with user=user %}
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Mataroa Users</h2>
+    <ul>
+        {% for user in users %}
+        {% if 'mataroa.blog' in user.email %}
+        <li>
+            {% include "partials/admin_user.html" with user=user %}
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+
+    <h2>Active Users</h2>
+    <ul>
+        {% for user in active_users %}
+        <li>
+            {% include "partials/admin_user.html" with user=user %}
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Active non-new Users</h2>
+    <ul>
+        {% for user in active_users %}
+        <li>
+            {% include "partials/admin_user.html" with user=user %}
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h2>New Posts</h2>
+    <ul>
+        {% for post in new_posts %}
+        <li>
+            {% include "partials/admin_post.html" with post=post %}
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Recently Edited Posts</h2>
+    <ul>
+        {% for post in edited_posts %}
+        <li>
+            {% include "partials/admin_post.html" with post=post %}
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h2>New Pages</h2>
+    <ul>
+        {% for page in new_pages %}
+        <li>
+            {% include "partials/admin_page.html" with page=page %}
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Recently Edited Pages</h2>
+    <ul>
+        {% for page in new_pages %}
+        <li>
+            {% include "partials/admin_page.html" with page=page %}
+        </li>
+        {% endfor %}
+    </ul>
+</main>
+{% endblock %}
