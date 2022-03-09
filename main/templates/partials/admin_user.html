@@ -1,3 +1,5 @@
-<a href="{% url 'admin:main_user_change' user.id %}">{{ user.username }}</a>
+<a href="{{ user.get_absolute_url }}">{{ user.username }}</a>
 / <span style="color: #999">{{ user.email|default:"(no email)" }}</span>
-/ <small>{{ user.date_joined }}</small>
+/ <a href="{% url 'admin:main_user_change' user.id %}">
+    <small>{{ user.date_joined }}</small>
+</a>
