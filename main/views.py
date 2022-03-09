@@ -964,6 +964,15 @@ def transparency(request):
         updated_at__gt=datetime.now() - timedelta(days=30)
     )
     active_users = len({post.owner.id for post in updated_posts})
+
+    one_month_ago = timezone.now() - timedelta(days=30)
+    active_nonnew_users = len(
+        {
+            post.owner.id
+            for post in updated_posts
+            if post.owner.date_joined < one_month_ago
+        }
+    )
     revenue_co2 = monthly_revenue * 0.05
 
     return render(
@@ -975,6 +984,7 @@ def transparency(request):
             "posts": models.Post.objects.all().count(),
             "pages": models.Page.objects.all().count(),
             "active_users": active_users,
+            "active_nonnew_users": active_nonnew_users,
             "published_posts": published_posts,
             "monthly_revenue": monthly_revenue,
             "revenue_co2": revenue_co2,
