@@ -120,6 +120,9 @@ class User(AbstractUser):
     def footer_note_as_html(self):
         return util.md_to_html(self.footer_note)
 
+    def get_absolute_url(self):
+        return f"//{self.username}.{settings.CANONICAL_HOST}"
+
     def get_export_unsubscribe_url(self):
         domain = self.custom_domain or f"{self.username}.{settings.CANONICAL_HOST}"
         path = reverse("export_unsubscribe_key", args={self.export_unsubscribe_key})
