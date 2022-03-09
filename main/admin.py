@@ -6,6 +6,7 @@ from django.utils.html import format_html
 from main import models, util
 
 
+@admin.register(models.User)
 class UserAdmin(DjUserAdmin):
     list_display = (
         "id",
@@ -63,9 +64,7 @@ class UserAdmin(DjUserAdmin):
     ordering = ["-id"]
 
 
-admin.site.register(models.User, UserAdmin)
-
-
+@admin.register(models.Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = (
         "id",
@@ -86,9 +85,7 @@ class PostAdmin(admin.ModelAdmin):
     ordering = ["-id"]
 
 
-admin.site.register(models.Post, PostAdmin)
-
-
+@admin.register(models.Page)
 class PageAdmin(admin.ModelAdmin):
     list_display = (
         "id",
@@ -103,9 +100,7 @@ class PageAdmin(admin.ModelAdmin):
     ordering = ["-id"]
 
 
-admin.site.register(models.Page, PageAdmin)
-
-
+@admin.register(models.Image)
 class ImageAdmin(admin.ModelAdmin):
     list_display = (
         "id",
@@ -119,9 +114,7 @@ class ImageAdmin(admin.ModelAdmin):
     ordering = ["-id"]
 
 
-admin.site.register(models.Image, ImageAdmin)
-
-
+@admin.register(models.AnalyticPage)
 class AnalyticPageAdmin(admin.ModelAdmin):
     list_display = (
         "id",
@@ -133,9 +126,7 @@ class AnalyticPageAdmin(admin.ModelAdmin):
     ordering = ["-id"]
 
 
-admin.site.register(models.AnalyticPage, AnalyticPageAdmin)
-
-
+@admin.register(models.AnalyticPost)
 class AnalyticPostAdmin(admin.ModelAdmin):
     list_display = (
         "id",
@@ -146,9 +137,7 @@ class AnalyticPostAdmin(admin.ModelAdmin):
     ordering = ["-id"]
 
 
-admin.site.register(models.AnalyticPost, AnalyticPostAdmin)
-
-
+@admin.register(models.Comment)
 class CommentAdmin(admin.ModelAdmin):
     list_display = (
         "id",
@@ -162,9 +151,7 @@ class CommentAdmin(admin.ModelAdmin):
     ordering = ["-id"]
 
 
-admin.site.register(models.Comment, CommentAdmin)
-
-
+@admin.register(models.Notification)
 class NotificationAdmin(admin.ModelAdmin):
     list_display = (
         "id",
@@ -177,9 +164,7 @@ class NotificationAdmin(admin.ModelAdmin):
     ordering = ["-id"]
 
 
-admin.site.register(models.Notification, NotificationAdmin)
-
-
+@admin.register(models.NotificationRecord)
 class NotificationRecordAdmin(admin.ModelAdmin):
     list_display = (
         "id",
@@ -192,9 +177,7 @@ class NotificationRecordAdmin(admin.ModelAdmin):
     ordering = ["-id"]
 
 
-admin.site.register(models.NotificationRecord, NotificationRecordAdmin)
-
-
+@admin.register(models.ExportRecord)
 class ExportRecordAdmin(admin.ModelAdmin):
     list_display = (
         "id",
@@ -205,6 +188,3 @@ class ExportRecordAdmin(admin.ModelAdmin):
     list_display_links = ("id", "name")
 
     ordering = ["-id"]
-
-
-admin.site.register(models.ExportRecord, ExportRecordAdmin)
