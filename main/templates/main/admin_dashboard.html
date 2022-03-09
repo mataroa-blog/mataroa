@@ -53,9 +53,9 @@
         {% endfor %}
     </ul>
 
-    <h2>Active non-new Users ({{ active_users|length }})</h2>
+    <h2>active_nonnew non-new Users ({{ active_nonnew_users|length }})</h2>
     <ul>
-        {% for user in active_users %}
+        {% for user in active_nonnew_users %}
         <li>
             {% include "partials/admin_user.html" with user=user %}
         </li>
