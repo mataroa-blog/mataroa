@@ -1009,7 +1009,7 @@ def admin_dashboard(request):
         raise Http404()
 
     updated_posts = models.Post.objects.filter(
-        updated_at__gt=datetime.now() - timedelta(days=30)
+        updated_at__gte=datetime.now() - timedelta(days=30)
     )
     active_users = {post.owner for post in updated_posts}
     one_month_ago = timezone.now() - timedelta(days=30)
@@ -1022,22 +1022,22 @@ def admin_dashboard(request):
         "main/admin_dashboard.html",
         {
             "users": models.User.objects.all(),
-            "new_users": models.User.objects.filter(date_joined=one_month_ago),
+            "new_users": models.User.objects.filter(date_joined__gte=one_month_ago),
             "premium_users": models.User.objects.filter(is_premium=True),
             "grandfather_users": models.User.objects.filter(is_grandfathered=True),
             "active_users": active_users,
             "active_nonnew_users": active_nonnew_users,
             "new_posts": models.Post.objects.filter(
-                created_at__gt=one_month_ago
+                created_at__gte=one_month_ago
             ).order_by("-created_at"),
             "edited_posts": models.Post.objects.filter(
-                updated_at__gt=one_month_ago
+                updated_at__gte=one_month_ago
             ).order_by("-updated_at"),
             "new_pages": models.Page.objects.filter(
-                created_at__gt=one_month_ago
+                created_at__gte=one_month_ago
             ).order_by("-created_at"),
             "edited_pages": models.Page.objects.filter(
-                updated_at__gt=one_month_ago
+                updated_at__gte=one_month_ago
             ).order_by("-updated_at"),
         },
     )

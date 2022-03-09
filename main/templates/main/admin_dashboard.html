@@ -6,7 +6,7 @@
 <main>
     <h1>Admin Dashboard</h1>
 
-    <h2>New Users</h2>
+    <h2>New Users ({{ new_users|length }})</h2>
     <ul>
         {% for user in new_users %}
         <li>
@@ -15,7 +15,7 @@
         {% endfor %}
     </ul>
 
-    <h2>Premium Users</h2>
+    <h2>Premium Users ({{ premium_users|length }})</h2>
     <ul>
         {% for user in premium_users %}
         <li>
@@ -24,7 +24,7 @@
         {% endfor %}
     </ul>
 
-    <h2>Grandfather Users</h2>
+    <h2>Grandfather Users ({{ grandfather_users|length }})</h2>
     <ul>
         {% for user in grandfather_users %}
         <li>
@@ -44,7 +44,7 @@
         {% endfor %}
     </ul>
 
-    <h2>Active Users</h2>
+    <h2>Active Users ({{ active_users|length }})</h2>
     <ul>
         {% for user in active_users %}
         <li>
@@ -53,7 +53,7 @@
         {% endfor %}
     </ul>
 
-    <h2>Active non-new Users</h2>
+    <h2>Active non-new Users ({{ active_users|length }})</h2>
     <ul>
         {% for user in active_users %}
         <li>
@@ -62,7 +62,7 @@
         {% endfor %}
     </ul>
 
-    <h2>New Posts</h2>
+    <h2>New Posts ({{ new_posts|length }})</h2>
     <ul>
         {% for post in new_posts %}
         <li>
@@ -71,7 +71,7 @@
         {% endfor %}
     </ul>
 
-    <h2>Recently Edited Posts</h2>
+    <h2>Recently Edited Posts ({{ edited_posts|length }})</h2>
     <ul>
         {% for post in edited_posts %}
         <li>
@@ -80,7 +80,7 @@
         {% endfor %}
     </ul>
 
-    <h2>New Pages</h2>
+    <h2>New Pages ({{ new_pages|length }})</h2>
     <ul>
         {% for page in new_pages %}
         <li>
@@ -89,7 +89,7 @@
         {% endfor %}
     </ul>
 
-    <h2>Recently Edited Pages</h2>
+    <h2>Recently Edited Pages ({{ new_pages|length }})</h2>
     <ul>
         {% for page in new_pages %}
         <li>
