@@ -1,5 +1,8 @@
-<a href="{{ post.owner.get_absolute_url }}">
-    <span style="color: #999">{{ post.owner }}</span>
-</a>
-/ <small>{{ post.created_at }}</small>
-/ <a href="{% url 'admin:main_post_change' post.id %}">{{ post.title }}</a>
+<a href="{{ post.owner.blog_absolute_url }}">
+    <span style="color: #999">{{ post.owner }}</span></a>
+
+/ <a href="{{ post.get_absolute_url }}">
+    {{ post.title }}</a>
+
+/ <a href="{% url 'admin:main_post_change' post.id %}">
+    <small>{{ post.created_at }}</small></a>
