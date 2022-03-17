@@ -103,6 +103,10 @@ class User(AbstractUser):
         ordering = ["-id"]
 
     @property
+    def blog_absolute_url(self):
+        return f"//{self.username}.{settings.CANONICAL_HOST}"
+
+    @property
     def blog_byline_as_text(self):
         linker = bleach.linkifier.Linker(callbacks=[lambda attrs, new: None])
         html_text = util.md_to_html(self.blog_byline, strip_tags=True)
@@ -119,9 +123,6 @@ class User(AbstractUser):
     @property
     def footer_note_as_html(self):
         return util.md_to_html(self.footer_note)
-
-    def get_absolute_url(self):
-        return f"//{self.username}.{settings.CANONICAL_HOST}"
 
     def get_export_unsubscribe_url(self):
         domain = self.custom_domain or f"{self.username}.{settings.CANONICAL_HOST}"
