@@ -52,14 +52,20 @@ def index(request):
     if hasattr(request, "subdomain"):
         if models.User.objects.filter(username=request.subdomain).exists():
             if request.user.is_authenticated and request.user == request.blog_user:
-                posts = models.Post.objects.filter(owner=request.blog_user)
+                posts = models.Post.objects.filter(owner=request.blog_user).defer(
+                    "body"
+                )
             else:
                 models.AnalyticPage.objects.create(user=request.blog_user, path="index")
-                posts = models.Post.objects.filter(
-                    owner=request.blog_user,
-                    published_at__isnull=False,
-                    published_at__lte=timezone.now().date(),
-                ).order_by("-published_at")
+                posts = (
+                    models.Post.objects.filter(
+                        owner=request.blog_user,
+                        published_at__isnull=False,
+                        published_at__lte=timezone.now().date(),
+                    )
+                    .defer("body")
+                    .order_by("-published_at")
+                )
 
             return render(
                 request,
@@ -70,7 +76,7 @@ def index(request):
                     "posts": posts,
                     "pages": models.Page.objects.filter(
                         owner=request.blog_user, is_hidden=False
-                    ),
+                    ).defer("body"),
                 },
             )
         else:
