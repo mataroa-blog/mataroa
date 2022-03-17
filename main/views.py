@@ -1004,13 +1004,13 @@ def guides_images(request):
     return render(request, "main/guides_images.html")
 
 
-def admin_dashboard(request):
+def admin_users(request):
     if not request.user.is_authenticated or not request.user.is_superuser:
         raise Http404()
 
     updated_posts = models.Post.objects.filter(
         updated_at__gte=datetime.now() - timedelta(days=30)
-    )
+    ).select_related("owner")
     active_users = {post.owner for post in updated_posts}
     one_month_ago = timezone.now() - timedelta(days=30)
     active_nonnew_users = {
@@ -1019,7 +1019,7 @@ def admin_dashboard(request):
 
     return render(
         request,
-        "main/admin_dashboard.html",
+        "main/admin_users.html",
         {
             "users": models.User.objects.all(),
             "new_users": models.User.objects.filter(date_joined__gte=one_month_ago),
@@ -1027,17 +1027,43 @@ def admin_dashboard(request):
             "grandfather_users": models.User.objects.filter(is_grandfathered=True),
             "active_users": active_users,
             "active_nonnew_users": active_nonnew_users,
-            "new_posts": models.Post.objects.filter(
-                created_at__gte=one_month_ago
-            ).order_by("-created_at"),
-            "edited_posts": models.Post.objects.filter(
-                updated_at__gte=one_month_ago
-            ).order_by("-updated_at"),
-            "new_pages": models.Page.objects.filter(
-                created_at__gte=one_month_ago
-            ).order_by("-created_at"),
-            "edited_pages": models.Page.objects.filter(
-                updated_at__gte=one_month_ago
-            ).order_by("-updated_at"),
+        },
+    )
+
+
+def admin_posts(request):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        raise Http404()
+
+    one_month_ago = timezone.now() - timedelta(days=30)
+    return render(
+        request,
+        "main/admin_posts.html",
+        {
+            "new_posts": models.Post.objects.filter(created_at__gte=one_month_ago)
+            .select_related("owner")
+            .order_by("-created_at"),
+            "edited_posts": models.Post.objects.filter(updated_at__gte=one_month_ago)
+            .select_related("owner")
+            .order_by("-updated_at"),
+        },
+    )
+
+
+def admin_pages(request):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        raise Http404()
+
+    one_month_ago = timezone.now() - timedelta(days=30)
+    return render(
+        request,
+        "main/admin_pages.html",
+        {
+            "new_pages": models.Page.objects.filter(created_at__gte=one_month_ago)
+            .select_related("owner")
+            .order_by("-created_at"),
+            "edited_pages": models.Page.objects.filter(updated_at__gte=one_month_ago)
+            .select_related("owner")
+            .order_by("-updated_at"),
         },
     )

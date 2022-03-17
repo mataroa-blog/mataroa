@@ -1,0 +1,34 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Atua Pages{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Atua Pages</h1>
+
+    <nav>
+        Atua:
+        <a href="{% url 'admin_users' %}">Users</a>
+        | <a href="{% url 'admin_posts' %}">Posts</a>
+        | <a href="{% url 'admin_pages' %}">Pages</a>
+    </nav>
+
+    <h2>New Pages ({{ new_pages|length }})</h2>
+    <ul>
+        {% for page in new_pages %}
+        <li>
+            {% include "partials/admin_page.html" with page=page %}
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Recently Edited Pages ({{ new_pages|length }})</h2>
+    <ul>
+        {% for page in new_pages %}
+        <li>
+            {% include "partials/admin_page.html" with page=page %}
+        </li>
+        {% endfor %}
+    </ul>
+</main>
+{% endblock %}

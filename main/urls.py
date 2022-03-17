@@ -29,7 +29,9 @@ urlpatterns += [
 
 # admin pages
 urlpatterns += [
-    path("atua/dashboard/", views.admin_dashboard, name="admin_dashboard"),
+    path("atua/users/", views.admin_users, name="admin_users"),
+    path("atua/posts/", views.admin_posts, name="admin_posts"),
+    path("atua/pages/", views.admin_pages, name="admin_pages"),
 ]
 
 # blog posts
