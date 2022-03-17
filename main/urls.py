@@ -3,7 +3,7 @@ from django.urls import include, path, re_path
 
 from main import feeds, views, views_billing, views_export
 
-admin.site.site_header = "mataroa administration"
+admin.site.site_header = "mataroa admin"
 
 # general
 urlpatterns = [
