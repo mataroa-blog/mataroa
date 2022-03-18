@@ -10,6 +10,7 @@ let
 in
   pkgs.mkShell {
     buildInputs = [
+      ncurses
       postgresql_12
       bashInteractive
       my-python
