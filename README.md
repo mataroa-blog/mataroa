@@ -48,7 +48,7 @@ To install dependencies, assume `pip` works as the system pip:
 pip install -r requirements_dev.txt
 ```
 
-### Dependencies with `venv`
+### Dependencies with venv
 
 If one is not using nix, then one can use
 [venv](https://docs.python.org/3/library/venv.html):
