@@ -58,17 +58,18 @@ cp .envrc.example .envrc
 `.envrc` should contain the following variables:
 
 ```sh
+export DEBUG=1
 export SECRET_KEY=some-secret-key
 export DATABASE_URL=postgres://mataroa:db-password@db:5432/mataroa
 export EMAIL_HOST_USER=smtp-user
 export EMAIL_HOST_PASSWORD=smtp-password
 ```
 
-When on production, also include the following variables (see
+When on production, also include/update the following variables (see
 [Deployment](#Deployment) and [Backup](#Backup)):
 
 ```sh
-export NODEBUG=1
+export DEBUG=1
 export PGPASSWORD=db-password
 ```
 
@@ -160,7 +161,7 @@ on Ubuntu 20.04.
 
 Remember to set the environment variables before starting `uwsgi`. Depending
 on the deployment environment, this could mean directly exporting the variables
-or just sourcing `.envrc` (with all production variables — including `NODEBUG`):
+or just sourcing `.envrc` (with all production variables — including `DEBUG`):
 
 ```sh
 source .envrc
@@ -185,9 +186,6 @@ To reload or store the Caddy webserver:
 caddy reload --config /home/roa/mataroa/Caddyfile
 caddy stop
 ```
-
-Note that the value of the `NODEBUG` variable is ignored. What matters is
-merely its existence in the environment.
 
 Also, two cronjobs (used by the email newsletter feature) are needed to be
 installed. The schedule is subject to the administrator's preference. Indicatively:

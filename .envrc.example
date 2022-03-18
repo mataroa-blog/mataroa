@@ -1,3 +1,4 @@
+export DEBUG=1
 export SECRET_KEY=some-secret-key
 export DATABASE_URL=postgres://mataroa:db-password@db:5432/mataroa
 export EMAIL_HOST_USER=smtp-user
