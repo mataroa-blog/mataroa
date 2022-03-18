@@ -10,7 +10,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         if not settings.DEBUG:
-            raise CommandError("Population canceled. Django settings DEBUG mode is off.")
+            raise CommandError(
+                "Population canceled. Django settings DEBUG mode is off."
+            )
 
         if not models.User.objects.exists():
             raise CommandError(
