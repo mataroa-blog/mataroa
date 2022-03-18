@@ -8,12 +8,16 @@ Condensed and commented sources file tree:
 
 ```
 .
+├── .build.yml # SourceHut CI build config
+├── .envrc.example # example direnv file
+├── .github/ # GitHub Actions config files
 ├── Caddyfile # configuration for Caddy webserver
 ├── Dockerfile
 ├── LICENSE
 ├── Makefile # make-defined tasks
 ├── README.md
 ├── backup-database.sh
+├── default.nix # nix profile
 ├── deploy.sh
 ├── docker-compose.yml
 ├── docs/
@@ -69,7 +73,7 @@ Condensed and commented sources file tree:
 ├── requirements.in # user-editable requirements file
 ├── requirements.txt # pip-compile generated version-locked dependencies
 ├── requirements_dev.txt # user-editable development requirements
-└── uwsgi.ini # configuration for uWSGI
+└── uwsgi.example.ini # example configuration for uWSGI
 ```
 
 ## [`main/urls.py`](/main/urls.py)
@@ -102,6 +106,7 @@ It includes:
 * webring
 * analytics
 * notifications subscribe/unsubscribe
+* atua dashboard
 
 Generally, [Django class-based generic views](https://docs.djangoproject.com/en/3.2/topics/class-based-views/generic-display/)
 are used most of the time as they provide useful functionality abstracted away.
