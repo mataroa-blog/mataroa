@@ -120,7 +120,7 @@ If Docker and docker-compose are preferred, then:
 1. Run `docker-compose up -d`.
 
 The database data will be saved in the git-ignored directory / Docker volume
-`db_data`, located in the root of the project.
+`docker-postgres-data`, located in the root of the project.
 
 ## Testing
 
@@ -159,12 +159,12 @@ and [Caddy](https://caddyserver.com/).
 A [server playbook](/docs/server-playbook.md) document is also available, based
 on Ubuntu 20.04.
 
-Remember to set the environment variables before starting `uwsgi`. Depending
-on the deployment environment, this could mean directly exporting the variables
-or just sourcing `.envrc` (with all production variables — including `DEBUG`):
+Environment variables for production are defined both in `uwsgi.ini` (for
+uwsgi) and in `.envrc` (for manage.py commands such as migrations and cron
+management commands).
 
 ```sh
-source .envrc
+cp uwsgi.example.ini uwsgi.ini  # edit environment variables in uwsgi.ini
 uwsgi uwsgi.ini  # start djago app
 caddy start --config /home/roa/mataroa/Caddyfile  # start caddy server
 ```

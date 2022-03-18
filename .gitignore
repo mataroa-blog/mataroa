@@ -13,6 +13,7 @@ venv/
 htmlcov/
 
 # uwsgi
+uwsgi.ini
 uwsgi-log.txt
 mataroa.pid
 
