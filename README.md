@@ -177,6 +177,9 @@ Environment variables for production are defined both in `uwsgi.ini` (for
 uwsgi) and in `.envrc` (for manage.py commands such as migrations and cron
 management commands).
 
+Note that the deployment is not configured using nix and thus we install
+dependencies using `venv`.
+
 ```sh
 cp uwsgi.example.ini uwsgi.ini  # edit environment variables in uwsgi.ini
 uwsgi uwsgi.ini  # start djago app
