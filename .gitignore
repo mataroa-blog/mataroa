@@ -18,5 +18,5 @@ uwsgi-log.txt
 mataroa.pid
 
 # docker
-db_data/
+docker-postgres-data/
 docker-compose.override.yml

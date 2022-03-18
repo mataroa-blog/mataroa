@@ -11,7 +11,7 @@ services:
     environment:
       POSTGRES_PASSWORD: postgres
     volumes:
-      - ./db_data:/var/lib/postgresql/data
+      - ./docker-postgres-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
   web:
