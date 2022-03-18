@@ -16,3 +16,12 @@ lint:
 cov:
 	coverage run --source='.' --omit '.pyenv/*' manage.py test
 	coverage report -m
+
+pgstart:
+	PGDATA=postgres-data/ pg_ctl start
+
+pgstop:
+	PGDATA=postgres-data/ pg_ctl stop
+
+reload:
+	uwsgi --reload mataroa.pid
