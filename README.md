@@ -17,6 +17,7 @@ Also checkout our docs on:
 * [Code Walkthrough](docs/code-walkthrough.md)
 * [Dependencies](docs/dependencies.md)
 * [Server Playbook](docs/server-playbook.md)
+* [Admin and Moderation](docs/admin-moderation.md)
 
 ## Development
 
