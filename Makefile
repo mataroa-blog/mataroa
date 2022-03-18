@@ -1,14 +1,18 @@
 .PHONY: format lint cov
 
-lint:
-	flake8 --exclude=.git/,venv/ --ignore=E203,E501,W503
-	isort --check-only --profile black .
-	black --check --exclude '/(\.git|venv)/' .
+all: format lint cov
 
 format:
-	black --exclude '/(\.git|venv)/' .
-	isort --profile black .
+	@echo Formating Python code
+	black --exclude '/(\.direnv|\.pyenv)/' .
+	isort --skip-glob .pyenv --profile black .
+
+lint:
+	@echo Linting Python code
+	flake8 --exclude=.pyenv/,.direnv/ --ignore=E203,E501,W503
+	isort --check-only --skip-glob .pyenv --profile black .
+	black --check --exclude '/(\.direnv|\.pyenv)/' .
 
 cov:
-	coverage run --source='.' --omit 'venv/*' manage.py test
+	coverage run --source='.' --omit '.pyenv/*' manage.py test
 	coverage report -m
