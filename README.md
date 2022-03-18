@@ -30,19 +30,33 @@ The Django project is `mataroa`. There is one Django app, `main`, with all
 business logic. Application CLI commands are generally divided into two
 categories, those under `python manage.py` and those under `make`.
 
-### Dependencies
+### Dependencies with Nix
 
-Using [venv](https://docs.python.org/3/library/venv.html):
+This project is configured with [Nix](https://nixos.org/) and
+[direnv](https://direnv.net/). The default profile is described in
+[`default.nix`](default.nix) and the example [`.envrc`](.envrc.example)
+defines `use nix` and
+[`layout python`](https://github.com/direnv/direnv/wiki/Python).
+
+`direnv` should create a venv and auto-load the nix profile. In case of lack
+of `direnv`, run `nix-shell` to enable the default nix profile.
+
+To install dependencies, assume `pip` works as the system pip:
+
+```
+pip install -r requirements_dev.txt
+```
+
+### Dependencies with `venv`
+
+If one is not using nix, then one can use
+[venv](https://docs.python.org/3/library/venv.html):
 
 ```sh
 python3 -m venv venv
 source venv/bin/activate
-pip install -r requirements.txt
 pip install -r requirements_dev.txt
 ```
-
-This project also uses [pip-tools](https://github.com/jazzband/pip-tools) for
-dependency management.
 
 ### Environment variables
 
