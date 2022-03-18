@@ -14,7 +14,7 @@ On how to contribute using email patches see
 Also checkout our docs on:
 
 * [Git Commit Message Guidelines](docs/commit-messages.md)
-* [Code Walkthrough](docs/code-walkthrough.md)
+* [File Structure Walkthrough](docs/code-walkthrough.md)
 * [Dependencies](docs/dependencies.md)
 * [Server Playbook](docs/server-playbook.md)
 * [Admin and Moderation](docs/admin-moderation.md)

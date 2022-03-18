@@ -1,6 +1,8 @@
-# Code Walkthrough
+# File Structure Walkthrough
 
-Here, an overview of the project's code sources is presented.
+Here, an overview of the project's code sources is presented. The purpose is
+for the reader to understand what kind of functionality is located where in
+the sources.
 
 All business logic of the application is in one Django app: [`main`](/main).
 
