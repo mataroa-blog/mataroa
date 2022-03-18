@@ -83,7 +83,7 @@ When on production, also include/update the following variables (see
 [Deployment](#Deployment) and [Backup](#Backup)):
 
 ```sh
-export DEBUG=1
+export DEBUG=0
 export PGPASSWORD=db-password
 ```
 
