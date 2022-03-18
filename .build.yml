@@ -10,6 +10,7 @@ tasks:
   - test: |
       cd mataroa
       sudo -u postgres psql -U postgres -d postgres -c "ALTER USER postgres WITH PASSWORD 'postgres';"
+      export DEBUG=1
       export DATABASE_URL='postgres://postgres:postgres@localhost:5432/postgres'
       python3 manage.py collectstatic --noinput
       python3 manage.py test

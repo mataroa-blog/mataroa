@@ -36,7 +36,7 @@ jobs:
     - name: Run Tests
       run: |
         python manage.py collectstatic --noinput
-        python manage.py test
+        DEBUG=1 python manage.py test
       env:
         SECRET_KEY: "thisisthesecretkey"
         DATABASE_URL: "postgres://postgres:postgres@localhost:5432/postgres"
