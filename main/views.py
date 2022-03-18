@@ -705,6 +705,7 @@ class AnalyticPostDetail(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["title"] = self.object.title
 
         # calculate dates
         current_date = timezone.now().date()
@@ -719,8 +720,6 @@ class AnalyticPostDetail(LoginRequiredMixin, DetailView):
             .annotate(Count("id"))
         )
 
-        context["title"] = self.object.title
-
         return populate_analytics_context(
             context=context,
             date_25d_ago=date_25d_ago,
@@ -733,30 +732,31 @@ class AnalyticPageDetail(LoginRequiredMixin, DetailView):
     template_name = "main/analytic_detail.html"
 
     def get_object(self):
+        # our object is annotated with counts for the last 25 days
         date_25d_ago = timezone.now().date() - timedelta(days=24)
-        return models.AnalyticPage.objects.filter(
-            user=self.request.user,
-            path=self.kwargs["page_path"],
-            created_at__gt=date_25d_ago,
+        return (
+            models.AnalyticPage.objects.filter(
+                user=self.request.user,
+                path=self.kwargs["page_path"],
+                created_at__gt=date_25d_ago,
+            )
+            .values("created_at")
+            .annotate(Count("id"))
         )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["title"] = self.kwargs["page_path"]
 
         # calculate dates
         current_date = timezone.now().date()
         date_25d_ago = current_date - timedelta(days=24)
 
-        # get all counts for the last 25 days
-        day_counts = self.object.values("created_at").annotate(Count("id"))
-
-        context["title"] = self.kwargs["page_path"]
-
         return populate_analytics_context(
             context=context,
             date_25d_ago=date_25d_ago,
             current_date=current_date,
-            day_counts=day_counts,
+            day_counts=self.object,
         )
 
 
