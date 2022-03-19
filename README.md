@@ -27,9 +27,10 @@ documentation.
 
 ### Structure
 
-The Django project is `mataroa`. There is one Django app, `main`, with all
-business logic. Application CLI commands are generally divided into two
-categories, those under `python manage.py` and those under `make`.
+The Django project is [`mataroa`](mataroa). There is one Django app,
+[`main`](main), with all business logic. Application CLI commands are generally
+divided into two categories, those under `python manage.py` and those under
+`make`.
 
 ### Dependencies with Nix
 
