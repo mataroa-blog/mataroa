@@ -1010,7 +1010,7 @@ def guides_images(request):
     return render(request, "main/guides_images.html")
 
 
-def admin_users(request):
+def atua_users(request):
     if not request.user.is_authenticated or not request.user.is_superuser:
         raise Http404()
 
@@ -1025,7 +1025,7 @@ def admin_users(request):
 
     return render(
         request,
-        "main/admin_users.html",
+        "main/atua_users.html",
         {
             "users": models.User.objects.all(),
             "new_users": models.User.objects.filter(date_joined__gte=one_month_ago),
@@ -1037,14 +1037,14 @@ def admin_users(request):
     )
 
 
-def admin_posts(request):
+def atua_posts(request):
     if not request.user.is_authenticated or not request.user.is_superuser:
         raise Http404()
 
     one_month_ago = timezone.now() - timedelta(days=30)
     return render(
         request,
-        "main/admin_posts.html",
+        "main/atua_posts.html",
         {
             "new_posts": models.Post.objects.filter(created_at__gte=one_month_ago)
             .select_related("owner")
@@ -1056,14 +1056,14 @@ def admin_posts(request):
     )
 
 
-def admin_pages(request):
+def atua_pages(request):
     if not request.user.is_authenticated or not request.user.is_superuser:
         raise Http404()
 
     one_month_ago = timezone.now() - timedelta(days=30)
     return render(
         request,
-        "main/admin_pages.html",
+        "main/atua_pages.html",
         {
             "new_pages": models.Page.objects.filter(created_at__gte=one_month_ago)
             .select_related("owner")

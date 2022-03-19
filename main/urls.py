@@ -27,11 +27,11 @@ urlpatterns += [
     path("accounts/delete/", views.UserDelete.as_view(), name="user_delete"),
 ]
 
-# admin pages
+# atua pages
 urlpatterns += [
-    path("atua/users/", views.admin_users, name="admin_users"),
-    path("atua/posts/", views.admin_posts, name="admin_posts"),
-    path("atua/pages/", views.admin_pages, name="admin_pages"),
+    path("atua/users/", views.atua_users, name="atua_users"),
+    path("atua/posts/", views.atua_posts, name="atua_posts"),
+    path("atua/pages/", views.atua_pages, name="atua_pages"),
 ]
 
 # blog posts

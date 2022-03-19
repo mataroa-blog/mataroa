@@ -8,16 +8,16 @@
 
     <nav>
         Atua:
-        <a href="{% url 'admin_users' %}">Users</a>
-        | <a href="{% url 'admin_posts' %}">Posts</a>
-        | <a href="{% url 'admin_pages' %}">Pages</a>
+        <a href="{% url 'atua_users' %}">Users</a>
+        | <a href="{% url 'atua_posts' %}">Posts</a>
+        | <a href="{% url 'atua_pages' %}">Pages</a>
     </nav>
 
     <h2>New Posts ({{ new_posts|length }})</h2>
     <ul>
         {% for post in new_posts %}
         <li>
-            {% include "partials/admin_post.html" with post=post %}
+            {% include "partials/atua_post.html" with post=post %}
         </li>
         {% endfor %}
     </ul>
@@ -26,7 +26,7 @@
     <ul>
         {% for post in edited_posts %}
         <li>
-            {% include "partials/admin_post.html" with post=post %}
+            {% include "partials/atua_post.html" with post=post %}
         </li>
         {% endfor %}
     </ul>
