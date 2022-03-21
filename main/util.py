@@ -1,3 +1,6 @@
+import re
+import sys
+import unicodedata
 import uuid
 
 import bleach
@@ -128,6 +131,20 @@ def md_to_html(markdown_string, strip_tags=False):
         ],
     )
     return clean_html(dirty_html, strip_tags)
+
+
+def remove_control_chars(text):
+    """Remove control characters aka Cc category of unicode.
+
+    See http://www.unicode.org/reports/tr44/#General_Category_Values
+    """
+    all_chars = (chr(i) for i in range(sys.maxunicode))
+    categories = {"Cc"}
+    control_chars = "".join(
+        c for c in all_chars if unicodedata.category(c) in categories
+    )
+    control_char_re = re.compile("[%s]" % re.escape(control_chars))
+    return control_char_re.sub(" ", text)
 
 
 def get_protocol():

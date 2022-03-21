@@ -220,8 +220,8 @@ class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        # trim non printable characters of self.object.body
         self.object.slug = util.get_post_slug(self.object.title, self.request.user)
+        self.object.body = util.remove_control_chars(self.object.body)
         self.object.owner = self.request.user
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
@@ -260,6 +260,7 @@ class PostUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         self.object.slug = util.get_post_slug(
             updated_slug, self.request.user, post=self.object
         )
+        self.object.body = util.remove_control_chars(self.object.body)
         self.object.save()
 
         return super().form_valid(form)
