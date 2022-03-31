@@ -1,6 +1,4 @@
 import re
-import sys
-import unicodedata
 import uuid
 
 import bleach
@@ -134,16 +132,14 @@ def md_to_html(markdown_string, strip_tags=False):
 
 
 def remove_control_chars(text):
-    """Remove control characters aka Cc category of unicode.
+    """Remove control characters from a string.
 
+    We remove all characters of the Cc category of unicode, except for
+    \t (tab), \n (new line), \r (carriage return).
     See http://www.unicode.org/reports/tr44/#General_Category_Values
     """
-    all_chars = (chr(i) for i in range(sys.maxunicode))
-    categories = {"Cc"}
-    control_chars = "".join(
-        c for c in all_chars if unicodedata.category(c) in categories
-    )
-    control_char_re = re.compile("[%s]" % re.escape(control_chars))
+    control_char_string = "".join(denylist.DISALLOWED_CHARACTERS)
+    control_char_re = re.compile("[%s]" % re.escape(control_char_string))
     return control_char_re.sub(" ", text)
 
 

@@ -222,6 +222,7 @@ class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         self.object = form.save(commit=False)
         self.object.slug = util.get_post_slug(self.object.title, self.request.user)
         self.object.owner = self.request.user
+        self.object.body = util.remove_control_chars(self.object.body)
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
@@ -250,6 +251,7 @@ class PostUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             self.object.slug = util.get_post_slug(
                 self.object.title, self.request.user, post=self.object
             )
+            self.object.body = util.remove_control_chars(self.object.body)
             self.object.save()
             return super().form_valid(form)
 
