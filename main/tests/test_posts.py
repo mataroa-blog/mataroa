@@ -20,6 +20,22 @@ class PostCreateTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertTrue(models.Post.objects.get(title=data["title"]))
 
+    def test_post_multiline_create(self):
+        data = {
+            "title": "multiline post",
+            "slug": "multiline-post",
+            "body": """What I’m really concerned about is reaching
+one person. And that person may be myself for all I know.
+
+    — Jorge Luis Borges.""",
+        }
+        response = self.client.post(reverse("post_create"), data)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(models.Post.objects.get(title=data["title"]))
+        self.assertEqual(
+            models.Post.objects.get(title=data["title"]).body, data["body"]
+        )
+
 
 class PostCreateAnonTestCase(TestCase):
     """Test non logged in user cannot create post."""
