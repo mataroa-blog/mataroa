@@ -31,11 +31,12 @@ Condensed and commented sources file tree:
 │   ├── apps.py
 │   ├── denylist.py # list of various keywords allowed and denied
 │   ├── feeds.py # django rss functionality
+│   ├── fixtures/
+│   │   └── dev-data.json # sample development data
 │   ├── forms.py
 │   ├── management/ # commands under `python manage.py`
 │   │   └── commands/
 │   │       ├── enqueue_notifications.py
-│   │       ├── populate_dev_data.py
 │   │       └── process_notifications.py
 │   │       └── mail_exports.py
 │   ├── middleware.py # mostly subdomain routing

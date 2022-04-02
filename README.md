@@ -102,8 +102,10 @@ Also, initialising the database with some sample development data is possible
 with:
 
 ```sh
-python manage.py populate_dev_data
+python manage.py loaddata dev-data
 ```
+
+`dev-data` is located in [main/fixtures/dev-data.json](main/fixtures/dev-data.json)
 
 ### Subdomains
 
@@ -254,7 +256,6 @@ In addition to the standard Django management commands, there are also:
 * `enqueue_notifications`: create records for notification emails to be sent.
 * `process_notifications`: sends notification emails for new blog posts of existing records.
 * `mail_exports`: emails users of their blog exports.
-* `populate_dev_data`: populate database with sample development data.
 
 They are triggered using the standard `manage.py` Django way; eg:
 
