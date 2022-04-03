@@ -893,7 +893,7 @@ class NotificationRecordList(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return models.NotificationRecord.objects.filter(
             notification__blog_user=self.request.user
-        )
+        ).select_related("post", "notification")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -901,16 +901,35 @@ class NotificationRecordList(LoginRequiredMixin, ListView):
         context["notificationrecord_list_unsent"] = (
             context["notificationrecord_list"]
             .filter(sent_at__isnull=True)
-            .order_by("post")
+            .order_by("post", "is_canceled")  # order needed for {% regroup %}
         )
+
+        # keep a list of records too old to show
+        to_exclude = []
         for nr in context["notificationrecord_list_unsent"]:
+            two_days_ago = timezone.now().date() - timedelta(days=2)
+            if nr.is_canceled and nr.post.published_at < two_days_ago:
+                to_exclude.append(nr.id)
+                continue
+
+        # exclude too old records
+        context["notificationrecord_list_unsent"] = context[
+            "notificationrecord_list_unsent"
+        ].exclude(id__in=to_exclude)
+
+        for nr in context["notificationrecord_list_unsent"]:
+
+            # if post was deleted, delete nr as well
             if nr.post is None:
-                # post was deleted, delete nr as well
                 nr.delete()
                 continue
+
+            # do not show if post is not published
             if not nr.post.published_at:
                 nr.scheduled_at = None
                 continue
+
+            # show scheduled day as the next one after publication date
             nr.scheduled_at = nr.post.published_at + timedelta(days=1)
 
         context["notificationrecord_list_sent"] = (
