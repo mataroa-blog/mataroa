@@ -33,6 +33,7 @@
                 <title>{{ analytic.count }} hits during {{ day|date:'F j, Y' }}</title>
             </rect>
 
+            {% if forloop.counter0|divisibleby:"2" %}
             <text
                 x="{{ analytic.x_offset|add:'9' }}"
                 y="108"
@@ -42,6 +43,7 @@
                 >
                 {{ analytic.count }}
             </text>
+            {% endif %}
 
             <text
                 x="115"
