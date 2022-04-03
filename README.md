@@ -105,7 +105,7 @@ with:
 python manage.py loaddata dev-data
 ```
 
-* `dev-data` is located in [`main/fixtures/dev-data.json`](main/fixtures/dev-data.json)
+* `dev-data` is [`main/fixtures/dev-data.json`](main/fixtures/dev-data.json)
 * Credentials are `admin` / `admin`.
 
 ### Subdomains
