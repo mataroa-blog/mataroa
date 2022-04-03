@@ -88,6 +88,7 @@ ALLOWED_HTML_ELEMENTS = [
     "abbr",
     "acronym",
     "article",
+    "audio",
     "b",
     "bdi",
     "bdo",
@@ -140,6 +141,7 @@ ALLOWED_HTML_ELEMENTS = [
 ALLOWED_HTML_ATTRS = [
     "alt",
     "class",
+    "controls",
     "frameborder",
     "height",
     "href",
