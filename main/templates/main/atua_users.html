@@ -13,15 +13,6 @@
         | <a href="{% url 'atua_pages' %}">Pages</a>
     </nav>
 
-    <h2>New Users ({{ new_users|length }})</h2>
-    <ul>
-        {% for user in new_users %}
-        <li>
-            {% include "partials/atua_user.html" with user=user %}
-        </li>
-        {% endfor %}
-    </ul>
-
     <h2>Premium Users ({{ premium_users|length }})</h2>
     <ol reversed>
         {% for user in premium_users %}
@@ -30,6 +21,15 @@
         </li>
         {% endfor %}
     </ol>
+
+    <h2>New Users ({{ new_users|length }})</h2>
+    <ul>
+        {% for user in new_users %}
+        <li>
+            {% include "partials/atua_user.html" with user=user %}
+        </li>
+        {% endfor %}
+    </ul>
 
     <h2>Grandfather Users ({{ grandfather_users|length }})</h2>
     <ul>
