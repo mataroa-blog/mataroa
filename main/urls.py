@@ -38,7 +38,8 @@ urlpatterns += [
 urlpatterns += [
     path("blog/create/", views.PostCreate.as_view(), name="post_create"),
     path("blog/<slug:slug>/", views.PostDetail.as_view(), name="post_detail"),
-    path("post/<slug:slug>/", views.post_detail_redir, name="post_detail_redir"),
+    path("posts/<slug:slug>/", views.post_detail_redir, name="post_detail_redir_a"),
+    path("post/<slug:slug>/", views.post_detail_redir, name="post_detail_redir_b"),
     path("blog/<slug:slug>/edit/", views.PostUpdate.as_view(), name="post_update"),
     path("blog/<slug:slug>/delete/", views.PostDelete.as_view(), name="post_delete"),
 ]

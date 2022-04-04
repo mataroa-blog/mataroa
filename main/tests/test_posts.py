@@ -127,9 +127,18 @@ class PostDetailTestCase(TestCase):
         self.assertContains(response, self.data["title"])
         self.assertContains(response, self.data["body"])
 
-    def test_post_detail_redir(self):
+    def test_post_detail_redir_a(self):
         response = self.client.get(
-            reverse("post_detail_redir", args=(self.post.slug,)),
+            reverse("post_detail_redir_a", args=(self.post.slug,)),
+            # needs HTTP_HOST because we need to request it on the subdomain
+            HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
+        )
+        self.assertEqual(response.status_code, 301)
+        self.assertEqual(response.url, reverse("post_detail", args=(self.post.slug,)))
+
+    def test_post_detail_redir_b(self):
+        response = self.client.get(
+            reverse("post_detail_redir_b", args=(self.post.slug,)),
             # needs HTTP_HOST because we need to request it on the subdomain
             HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
         )
