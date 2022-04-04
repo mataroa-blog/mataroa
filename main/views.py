@@ -169,6 +169,10 @@ class UserDelete(LoginRequiredMixin, DeleteView):
         return self.request.user
 
 
+def post_detail_redir(request, slug):
+    return redirect("post_detail", slug=slug, permanent=True)
+
+
 class PostDetail(DetailView):
     model = models.Post
 
