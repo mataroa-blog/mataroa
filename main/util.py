@@ -33,8 +33,15 @@ def get_post_slug(post_title, owner, post=None):
 
     # if post is not None, then this is an update op
     if post is not None:
-        if models.Post.objects.filter(owner=owner, slug=slug).count() == 1:
-            return slug
+        post_with_same_slugs = models.Post.objects.filter(owner=owner, slug=slug)
+        if post_with_same_slugs:
+            if post_with_same_slugs.first().id == post.id:
+                # if post being updating is the same one, then just return the same slug
+                return slug
+            else:
+                # if post being updating is another one, then add a suffix to differentiate
+                slug += "-" + str(uuid.uuid4())[:8]
+                return slug
 
     # if post arg is None, then this is a new post
     # if slug already exists for another post, add a suffix to make it unique

@@ -199,6 +199,74 @@ class PostUpdateTestCase(TestCase):
         self.assertEqual(updated_post.body, new_data["body"])
 
 
+class PostUpdateSameSlugTestCase(TestCase):
+    """Test updating post without changing slug works."""
+
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.client.force_login(self.user)
+        self.data = {
+            "title": "Post A",
+            "slug": "post-a",
+            "body": "Content sentence.",
+        }
+        self.post = models.Post.objects.create(owner=self.user, **self.data)
+
+    def test_post_update(self):
+        new_data = {
+            "title": "Post A",
+            "slug": "post-a",
+            "body": "Updated content, same slug.",
+        }
+        self.client.post(
+            reverse("post_update", args=(self.post.slug,)),
+            data=new_data,
+            HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
+        )
+        updated_post = models.Post.objects.get(id=self.post.id)
+        self.assertEqual(updated_post.title, new_data["title"])
+        self.assertEqual(updated_post.slug, "post-a")
+        self.assertEqual(updated_post.body, new_data["body"])
+
+
+class PostUpdateTwoSlugsTestCase(TestCase):
+    """Test updating post with slug of another post."""
+
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.client.force_login(self.user)
+        self.data_a = {
+            "title": "Post A",
+            "slug": "post-a",
+            "body": "Content a sentence.",
+        }
+        self.post_a = models.Post.objects.create(owner=self.user, **self.data_a)
+        self.data_b = {
+            "title": "Post B",
+            "slug": "post-b",
+            "body": "Content b sentence.",
+        }
+        self.post_b = models.Post.objects.create(owner=self.user, **self.data_b)
+
+    def test_post_update(self):
+        """Update post a and set its slug to post-b."""
+        new_data = {
+            "title": "Post A",
+            "slug": "post-b",
+            "body": "Content a sentence.",
+        }
+        self.client.post(
+            reverse("post_update", args=(self.post_a.slug,)),
+            data=new_data,
+            HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
+        )
+        updated_post = models.Post.objects.get(id=self.post_a.id)
+        self.assertEqual(updated_post.title, new_data["title"])
+        # updated_post slug is post-b-<random-chars>
+        self.assertEqual(updated_post.slug[:6], "post-b")
+        self.assertEqual(updated_post.body, new_data["body"])
+
+
 class PostUpdateNotOwnTestCase(TestCase):
     """Test user cannot update other user's post."""
 
