@@ -381,14 +381,7 @@ table {
     border: 1px solid var(--light-grey-color);
     width: 100%;
     box-sizing: border-box;
-}
-
-th {
-    text-align: left;
-}
-
-tr {
-    min-width: 300px;
+    font-family: sans-serif;
 }
 
 thead:nth-child(odd),
@@ -612,6 +605,14 @@ form .helptext {
 .comparisons thead > tr > th:not(:first-child),
 .comparisons tbody > tr > td:not(:first-child) {
     text-align: center;
+}
+
+.comparisons th {
+    text-align: left;
+}
+
+.comparisons tr {
+    min-width: 300px;
 }
 
 /* blog index */

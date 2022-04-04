@@ -95,6 +95,7 @@ ALLOWED_HTML_ELEMENTS = [
     "br",
     "blockquote",
     "cite",
+    "colgroup",
     "code",
     "div",
     "dfn",
@@ -130,7 +131,13 @@ ALLOWED_HTML_ELEMENTS = [
     "strong",
     "sub",
     "sup",
+    "table",
+    "tbody",
+    "td",
+    "th",
+    "thead",
     "time",
+    "tr",
     "u",
     "ul",
     "var",
@@ -139,6 +146,7 @@ ALLOWED_HTML_ELEMENTS = [
 
 # attributes allowed to exist inside the elements of the HTML of a markdown text
 ALLOWED_HTML_ATTRS = [
+    "align",
     "alt",
     "class",
     "controls",
@@ -147,6 +155,7 @@ ALLOWED_HTML_ATTRS = [
     "href",
     "id",
     "seamless",
+    "span",
     "src",
     "style",
     "title",
