@@ -55,7 +55,7 @@ def host_middleware(get_response):
                     # user has retired their mataroa blog, redirect to new domain
                     if request.blog_user.redirect_domain:
                         redir_domain = (
-                            request.blog_user.redirect_domain + request.path_info
+                            request.blog_user.redirect_domain + request.path_info[5:]
                         )
 
                     # if there is no protocol prefix,
@@ -76,7 +76,7 @@ def host_middleware(get_response):
             # if user has retired their mataroa blog (and keeps the custom domain)
             # redirect to new domain
             if request.blog_user.redirect_domain:
-                redir_domain = request.blog_user.redirect_domain + request.path_info
+                redir_domain = request.blog_user.redirect_domain + request.path_info[5:]
 
                 # if there is no protocol prefix,
                 # prepend double slashes to indicate other domain
