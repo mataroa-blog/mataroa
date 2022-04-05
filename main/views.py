@@ -26,7 +26,7 @@ from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 
 from main import denylist, forms, models, util
-from main.sitemaps import PageSitemap, PostSitemap
+from main.sitemaps import PageSitemap, PostSitemap, StaticSitemap
 
 
 @login_required
@@ -1105,12 +1105,12 @@ def sitemap(request):
     if not hasattr(request, "subdomain"):
         raise Http404()
 
-    user = models.User.objects.get(username=request.subdomain)
     subdomain = request.subdomain
 
     sitemaps = {
-        "posts": PostSitemap(user, subdomain),
-        "pages": PageSitemap(user, subdomain),
+        "static": StaticSitemap(),
+        "posts": PostSitemap(subdomain),
+        "pages": PageSitemap(subdomain),
     }
 
     return DjSitemapView(request, sitemaps)
