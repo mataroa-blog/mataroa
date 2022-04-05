@@ -4,15 +4,17 @@ from django.utils import timezone
 
 from main import models
 
+
 class StaticSitemap(Sitemap):
     priority = 1.0
     changefreq = "always"
 
     def items(self):
-        return ['index']
+        return ["index"]
 
     def location(self, obj):
         return reverse(obj)
+
 
 class PostSitemap(Sitemap):
     priority = 1.0
