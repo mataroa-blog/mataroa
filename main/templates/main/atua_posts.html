@@ -6,14 +6,19 @@
 <main>
     <h1>Atua Posts</h1>
 
-    <nav>
+    <p>
         Atua:
         <a href="{% url 'atua_users' %}">Users</a>
         | <a href="{% url 'atua_posts' %}">Posts</a>
         | <a href="{% url 'atua_pages' %}">Pages</a>
-    </nav>
+    </p>
 
-    <h2>New Posts ({{ new_posts|length }})</h2>
+    <ul>
+        <li><a href="#posts-new">New</a></li>
+        <li><a href="#posts-edited">Recently Edited</a></li>
+    </ul>
+
+    <h2 id="posts-new">New Posts ({{ new_posts|length }})</h2>
     <ul>
         {% for post in new_posts %}
         <li>
@@ -22,7 +27,7 @@
         {% endfor %}
     </ul>
 
-    <h2>Recently Edited Posts ({{ edited_posts|length }})</h2>
+    <h2 id="posts-edited">Recently Edited Posts ({{ edited_posts|length }})</h2>
     <ul>
         {% for post in edited_posts %}
         <li>

@@ -6,14 +6,23 @@
 <main>
     <h1>Atua Users</h1>
 
-    <nav>
+    <p>
         Atua:
         <a href="{% url 'atua_users' %}">Users</a>
         | <a href="{% url 'atua_posts' %}">Posts</a>
         | <a href="{% url 'atua_pages' %}">Pages</a>
-    </nav>
+    </p>
 
-    <h2>Premium Users ({{ premium_users|length }})</h2>
+    <ul>
+        <li><a href="#users-premium">Premium</a></li>
+        <li><a href="#users-new">New</a></li>
+        <li><a href="#users-grandfather">Grandfather</a></li>
+        <li><a href="#users-staff">Staff</a></li>
+        <li><a href="#users-active">Active</a></li>
+        <li><a href="#users-active-nonnew">Active non-new</a></li>
+    </ul>
+
+    <h2 id="users-premium">Premium Users ({{ premium_users|length }})</h2>
     <ol reversed>
         {% for user in premium_users %}
         <li>
@@ -23,7 +32,7 @@
         {% endfor %}
     </ol>
 
-    <h2>New Users ({{ new_users|length }})</h2>
+    <h2 id="users-new">New Users ({{ new_users|length }})</h2>
     <ul>
         {% for user in new_users %}
         <li>
@@ -32,7 +41,7 @@
         {% endfor %}
     </ul>
 
-    <h2>Grandfather Users ({{ grandfather_users|length }})</h2>
+    <h2 id="users-grandfather">Grandfather Users ({{ grandfather_users|length }})</h2>
     <ul>
         {% for user in grandfather_users %}
         <li>
@@ -41,7 +50,7 @@
         {% endfor %}
     </ul>
 
-    <h2>Mataroa Users</h2>
+    <h2 id="users-staff">Staff Users</h2>
     <ul>
         {% for user in users %}
         {% if 'mataroa.blog' in user.email %}
@@ -52,7 +61,7 @@
         {% endfor %}
     </ul>
 
-    <h2>Active Users ({{ active_users|length }})</h2>
+    <h2 id="users-active">Active Users ({{ active_users|length }})</h2>
     <ul>
         {% for user in active_users %}
         <li>
@@ -61,7 +70,7 @@
         {% endfor %}
     </ul>
 
-    <h2>Active non-new Users ({{ active_nonnew_users|length }})</h2>
+    <h2 id="users-active-nonnew">Active non-new Users ({{ active_nonnew_users|length }})</h2>
     <ul>
         {% for user in active_nonnew_users %}
         <li>
