@@ -3,3 +3,14 @@
 / <a href="{% url 'admin:main_user_change' user.id %}">
     <small>{{ user.date_joined }}</small>
 </a>
+{% if user.is_premium %}
+{% if user.monero_address %}
+/ <small>XMR: {{ user.monero_address|truncatechars:7 }}</small>
+{% else %}
+/ <small>
+    <a href="https://dashboard.stripe.com/customers/{{ user.stripe_customer_id }}">
+        {{ user.stripe_customer_id }}
+    </a>
+</small>
+{% endif %}
+{% endif %}

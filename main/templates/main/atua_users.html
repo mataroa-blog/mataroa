@@ -27,7 +27,6 @@
         {% for user in premium_users %}
         <li>
             {% include "partials/atua_user.html" with user=user %}
-            / <small>{{ user.monero_address|default:user.stripe_customer_id }}</small>
         </li>
         {% endfor %}
     </ol>
