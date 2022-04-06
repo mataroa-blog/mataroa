@@ -688,7 +688,8 @@ def populate_analytics_context(context, date_25d_ago, current_date, day_counts):
             count_percent = count_per_day[current_date] * 100 / highest_day_count
 
         context["analytics_per_day"][current_date] = {
-            "count": count_per_day[current_date],
+            "count_approx": util.get_approx_number(count_per_day[current_date]),
+            "count_exact": count_per_day[current_date],
             "x_offset": current_x_offset,
             "count_percent": count_percent,
             "negative_count_percent": 100 - count_percent,

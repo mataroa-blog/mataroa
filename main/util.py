@@ -20,6 +20,15 @@ def is_disallowed(username):
     return username in denylist.DISALLOWED_USERNAMES
 
 
+def get_approx_number(number):
+    """Get approximate number, eg. 1823 -> 2k"""
+    if number > 999:
+        approx = round(number / 1000)
+        return f"{approx}k"
+
+    return number
+
+
 def get_post_slug(post_title, owner, post=None):
     """
     Generate slug given post title. Optional post arg for post that already
