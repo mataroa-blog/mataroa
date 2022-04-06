@@ -19,9 +19,10 @@ class SitemapFormatTestCase(TestCase):
             HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
         )
         self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '<?xml version="1.0" encoding="UTF-8"?>')
         self.assertContains(
             response,
-            '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
         )
 
 
@@ -35,7 +36,7 @@ class SitemapIndexTestCase(TestCase):
             # needs HTTP_HOST because we need to request it on the subdomain
             HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
         )
-        # Do not include <loc> so the assertion matches all protocols
+        # do not include <loc> so the assertion matches all protocols
         self.assertContains(
             response, f"//{self.user.username}.{settings.CANONICAL_HOST}/</loc>"
         )
@@ -56,7 +57,7 @@ class SitemapPostTestCase(TestCase):
             # needs HTTP_HOST because we need to request it on the subdomain
             HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
         )
-        # Do not include <loc> so the assertion matches all protocols
+        # do not include <loc> so the assertion matches all protocols
         self.assertContains(
             response,
             f"//{self.user.username}.{settings.CANONICAL_HOST}/blog/{self.data['slug']}/</loc>",
@@ -79,7 +80,7 @@ class SitemapFuturePostTestCase(TestCase):
             # needs HTTP_HOST because we need to request it on the subdomain
             HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
         )
-        # Do not include <loc> so the assertion matches all protocols
+        # do not include <loc> so the assertion matches all protocols
         self.assertNotContains(
             response,
             f"//{self.user.username}.{settings.CANONICAL_HOST}/blog/{self.data['slug']}/</loc>",
@@ -99,7 +100,7 @@ class SitemapPostDraftTestCase(TestCase):
             # needs HTTP_HOST because we need to request it on the subdomain
             HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
         )
-        # Do not include <loc> so the assertion matches all protocols
+        # do not include <loc> so the assertion matches all protocols
         self.assertNotContains(
             response,
             f"//{self.user.username}.{settings.CANONICAL_HOST}/blog/{self.data['slug']}/</loc>",
@@ -121,7 +122,7 @@ class SitemapPageTestCase(TestCase):
             # needs HTTP_HOST because we need to request it on the subdomain
             HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
         )
-        # Do not include <loc> so the assertion matches all protocols
+        # do not include <loc> so the assertion matches all protocols
         self.assertContains(
             response,
             f"//{self.user.username}.{settings.CANONICAL_HOST}/{self.data['slug']}/</loc>",
@@ -141,7 +142,7 @@ class SitemapHiddenPageTestCase(TestCase):
             # needs HTTP_HOST because we need to request it on the subdomain
             HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
         )
-        # Do not include <loc> so the assertion matches all protocols
+        # do not include <loc> so the assertion matches all protocols
         self.assertNotContains(
             response,
             f"//{self.user.username}.{settings.CANONICAL_HOST}/{self.data['slug']}/</loc>",
