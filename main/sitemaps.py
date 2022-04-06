@@ -28,7 +28,7 @@ class PostSitemap(Sitemap):
             owner__username=self.subdomain,
             published_at__isnull=False,
             published_at__lte=timezone.now().date(),
-        )
+        ).order_by("-published_at")
 
     def location(self, obj):
         return reverse("post_detail", kwargs={"slug": obj.slug})
