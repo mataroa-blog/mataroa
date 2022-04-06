@@ -47,6 +47,7 @@ urlpatterns += [
 # blog extras
 urlpatterns += [
     path("rss/", feeds.RSSBlogFeed(), name="rss_feed"),
+    path("sitemap.xml", views.sitemap, name="sitemap"),
     path("newsletter/", views.Notification.as_view(), name="notification_subscribe"),
     path(
         "newsletter/unsubscribe/",

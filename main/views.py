@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView as DjLogoutView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.sitemaps.views import sitemap as DjSitemapView
 from django.core import mail
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count
@@ -25,6 +26,7 @@ from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 
 from main import denylist, forms, models, util
+from main.sitemaps import PageSitemap, PostSitemap, StaticSitemap
 
 
 @login_required
@@ -1098,3 +1100,18 @@ def atua_pages(request):
             .order_by("-updated_at"),
         },
     )
+
+
+def sitemap(request):
+    if not hasattr(request, "subdomain"):
+        raise Http404()
+
+    subdomain = request.subdomain
+
+    sitemaps = {
+        "static": StaticSitemap(),
+        "posts": PostSitemap(subdomain),
+        "pages": PageSitemap(subdomain),
+    }
+
+    return DjSitemapView(request, sitemaps)
