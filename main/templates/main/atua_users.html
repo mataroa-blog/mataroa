@@ -53,7 +53,7 @@
     <h2 id="users-staff">Staff Users</h2>
     <ul>
         {% for user in users %}
-        {% if 'mataroa.blog' in user.email %}
+        {% if '@mataroa.blog' in user.email %}
         <li>
             {% include "partials/atua_user.html" with user=user %}
         </li>
