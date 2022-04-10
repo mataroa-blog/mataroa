@@ -101,15 +101,19 @@ export PGPASSWORD=db-password
 
 ### Database
 
-This project uses PostgreSQL. Assuming one has set the `DATABASE_URL` (see
-above), to create the database schema:
+This project is using one PostreSQL database for persistence.
+
+One can use the `make pginit` command to initialise a database in the
+`postgres-data/` directory.
+
+After setting the `DATABASE_URL` ([see above](#environment-variables)), create
+the database schema with:
 
 ```sh
 python manage.py migrate
 ```
 
-Also, initialising the database with some sample development data is possible
-with:
+Initialising the database with some sample development data is possible with:
 
 ```sh
 python manage.py loaddata dev-data

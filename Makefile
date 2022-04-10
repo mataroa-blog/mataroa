@@ -17,6 +17,9 @@ cov:
 	coverage run --source='.' --omit '.pyenv/*' manage.py test
 	coverage report -m
 
+pginit:
+	PGDATA=postgres-data/ pg_ctl init
+
 pgstart:
 	PGDATA=postgres-data/ pg_ctl start
 
