@@ -2,6 +2,16 @@
 
 Naked blogging platform.
 
+## Community
+
+We have a mailing list at
+[~sirodoht/mataroa-community@lists.sr.ht](mailto:~sirodoht/mataroa-community@lists.sr.ht)
+for the mataroa community to introduce themselves, their blogs, and discuss
+anything that's on their mind!
+
+Archives at:
+[https://lists.sr.ht/~sirodoht/mataroa-community](https://lists.sr.ht/~sirodoht/mataroa-community)
+
 ## Contributing
 
 Feel free to open a PR on [GitHub](https://github.com/sirodoht/mataroa) or
@@ -18,16 +28,6 @@ Also checkout our docs on:
 * [Dependencies](docs/dependencies.md)
 * [Server Playbook](docs/server-playbook.md)
 * [Admin and Moderation](docs/admin-moderation.md)
-
-## Community
-
-We have a mailing list at
-[~sirodoht/mataroa-community@lists.sr.ht](mailto:~sirodoht/mataroa-community@lists.sr.ht)
-for the mataroa community to introduce themselves, their blogs, and discuss
-anything that's on their mind!
-
-Archives at:
-[https://lists.sr.ht/~sirodoht/mataroa-community](https://lists.sr.ht/~sirodoht/mataroa-community)
 
 ## Development
 
