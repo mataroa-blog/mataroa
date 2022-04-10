@@ -1,4 +1,4 @@
-<a href="{{ user.blog_absolute_url }}" target="_blank">{{ user.username }}</a>
+<a href="{{ user.blog_absolute_url }}" target="_blank" rel="noopener">{{ user.username }}</a>
 / <span style="color: #999">{{ user.email|default:"(no email)" }}</span>
 / <a href="{% url 'admin:main_user_change' user.id %}">
     <small>{{ user.date_joined }}</small>
