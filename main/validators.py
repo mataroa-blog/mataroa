@@ -8,6 +8,18 @@ class AlphanumericHyphenValidator(dj_validators.RegexValidator):
     flags = 0
 
 
+class HyphenOnlyValidator(dj_validators.RegexValidator):
+    regex = r"^[-]*$"
+    message = "Invalid value. Cannot be just hyphens."
+    inverse_match = True
+    flags = 0
+
+
+def validate_username_hyphens(value):
+    if "." not in value:
+        raise ValidationError("Invalid domain name")
+
+
 def validate_domain_name(value):
     if "." not in value:
         raise ValidationError("Invalid domain name")

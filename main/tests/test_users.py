@@ -22,6 +22,28 @@ class UserCreateTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertTrue(models.User.objects.get(username=data["username"]))
 
+    def test_user_creation_hyphen(self):
+        data = {
+            "username": "alice-bob",
+            "password1": "abcdef123456",
+            "password2": "abcdef123456",
+            "blog_title": "New blog",
+        }
+        response = self.client.post(reverse("user_create"), data)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(models.User.objects.get(username=data["username"]))
+
+    def test_user_creation_multiple_hyphens(self):
+        data = {
+            "username": "alice----bob",
+            "password1": "abcdef123456",
+            "password2": "abcdef123456",
+            "blog_title": "New blog",
+        }
+        response = self.client.post(reverse("user_create"), data)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(models.User.objects.get(username=data["username"]))
+
 
 class UserCreateDisallowedTestCase(TestCase):
     def test_user_creation(self):
@@ -33,6 +55,47 @@ class UserCreateDisallowedTestCase(TestCase):
         }
         response = self.client.post(reverse("user_create"), data)
         self.assertContains(response, b"This username is not available.")
+
+
+class UserCreateInvalidTestCase(TestCase):
+    def test_user_creation_dollar(self):
+        data = {
+            "username": "with$dollar",
+            "password1": "abcdef123456",
+            "password2": "abcdef123456",
+            "blog_title": "New blog",
+        }
+        response = self.client.post(reverse("user_create"), data)
+        self.assertContains(
+            response,
+            b"Invalid value. Should include only lowercase letters, numbers, and -",
+        )
+
+    def test_user_creation_hyphen(self):
+        data = {
+            "username": "-",
+            "password1": "abcdef123456",
+            "password2": "abcdef123456",
+            "blog_title": "New blog",
+        }
+        response = self.client.post(reverse("user_create"), data)
+        self.assertContains(
+            response,
+            b"Invalid value. Cannot be just hyphens.",
+        )
+
+    def test_user_creation_multiple_hyphens(self):
+        data = {
+            "username": "-------",
+            "password1": "abcdef123456",
+            "password2": "abcdef123456",
+            "blog_title": "New blog",
+        }
+        response = self.client.post(reverse("user_create"), data)
+        self.assertContains(
+            response,
+            b"Invalid value. Cannot be just hyphens.",
+        )
 
 
 class LoginTestCase(TestCase):

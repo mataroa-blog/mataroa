@@ -16,7 +16,10 @@ class User(AbstractUser):
         max_length=150,
         unique=True,
         help_text="This is your subdomain. Lowercase alphanumeric.",
-        validators=[validators.AlphanumericHyphenValidator()],
+        validators=[
+            validators.AlphanumericHyphenValidator(),
+            validators.HyphenOnlyValidator(),
+        ],
         error_messages={"unique": "A user with that username already exists."},
     )
     email = models.EmailField(
