@@ -172,6 +172,7 @@ urlpatterns += [
 # api
 urlpatterns += [
     path("api/docs/", views.api_docs, name="api_docs"),
+    path("api/posts/", views.api_posts, name="api_posts"),
 ]
 
 # pages - needs to be last due to <slug>

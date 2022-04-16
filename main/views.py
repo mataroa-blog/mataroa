@@ -1,3 +1,4 @@
+import json
 import uuid
 from collections import defaultdict
 from datetime import datetime, timedelta
@@ -11,17 +12,20 @@ from django.contrib.auth.views import LogoutView as DjLogoutView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.sitemaps.views import sitemap as DjSitemapView
 from django.core import mail
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import BadRequest, PermissionDenied
 from django.db.models import Count
 from django.http import (
     Http404,
     HttpResponse,
     HttpResponseBadRequest,
+    HttpResponseNotAllowed,
     HttpResponseRedirect,
+    JsonResponse,
 )
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 
@@ -1119,3 +1123,43 @@ def sitemap(request):
 
 def api_docs(request):
     return render(request, "main/api_docs.html")
+
+
+@csrf_exempt
+def api_posts(request):
+    if request.method != "POST":
+        return HttpResponseNotAllowed(["POST"])
+
+    # check authorization header
+    auth_header = request.headers.get("Authorization")
+    if auth_header is None:
+        raise PermissionDenied()
+
+    # check auth header form
+    if auth_header[:7] != "Bearer ":
+        raise BadRequest()
+
+    # check token's user
+    token = auth_header[7:]
+    users_from_token = models.User.objects.filter(api_key=token)
+    if not users_from_token:
+        raise PermissionDenied()
+    user = users_from_token.first()
+
+    # validate input data
+    try:
+        data = json.loads(request.body.decode("utf-8"))
+    except json.JSONDecodeError:
+        raise BadRequest()
+    if "title" not in data or "body" not in data:
+        raise BadRequest()
+
+    # create new post
+    slug = util.get_post_slug(data["title"], user)
+    post = models.Post.objects.create(
+        owner=user, title=data["title"], slug=slug, body=data["body"], published_at=None
+    )
+
+    return JsonResponse(
+        {"slug": slug, "url": util.get_protocol() + post.get_absolute_url()}
+    )
