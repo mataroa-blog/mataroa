@@ -22,7 +22,7 @@
         <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization">Authorization</a>
         HTTP header, using the <code>Bearer</code> scheme.
     </p>
-    <pre><code>Authorization: Bearer {{ request.user.api_key }}</code></pre>
+    <pre><code>Authorization: Bearer {{ request.user.api_key|default:"your-api-key" }}</code></pre>
 
     <h2>POST /api/posts/</h2>
     <p>
