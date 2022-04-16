@@ -7,15 +7,17 @@ description = "Example blog description"
 # Whether to automatically compile all Sass files in the sass directory
 compile_sass = false
 
+generate_feed = true
+feed_filename = "rss.xml"
+feed_limit = 20
+
 # Whether to do syntax highlighting
 # Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
+[markdown]
 highlight_code = true
 
 # Whether to build a search index to be used later on by a JavaScript library
 build_search_index = false
-
-generate_rss = true
-rss_limit = 20
 
 [extra]
 # Put all your custom variables here
