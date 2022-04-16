@@ -1,4 +1,6 @@
 import base64
+import binascii
+import os
 import uuid
 
 import bleach
@@ -9,6 +11,11 @@ from django.urls import reverse
 from django.utils import timezone
 
 from main import util, validators
+
+
+def _generate_key():
+    """Return 32-char random string."""
+    return binascii.b2a_hex(os.urandom(16)).decode("utf-8")
 
 
 class User(AbstractUser):
@@ -27,6 +34,7 @@ class User(AbstractUser):
         null=True,
         help_text="Optional, but also the only way to recover password if forgotten.",
     )
+    api_key = models.CharField(max_length=32, default=_generate_key, unique=True)
     about = models.TextField(blank=True, null=True)
     blog_title = models.CharField(max_length=500, blank=True, null=True)
     blog_byline = models.CharField(max_length=500, blank=True, null=True)
