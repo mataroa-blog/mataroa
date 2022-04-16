@@ -649,7 +649,7 @@ class WebringUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         "webring_prev_url",
         "webring_next_url",
     ]
-    template_name = "main/blog_webring_update.html"
+    template_name = "main/webring.html"
     success_message = "webring settings updated"
     success_url = reverse_lazy("dashboard")
 
