@@ -376,6 +376,14 @@ figcaption {
     text-align: center;
 }
 
+dt {
+    font-weight: 700;
+}
+
+dd {
+    margin-left: 0;
+}
+
 table {
     border-collapse: collapse;
     border: 1px solid var(--light-grey-color);

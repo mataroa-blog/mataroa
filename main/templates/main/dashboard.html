@@ -21,22 +21,26 @@
         <br><a href="{% url 'analytic_list' %}">Analytics</a>
     </p>
 
-    <strong>Account</strong>
+    <strong>Manage</strong>
     <p>
-        <a href="{% url 'user_update' %}">Blog settings</a>
+        <a href="{% url 'blog_webring' %}">Webring</a>
+        <br><a href="{% url 'api_docs' %}">API</a>
 
         {% if billing_enabled %}
         <br><a href="{% url 'billing_index' %}">Billing</a>
         {% endif %}
 
-        <br><a href="{% url 'blog_webring' %}">Webring</a>
         <br><a href="{% url 'blog_import' %}">Import posts</a>
         <br><a href="{% url 'export_index' %}">Export blog</a>
+    </p>
+
+    <strong>Account</strong>
+    <p>
+        <a href="{% url 'user_update' %}">Blog settings</a>
         <br><a href="{% url 'password_change' %}">Change password</a>
         <br><a href="{% url 'modus' %}">Modus operandi</a>
         <br><a href="mailto:admin@mataroa.blog">Help and support</a>
         <br><a href="{% url 'logout' %}">Log out</a>
     </p>
-
 </main>
 {% endblock %}

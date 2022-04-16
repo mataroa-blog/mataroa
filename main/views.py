@@ -1115,3 +1115,7 @@ def sitemap(request):
     }
 
     return DjSitemapView(request, sitemaps)
+
+
+def api_docs(request):
+    return render(request, "main/api_docs.html")

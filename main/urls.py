@@ -169,6 +169,11 @@ urlpatterns += [
     ),
 ]
 
+# api
+urlpatterns += [
+    path("api/docs/", views.api_docs, name="api_docs"),
+]
+
 # pages - needs to be last due to <slug>
 urlpatterns += [
     path("pages/", views.PageList.as_view(), name="page_list"),

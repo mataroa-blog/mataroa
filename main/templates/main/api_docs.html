@@ -1,0 +1,57 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}API — Mataroa{% endblock %}
+
+{% block content %}
+<main>
+    <h1>API</h1>
+    <p>
+        We provide an API to allow programmatic updating of one’s blog.
+    </p>
+
+    <dl>
+        <dt>API Key</dt>
+        <dd>{{ request.user.api_key|default:"your-api-key" }}</dd>
+    </dl>
+
+    <hr>
+
+    <h2>Authentication</h2>
+    <p>
+        We authenticate requests using the
+        <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization">Authorization</a>
+        HTTP header, using the <code>Bearer</code> scheme.
+    </p>
+    <pre><code>Authorization: Bearer {{ request.user.api_key }}</code></pre>
+
+    <h2>POST /api/posts/</h2>
+    <p>
+        Create new post.
+    </p>
+
+    <strong>Parameters</strong>
+    <ul>
+        <li><code>title</code>: string</li>
+        <li><code>body</code>: string</li>
+    </ul>
+
+    <strong>Request</strong>
+    <pre><code>{
+    "title": "Introducing my new blog",
+    "body": "## Why?\n\nEveryone needs a blog, right?"
+}</code></pre>
+
+    <strong>Response</strong>
+    <pre><code>{
+    "slug": "introducing-my-new-blog",
+    "url": "https://{{ request.user.username|default:"your-username" }}.mataroa.blog/blog/introducing-my-new-blog/"
+}</code></pre>
+
+    <strong>Example with curl</strong>
+    <pre><code>$ curl -X POST -H 'Authorization: Bearer {{ request.user.api_key|default:"your-api-key" }}' https://mataroa.blog/api/posts/ -d '{"title": "Introducing my new blog", "body": "## Why?\n\nEveryone needs a blog, right?"}'
+{"slug": "introducing-my-new-blog", "url": "https://{{ request.user.username|default:"your-username" }}.mataroa.blog/blog/introducing-my-new-blog/"}
+
+</code></pre>
+
+</main>
+{% endblock %}
