@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import include, path, re_path
 
-from main import feeds, views, views_billing, views_export
+from main import feeds, views, views_api, views_billing, views_export
 
 admin.site.site_header = "mataroa admin"
 
@@ -171,8 +171,8 @@ urlpatterns += [
 
 # api
 urlpatterns += [
-    path("api/docs/", views.api_docs, name="api_docs"),
-    path("api/posts/", views.api_posts, name="api_posts"),
+    path("api/docs/", views_api.api_docs, name="api_docs"),
+    path("api/posts/", views_api.api_posts, name="api_posts"),
 ]
 
 # pages - needs to be last due to <slug>
