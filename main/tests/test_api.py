@@ -23,6 +23,25 @@ class APIDocsTestCase(TestCase):
         self.assertContains(response, self.user.api_key)
 
 
+class APIResetKeyTestCase(TestCase):
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.client.force_login(self.user)
+        self.api_key = self.user.api_key
+
+    def test_api_key_reset_get(self):
+        response = self.client.get(reverse("api_reset"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Reset API key")
+
+    def test_api_key_reset_post(self):
+        response = self.client.post(reverse("api_reset"), follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "API key has been reset")
+        new_api_key = models.User.objects.get(username="alice").api_key
+        self.assertNotEqual(self.api_key, new_api_key)
+
+
 class APIPostsAnonTestCase(TestCase):
     def test_posts_anon_get(self):
         response = self.client.get(reverse("api_posts"))

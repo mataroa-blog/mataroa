@@ -13,6 +13,9 @@
         <dt>API Key</dt>
         <dd>{{ request.user.api_key|default:"your-api-key" }}</dd>
     </dl>
+    <p>
+        <a href="{% url 'api_reset' %}">Reset API key »</a>
+    </p>
 
     <hr>
 

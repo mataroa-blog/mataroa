@@ -172,6 +172,7 @@ urlpatterns += [
 # api
 urlpatterns += [
     path("api/docs/", views_api.api_docs, name="api_docs"),
+    path("api/reset/", views_api.APIKeyReset.as_view(), name="api_reset"),
     path("api/posts/", views_api.api_posts, name="api_posts"),
 ]
 

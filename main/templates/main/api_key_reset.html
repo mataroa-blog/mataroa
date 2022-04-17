@@ -1,0 +1,21 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Reset API key — Mataroa{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Reset API key</h1>
+    <p>
+        This will invalidate your current API key:
+    </p>
+    <code>{{ request.user.api_key }}</code>
+    <p>
+        and create a random new one in its place.
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" value="Yes, roll key for sure" class="type-danger">
+    </form>
+</main>
+{% endblock %}

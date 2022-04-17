@@ -140,6 +140,10 @@ class User(AbstractUser):
         path = reverse("export_unsubscribe_key", args={self.export_unsubscribe_key})
         return f"//{domain}{path}"
 
+    def reset_api_key(self):
+        self.api_key = _generate_key()
+        self.save()
+
     def __str__(self):
         return self.username
 

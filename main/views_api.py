@@ -1,17 +1,32 @@
 import json
 
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import BadRequest, PermissionDenied
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.views.generic.edit import FormView
 
 from main import forms, models, util
 
 
 def api_docs(request):
     return render(request, "main/api_docs.html")
+
+
+class APIKeyReset(SuccessMessageMixin, LoginRequiredMixin, FormView):
+    form_class = forms.ResetAPIKeyForm
+    template_name = "main/api_key_reset.html"
+    success_url = reverse_lazy("api_docs")
+    success_message = "API key has been reset"
+
+    def form_valid(self, form):
+        super().form_valid(form)
+        self.request.user.reset_api_key()
+        return HttpResponseRedirect(self.get_success_url())
 
 
 @require_POST
