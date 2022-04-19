@@ -154,6 +154,7 @@ ALLOWED_HTML_ATTRS = [
     "height",
     "href",
     "id",
+    "name",
     "seamless",
     "span",
     "src",
