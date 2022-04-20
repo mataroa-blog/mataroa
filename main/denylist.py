@@ -68,18 +68,19 @@ DISALLOWED_USERNAMES = [
 
 # not allowed to create a blog page with these as slugs
 DISALLOWED_PAGE_SLUGS = [
+    "analytics",
+    "billing",
     "blog",
     "dashboard",
-    "rss",
+    "export",
+    "halsey",
+    "images",
+    "import",
     "newsletter",
     "notifications",
-    "billing",
-    "webring",
-    "import",
-    "export",
-    "images",
-    "analytics",
     "pages",
+    "rss",
+    "webring",
 ]
 
 # elements allowed to exist inside the HTML of a markdown text
