@@ -1,7 +1,10 @@
+from datetime import date
+
+from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
 
-from main import models
+from main import models, util
 
 
 class APIDocsAnonTestCase(TestCase):
@@ -26,8 +29,8 @@ class APIDocsTestCase(TestCase):
 class APIResetKeyTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
-        self.client.force_login(self.user)
         self.api_key = self.user.api_key
+        self.client.force_login(self.user)
 
     def test_api_key_reset_get(self):
         response = self.client.get(reverse("api_reset"))
@@ -42,24 +45,74 @@ class APIResetKeyTestCase(TestCase):
         self.assertNotEqual(self.api_key, new_api_key)
 
 
-class APIPostsAnonTestCase(TestCase):
-    def test_posts_anon_get(self):
-        response = self.client.get(reverse("api_posts"))
-        self.assertEqual(response.status_code, 405)
-
-    def test_posts_anon_post(self):
-        response = self.client.post(reverse("api_posts"))
-        self.assertEqual(response.status_code, 403)
-
-
-class APIPostsTestCase(TestCase):
-    def setUp(self):
-        self.user = models.User.objects.create(username="alice")
-        self.client.force_login(self.user)
+class APIPostListAnonTestCase(TestCase):
+    """Test cases for anonymous POST / GET / PATCH / DELETE on /api/posts/."""
 
     def test_posts_get(self):
         response = self.client.get(reverse("api_posts"))
+        self.assertEqual(response.status_code, 403)
+
+    def test_posts_post(self):
+        response = self.client.post(reverse("api_posts"))
+        self.assertEqual(response.status_code, 403)
+
+    def test_posts_patch(self):
+        response = self.client.patch(reverse("api_posts"))
         self.assertEqual(response.status_code, 405)
+
+    def test_posts_delete(self):
+        response = self.client.delete(reverse("api_posts"))
+        self.assertEqual(response.status_code, 405)
+
+
+class APIPostAnonTestCase(TestCase):
+    """Test cases for anonymous GET / PATCH / DELETE on /api/posts/<post-slug>/."""
+
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        data = {
+            "owner": self.user,
+            "title": "Hello world",
+            "slug": "hello-world",
+            "body": "## Hey\n\nHey world.",
+            "published_at": date(2020, 7, 2),
+        }
+        self.post = models.Post.objects.create(**data)
+
+    def test_post_get(self):
+        response = self.client.get(
+            reverse("api_post", args=(self.post.slug,)),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 403)
+
+    def test_post_post(self):
+        response = self.client.post(
+            reverse("api_post", args=(self.post.slug,)),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 405)
+
+    def test_post_patch(self):
+        response = self.client.patch(
+            reverse("api_post", args=(self.post.slug,)),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 403)
+
+    def test_post_delete(self):
+        response = self.client.delete(
+            reverse("api_post", args=(self.post.slug,)),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 403)
+
+
+class APIPostListPostAuthTestCase(TestCase):
+    """Test cases for auth-related POST /api/posts/ aka post creation."""
+
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
 
     def test_posts_post_no_auth(self):
         response = self.client.post(reverse("api_posts"))
@@ -69,7 +122,7 @@ class APIPostsTestCase(TestCase):
         response = self.client.post(
             reverse("api_posts"), HTTP_AUTHORIZATION=f"Nearer {self.user.api_key}"
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 403)
 
     def test_posts_post_wrong_auth(self):
         response = self.client.post(
@@ -84,34 +137,56 @@ class APIPostsTestCase(TestCase):
         )
         self.assertEqual(response.status_code, 400)
 
+
+class APIPostListPostTestCase(TestCase):
+    """Test cases for POST /api/posts/ aka post creation."""
+
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+
     def test_posts_post_no_title(self):
-        self.data = {
+        data = {
             "body": "This is my post with no title key",
         }
         response = self.client.post(
             reverse("api_posts"),
             HTTP_AUTHORIZATION=f"Bearer {self.user.api_key}",
             content_type="application/json",
-            data=self.data,
+            data=data,
         )
         self.assertEqual(response.status_code, 400)
         self.assertEqual(models.Post.objects.all().count(), 0)
 
     def test_posts_post_no_body(self):
-        self.data = {
+        data = {
             "title": "First Post no body key",
         }
         response = self.client.post(
             reverse("api_posts"),
             HTTP_AUTHORIZATION=f"Bearer {self.user.api_key}",
             content_type="application/json",
-            data=self.data,
+            data=data,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(models.Post.objects.all().first().title, data["title"])
+        self.assertEqual(models.Post.objects.all().first().body, "")
+        self.assertEqual(models.Post.objects.all().count(), 1)
+
+    def test_posts_post_bogus_key(self):
+        data = {
+            "randomkey": "random value",
+        }
+        response = self.client.post(
+            reverse("api_posts"),
+            HTTP_AUTHORIZATION=f"Bearer {self.user.api_key}",
+            content_type="application/json",
+            data=data,
         )
         self.assertEqual(response.status_code, 400)
         self.assertEqual(models.Post.objects.all().count(), 0)
 
-    def test_posts_post(self):
-        self.data = {
+    def test_posts_post_no_published_at(self):
+        data = {
             "title": "First Post",
             "body": "## Welcome\n\nThis is my first sentence.",
         }
@@ -119,10 +194,497 @@ class APIPostsTestCase(TestCase):
             reverse("api_posts"),
             HTTP_AUTHORIZATION=f"Bearer {self.user.api_key}",
             content_type="application/json",
-            data=self.data,
+            data=data,
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(models.Post.objects.all().count(), 1)
-        self.assertEqual(models.Post.objects.all().first().title, self.data["title"])
-        self.assertEqual(models.Post.objects.all().first().body, self.data["body"])
+        self.assertEqual(models.Post.objects.all().first().title, data["title"])
+        self.assertEqual(models.Post.objects.all().first().body, data["body"])
+        self.assertEqual(models.Post.objects.all().first().published_at, None)
         models.Post.objects.all().first().delete()
+
+    def test_posts_post_other_owner(self):
+        user_b = models.User.objects.create(username="bob")
+        data = {
+            "title": "First Post",
+            "body": "## Welcome\n\nThis is my first sentence.",
+            "owner_id": user_b.id,
+        }
+        response = self.client.post(
+            reverse("api_posts"),
+            HTTP_AUTHORIZATION=f"Bearer {self.user.api_key}",
+            content_type="application/json",
+            data=data,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(models.Post.objects.all().count(), 1)
+        self.assertEqual(models.Post.objects.all().first().owner_id, self.user.id)
+        models.Post.objects.all().first().delete()
+
+    def test_posts_post(self):
+        data = {
+            "title": "First Post",
+            "body": "## Welcome\n\nThis is my first sentence.",
+            "published_at": "2020-01-23",
+        }
+        response = self.client.post(
+            reverse("api_posts"),
+            HTTP_AUTHORIZATION=f"Bearer {self.user.api_key}",
+            content_type="application/json",
+            data=data,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(models.Post.objects.all().count(), 1)
+        self.assertEqual(models.Post.objects.all().first().title, data["title"])
+        self.assertEqual(models.Post.objects.all().first().body, data["body"])
+        self.assertEqual(
+            models.Post.objects.all().first().published_at, date(2020, 1, 23)
+        )
+        self.assertTrue(response.json()["ok"])
+        self.assertEqual(
+            response.json()["slug"], models.Post.objects.all().first().slug
+        )
+        self.assertEqual(
+            response.json()["url"],
+            util.get_protocol() + models.Post.objects.all().first().get_absolute_url(),
+        )
+        models.Post.objects.all().first().delete()
+
+
+class APIPostListPatchAuthTestCase(TestCase):
+    """Test cases for auth-related PATCH /api/posts/<post-slug>/ aka post update."""
+
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.post = models.Post.objects.create(
+            title="Hello world",
+            slug="hello-world",
+            body="## Hey\n\nHey world.",
+            owner=self.user,
+        )
+
+    def test_post_get(self):
+        response = self.client.get(reverse("api_post", args=(self.post.slug,)))
+        self.assertEqual(response.status_code, 403)
+
+    def test_post_post(self):
+        response = self.client.post(reverse("api_post", args=(self.post.slug,)))
+        self.assertEqual(response.status_code, 405)
+
+    def test_post_patch_no_auth(self):
+        response = self.client.patch(reverse("api_post", args=(self.post.slug,)))
+        self.assertEqual(response.status_code, 403)
+
+    def test_post_patch_bad_auth(self):
+        response = self.client.patch(
+            reverse("api_post", args=(self.post.slug,)),
+            HTTP_AUTHORIZATION=f"Nearer {self.user.api_key}",
+        )
+        self.assertEqual(response.status_code, 403)
+
+    def test_post_patch_wrong_auth(self):
+        response = self.client.patch(
+            reverse("api_post", args=(self.post.slug,)),
+            HTTP_AUTHORIZATION="Bearer 12345678901234567890123456789012",
+        )
+        self.assertEqual(response.status_code, 403)
+
+
+class APIPostListPatchTestCase(TestCase):
+    """Test cases for PATCH /api/posts/<post-slug>/ aka post update."""
+
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+
+    def test_post_patch(self):
+        data = {
+            "owner": self.user,
+            "title": "Hello world",
+            "slug": "hello-world",
+            "body": "## Hey\n\nHey world.",
+            "published_at": date(2020, 7, 2),
+        }
+        post = models.Post.objects.create(**data)
+        response = self.client.patch(
+            reverse("api_post", args=(post.slug,)),
+            HTTP_AUTHORIZATION=f"Bearer {self.user.api_key}",
+            content_type="application/json",
+            data={
+                "title": "New world",
+                "slug": "new-world",
+                "body": "new body",
+                "published_at": "2019-07-02",
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(models.Post.objects.all().count(), 1)
+        self.assertEqual(models.Post.objects.all().first().title, "New world")
+        self.assertEqual(models.Post.objects.all().first().slug, "new-world")
+        self.assertEqual(models.Post.objects.all().first().body, "new body")
+        self.assertEqual(
+            models.Post.objects.all().first().published_at, date(2019, 7, 2)
+        )
+        self.assertTrue(response.json()["ok"])
+        self.assertEqual(
+            response.json()["url"],
+            util.get_protocol() + models.Post.objects.all().first().get_absolute_url(),
+        )
+        models.Post.objects.all().first().delete()
+
+    def test_post_patch_nonexistent_post(self):
+        response = self.client.get(
+            reverse("api_post", args=("nonexistent-post",)),
+            HTTP_AUTHORIZATION=f"Bearer {self.user.api_key}",
+            content_type="application/json",
+            data={
+                "title": "New world",
+            },
+        )
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json(), {"ok": False, "error": "Not found."})
+
+    def test_post_patch_no_body(self):
+        data = {
+            "owner": self.user,
+            "title": "Hello world",
+            "slug": "hello-world",
+            "body": "## Hey\n\nHey world.",
+            "published_at": date(2020, 7, 2),
+        }
+        post = models.Post.objects.create(**data)
+        response = self.client.patch(
+            reverse("api_post", args=(post.slug,)),
+            HTTP_AUTHORIZATION=f"Bearer {self.user.api_key}",
+            content_type="application/json",
+            data={
+                "title": "New world",
+                "slug": "new-world",
+                "published_at": "2019-07-02",
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(models.Post.objects.all().count(), 1)
+        self.assertEqual(models.Post.objects.all().first().title, "New world")
+        self.assertEqual(models.Post.objects.all().first().slug, "new-world")
+        self.assertEqual(models.Post.objects.all().first().body, data["body"])
+        self.assertEqual(
+            models.Post.objects.all().first().published_at, date(2019, 7, 2)
+        )
+        models.Post.objects.all().first().delete()
+
+    def test_post_patch_no_slug(self):
+        data = {
+            "owner": self.user,
+            "title": "Hello world",
+            "slug": "hello-world",
+            "body": "## Hey\n\nHey world.",
+            "published_at": date(2020, 7, 2),
+        }
+        post = models.Post.objects.create(**data)
+        response = self.client.patch(
+            reverse("api_post", args=(post.slug,)),
+            HTTP_AUTHORIZATION=f"Bearer {self.user.api_key}",
+            content_type="application/json",
+            data={
+                "title": "New world",
+                "published_at": "2019-07-02",
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(models.Post.objects.all().count(), 1)
+        self.assertEqual(models.Post.objects.all().first().title, "New world")
+        self.assertEqual(models.Post.objects.all().first().slug, data["slug"])
+        self.assertEqual(models.Post.objects.all().first().body, data["body"])
+        self.assertEqual(
+            models.Post.objects.all().first().published_at, date(2019, 7, 2)
+        )
+        models.Post.objects.all().first().delete()
+
+    def test_post_patch_invalid_slug(self):
+        data = {
+            "owner": self.user,
+            "title": "Hello world",
+            "slug": "hello-world",
+            "body": "## Hey\n\nHey world.",
+            "published_at": date(2020, 7, 2),
+        }
+        post = models.Post.objects.create(**data)
+        response = self.client.patch(
+            reverse("api_post", args=(post.slug,)),
+            HTTP_AUTHORIZATION=f"Bearer {self.user.api_key}",
+            content_type="application/json",
+            data={
+                "slug": "slug with spaces is invalid",
+            },
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(models.Post.objects.all().count(), 1)
+        self.assertEqual(models.Post.objects.all().first().title, data["title"])
+        self.assertEqual(models.Post.objects.all().first().slug, data["slug"])
+        self.assertEqual(models.Post.objects.all().first().body, data["body"])
+        self.assertEqual(
+            models.Post.objects.all().first().published_at, data["published_at"]
+        )
+        models.Post.objects.all().first().delete()
+
+    def test_post_patch_invalid_key(self):
+        data = {
+            "owner": self.user,
+            "title": "Hello world",
+            "slug": "hello-world",
+            "body": "## Hey\n\nHey world.",
+            "published_at": date(2020, 7, 2),
+        }
+        post = models.Post.objects.create(**data)
+        response = self.client.patch(
+            reverse("api_post", args=(post.slug,)),
+            HTTP_AUTHORIZATION=f"Bearer {self.user.api_key}",
+            content_type="application/json",
+            data={
+                "invalid": "random key value",
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(models.Post.objects.all().count(), 1)
+        self.assertEqual(models.Post.objects.all().first().title, data["title"])
+        self.assertEqual(models.Post.objects.all().first().slug, data["slug"])
+        self.assertEqual(models.Post.objects.all().first().body, data["body"])
+        self.assertEqual(
+            models.Post.objects.all().first().published_at, data["published_at"]
+        )
+        models.Post.objects.all().first().delete()
+
+    def test_post_patch_other_user_post(self):
+        """Test changing another user's blog post is not allowed."""
+
+        user_b = models.User.objects.create(username="bob")
+        data = {
+            "owner": user_b,
+            "title": "Hello world",
+            "slug": "hello-world",
+            "body": "## Hey\n\nHey world.",
+            "published_at": date(2020, 7, 2),
+        }
+        post = models.Post.objects.create(**data)
+        response = self.client.patch(
+            reverse("api_post", args=(post.slug,)),
+            HTTP_AUTHORIZATION=f"Bearer {self.user.api_key}",
+            content_type="application/json",
+            data={
+                "title": "Hi Bob, it's Alice",
+            },
+        )
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(models.Post.objects.all().count(), 1)
+        self.assertEqual(models.Post.objects.all().first().title, data["title"])
+        models.Post.objects.all().first().delete()
+
+
+class APIPostGetAuthTestCase(TestCase):
+    """Test cases for auth-related GET /api/posts/<post-slug>/ aka post retrieve."""
+
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.post = models.Post.objects.create(
+            title="Hello world",
+            slug="hello-world",
+            body="## Hey\n\nHey world.",
+            owner=self.user,
+        )
+
+    def test_post_get_no_auth(self):
+        response = self.client.get(reverse("api_post", args=(self.post.slug,)))
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json(), {"ok": False, "error": "Not authorized."})
+
+    def test_post_get_bad_auth(self):
+        response = self.client.get(
+            reverse("api_post", args=(self.post.slug,)),
+            HTTP_AUTHORIZATION=f"Nearer {self.user.api_key}",
+        )
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json(), {"ok": False, "error": "Not authorized."})
+
+    def test_post_get_wrong_auth(self):
+        response = self.client.get(
+            reverse("api_post", args=(self.post.slug,)),
+            HTTP_AUTHORIZATION="Bearer 12345678901234567890123456789012",
+        )
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json(), {"ok": False, "error": "Not authorized."})
+
+
+class APIPostGetTestCase(TestCase):
+    """Test cases for GET /api/posts/<post-slug>/ aka post retrieve."""
+
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+
+    def test_post_get(self):
+        data = {
+            "owner": self.user,
+            "title": "Hello world",
+            "slug": "hello-world",
+            "body": "## Hey\n\nHey world.",
+            "published_at": date(2020, 7, 2),
+        }
+        post = models.Post.objects.create(**data)
+        response = self.client.get(
+            reverse("api_post", args=(post.slug,)),
+            HTTP_AUTHORIZATION=f"Bearer {self.user.api_key}",
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(models.Post.objects.all().count(), 1)
+        self.assertEqual(models.Post.objects.all().first().title, data["title"])
+        self.assertEqual(models.Post.objects.all().first().body, data["body"])
+        self.assertEqual(models.Post.objects.all().first().slug, data["slug"])
+        self.assertEqual(models.Post.objects.all().first().owner, self.user)
+        self.assertEqual(
+            models.Post.objects.all().first().published_at, data["published_at"]
+        )
+        self.assertTrue(response.json()["ok"])
+        self.assertEqual(
+            response.json()["url"],
+            util.get_protocol() + models.Post.objects.all().first().get_absolute_url(),
+        )
+        models.Post.objects.all().first().delete()
+
+    def test_post_get_nonexistent(self):
+        response = self.client.get(
+            reverse("api_post", args=("nonexistent-post",)),
+            HTTP_AUTHORIZATION=f"Bearer {self.user.api_key}",
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(models.Post.objects.all().count(), 0)
+        self.assertFalse(response.json()["ok"])
+
+
+class APIPostDeleteAuthTestCase(TestCase):
+    """Test cases for auth-related DELETE /api/posts/<post-slug>/ aka post retrieve."""
+
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.post = models.Post.objects.create(
+            title="Hello world",
+            slug="hello-world",
+            body="## Hey\n\nHey world.",
+            owner=self.user,
+        )
+
+    def test_post_delete_no_auth(self):
+        response = self.client.delete(reverse("api_post", args=(self.post.slug,)))
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json(), {"ok": False, "error": "Not authorized."})
+
+    def test_post_delete_bad_auth(self):
+        response = self.client.delete(
+            reverse("api_post", args=(self.post.slug,)),
+            HTTP_AUTHORIZATION=f"Nearer {self.user.api_key}",
+        )
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json(), {"ok": False, "error": "Not authorized."})
+
+    def test_post_delete_wrong_auth(self):
+        response = self.client.delete(
+            reverse("api_post", args=(self.post.slug,)),
+            HTTP_AUTHORIZATION="Bearer 12345678901234567890123456789012",
+        )
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json(), {"ok": False, "error": "Not authorized."})
+
+    def test_post_delete_other_user(self):
+        user_b = models.User.objects.create(username="bob")
+        response = self.client.delete(
+            reverse("api_post", args=(self.post.slug,)),
+            HTTP_AUTHORIZATION=f"Bearer {user_b.api_key}",
+        )
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json(), {"ok": False, "error": "Not allowed."})
+
+
+class APIPostDeleteTestCase(TestCase):
+    """Test cases for DELETE /api/posts/<post-slug>/ aka post retrieve."""
+
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+
+    def test_post_delete(self):
+        data = {
+            "owner": self.user,
+            "title": "Hello world",
+            "slug": "hello-world",
+            "body": "## Hey\n\nHey world.",
+            "published_at": date(2020, 7, 2),
+        }
+        post = models.Post.objects.create(**data)
+        response = self.client.delete(
+            reverse("api_post", args=(post.slug,)),
+            HTTP_AUTHORIZATION=f"Bearer {self.user.api_key}",
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(models.Post.objects.all().count(), 0)
+        self.assertTrue(response.json()["ok"])
+
+    def test_post_get_nonexistent(self):
+        response = self.client.get(
+            reverse("api_post", args=("nonexistent-post",)),
+            HTTP_AUTHORIZATION=f"Bearer {self.user.api_key}",
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(models.Post.objects.all().count(), 0)
+        self.assertFalse(response.json()["ok"])
+
+
+class APIPostListGetTestCase(TestCase):
+    """Test cases for GET /api/posts/ aka post list."""
+
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.post_a = models.Post.objects.create(
+            title="Hello world",
+            slug="hello-world",
+            body="## Hey\n\nHey world.",
+            owner=self.user,
+        )
+        self.post_b = models.Post.objects.create(
+            title="Bye world",
+            slug="bye-world",
+            body="## Bye\n\nBye world.",
+            owner=self.user,
+        )
+
+    def test_posts_get(self):
+        response = self.client.get(
+            reverse("api_posts"),
+            HTTP_AUTHORIZATION=f"Bearer {self.user.api_key}",
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(models.Post.objects.all().count(), 2)
+        self.assertTrue(response.json()["ok"])
+        post_list = response.json()["post_list"]
+        self.assertEqual(len(post_list), 2)
+        self.assertIn(
+            {
+                "title": "Bye world",
+                "slug": "bye-world",
+                "body": "## Bye\n\nBye world.",
+                "published_at": "2022-04-21",
+                "url": f"{util.get_protocol()}//{self.user.username}.{settings.CANONICAL_HOST}/blog/bye-world/",
+            },
+            post_list,
+        )
+        self.assertIn(
+            {
+                "title": "Hello world",
+                "slug": "hello-world",
+                "body": "## Hey\n\nHey world.",
+                "published_at": "2022-04-21",
+                "url": f"{util.get_protocol()}//{self.user.username}.{settings.CANONICAL_HOST}/blog/hello-world/",
+            },
+            post_list,
+        )

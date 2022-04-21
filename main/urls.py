@@ -174,6 +174,7 @@ urlpatterns += [
     path("api/docs/", views_api.api_docs, name="api_docs"),
     path("api/reset/", views_api.APIKeyReset.as_view(), name="api_reset"),
     path("api/posts/", views_api.api_posts, name="api_posts"),
+    path("api/posts/<slug:slug>/", views_api.api_post, name="api_post"),
 ]
 
 # pages - needs to be last due to <slug>

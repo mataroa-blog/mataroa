@@ -1,20 +1,27 @@
 import json
 
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.core.exceptions import BadRequest, PermissionDenied
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_http_methods
 from django.views.generic.edit import FormView
 
 from main import forms, models, util
 
 
 def api_docs(request):
-    return render(request, "main/api_docs.html")
+    return render(
+        request,
+        "main/api_docs.html",
+        {
+            "host": settings.CANONICAL_HOST,
+            "protocol": util.get_protocol(),
+        },
+    )
 
 
 class APIKeyReset(SuccessMessageMixin, LoginRequiredMixin, FormView):
@@ -29,39 +36,150 @@ class APIKeyReset(SuccessMessageMixin, LoginRequiredMixin, FormView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-@require_POST
-@csrf_exempt
-def api_posts(request):
+def _authenticate_token(request):
+    """Verify request is authenticated with a token."""
+
     # check authorization header
     auth_header = request.headers.get("Authorization")
     if auth_header is None:
-        raise PermissionDenied()
+        return None
 
     # check auth header form
     if auth_header[:7] != "Bearer ":
-        raise BadRequest()
+        return None
 
     # check token's user
     token = auth_header[7:]
     users_from_token = models.User.objects.filter(api_key=token)
     if not users_from_token:
-        raise PermissionDenied()
-    user = users_from_token.first()
+        return None
 
-    # validate input data
+    return users_from_token.first()
+
+
+@require_http_methods(["POST", "GET"])
+@csrf_exempt
+def api_posts(request):
+    user = _authenticate_token(request)
+    if not user:
+        return JsonResponse({"ok": False, "error": "Not authorized."}, status=403)
+
+    # handle GET case
+    if request.method == "GET":
+        post_list = models.Post.objects.filter(owner=user)
+        post_list = [
+            {
+                "title": p.title,
+                "slug": p.slug,
+                "body": p.body,
+                "published_at": p.published_at,
+                "url": util.get_protocol() + p.get_absolute_url(),
+            }
+            for p in post_list
+        ]
+        return JsonResponse(
+            {
+                "ok": True,
+                "post_list": post_list,
+            }
+        )
+
+    # POST case - validate input data
     try:
         data = json.loads(request.body.decode("utf-8"))
     except json.JSONDecodeError:
-        raise BadRequest()
-    if "title" not in data or "body" not in data:
-        raise BadRequest()
+        return JsonResponse({"ok": False, "message": "Input data invalid."}, status=400)
+    form = forms.APIPost(data)
+    if not form.is_valid():
+        return JsonResponse({"ok": False, "message": "Input data invalid."}, status=400)
+    if "title" not in data:
+        return JsonResponse(
+            {"ok": False, "message": "Title field is required."}, status=400
+        )
 
-    # create new post
+    # POST case - create post
     slug = util.get_post_slug(data["title"], user)
+    published_at = None
+    if "published_at" in data:
+        published_at = data["published_at"]
+    body = ""
+    if "body" in data:
+        body = data["body"]
     post = models.Post.objects.create(
-        owner=user, title=data["title"], slug=slug, body=data["body"], published_at=None
+        owner=user, title=data["title"], slug=slug, body=body, published_at=published_at
     )
 
     return JsonResponse(
-        {"slug": slug, "url": util.get_protocol() + post.get_absolute_url()}
+        {"ok": True, "slug": slug, "url": util.get_protocol() + post.get_absolute_url()}
     )
+
+
+@require_http_methods(["PATCH", "GET", "DELETE"])
+@csrf_exempt
+def api_post(request, slug):
+    user = _authenticate_token(request)
+    if not user:
+        return JsonResponse({"ok": False, "error": "Not authorized."}, status=403)
+
+    # validate input data
+    if request.method == "PATCH":
+        try:
+            data = json.loads(request.body.decode("utf-8"))
+        except json.JSONDecodeError:
+            return JsonResponse(
+                {"ok": False, "message": "Input data invalid."}, status=400
+            )
+        form = forms.APIPost(data)
+        if not form.is_valid():
+            return JsonResponse(
+                {"ok": False, "message": "Input data invalid."}, status=400
+            )
+
+    # get post
+    post_list = models.Post.objects.filter(slug=slug)
+    if not post_list:
+        return JsonResponse({"ok": False, "error": "Not found."}, status=404)
+    post = post_list.first()
+    if post.owner != user:
+        return JsonResponse({"ok": False, "error": "Not allowed."}, status=403)
+
+    # delete case
+    if request.method == "DELETE":
+        post.delete()
+        return JsonResponse(
+            {
+                "ok": True,
+            }
+        )
+
+    # retrieve case
+    if request.method == "GET":
+        return JsonResponse(
+            {
+                "ok": True,
+                "url": util.get_protocol() + post.get_absolute_url(),
+                "slug": post.slug,
+                "title": post.title,
+                "body": post.body,
+                "published_at": post.published_at,
+            }
+        )
+
+    # update post
+    if request.method == "PATCH":
+        if "title" in data:
+            post.title = form.cleaned_data["title"]
+        if "slug" in data:
+            post.slug = util.get_post_slug(form.cleaned_data["slug"], user, post=post)
+        if "body" in data:
+            post.body = util.remove_control_chars(form.cleaned_data["body"])
+        if "published_at" in data:
+            post.published_at = form.cleaned_data["published_at"]
+        post.save()
+        return JsonResponse(
+            {
+                "ok": True,
+                "slug": post.slug,
+                "url": util.get_protocol() + post.get_absolute_url(),
+            }
+        )

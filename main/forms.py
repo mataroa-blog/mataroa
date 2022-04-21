@@ -39,3 +39,12 @@ class StripeForm(forms.Form):
 
 class ResetAPIKeyForm(forms.Form):
     """Reset user's api_key field."""
+
+
+class APIPost(forms.Form):
+    """Form for Post resource when accessed from the API."""
+
+    title = forms.CharField(max_length=300, required=False)
+    slug = forms.SlugField(max_length=300, required=False)
+    body = forms.CharField(widget=forms.Textarea, required=False)
+    published_at = forms.DateField(required=False)
