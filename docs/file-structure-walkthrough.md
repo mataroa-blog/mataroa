@@ -65,6 +65,7 @@ Condensed and commented sources file tree:
 │   ├── util.py
 │   ├── validators.py # custom form and field validators
 │   ├── views.py
+│   ├── views_api.py
 │   ├── views_billing.py
 │   └── views_export.py
 ├── manage.py
@@ -110,8 +111,10 @@ It includes:
 * analytics
 * notifications subscribe/unsubscribe
 * atua dashboard
+* sitemaps
 
-Generally, [Django class-based generic views](https://docs.djangoproject.com/en/3.2/topics/class-based-views/generic-display/)
+Generally,
+[Django class-based generic views](https://docs.djangoproject.com/en/3.2/topics/class-based-views/generic-display/)
 are used most of the time as they provide useful functionality abstracted away.
 
 The Django source code [for generic views](https://github.com/django/django/tree/main/django/views/generic)
@@ -125,6 +128,11 @@ is also extremely readable:
 [Function-based views](https://docs.djangoproject.com/en/3.2/intro/tutorial01/#write-your-first-view)
 are used in cases where the CRUD/RESTful design pattern is not clear such as
 `notification_unsubscribe_key` where we unsubscribe an email via a GET operation.
+
+## [`main/views_api.py`](/main/views_api.py)
+
+This module contains all API related views. These views have their own
+api key based authentication.
 
 ## [`main/views_export.py`](/main/views_export.py)
 
