@@ -17,6 +17,16 @@
         <a href="{% url 'api_reset' %}">Reset API key »</a>
     </p>
 
+    <h2>Notes</h2>
+    <ul>
+        <li>
+            One can <a href="{% url 'api_reset' %}">reset their API key</a>.
+            This will invalidate their key and issue a new one.
+        </li>
+        <li>All API endpoints end with a trailing slash.</li>
+        <li>There is no rate limiting.</li>
+    </ul>
+
     <hr>
 
     <h2>Authentication</h2>
@@ -34,27 +44,127 @@
 
     <strong>Parameters</strong>
     <ul>
-        <li><code>title</code>: string</li>
-        <li><code>body</code>: string</li>
+        <li><code>title</code>: string [required]</li>
+        <li><code>body</code>: string [optional]</li>
+        <li><code>published_at</code>: string (ISO date eg. 2006-01-31) [optional]</li>
     </ul>
 
     <strong>Request</strong>
     <pre><code>{
-    "title": "Introducing my new blog",
-    "body": "## Why?\n\nEveryone needs a blog, right?"
+    "title": "New blog",
+    "body": "## Why?\n\nEveryone wants a blog, right?",
+    "published_at": "2020-09-21",
 }</code></pre>
 
     <strong>Response</strong>
     <pre><code>{
-    "slug": "introducing-my-new-blog",
-    "url": "https://{{ request.user.username|default:"your-username" }}.mataroa.blog/blog/introducing-my-new-blog/"
+    "ok": true,
+    "slug": "new-blog",
+    "url": "{{ protocol }}//{{ request.user.username|default:"your-username" }}.{{ host }}/blog/new-blog/"
 }</code></pre>
 
-    <strong>Example with curl</strong>
-    <pre><code>$ curl -X POST -H 'Authorization: Bearer {{ request.user.api_key|default:"your-api-key" }}' https://mataroa.blog/api/posts/ -d '{"title": "Introducing my new blog", "body": "## Why?\n\nEveryone needs a blog, right?"}'
-{"slug": "introducing-my-new-blog", "url": "https://{{ request.user.username|default:"your-username" }}.mataroa.blog/blog/introducing-my-new-blog/"}
-
+    <strong>curl</strong>
+    <pre><code>$ curl -X POST \
+    -H 'Authorization: Bearer {{ request.user.api_key|default:"your-api-key" }}' \
+    -d '{"title": "New blog", "body": "## Why?\n\nEveryone needs a blog, right?"}' \
+    {{ protocol }}//{{ host }}/api/posts/
 </code></pre>
 
+    <h2>PATCH /api/posts/&lt;post-slug&gt;</h2>
+    <p>
+        Update existing post.
+    </p>
+
+    <strong>Parameters</strong>
+    <ul>
+        <li><code>title</code>: string [optional]</li>
+        <li><code>slug</code>: string (slug; no spaces) [optional]</li>
+        <li><code>body</code>: string [optional]</li>
+        <li><code>published_at</code>: string (ISO date eg. 2006-01-31; or empty to unpublish) [optional]</li>
+    </ul>
+
+    <strong>Request</strong>
+    <pre><code>{
+    "title": "Updating my new blog",
+    "slug": "updating-blog",
+    "body": "Welcome back!"
+    "published_at": "2020-09-21",
+}</code></pre>
+
+    <strong>Response</strong>
+    <pre><code>{
+    "ok": true,
+    "slug": "updating-blog",
+    "url": "{{ protocol }}//{{ request.user.username|default:"your-username" }}.{{ host }}/blog/updating-blog/"
+}</code></pre>
+
+    <strong>curl</strong>
+    <pre><code>$ curl -X PATCH \
+    -H 'Authorization: Bearer {{ request.user.api_key|default:"your-api-key" }}' \
+    -d '{"title": "Updating my new blog", "body": "Rethinking and rewriting."}' \
+    {{ protocol }}//{{ host }}/api/posts/introducing-my-new-blog
+</code></pre>
+
+
+    <h2>DELETE /api/posts/&lt;post-slug&gt;</h2>
+    <p>
+        Delete post.
+    </p>
+
+    <strong>Parameters</strong>
+    <ul>
+        <li><em>(no parameters)</em></li>
+    </ul>
+
+    <strong>Response</strong>
+    <pre><code>{
+    "ok": true,
+}</code></pre>
+
+    <strong>curl</strong>
+    <pre><code>$ curl -X DELETE \
+    -H 'Authorization: Bearer {{ request.user.api_key|default:"your-api-key" }}' \
+    {{ protocol }}//{{ host }}/api/posts/introducing-my-new-blog/
+</code></pre>
+
+
+    <h2>GET /api/posts/</h2>
+    <p>
+        List all posts.
+    </p>
+
+    <strong>Parameters</strong>
+    <ul>
+        <li><em>(no parameters)</em></li>
+    </ul>
+
+    <strong>Response</strong>
+    <pre><code>{
+    "ok": true,
+    "post_list": [
+        {
+            "title": "On life",
+            "slug": "on-life",
+            "body": "What is life?\n\nAn illusion, a shadow, a story.",
+            "published_at": null,
+            "url": "{{ protocol }}//{{ request.user.username|default:"your-username" }}.mataroa.blog/blog/on-life/"
+        },
+        {
+            "title": "New blog",
+            "slug": "new-blog",
+            "body": "With health!",
+            "published_at": "2020-10-19",
+            "url": "{{ protocol }}//{{ request.user.username|default:"your-username" }}.mataroa.blog/blog/new-blog/"
+        }
+    ]
+}</code></pre>
+
+    <strong>curl</strong>
+    <pre><code>$ curl -X GET \
+    -H 'Authorization: Bearer {{ request.user.api_key|default:"your-api-key" }}' \
+    {{ protocol }}//{{ host }}/api/posts/
+</code></pre>
+
+    <div style="margin-top: 64px;"></div>
 </main>
 {% endblock %}
