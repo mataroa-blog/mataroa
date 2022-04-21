@@ -7,7 +7,7 @@ Naked blogging platform.
 We have a mailing list at
 [~sirodoht/mataroa-community@lists.sr.ht](mailto:~sirodoht/mataroa-community@lists.sr.ht)
 for the mataroa community to introduce themselves, their blogs, and discuss
-anything that's on their mind!
+anything that’s on their mind!
 
 Archives at:
 [https://lists.sr.ht/~sirodoht/mataroa-community](https://lists.sr.ht/~sirodoht/mataroa-community)
@@ -61,7 +61,7 @@ pip install -r requirements_dev.txt
 
 ### Dependencies with venv
 
-If one is not using nix, then one can use
+If one is not using nix, they can use
 [venv](https://docs.python.org/3/library/venv.html):
 
 ```sh
@@ -119,12 +119,12 @@ Initialising the database with some sample development data is possible with:
 python manage.py loaddata dev-data
 ```
 
-* `dev-data` is [`main/fixtures/dev-data.json`](main/fixtures/dev-data.json)
-* Credentials are `admin` / `admin`.
+* `dev-data` is defined in [`main/fixtures/dev-data.json`](main/fixtures/dev-data.json)
+* Credentials of the fixtured user are `admin` / `admin`.
 
 ### Subdomains
 
-To develop locally with subdomains, one needs something like that in
+To develop locally with subdomains, one needs something like this in their
 `/etc/hosts`:
 
 ```
@@ -134,8 +134,8 @@ To develop locally with subdomains, one needs something like that in
 127.0.0.1 mylocalusername.mataroalocal.blog
 ```
 
-As `/etc/hosts` does not support wildcard entries, there needs to be one entry
-for each mataroa user/blog.
+`/etc/hosts` does not support wildcard entries, thus there needs to be one entry
+per mataroa user/blog.
 
 ### Serve
 
@@ -173,9 +173,9 @@ make cov
 
 The following tools are used for code linting and formatting:
 
-* [black](https://github.com/psf/black) for code formatting.
-* [isort](https://github.com/pycqa/isort) for imports order consistency.
-* [flake8](https://gitlab.com/pycqa/flake8) for code linting.
+* [black](https://github.com/psf/black) for code formatting
+* [isort](https://github.com/pycqa/isort) for imports order consistency
+* [flake8](https://gitlab.com/pycqa/flake8) for code linting
 
 To use:
 
@@ -190,11 +190,11 @@ Deployment is configured using [uWSGI](https://uwsgi.readthedocs.io/en/latest/)
 and [Caddy](https://caddyserver.com/).
 
 A [server playbook](/docs/server-playbook.md) document is also available, based
-on Ubuntu 20.04.
+on Ubuntu 20.04 LTS.
 
-Environment variables for production are defined both in `uwsgi.ini` (for
-uwsgi) and in `.envrc` (for manage.py commands such as migrations and cron
-management commands).
+Environment variables for production are defined both in `uwsgi.ini` (for uWSGI)
+and in `.envrc` (for manage.py commands such as migrations and cron management
+commands).
 
 Note that the deployment is not configured using nix and thus we install
 dependencies using `venv`.
@@ -223,8 +223,8 @@ caddy reload --config /home/roa/mataroa/Caddyfile
 caddy stop
 ```
 
-Also, two cronjobs (used by the email newsletter feature) are needed to be
-installed. The schedule is subject to the administrator's preference. Indicatively:
+Also, two cronjobs (used by the email newsletter feature) need to be installed.
+The schedule is subject to the administrator’s preference. Indicatively:
 
 ```sh
 */5 * * * * bash -c 'cd /home/roa/mataroa && source ./venv/bin/activate && source .envrc && python manage.py enqueue_notifications'
@@ -232,7 +232,7 @@ installed. The schedule is subject to the administrator's preference. Indicative
 0 0 1 * * bash -c 'cd /home/roa/mataroa && source ./venv/bin/activate && source .envrc && python manage.py mail_exports'
 ```
 
-Documentation about the commands can be found in section [Management](#Management).
+Documentation about these commands can be found in section [Management](#Management).
 
 Finally, certain [setting variables](mataroa/settings.py) may need to be redefined:
 
@@ -242,17 +242,17 @@ Finally, certain [setting variables](mataroa/settings.py) may need to be redefin
 
 ## Backup
 
-To automate backup, there is [a script](backup-database.sh) which dumps the
-database and uploads it into any S3-compatible object storage cloud using the
-[MinIO client](https://min.io/). The script also needs the database password
-as an environment variable. The key needs to be `PGPASSWORD`. The backup script
-assumes the variable lives in `.envrc` like so:
+To automate backup, one can run [`backup-database.sh`](backup-database.sh) which
+dumps the database and uploads it into any S3-compatible object storage cloud
+using the [MinIO client](https://min.io/). This script needs the database password
+as an environment variable. The key must be `PGPASSWORD`. The variable can live
+in `.envrc` as such:
 
 ```sh
 export PGPASSWORD=db-password
 ```
 
-To restore a dump:
+To restore a database dump:
 
 ```sh
 pg_restore -v -h localhost -cO --if-exists -d mataroa -U mataroa -W mataroa.dump
@@ -280,15 +280,14 @@ python manage.py enqueue_notifications
 
 ## Billing
 
-One can deploy mataroa without setting up the billing functionalities. This is
+One can deploy mataroa without setting up billing functionalities. This is
 the default case. To handle payments and subscriptions this project uses
 [Stripe](https://stripe.com/). To enable Stripe and payments, one needs to have
 a Stripe account with a single
 [Product](https://stripe.com/docs/billing/prices-guide) (eg. "Mataroa Premium
 Plan").
 
-To configure add the following variables to your `.envrc` from your Stripe
-account:
+To configure, add the following variables from your Stripe account to your `.envrc`:
 
 ```sh
 export STRIPE_API_KEY="sk_test_XXX"
