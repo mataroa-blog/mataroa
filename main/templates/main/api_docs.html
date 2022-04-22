@@ -13,9 +13,11 @@
         <dt>API Key</dt>
         <dd>{{ request.user.api_key|default:"your-api-key" }}</dd>
     </dl>
+    {% if request.user.is_authenticated %}
     <p>
         <a href="{% url 'api_reset' %}">Reset API key »</a>
     </p>
+    {% endif %}
 
     <h2>Notes</h2>
     <ul>
