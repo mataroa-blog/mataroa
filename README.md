@@ -14,7 +14,7 @@ Archives at:
 
 ## Contributing
 
-Feel free to open a PR on [GitHub](https://github.com/sirodoht/mataroa) or
+Feel free to open a PR on [GitHub](https://github.com/mataroa-blog/mataroa) or
 send an email patch to
 [~sirodoht/public-inbox@lists.sr.ht](mailto:~sirodoht/public-inbox@lists.sr.ht).
 

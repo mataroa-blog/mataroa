@@ -79,7 +79,7 @@ systemctl restart ssh
 
 ```sh
 sudo -i -u roa
-git clone https://github.com/sirodoht/mataroa.git
+git clone https://github.com/mataroa-blog/mataroa.git
 cd mataroa/
 uwsgi uwsgi.ini
 caddy start --config /home/roa/mataroa/Caddyfile
