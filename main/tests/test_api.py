@@ -648,12 +648,14 @@ class APIPostListGetTestCase(TestCase):
             title="Hello world",
             slug="hello-world",
             body="## Hey\n\nHey world.",
+            published_at=date(2020, 1, 1),
             owner=self.user,
         )
         self.post_b = models.Post.objects.create(
             title="Bye world",
             slug="bye-world",
             body="## Bye\n\nBye world.",
+            published_at=date(2020, 9, 14),
             owner=self.user,
         )
 
@@ -670,21 +672,21 @@ class APIPostListGetTestCase(TestCase):
         self.assertEqual(len(post_list), 2)
         self.assertIn(
             {
-                "title": "Bye world",
-                "slug": "bye-world",
-                "body": "## Bye\n\nBye world.",
-                "published_at": "2022-04-21",
-                "url": f"{util.get_protocol()}//{self.user.username}.{settings.CANONICAL_HOST}/blog/bye-world/",
+                "title": "Hello world",
+                "slug": "hello-world",
+                "body": "## Hey\n\nHey world.",
+                "published_at": "2020-01-01",
+                "url": f"{util.get_protocol()}//{self.user.username}.{settings.CANONICAL_HOST}/blog/hello-world/",
             },
             post_list,
         )
         self.assertIn(
             {
-                "title": "Hello world",
-                "slug": "hello-world",
-                "body": "## Hey\n\nHey world.",
-                "published_at": "2022-04-21",
-                "url": f"{util.get_protocol()}//{self.user.username}.{settings.CANONICAL_HOST}/blog/hello-world/",
+                "title": "Bye world",
+                "slug": "bye-world",
+                "body": "## Bye\n\nBye world.",
+                "published_at": "2020-09-14",
+                "url": f"{util.get_protocol()}//{self.user.username}.{settings.CANONICAL_HOST}/blog/bye-world/",
             },
             post_list,
         )
