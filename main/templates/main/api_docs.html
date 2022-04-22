@@ -104,7 +104,7 @@
     <pre><code>$ curl -X PATCH \
     -H 'Authorization: Bearer {{ request.user.api_key|default:"your-api-key" }}' \
     -d '{"title": "Updating my new blog", "body": "Rethinking and rewriting."}' \
-    {{ protocol }}//{{ host }}/api/posts/introducing-my-new-blog
+    {{ protocol }}//{{ host }}/api/posts/introducing-my-new-blog/
 </code></pre>
 
 
