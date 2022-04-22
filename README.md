@@ -9,8 +9,8 @@ We have a mailing list at
 for the mataroa community to introduce themselves, their blogs, and discuss
 anything that’s on their mind!
 
-Archives at:
-[https://lists.sr.ht/~sirodoht/mataroa-community](https://lists.sr.ht/~sirodoht/mataroa-community)
+Archives at
+[lists.sr.ht/~sirodoht/mataroa-community](https://lists.sr.ht/~sirodoht/mataroa-community)
 
 ## Contributing
 
