@@ -119,8 +119,10 @@ def syntax_highlight(text):
 
 
 def clean_html(dirty_html, strip_tags=False):
-    """Clean potentially evil HTML. strip_tags: true will strip everything, false will escape."""
+    """Clean potentially evil HTML.
 
+    - strip_tags: true will strip everything, false will escape.
+    """
     if strip_tags:
         return bleach.clean(dirty_html, strip=True)
 
