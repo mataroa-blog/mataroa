@@ -1,4 +1,4 @@
-FROM python:3.8.9
+FROM python:3.10
 ENV PYTHONUNBUFFERED 1
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
