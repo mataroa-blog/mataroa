@@ -13,6 +13,7 @@ from django.contrib.sitemaps.views import sitemap as DjSitemapView
 from django.core import mail
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count
+from django.db.models.functions import TruncDay
 from django.http import (
     Http404,
     HttpResponse,
@@ -1008,6 +1009,34 @@ def transparency(request):
     )
     revenue_co2 = monthly_revenue * 0.05
 
+    # calc new users and chart data
+    new_users_per_day_qs = (
+        models.User.objects.annotate(date=TruncDay("date_joined"))
+        .values("date")
+        .annotate(user_count=Count("id"))
+        .order_by("-date")[:25]
+    )
+    new_users_per_day = {}
+    current_x_offset = 0
+    # find day with the most counts (so that we can normalise the rest)
+    highest_day_count = 1
+    for nu in new_users_per_day_qs:
+        if highest_day_count < nu["user_count"]:
+            highest_day_count = nu["user_count"]
+    for nu in new_users_per_day_qs:
+        # normalize day count to percentage for svg drawing
+        count_percent = 1  # keep lowest value to 1 (1px) so that it's visible
+        if highest_day_count != 0 and nu["user_count"] != 0:
+            count_percent = nu["user_count"] * 100 / highest_day_count
+
+        new_users_per_day[nu["date"]] = {
+            "count": nu["user_count"],
+            "x_offset": current_x_offset,
+            "count_percent": count_percent,
+            "negative_count_percent": 100 - count_percent,
+        }
+        current_x_offset += 20
+
     return render(
         request,
         "main/transparency.html",
@@ -1021,6 +1050,7 @@ def transparency(request):
             "published_posts": published_posts,
             "monthly_revenue": monthly_revenue,
             "revenue_co2": revenue_co2,
+            "new_users_per_day": new_users_per_day,
         },
     )
 
