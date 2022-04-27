@@ -12,6 +12,11 @@ anything that’s on their mind!
 Archives at
 [lists.sr.ht/~sirodoht/mataroa-community](https://lists.sr.ht/~sirodoht/mataroa-community)
 
+### Tools
+
+[Victor Freire](https://freire.dev.br/) has created
+[mata](https://git.sr.ht/~glorifiedgluer/mata/), a CLI tool for Mataroa.
+
 ## Contributing
 
 Feel free to open a PR on [GitHub](https://github.com/mataroa-blog/mataroa) or
