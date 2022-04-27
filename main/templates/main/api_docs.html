@@ -72,6 +72,33 @@
     {{ protocol }}//{{ host }}/api/posts/
 </code></pre>
 
+    <h2>GET /api/posts/</h2>
+    <p>
+        Get single post.
+    </p>
+
+    <strong>Parameters</strong>
+    <ul>
+        <li><em>(no parameters)</em></li>
+    </ul>
+
+    <strong>Response</strong>
+    <pre><code>{
+    "ok": true,
+    "slug": "new-blog",
+    "title": "New blog",
+    "body": "Welcome!"
+    "published_at": "2020-09-21"
+    "url": "{{ protocol }}//{{ request.user.username|default:"your-username" }}.{{ host }}/blog/new-blog/"
+}</code></pre>
+
+    <strong>curl</strong>
+    <pre><code>$ curl -X POST \
+    -H 'Authorization: Bearer {{ request.user.api_key|default:"your-api-key" }}' \
+    -d '{"title": "New blog", "body": "## Why?\n\nEveryone needs a blog, right?"}' \
+    {{ protocol }}//{{ host }}/api/posts/
+</code></pre>
+
     <h2>PATCH /api/posts/&lt;post-slug&gt;</h2>
     <p>
         Update existing post.
