@@ -93,10 +93,9 @@
 }</code></pre>
 
     <strong>curl</strong>
-    <pre><code>$ curl -X POST \
+    <pre><code>$ curl -X GET \
     -H 'Authorization: Bearer {{ request.user.api_key|default:"your-api-key" }}' \
-    -d '{"title": "New blog", "body": "## Why?\n\nEveryone needs a blog, right?"}' \
-    {{ protocol }}//{{ host }}/api/posts/
+    {{ protocol }}//{{ host }}/api/posts/new-blog/
 </code></pre>
 
     <h2>PATCH /api/posts/&lt;post-slug&gt;</h2>
