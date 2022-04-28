@@ -13,7 +13,7 @@
 	log {
 		output file /var/log/caddy-mataroa.log {
 			roll_size 1gb
-			roll_keep 5
+			roll_keep 1
 			roll_keep_for 720h
 		}
 	}
@@ -36,7 +36,7 @@
 	log {
 		output file /var/log/caddy-customdomains.log {
 			roll_size 1gb
-			roll_keep 5
+			roll_keep 1
 			roll_keep_for 720h
 		}
 	}
