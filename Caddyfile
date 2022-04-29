@@ -16,6 +16,12 @@
 			roll_keep 1
 			roll_keep_for 720h
 		}
+		format filter {
+			wrap console
+			fields {
+				request>headers>Authorization delete
+			}
+		}
 	}
 }
 
@@ -38,6 +44,12 @@
 			roll_size 1gb
 			roll_keep 1
 			roll_keep_for 720h
+		}
+		format filter {
+			wrap console
+			fields {
+				request>headers>Authorization delete
+			}
 		}
 	}
 }
