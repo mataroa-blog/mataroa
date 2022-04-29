@@ -996,7 +996,7 @@ def transparency(request):
 
     updated_posts = models.Post.objects.filter(
         updated_at__gt=datetime.now() - timedelta(days=30)
-    )
+    ).select_related("owner")
     active_users = len({post.owner.id for post in updated_posts})
 
     one_month_ago = timezone.now() - timedelta(days=30)
