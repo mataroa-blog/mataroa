@@ -19,7 +19,6 @@ class UserAdmin(DjUserAdmin):
         "blog_byline",
         "stripe_customer_id",
         "is_premium",
-        "is_grandfathered",
         "mail_export_on",
     )
     list_display_links = ("id", "username")
