@@ -144,6 +144,7 @@ def md_to_html(markdown_string, strip_tags=False):
             "markdown.extensions.fenced_code",
             "markdown.extensions.tables",
             "markdown.extensions.footnotes",
+            "markdown.extensions.toc",
         ],
     )
     return clean_html(dirty_html, strip_tags)
