@@ -98,6 +98,7 @@ ALLOWED_HTML_ELEMENTS = [
     "cite",
     "colgroup",
     "code",
+    "del",
     "div",
     "dfn",
     "em",
