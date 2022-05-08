@@ -8,6 +8,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.views.decorators.http import require_POST
 
 from main import models, util
 
@@ -289,6 +290,7 @@ def _get_epub_chapter(post):
 """
 
 
+@require_POST
 @login_required
 def export_epub(request):
     if request.method == "POST":
