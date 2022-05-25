@@ -5,7 +5,7 @@ from django.urls import reverse
 from main import models
 
 
-class CommentFullCreateTestCase(TestCase):
+class CommentCreateTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice", comments_on=True)
         self.post = models.Post.objects.create(
@@ -26,11 +26,71 @@ class CommentFullCreateTestCase(TestCase):
             data=data,
         )
         self.assertEqual(response.status_code, 302)
+
         self.assertEqual(models.Comment.objects.all().count(), 1)
         self.assertEqual(models.Comment.objects.all().first().name, data["name"])
         self.assertEqual(models.Comment.objects.all().first().email, data["email"])
         self.assertEqual(models.Comment.objects.all().first().body, data["body"])
         self.assertEqual(models.Comment.objects.all().first().post, self.post)
+
+        response = self.client.get(
+            reverse("post_detail", args=(self.post.slug,)),
+            HTTP_HOST="alice." + settings.CANONICAL_HOST,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "your comment is pending review")
+
+
+class CommentApprovedCreateTestCase(TestCase):
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice", comments_on=True)
+        self.post = models.Post.objects.create(
+            title="Hello world",
+            slug="hello-world",
+            owner=self.user,
+        )
+        self.comment = models.Comment.objects.create(
+            post=self.post,
+            name="Jon",
+            email="jon@wick.com",
+            body="Content sentence.",
+            is_approved=True,
+        )
+
+    def test_comment_create(self):
+        response = self.client.get(
+            reverse("post_detail", args=(self.post.slug,)),
+            HTTP_HOST="alice." + settings.CANONICAL_HOST,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Jon")
+        self.assertContains(response, "Content sentence.")
+
+
+class CommentNotApprovedCreateTestCase(TestCase):
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice", comments_on=True)
+        self.post = models.Post.objects.create(
+            title="Hello world",
+            slug="hello-world",
+            owner=self.user,
+        )
+        self.comment = models.Comment.objects.create(
+            post=self.post,
+            name="Jon",
+            email="jon@wick.com",
+            body="Content sentence.",
+            is_approved=False,
+        )
+
+    def test_comment_create(self):
+        response = self.client.get(
+            reverse("post_detail", args=(self.post.slug,)),
+            HTTP_HOST="alice." + settings.CANONICAL_HOST,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, "Jon")
+        self.assertNotContains(response, "Content sentence.")
 
 
 class CommentNameCreateTestCase(TestCase):
