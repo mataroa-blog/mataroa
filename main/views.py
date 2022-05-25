@@ -1174,7 +1174,7 @@ def atua_comments_recent(request):
         {
             "recent_comments": models.Comment.objects.filter(
                 is_approved=True, created_at__lte=one_month_ago
-            ),
+            ).order_by("-id"),
         },
     )
 
