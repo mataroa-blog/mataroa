@@ -190,7 +190,9 @@ class PostDetail(DetailView):
             context["pages"] = models.Page.objects.filter(
                 owner__username=self.request.subdomain, is_hidden=False
             )
-            context["comments"] = models.Comment.objects.filter(post=self.object)
+            context["comments"] = models.Comment.objects.filter(
+                post=self.object, is_approved=True
+            )
 
         # do not record analytic if post is authed user's
         if (
@@ -324,7 +326,7 @@ class PostDelete(LoginRequiredMixin, DeleteView):
 class CommentCreate(SuccessMessageMixin, CreateView):
     model = models.Comment
     fields = ["name", "email", "body"]
-    success_message = "your comment was published"
+    success_message = "your comment is pending review"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -340,24 +342,13 @@ class CommentCreate(SuccessMessageMixin, CreateView):
             return self.render_to_response(self.get_context_data(form=form))
 
         self.object = form.save(commit=False)
+        if settings.COMMENTS_MODERATION:
+            self.object.is_approved = False
         self.object.post = models.Post.objects.get(
             owner__username=self.request.subdomain, slug=self.kwargs["slug"]
         )
         self.object.save()
         messages.add_message(self.request, messages.INFO, self.success_message)
-
-        # inform blog_user
-        post_url = util.get_protocol() + self.object.post.get_absolute_url()
-        body = f"Someone commented on your post: {self.object.post.title}\n"
-        body += "\nComment follows:\n"
-        body += "\n" + self.object.body + "\n"
-        body += f"\n---\nSee at {post_url}\n"
-        mail.send_mail(
-            subject=f"New comment for on post: {self.object.post.title}",
-            message=body,
-            from_email=settings.NOTIFICATIONS_FROM_EMAIL,
-            recipient_list=[self.object.post.owner.email],
-        )
 
         return HttpResponseRedirect(
             reverse_lazy("post_detail", kwargs={"slug": self.object.post.slug})
@@ -374,7 +365,7 @@ class CommentDelete(LoginRequiredMixin, DeleteView):
     model = models.Comment
     success_message = "comment deleted"
 
-    def form_valid(self, request):
+    def form_valid(self, form):
         self.object = self.get_object()
         self.object.delete()
         messages.success(self.request, self.success_message % self.object.__dict__)
@@ -1055,6 +1046,21 @@ def transparency(request):
     )
 
 
+def sitemap(request):
+    if not hasattr(request, "subdomain"):
+        raise Http404()
+
+    subdomain = request.subdomain
+
+    sitemaps = {
+        "static": StaticSitemap(),
+        "posts": PostSitemap(subdomain),
+        "pages": PageSitemap(subdomain),
+    }
+
+    return DjSitemapView(request, sitemaps)
+
+
 def privacy(request):
     return render(request, "main/privacy.html")
 
@@ -1132,16 +1138,70 @@ def atua_pages(request):
     )
 
 
-def sitemap(request):
-    if not hasattr(request, "subdomain"):
+def atua_comments(request):
+    if not request.user.is_authenticated or not request.user.is_superuser:
         raise Http404()
 
-    subdomain = request.subdomain
+    one_month_ago = timezone.now() - timedelta(days=30)
+    return render(
+        request,
+        "main/atua_comments.html",
+        {
+            "non_approved_comments": models.Comment.objects.filter(
+                is_approved=False
+            ).order_by("-id"),
+            "recently_approved_comments": models.Comment.objects.filter(
+                is_approved=True, created_at__gte=one_month_ago
+            ),
+        },
+    )
 
-    sitemaps = {
-        "static": StaticSitemap(),
-        "posts": PostSitemap(subdomain),
-        "pages": PageSitemap(subdomain),
-    }
 
-    return DjSitemapView(request, sitemaps)
+class AtuaCommentApprove(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    model = models.Comment
+    fields = ["is_approved"]
+    template_name = "main/atua_comment_approve.html"
+    success_url = reverse_lazy("atua_comments")
+    success_message = "comment approved"
+
+    def form_valid(self, form):
+        self.object = self.get_object()
+        self.object.is_approved = True
+        self.object.save()
+
+        # inform blog_user
+        post_url = util.get_protocol() + self.object.post.get_absolute_url()
+        body = f"Someone commented on your post: {self.object.post.title}\n"
+        body += "\nComment follows:\n"
+        body += "\n" + self.object.body + "\n"
+        body += f"\n---\nSee at {post_url}\n"
+        mail.send_mail(
+            subject=f"New comment for on post: {self.object.post.title}",
+            message=body,
+            from_email=settings.NOTIFICATIONS_FROM_EMAIL,
+            recipient_list=[self.object.post.owner.email],
+        )
+
+        return HttpResponseRedirect(reverse("atua_comments"))
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_superuser:
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
+
+class AtuaCommentDelete(LoginRequiredMixin, DeleteView):
+    model = models.Comment
+    success_message = "comment deleted"
+    template_name = "main/atua_comment_delete.html"
+
+    def form_valid(self, form):
+        self.object = self.get_object()
+        self.object.delete()
+        messages.success(self.request, self.success_message % self.object.__dict__)
+        return HttpResponseRedirect(reverse("atua_comments"))
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_superuser:
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)

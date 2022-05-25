@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
 
@@ -29,6 +30,14 @@ class AtuaAnonTestCase(TestCase):
         response = self.client.post(reverse("atua_pages"))
         self.assertEqual(response.status_code, 404)
 
+    def test_atua_comments_get(self):
+        response = self.client.get(reverse("atua_comments"))
+        self.assertEqual(response.status_code, 404)
+
+    def test_atua_comments_post(self):
+        response = self.client.post(reverse("atua_comments"))
+        self.assertEqual(response.status_code, 404)
+
 
 class AtuaNonadminTestCase(TestCase):
     def setUp(self):
@@ -47,6 +56,10 @@ class AtuaNonadminTestCase(TestCase):
         response = self.client.get(reverse("atua_pages"))
         self.assertEqual(response.status_code, 404)
 
+    def test_atua_comments_nonadmin(self):
+        response = self.client.get(reverse("atua_comments"))
+        self.assertEqual(response.status_code, 404)
+
 
 class AtuaAdminTestCase(TestCase):
     def setUp(self):
@@ -63,4 +76,8 @@ class AtuaAdminTestCase(TestCase):
 
     def test_atua_pages_admin(self):
         response = self.client.get(reverse("atua_pages"))
+        self.assertEqual(response.status_code, 200)
+
+    def test_atua_comments_admin(self):
+        response = self.client.get(reverse("atua_comments"))
         self.assertEqual(response.status_code, 200)
