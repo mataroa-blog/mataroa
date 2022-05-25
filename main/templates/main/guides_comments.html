@@ -1,0 +1,43 @@
+{% extends 'main/layout.html' %}
+
+{% load static %}
+
+{% block title %}Comments Guide — Mataroa{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Comments Guide</h1>
+    <p>
+        Mataroa supports comments on a blog post level. Comments are optional
+        and can be enabled blog-wide from the
+        <a href="{% url 'user_update' %}">settings page</a>.
+    </p>
+    <ul>
+        <li>Comments are optionally eponymous.</li>
+        <li>
+            There are no configuration options for comments other than enabling
+            them.
+        </li>
+        <li>
+            Blog authors get email notified when there is a new comment in any
+            of their posts.
+        </li>
+        <li>Commenters do not get any notification, in any case.</li>
+
+        {% if comments_moderation_on %}
+        <li>
+            All comments are held for moderation.
+        </li>
+        {% else %}
+        <li>
+            There is no moderation on comments. Unfortunately, if a blog gets
+            shared somewhere public very capable spammers will not hold back.
+        </li>
+        {% endif %}
+    </ul>
+
+</main>
+
+{% include 'partials/footer.html' %}
+
+{% endblock %}

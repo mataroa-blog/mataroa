@@ -15,6 +15,7 @@ urlpatterns = [
     path("modus/transparency/", views.transparency, name="transparency"),
     path("guides/markdown/", views.guides_markdown, name="guides_markdown"),
     path("guides/images/", views.guides_images, name="guides_images"),
+    path("guides/comments/", views.guides_comments, name="guides_comments"),
     path("guides/comparisons/", views.comparisons, name="comparisons"),
 ]
 

@@ -1073,6 +1073,16 @@ def guides_images(request):
     return render(request, "main/guides_images.html")
 
 
+def guides_comments(request):
+    return render(
+        request,
+        "main/guides_comments.html",
+        {
+            "comments_moderation_on": settings.COMMENTS_MODERATION,
+        },
+    )
+
+
 def atua_users(request):
     if not request.user.is_authenticated or not request.user.is_superuser:
         raise Http404()
