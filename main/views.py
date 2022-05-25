@@ -1173,7 +1173,7 @@ def atua_comments_recent(request):
         "main/atua_comments_recent.html",
         {
             "recent_comments": models.Comment.objects.filter(
-                is_approved=True, created_at__gte=one_month_ago
+                is_approved=True, created_at__lte=one_month_ago
             ),
         },
     )
