@@ -1,16 +1,16 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}Atua Comments{% endblock %}
+{% block title %}Atua Comments New{% endblock %}
 
 {% block content %}
 <main>
-    <h1>Atua Comments</h1>
+    <h1>Atua Comments New</h1>
 
     {% include "partials/atua_nav.html" %}
 
-    <h2>Non-approved Comments ({{ non_approved_comments|length }})</h2>
+    <h2>New Comments ({{ new_comments|length }})</h2>
     <ul>
-        {% for comment in non_approved_comments %}
+        {% for comment in new_comments %}
         <li>
             <a href="{% url 'admin:main_comment_change' comment.id %}">{{ comment.id }}</a>
             / <a href="{{ comment.post.owner.blog_absolute_url }}">{{ comment.post.owner }}</a>

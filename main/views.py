@@ -1148,19 +1148,31 @@ def atua_pages(request):
     )
 
 
-def atua_comments(request):
+def atua_comments_new(request):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        raise Http404()
+
+    return render(
+        request,
+        "main/atua_comments_new.html",
+        {
+            "new_comments": models.Comment.objects.filter(is_approved=False).order_by(
+                "-id"
+            ),
+        },
+    )
+
+
+def atua_comments_recent(request):
     if not request.user.is_authenticated or not request.user.is_superuser:
         raise Http404()
 
     one_month_ago = timezone.now() - timedelta(days=30)
     return render(
         request,
-        "main/atua_comments.html",
+        "main/atua_comments_recent.html",
         {
-            "non_approved_comments": models.Comment.objects.filter(
-                is_approved=False
-            ).order_by("-id"),
-            "recently_approved_comments": models.Comment.objects.filter(
+            "recent_comments": models.Comment.objects.filter(
                 is_approved=True, created_at__gte=one_month_ago
             ),
         },
@@ -1171,7 +1183,7 @@ class AtuaCommentApprove(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = models.Comment
     fields = ["is_approved"]
     template_name = "main/atua_comment_approve.html"
-    success_url = reverse_lazy("atua_comments")
+    success_url = reverse_lazy("atua_comments_new")
     success_message = "comment approved"
 
     def form_valid(self, form):
@@ -1192,7 +1204,7 @@ class AtuaCommentApprove(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             recipient_list=[self.object.post.owner.email],
         )
 
-        return HttpResponseRedirect(reverse("atua_comments"))
+        return HttpResponseRedirect(self.get_success_url())
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_superuser:
@@ -1209,7 +1221,7 @@ class AtuaCommentDelete(LoginRequiredMixin, DeleteView):
         self.object = self.get_object()
         self.object.delete()
         messages.success(self.request, self.success_message % self.object.__dict__)
-        return HttpResponseRedirect(reverse("atua_comments"))
+        return HttpResponseRedirect(reverse("atua_comments_new"))
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_superuser:

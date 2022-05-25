@@ -33,7 +33,10 @@ urlpatterns += [
     path("atua/users/", views.atua_users, name="atua_users"),
     path("atua/posts/", views.atua_posts, name="atua_posts"),
     path("atua/pages/", views.atua_pages, name="atua_pages"),
-    path("atua/comments/", views.atua_comments, name="atua_comments"),
+    path("atua/comments/new/", views.atua_comments_new, name="atua_comments_new"),
+    path(
+        "atua/comments/recent/", views.atua_comments_recent, name="atua_comments_recent"
+    ),
     path(
         "atua/comments/<int:pk>/approve/",
         views.AtuaCommentApprove.as_view(),

@@ -30,12 +30,20 @@ class AtuaAnonTestCase(TestCase):
         response = self.client.post(reverse("atua_pages"))
         self.assertEqual(response.status_code, 404)
 
-    def test_atua_comments_get(self):
-        response = self.client.get(reverse("atua_comments"))
+    def test_atua_comments_new_get(self):
+        response = self.client.get(reverse("atua_comments_new"))
         self.assertEqual(response.status_code, 404)
 
-    def test_atua_comments_post(self):
-        response = self.client.post(reverse("atua_comments"))
+    def test_atua_comments_recent_get(self):
+        response = self.client.get(reverse("atua_comments_recent"))
+        self.assertEqual(response.status_code, 404)
+
+    def test_atua_comments_new_post(self):
+        response = self.client.post(reverse("atua_comments_new"))
+        self.assertEqual(response.status_code, 404)
+
+    def test_atua_comments_recent_post(self):
+        response = self.client.post(reverse("atua_comments_recent"))
         self.assertEqual(response.status_code, 404)
 
 
@@ -56,8 +64,12 @@ class AtuaNonadminTestCase(TestCase):
         response = self.client.get(reverse("atua_pages"))
         self.assertEqual(response.status_code, 404)
 
-    def test_atua_comments_nonadmin(self):
-        response = self.client.get(reverse("atua_comments"))
+    def test_atua_comments_new_nonadmin(self):
+        response = self.client.get(reverse("atua_comments_new"))
+        self.assertEqual(response.status_code, 404)
+
+    def test_atua_comments_recent_nonadmin(self):
+        response = self.client.get(reverse("atua_comments_recent"))
         self.assertEqual(response.status_code, 404)
 
 
@@ -78,8 +90,12 @@ class AtuaAdminTestCase(TestCase):
         response = self.client.get(reverse("atua_pages"))
         self.assertEqual(response.status_code, 200)
 
-    def test_atua_comments_admin(self):
-        response = self.client.get(reverse("atua_comments"))
+    def test_atua_comments_new_admin(self):
+        response = self.client.get(reverse("atua_comments_new"))
+        self.assertEqual(response.status_code, 200)
+
+    def test_atua_comments_recent_admin(self):
+        response = self.client.get(reverse("atua_comments_recent"))
         self.assertEqual(response.status_code, 200)
 
 
