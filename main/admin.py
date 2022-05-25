@@ -142,6 +142,7 @@ class CommentAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "post",
+        "is_approved",
         "name",
         "email",
         "body",

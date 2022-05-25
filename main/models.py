@@ -296,6 +296,7 @@ class Comment(models.Model):
     body = models.TextField()
     name = models.CharField(max_length=150, default="Anonymous", null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
+    is_approved = models.BooleanField(default=True)
 
     class Meta:
         ordering = ["created_at"]
