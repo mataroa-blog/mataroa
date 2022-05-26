@@ -19,14 +19,17 @@
             them.
         </li>
         <li>
-            Blog authors get email notified when there is a new comment in any
-            of their posts.
+            Blog authors get an email notification when there is a new comment
+            in any of their posts.
         </li>
         <li>Commenters do not get any notification, in any case.</li>
 
         {% if comments_moderation_on %}
         <li>
             All comments are held for moderation.
+        </li>
+        <li>
+            The comment review process can take up to 24 hours.
         </li>
         {% else %}
         <li>
