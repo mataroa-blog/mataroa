@@ -44,9 +44,11 @@ Condensed and commented sources file tree:
 │   ├── models.py
 │   ├── static/
 │   ├── templates
-│   │   ├── main/
-│   │   ├── partials/
+│   │   ├── main/ # HTML templates for most pages
+│   │   ├── assets/
 │   │   │   ├── drag-and-drop-upload.js
+│   │   │   └── style.css
+│   │   ├── partials/
 │   │   │   ├── footer.html
 │   │   │   ├── footer_blog.html
 │   │   │   └── webring.html
@@ -186,3 +188,9 @@ upload functionalities (for post import or image upload), and card details
 submission.
 
 See [Django Form fields reference](https://docs.djangoproject.com/en/3.2/ref/forms/fields/).
+
+## [`main/templates/assets/style.css`](main/templates/assets/style.css)
+
+On Mataroa, a user can enable an option, Theme Zia Lucia, and get a higher font
+size by default. Because we need to change the body font-size value, we render
+the CSS. It is not static. This is why it lives inside the templates directory.

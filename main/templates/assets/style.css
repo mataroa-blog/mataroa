@@ -193,7 +193,7 @@ template {
 
 /* dark mode
  * create a new color (dark-mode-color)
- * override three existing colors */
+ * override existing colors */
 @media (prefers-color-scheme: dark) {
     :root {
         --dark-mode-color: #212529;
@@ -208,8 +208,10 @@ template {
 
 html,
 body {
+    {% if request.theme_zialucia %}
+    font-size: 20px;
+    {% endif %}
     font-family: sans-serif;
-    font-size: 14px;
     line-height: 1.5;
 }
 @media (prefers-color-scheme: dark) {
@@ -250,6 +252,7 @@ a.btn:disabled {
 
 
 h1 {
+    font-size: 1.8rem;
     font-weight: 500;
     padding-bottom: 4px;
     border-bottom: 2px solid var(--light-grey-color);
@@ -263,25 +266,17 @@ h3 {
 }
 
 main {
-    max-width: 500px;
+    max-width: 34rem;
     margin-bottom: 16px;
     margin-left: auto;
     margin-right: auto;
-}
-@media (max-width: 500px) {
-    main {
-        padding-left: 8px;
-        padding-right: 8px;
-    }
+    padding-left: 8px;
+    padding-right: 8px;
 }
 @media print {
     main {
         max-width: unset;
     }
-}
-
-.theme-zialucia main {
-    max-width: 720px;
 }
 
 @media print {
@@ -291,7 +286,7 @@ main {
 }
 
 aside {
-    max-width: 500px;
+    max-width: 34rem;
     border: 1px dashed #000;
     padding: 2px 6px;
     margin-top: 8px;
@@ -299,7 +294,7 @@ aside {
     margin-right: auto;
     box-sizing: border-box;
 }
-@media (max-width: 500px) {
+@media (max-width: 34rem) {
     aside {
         margin-left: 8px;
         margin-right: 8px;
@@ -310,47 +305,27 @@ aside {
     color: var(--red-color);
 }
 
-.theme-zialucia aside {
-    max-width: 720px;
-}
-
 section {
-    max-width: 500px;
+    max-width: 34rem;
     margin-bottom: 16px;
     margin-left: auto;
     margin-right: auto;
-}
-@media (max-width: 500px) {
-    section {
-        padding-left: 8px;
-        padding-right: 8px;
-    }
-}
-
-.theme-zialucia section {
-    max-width: 720px;
+    padding-left: 8px;
+    padding-right: 8px;
 }
 
 nav {
-    max-width: 500px;
+    max-width: 34rem;
     margin-top: 16px;
     margin-left: auto;
     margin-right: auto;
-}
-@media (max-width: 500px) {
-    nav {
-        padding-left: 8px;
-        padding-right: 8px;
-    }
+    padding-left: 8px;
+    padding-right: 8px;
 }
 @media print {
     nav {
         display: none;
     }
-}
-
-.theme-zialucia nav {
-    max-width: 720px;
 }
 
 ol,
@@ -389,7 +364,6 @@ table {
     border: 1px solid var(--light-grey-color);
     width: 100%;
     box-sizing: border-box;
-    font-family: sans-serif;
 }
 
 thead:nth-child(odd),
@@ -408,17 +382,9 @@ pre {
     overflow-x: scroll;
 }
 
-.theme-zialucia pre {
-    font-size: 16px;
-}
-
 code {
     background: var(--airy-grey-color);
     padding: 2px;
-}
-
-.theme-zialucia code {
-    font-size: 16px;
 }
 
 hr {
@@ -429,22 +395,14 @@ hr {
 }
 
 footer {
+    max-width: 34rem;
     margin-left: auto;
     margin-right: auto;
     margin-top: 32px;
     margin-bottom: 16px;
-    max-width: 500px;
+    padding-left: 8px;
+    padding-right: 8px;
     color: var(--dark-grey-color);
-}
-@media (max-width: 500px) {
-    footer {
-        padding-left: 8px;
-        padding-right: 8px;
-    }
-}
-
-.theme-zialucia footer {
-    max-width: 720px;
 }
 
 .footer-comment {
@@ -471,10 +429,6 @@ footer {
     border-color: var(--red-color) !important;
 }
 
-/* themes
- * if empty, they are used in combination with other rules */
-.theme-zialucia {}
-
 /* form */
 label {
     display: block;
@@ -489,9 +443,9 @@ textarea {
     display: block;
     border: 2px solid var(--light-grey-color);
     box-sizing: border-box;
-    width: 500px;
+    width: 34rem;
 }
-@media (max-width: 500px) {
+@media (max-width: 34rem) {
     input[type="text"],
     input[type="url"],
     input[type="email"],
@@ -508,23 +462,6 @@ textarea {
     textarea {
         color: #fff;
         background: var(--light-grey-color);
-    }
-}
-
-.theme-zialucia input[type="text"],
-.theme-zialucia input[type="url"],
-.theme-zialucia input[type="email"],
-.theme-zialucia input[type="password"],
-.theme-zialucia textarea {
-    width: 720px;
-}
-@media (max-width: 500px) {
-    .theme-zialucia input[type="text"],
-    .theme-zialucia input[type="url"],
-    .theme-zialucia input[type="email"],
-    .theme-zialucia input[type="password"],
-    .theme-zialucia textarea {
-        width: 100%;
     }
 }
 
@@ -571,7 +508,7 @@ form .helptext {
 
 /* landing */
 .lead {
-    max-width: 500px;
+    max-width: 34rem;
     border: 1px dashed #000;
     padding-top: 8px;
     padding-bottom: 8px;
@@ -600,7 +537,7 @@ form .helptext {
 .comparisons p,
 .comparisons ol,
 .comparisons ul {
-    max-width: 500px;
+    max-width: 34rem;
     margin-left: auto;
     margin-right: auto;
 }
@@ -646,18 +583,7 @@ form .helptext {
 }
 
 .posts li {
-    font-size: 16px;
     margin-bottom: 24px;
-}
-
-.theme-zialucia .posts li {
-    font-size: 21px;
-    margin-bottom: 32px;
-}
-@media(max-width: 490px) {
-    .theme-zialucia .posts li {
-        font-size: 18px;
-    }
 }
 
 .posts small {
@@ -672,16 +598,6 @@ form .helptext {
 .byline {
     color: var(--dark-grey-color);
     margin: 16px 0 24px;
-}
-
-.theme-zialucia .byline {
-    font-size: 19px;
-    margin: 32px 0;
-}
-@media(max-width: 490px) {
-    .theme-zialucia .byline {
-        font-size: 17px;
-    }
 }
 
 .webring {
@@ -704,15 +620,6 @@ form .helptext {
     margin-bottom: 8px;
 }
 
-.theme-zialucia .posts-item-title {
-    font-size: 34px;
-}
-@media(max-width: 490px) {
-    .theme-zialucia .posts-item-title {
-        font-size: 30px;
-    }
-}
-
 .posts-item-byline {
     color: var(--dark-grey-color);
     margin-bottom: 8px;
@@ -733,34 +640,21 @@ form .helptext {
     content: "« ";
 }
 
+.posts-item-body p {
+    font-family: serif;
+    font-size: 1.1rem;
+}
+
+.posts-item-body li {
+    font-family: serif;
+    font-size: 1.1rem;
+}
+
 .posts-item-body img {
     max-width: 100%;
     display: block;
     margin-left: auto;
     margin-right: auto;
-}
-
-.theme-zialucia .posts-item-body {
-    font-family: serif;
-    font-size: 20px;
-}
-@media (max-width: 490px) {
-    .theme-zialucia .posts-item-body {
-        font-size: 17px;
-    }
-}
-
-.theme-zialucia .posts-item-body p {
-    max-width: 720px;
-}
-
-.theme-zialucia .posts-item-body h1,
-.theme-zialucia .posts-item-body h2,
-.theme-zialucia .posts-item-body h3,
-.theme-zialucia .posts-item-body h4,
-.theme-zialucia .posts-item-body h5,
-.theme-zialucia .posts-item-body h6 {
-    font-family: sans-serif;
 }
 
 /* comments */
@@ -769,8 +663,8 @@ form .helptext {
 }
 
 .comments-title {
+    font-size: 1.2rem;
     margin-top: 32px;
-    font-size: 19px;
     padding-bottom: 4px;
     border-bottom: 2px solid var(--light-grey-color);
 }
@@ -783,10 +677,6 @@ form .helptext {
 /* page detail */
 .pages-item-title {
     margin-bottom: 8px;
-}
-
-.theme-zialucia .pages-item-title {
-    font-size: 34px;
 }
 
 .pages-item-byline {
@@ -809,27 +699,14 @@ form .helptext {
     content: "« ";
 }
 
-.theme-zialucia .pages-item-body {
+.pages-item-body p {
     font-family: serif;
-    font-size: 20px;
-}
-@media (max-width: 490px) {
-    .theme-zialucia .pages-item-body {
-        font-size: 17px;
-    }
+    font-size: 1.1rem;
 }
 
-.theme-zialucia .pages-item-body p {
-    max-width: 720px;
-}
-
-.theme-zialucia .pages-item-body h1,
-.theme-zialucia .pages-item-body h2,
-.theme-zialucia .pages-item-body h3,
-.theme-zialucia .pages-item-body h4,
-.theme-zialucia .pages-item-body h5,
-.theme-zialucia .pages-item-body h6 {
-    font-family: sans-serif;
+.pages-item-body ul {
+    font-family: serif;
+    font-size: 1.1rem;
 }
 
 .pages-item-body img {
@@ -856,7 +733,7 @@ form .helptext {
 
 /* dashboard */
 .dashboard-cta {
-    font-size: 16px;
+    font-size: 1.1rem;
 }
 
 .dashboard-list {
