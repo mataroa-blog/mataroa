@@ -48,7 +48,7 @@ class User(AbstractUser):
     theme_zialucia = models.BooleanField(
         default=False,
         verbose_name="Theme Zia Lucia",
-        help_text="Enable/disable Zia Lucia theme with larger serif font.",
+        help_text="Enable/disable Zia Lucia theme with larger font size.",
     )
 
     redirect_domain = models.CharField(

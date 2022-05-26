@@ -19,14 +19,19 @@ def host_middleware(get_response):
         canonical_parts = settings.CANONICAL_HOST.split(".")
 
         if host == settings.CANONICAL_HOST:
-            # if on mataroa.blog, don't set request.subdomain, and just return
+            # this case is for mataroa.blog landing and dashboard pages
+            # * don't set request.subdomain
+            # * set theme if logged in
+            # * return immediately
+            if request.user.is_authenticated:
+                request.theme_zialucia = request.user.theme_zialucia
             return get_response(request)
         elif (
             len(host_parts) == 3
             and host_parts[1] == canonical_parts[0]  # should be "mataroa"
             and host_parts[2] == canonical_parts[1]  # should be "blog"
         ):
-            # if on <subdomain>.mataroa.blog:
+            # this case is for <subdomain>.mataroa.blog:
             # * set subdomain to given subdomain
             # * the lists indexes are different because CANONICAL_HOST has no subdomain
             # * also validation will happen inside views
