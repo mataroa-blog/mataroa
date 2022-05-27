@@ -10,7 +10,7 @@
         <a class="images-item-back" href="{% url 'image_list' %}">« all images</a>
         — Uploaded on <time datetime="{{ image.uploaded_at|date:'Y-m-d' }}">{{ image.uploaded_at|date:'F j, Y' }}</time>
         | <a href="{% url 'image_update' image.slug %}">Edit image</a>
-        | <a href="{% url 'image_delete' image.slug %}">Del</a>
+        | <a href="{% url 'image_delete' image.slug %}">Delete</a>
     </div>
 
     <p>
