@@ -1,75 +1,19 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}Atua Users{% endblock %}
+{% block title %}Atua {{ user_type }} Users{% endblock %}
 
 {% block content %}
 <main>
-    <h1>Atua Users</h1>
+    <h1>Atua {{ user_type }} Users ({{ user_list|length }})</h1>
 
     {% include "partials/atua_nav.html" %}
 
-    <ul>
-        <li><a href="#users-premium">Premium</a></li>
-        <li><a href="#users-new">New</a></li>
-        <li><a href="#users-grandfather">Grandfather</a></li>
-        <li><a href="#users-staff">Staff</a></li>
-        <li><a href="#users-active">Active</a></li>
-        <li><a href="#users-active-nonnew">Active non-new</a></li>
-    </ul>
-
-    <h2 id="users-premium">Premium Users ({{ premium_users|length }})</h2>
     <ol reversed>
-        {% for user in premium_users %}
+        {% for user in user_list %}
         <li>
             {% include "partials/atua_user.html" with user=user %}
         </li>
         {% endfor %}
     </ol>
-
-    <h2 id="users-new">New Users ({{ new_users|length }})</h2>
-    <ul>
-        {% for user in new_users %}
-        <li>
-            {% include "partials/atua_user.html" with user=user %}
-        </li>
-        {% endfor %}
-    </ul>
-
-    <h2 id="users-grandfather">Grandfather Users ({{ grandfather_users|length }})</h2>
-    <ul>
-        {% for user in grandfather_users %}
-        <li>
-            {% include "partials/atua_user.html" with user=user %}
-        </li>
-        {% endfor %}
-    </ul>
-
-    <h2 id="users-staff">Staff Users</h2>
-    <ul>
-        {% for user in users %}
-        {% if '@mataroa.blog' in user.email %}
-        <li>
-            {% include "partials/atua_user.html" with user=user %}
-        </li>
-        {% endif %}
-        {% endfor %}
-    </ul>
-
-    <h2 id="users-active">Active Users ({{ active_users|length }})</h2>
-    <ul>
-        {% for user in active_users %}
-        <li>
-            {% include "partials/atua_user.html" with user=user %}
-        </li>
-        {% endfor %}
-    </ul>
-
-    <h2 id="users-active-nonnew">Active non-new Users ({{ active_nonnew_users|length }})</h2>
-    <ul>
-        {% for user in active_nonnew_users %}
-        <li>
-            {% include "partials/atua_user.html" with user=user %}
-        </li>
-        {% endfor %}
-    </ul>
+</main>
 {% endblock %}

@@ -50,7 +50,7 @@
             {% endif %}
             {% if request.user.is_superuser %}
             | <a href="{% url 'admin:index' %}">Halsey</a>
-            | <a href="{% url 'atua_users' %}">Atua</a>
+            | <a href="{% url 'atua_users_premium' %}">Atua</a>
             {% endif %}
         </nav>
         {% endif %}

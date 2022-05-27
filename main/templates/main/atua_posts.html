@@ -1,34 +1,20 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}Atua Posts{% endblock %}
+{% block title %}Atua {{ post_type }} Posts{% endblock %}
 
 {% block content %}
 <main>
-    <h1>Atua Posts</h1>
+    <h1>Atua {{ post_type }} Posts ({{ post_list|length }})</h1>
 
     {% include "partials/atua_nav.html" %}
 
-    <ul>
-        <li><a href="#posts-new">New</a></li>
-        <li><a href="#posts-edited">Recently Edited</a></li>
-    </ul>
-
-    <h2 id="posts-new">New Posts ({{ new_posts|length }})</h2>
-    <ul>
-        {% for post in new_posts %}
+    <ol reversed>
+        {% for post in post_list %}
         <li>
             {% include "partials/atua_post.html" with post=post %}
         </li>
         {% endfor %}
-    </ul>
+    </ol>
 
-    <h2 id="posts-edited">Recently Edited Posts ({{ edited_posts|length }})</h2>
-    <ul>
-        {% for post in edited_posts %}
-        <li>
-            {% include "partials/atua_post.html" with post=post %}
-        </li>
-        {% endfor %}
-    </ul>
 </main>
 {% endblock %}

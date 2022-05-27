@@ -30,9 +30,24 @@ urlpatterns += [
 
 # atua pages
 urlpatterns += [
-    path("atua/users/", views.atua_users, name="atua_users"),
-    path("atua/posts/", views.atua_posts, name="atua_posts"),
-    path("atua/pages/", views.atua_pages, name="atua_pages"),
+    path("atua/users/premium/", views.atua_users_premium, name="atua_users_premium"),
+    path("atua/users/new/", views.atua_users_new, name="atua_users_new"),
+    path(
+        "atua/users/grandfather/",
+        views.atua_users_grandfather,
+        name="atua_users_grandfather",
+    ),
+    path("atua/users/staff/", views.atua_users_staff, name="atua_users_staff"),
+    path("atua/users/active/", views.atua_users_active, name="atua_users_active"),
+    path(
+        "atua/users/active-nonnew/",
+        views.atua_users_active_nonnew,
+        name="atua_users_active_nonnew",
+    ),
+    path("atua/posts/new/", views.atua_posts_new, name="atua_posts_new"),
+    path("atua/posts/recently/", views.atua_posts_recently, name="atua_posts_recently"),
+    path("atua/pages/new/", views.atua_pages_new, name="atua_pages_new"),
+    path("atua/pages/recently/", views.atua_pages_recently, name="atua_pages_recently"),
     path("atua/comments/new/", views.atua_comments_new, name="atua_comments_new"),
     path(
         "atua/comments/recent/", views.atua_comments_recent, name="atua_comments_recent"

@@ -1,8 +1,14 @@
-<p>
-    Atua:
-    <a href="{% url 'atua_users' %}">Users</a>
-    | <a href="{% url 'atua_posts' %}">Posts</a>
-    | <a href="{% url 'atua_pages' %}">Pages</a>
-    | <a href="{% url 'atua_comments_new' %}">Comments New</a>
-    | <a href="{% url 'atua_comments_recent' %}">Comments Recent</a>
-</p>
+<ul>
+    <li><a href="{% url 'atua_users_premium' %}">Users Premium</a></li>
+    <li><a href="{% url 'atua_users_new' %}">Users New</a></li>
+    <li><a href="{% url 'atua_users_grandfather' %}">Users Grandfather</a></li>
+    <li><a href="{% url 'atua_users_staff' %}">Users Staff</a></li>
+    <li><a href="{% url 'atua_users_active' %}">Users Active</a></li>
+    <li><a href="{% url 'atua_users_active_nonnew' %}">Users Active Nonnew</a></li>
+    <li><a href="{% url 'atua_posts_new' %}">Posts New</a></li>
+    <li><a href="{% url 'atua_posts_recently' %}">Posts Recently Edited</a></li>
+    <li><a href="{% url 'atua_pages_new' %}">Pages New</a></li>
+    <li><a href="{% url 'atua_pages_recently' %}">Pages Recently Edited</a></li>
+    <li><a href="{% url 'atua_comments_new' %}">Comments New</a></li>
+    <li><a href="{% url 'atua_comments_recent' %}">Comments Recent</a></li>
+</ul>

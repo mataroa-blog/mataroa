@@ -1083,7 +1083,64 @@ def guides_comments(request):
     )
 
 
-def atua_users(request):
+def atua_users_premium(request):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        raise Http404()
+
+    return render(
+        request,
+        "main/atua_users.html",
+        {
+            "user_type": "Premium",
+            "user_list": models.User.objects.filter(is_premium=True),
+        },
+    )
+
+
+def atua_users_new(request):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        raise Http404()
+
+    one_month_ago = timezone.now() - timedelta(days=30)
+    return render(
+        request,
+        "main/atua_users.html",
+        {
+            "user_type": "New",
+            "user_list": models.User.objects.filter(date_joined__gte=one_month_ago),
+        },
+    )
+
+
+def atua_users_grandfather(request):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        raise Http404()
+
+    return render(
+        request,
+        "main/atua_users.html",
+        {
+            "user_type": "Grandfather",
+            "user_list": models.User.objects.filter(is_grandfathered=True),
+        },
+    )
+
+
+def atua_users_staff(request):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        raise Http404()
+
+    return render(
+        request,
+        "main/atua_users.html",
+        {
+            "user_type": "Staff",
+            "user_list": models.User.objects.filter(email__contains="@mataroa.blog"),
+        },
+    )
+
+
+def atua_users_active(request):
     if not request.user.is_authenticated or not request.user.is_superuser:
         raise Http404()
 
@@ -1091,26 +1148,38 @@ def atua_users(request):
         updated_at__gte=datetime.now() - timedelta(days=30)
     ).select_related("owner")
     active_users = {post.owner for post in updated_posts}
-    one_month_ago = timezone.now() - timedelta(days=30)
-    active_nonnew_users = {
-        post.owner for post in updated_posts if post.owner.date_joined < one_month_ago
-    }
-
     return render(
         request,
         "main/atua_users.html",
         {
-            "users": models.User.objects.all(),
-            "new_users": models.User.objects.filter(date_joined__gte=one_month_ago),
-            "premium_users": models.User.objects.filter(is_premium=True),
-            "grandfather_users": models.User.objects.filter(is_grandfathered=True),
-            "active_users": active_users,
-            "active_nonnew_users": active_nonnew_users,
+            "user_type": "Active",
+            "user_list": active_users,
         },
     )
 
 
-def atua_posts(request):
+def atua_users_active_nonnew(request):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        raise Http404()
+
+    updated_posts = models.Post.objects.filter(
+        updated_at__gte=datetime.now() - timedelta(days=30)
+    ).select_related("owner")
+    one_month_ago = timezone.now() - timedelta(days=30)
+    active_nonnew_users = {
+        post.owner for post in updated_posts if post.owner.date_joined < one_month_ago
+    }
+    return render(
+        request,
+        "main/atua_users.html",
+        {
+            "user_type": "Active Nonnew",
+            "user_list": active_nonnew_users,
+        },
+    )
+
+
+def atua_posts_new(request):
     if not request.user.is_authenticated or not request.user.is_superuser:
         raise Http404()
 
@@ -1119,17 +1188,32 @@ def atua_posts(request):
         request,
         "main/atua_posts.html",
         {
-            "new_posts": models.Post.objects.filter(created_at__gte=one_month_ago)
+            "post_type": "New",
+            "post_list": models.Post.objects.filter(created_at__gte=one_month_ago)
             .select_related("owner")
             .order_by("-created_at"),
-            "edited_posts": models.Post.objects.filter(updated_at__gte=one_month_ago)
+        },
+    )
+
+
+def atua_posts_recently(request):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        raise Http404()
+
+    one_month_ago = timezone.now() - timedelta(days=30)
+    return render(
+        request,
+        "main/atua_posts.html",
+        {
+            "post_type": "Recently Edited",
+            "post_list": models.Post.objects.filter(updated_at__gte=one_month_ago)
             .select_related("owner")
             .order_by("-updated_at"),
         },
     )
 
 
-def atua_pages(request):
+def atua_pages_new(request):
     if not request.user.is_authenticated or not request.user.is_superuser:
         raise Http404()
 
@@ -1138,10 +1222,25 @@ def atua_pages(request):
         request,
         "main/atua_pages.html",
         {
-            "new_pages": models.Page.objects.filter(created_at__gte=one_month_ago)
+            "page_type": "New",
+            "page_list": models.Page.objects.filter(created_at__gte=one_month_ago)
             .select_related("owner")
             .order_by("-created_at"),
-            "edited_pages": models.Page.objects.filter(updated_at__gte=one_month_ago)
+        },
+    )
+
+
+def atua_pages_recently(request):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        raise Http404()
+
+    one_month_ago = timezone.now() - timedelta(days=30)
+    return render(
+        request,
+        "main/atua_pages.html",
+        {
+            "page_type": "Recently Edited",
+            "page_list": models.Page.objects.filter(updated_at__gte=one_month_ago)
             .select_related("owner")
             .order_by("-updated_at"),
         },
@@ -1154,9 +1253,10 @@ def atua_comments_new(request):
 
     return render(
         request,
-        "main/atua_comments_new.html",
+        "main/atua_comments.html",
         {
-            "new_comments": models.Comment.objects.filter(is_approved=False).order_by(
+            "comment_type": "New",
+            "comment_list": models.Comment.objects.filter(is_approved=False).order_by(
                 "-id"
             ),
         },
@@ -1170,9 +1270,10 @@ def atua_comments_recent(request):
     one_month_ago = timezone.now() - timedelta(days=30)
     return render(
         request,
-        "main/atua_comments_recent.html",
+        "main/atua_comments.html",
         {
-            "recent_comments": models.Comment.objects.filter(
+            "comment_type": "Recent",
+            "comment_list": models.Comment.objects.filter(
                 is_approved=True, created_at__lte=one_month_ago
             ).order_by("-id"),
         },

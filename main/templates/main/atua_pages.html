@@ -1,34 +1,20 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}Atua Pages{% endblock %}
+{% block title %}Atua {{ page_type }} Pages{% endblock %}
 
 {% block content %}
 <main>
-    <h1>Atua Pages</h1>
+    <h1>Atua {{ page_type }} Pages ({{ page_list|length }})</h1>
 
     {% include "partials/atua_nav.html" %}
 
-    <ul>
-        <li><a href="#pages-new">New</a></li>
-        <li><a href="#pages-edited">Recently Edited</a></li>
-    </ul>
-
-    <h2 id="pages-new">New Pages ({{ new_pages|length }})</h2>
-    <ul>
-        {% for page in new_pages %}
+    <ol reversed>
+        {% for page in page_list %}
         <li>
             {% include "partials/atua_page.html" with page=page %}
         </li>
         {% endfor %}
-    </ul>
+    </ol>
 
-    <h2 id="pages-edited">Recently Edited Pages ({{ new_pages|length }})</h2>
-    <ul>
-        {% for page in new_pages %}
-        <li>
-            {% include "partials/atua_page.html" with page=page %}
-        </li>
-        {% endfor %}
-    </ul>
 </main>
 {% endblock %}

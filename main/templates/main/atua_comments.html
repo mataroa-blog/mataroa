@@ -1,16 +1,15 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}Atua Comments New{% endblock %}
+{% block title %}Atua {{ comment_type }} Comments{% endblock %}
 
 {% block content %}
 <main>
-    <h1>Atua Comments New</h1>
+    <h1>Atua {{ comment_type }} Comments ({{ comment_list|length }})</h1>
 
     {% include "partials/atua_nav.html" %}
 
-    <h2>New Comments ({{ new_comments|length }})</h2>
-    <ul>
-        {% for comment in new_comments %}
+    <ol reversed>
+        {% for comment in comment_list %}
         <li>
             <a href="{% url 'admin:main_comment_change' comment.id %}">{{ comment.id }}</a>
             / <a href="{{ comment.post.owner.blog_absolute_url }}">{{ comment.post.owner }}</a>
@@ -26,7 +25,7 @@
         {% empty %}
         <li>(no comments)</li>
         {% endfor %}
-    </ul>
+    </ol>
 
 </main>
 {% endblock %}
