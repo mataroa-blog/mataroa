@@ -1256,9 +1256,9 @@ def atua_comments_new(request):
         "main/atua_comments.html",
         {
             "comment_type": "New",
-            "comment_list": models.Comment.objects.filter(is_approved=False).order_by(
-                "-id"
-            ),
+            "comment_list": models.Comment.objects.filter(is_approved=False)
+            .order_by("-id")
+            .select_related("post", "post__owner"),
         },
     )
 
@@ -1275,7 +1275,9 @@ def atua_comments_recent(request):
             "comment_type": "Recent",
             "comment_list": models.Comment.objects.filter(
                 is_approved=True, created_at__lte=one_month_ago
-            ).order_by("-id"),
+            )
+            .order_by("-id")
+            .select_related("post", "post__owner"),
         },
     )
 
