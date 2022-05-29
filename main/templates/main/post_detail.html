@@ -96,7 +96,7 @@
             {% if request.user.is_authenticated and request.subdomain == request.user.username %}
             (<a href="{% url 'comment_delete' post.slug comment.id %}" class="type-delete">del</a>)
             {% endif %}
-            <p class="comments-body">{{ comment.body }}</p>
+            <div class="comments-body">{{ comment.body_as_html|safe }}</div>
         </li>
         {% endfor %}
     </ol>

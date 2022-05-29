@@ -670,8 +670,11 @@ form .helptext {
 }
 
 .comments-body {
-    margin-top: 4px;
     margin-bottom: 16px;
+}
+
+.comments-body p {
+    margin-top: 4px;
 }
 
 /* page detail */

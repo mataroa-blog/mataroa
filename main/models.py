@@ -301,6 +301,10 @@ class Comment(models.Model):
     class Meta:
         ordering = ["created_at"]
 
+    @property
+    def body_as_html(self):
+        return util.md_to_html(self.body)
+
     def __str__(self):
         return self.created_at.strftime("%c") + ": " + self.post.title
 
