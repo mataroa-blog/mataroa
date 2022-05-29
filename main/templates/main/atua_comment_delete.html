@@ -21,7 +21,9 @@
         <br>On: <a href="{{ comment.post.get_absolute_url }}">{{ comment.post }}</a>
         <br>Name: {{ comment.name|default:"(no name)" }}
         <br>Email: {{ comment.email|default:"(no email)" }}
-        <br>Body: {{ comment.body }}
+    </p>
+    <p>
+        {{ comment.body }}
     </p>
 
     <p>
