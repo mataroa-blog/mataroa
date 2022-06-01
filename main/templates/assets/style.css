@@ -643,15 +643,15 @@ form .helptext {
 .posts-item-body p {
     {% if not request.theme_sansserif %}
     font-family: serif;
-    {% endif %}
     font-size: 1.1rem;
+    {% endif %}
 }
 
 .posts-item-body li {
     {% if not request.theme_sansserif %}
     font-family: serif;
-    {% endif %}
     font-size: 1.1rem;
+    {% endif %}
 }
 
 .posts-item-body img {
@@ -709,15 +709,15 @@ form .helptext {
 .pages-item-body p {
     {% if not request.theme_sansserif %}
     font-family: serif;
-    {% endif %}
     font-size: 1.1rem;
+    {% endif %}
 }
 
 .pages-item-body ul {
     {% if not request.theme_sansserif %}
     font-family: serif;
-    {% endif %}
     font-size: 1.1rem;
+    {% endif %}
 }
 
 .pages-item-body img {
