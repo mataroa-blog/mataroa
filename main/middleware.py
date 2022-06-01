@@ -25,6 +25,7 @@ def host_middleware(get_response):
             # * return immediately
             if request.user.is_authenticated:
                 request.theme_zialucia = request.user.theme_zialucia
+                request.theme_sansserif = request.user.theme_sansserif
             return get_response(request)
         elif (
             len(host_parts) == 3
@@ -43,6 +44,7 @@ def host_middleware(get_response):
 
                 # set theme
                 request.theme_zialucia = request.blog_user.theme_zialucia
+                request.theme_sansserif = request.blog_user.theme_sansserif
 
                 # redirect to custom and/or retired urls for cases:
                 # * logged out / anon users
@@ -77,6 +79,7 @@ def host_middleware(get_response):
             request.blog_user = models.User.objects.get(custom_domain=host)
             request.subdomain = request.blog_user.username
             request.theme_zialucia = request.blog_user.theme_zialucia
+            request.theme_sansserif = request.blog_user.theme_sansserif
 
             # if user has retired their mataroa blog (and keeps the custom domain)
             # redirect to new domain
