@@ -53,7 +53,7 @@ class User(AbstractUser):
     theme_sansserif = models.BooleanField(
         default=False,
         verbose_name="Theme Sans-serif",
-        help_text="Force sans-serif font in blog content.",
+        help_text="Use sans-serif font in blog content.",
     )
 
     redirect_domain = models.CharField(
