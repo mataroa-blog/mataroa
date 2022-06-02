@@ -149,6 +149,7 @@ ALLOWED_HTML_ELEMENTS = [
 # attributes allowed to exist inside the elements of the HTML of a markdown text
 ALLOWED_HTML_ATTRS = [
     "align",
+    "allowfullscreen",
     "alt",
     "class",
     "controls",
