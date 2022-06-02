@@ -10,6 +10,7 @@ let
 in
   pkgs.mkShell {
     buildInputs = [
+      shellcheck
       ncurses
       postgresql_12
       bashInteractive
