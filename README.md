@@ -181,6 +181,7 @@ The following tools are used for code linting and formatting:
 * [black](https://github.com/psf/black) for code formatting
 * [isort](https://github.com/pycqa/isort) for imports order consistency
 * [flake8](https://gitlab.com/pycqa/flake8) for code linting
+* [shellcheck](https://github.com/koalaman/shellcheck) for shell scripts
 
 To use:
 
