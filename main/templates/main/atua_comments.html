@@ -1,10 +1,10 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}Atua {{ comment_type }} Comments{% endblock %}
+{% block title %}Atua Comments{% endblock %}
 
 {% block content %}
 <main>
-    <h1>Atua {{ comment_type }} Comments ({{ comment_list|length }})</h1>
+    <h1>Atua Comments ({{ comment_list|length }})</h1>
 
     {% include "partials/atua_nav.html" %}
 
@@ -18,9 +18,6 @@
             <br>Name: {{ comment.name|default:"(no name)" }}
             <br>Email: {{ comment.email|default:"(no email)" }}
             <br>Body: {{ comment.body }}
-            <br><a href="{% url 'atua_comment_approve' comment.id %}" class="type-approve">Approve</a>
-            / <a href="{% url 'atua_comment_delete' comment.id %}" class="type-delete">Delete</a>
-            <br>&nbsp;
         </li>
         {% empty %}
         <li>(no comments)</li>

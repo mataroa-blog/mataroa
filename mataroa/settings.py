@@ -192,8 +192,3 @@ if not DEBUG:
 STRIPE_API_KEY = os.environ.get("STRIPE_API_KEY", "")
 STRIPE_PUBLIC_KEY = os.environ.get("STRIPE_PUBLIC_KEY", "")
 STRIPE_PRICE_ID = os.environ.get("STRIPE_PRICE_ID", "")
-
-
-# Comments
-
-COMMENTS_MODERATION = True
