@@ -19,24 +19,28 @@
             them.
         </li>
         <li>
-            Blog authors get an email notification when there is a new comment
-            in any of their posts.
+            Comments by blog authors are in bold font to make it clear that
+            they are from them.
+        </li>
+        <li>
+            No visitor comments are published immediately. They are all held
+            for moderation by the blog author.
+        </li>
+        <li>
+            Blog authors receive an email notification when there is a new
+            comment in any of their posts.
+        </li>
+        <li>
+            Blog authors have to approve a comment if they want it to be
+            public. By default, it remains hidden and not approved.
+        </li>
+        <li>
+            Blog authors can approve a comment either from each blog post
+            page or from the
+            <a href="{% url 'comment_pending' %}">Comments pending</a>
+            dashboard page.
         </li>
         <li>Commenters do not get any notification, in any case.</li>
-
-        {% if comments_moderation_on %}
-        <li>
-            All comments are held for moderation.
-        </li>
-        <li>
-            The comment review process can take up to 24 hours.
-        </li>
-        {% else %}
-        <li>
-            There is no moderation on comments. Unfortunately, if a blog gets
-            shared somewhere public very capable spammers will not hold back.
-        </li>
-        {% endif %}
     </ul>
 
 </main>
