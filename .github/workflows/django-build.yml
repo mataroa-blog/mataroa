@@ -42,5 +42,6 @@ jobs:
         DATABASE_URL: "postgres://postgres:postgres@localhost:5432/postgres"
     - name: Lint
       run: |
+        touch .envrc
         pip install -r requirements_dev.txt
         make lint

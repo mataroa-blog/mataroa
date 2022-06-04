@@ -15,7 +15,9 @@ tasks:
       python3 manage.py collectstatic --noinput
       python3 manage.py test
   - lint: |
+      sudo -u root apt install shellcheck
       cd mataroa
+      touch .envrc
       pip3 install -r requirements_dev.txt
       export PATH=/home/build/.local/bin:$PATH
       make lint
