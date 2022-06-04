@@ -301,7 +301,10 @@ class Comment(models.Model):
     body = models.TextField()
     name = models.CharField(max_length=150, default="Anonymous", null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
-    is_approved = models.BooleanField(default=True)
+    is_approved = models.BooleanField(default=False)
+    is_author = models.BooleanField(
+        default=False, help_text="True if logged in author has posted comment."
+    )
 
     class Meta:
         ordering = ["created_at"]
@@ -309,6 +312,10 @@ class Comment(models.Model):
     @property
     def body_as_html(self):
         return util.md_to_html(self.body)
+
+    def get_absolute_url(self):
+        path = reverse("post_detail", kwargs={"slug": self.post.slug})
+        return f"//{self.post.owner.username}.{settings.CANONICAL_HOST}{path}#comment-{self.id}"
 
     def __str__(self):
         return self.created_at.strftime("%c") + ": " + self.post.title
