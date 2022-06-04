@@ -1,0 +1,35 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Comments pending — {{ request.user.username }} at Mataroa{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Comments pending ({{ comment_list|length }})</h1>
+
+    <ul>
+        {% for comment in comment_list %}
+        <li>
+            Published at {{ comment.created_at }}
+
+            <br>On <a href="{{ comment.post.get_absolute_url }}">{{ comment.post }}</a>
+
+            <br>By {{ comment.name|default:"<em>(no name)</em>" }}
+            / {{ comment.email|default:"<em>(no email)</em>" }}
+
+            <br>Comment:
+            {{ comment.body_as_html|safe }}
+
+            <a href="{% url 'comment_approve' comment.post.slug comment.id %}" class="type-approve">Approve</a>
+            |
+            <a href="{% url 'comment_delete' comment.post.slug comment.id %}" class="type-delete">
+                Delete
+            </a>
+            <br>&nbsp;
+        </li>
+        {% empty %}
+        <li>(no comments)</li>
+        {% endfor %}
+    </ol>
+
+</main>
+{% endblock %}

@@ -48,20 +48,7 @@ urlpatterns += [
     path("atua/posts/recently/", views.atua_posts_recently, name="atua_posts_recently"),
     path("atua/pages/new/", views.atua_pages_new, name="atua_pages_new"),
     path("atua/pages/recently/", views.atua_pages_recently, name="atua_pages_recently"),
-    path("atua/comments/new/", views.atua_comments_new, name="atua_comments_new"),
-    path(
-        "atua/comments/recent/", views.atua_comments_recent, name="atua_comments_recent"
-    ),
-    path(
-        "atua/comments/<int:pk>/approve/",
-        views.AtuaCommentApprove.as_view(),
-        name="atua_comment_approve",
-    ),
-    path(
-        "atua/comments/<int:pk>/delete/",
-        views.AtuaCommentDelete.as_view(),
-        name="atua_comment_delete",
-    ),
+    path("atua/comments/", views.atua_comments, name="atua_comments"),
 ]
 
 # blog posts
@@ -108,6 +95,12 @@ urlpatterns += [
 
 # comments
 urlpatterns += [
+    path("comments/pending/", views.CommentPending.as_view(), name="comment_pending"),
+    path(
+        "blog/<slug:slug>/comments/create/author/",
+        views.CommentCreateAuthor.as_view(),
+        name="comment_create_author",
+    ),
     path(
         "blog/<slug:slug>/comments/create/",
         views.CommentCreate.as_view(),
@@ -117,6 +110,11 @@ urlpatterns += [
         "blog/<slug:slug>/comments/<int:pk>/delete/",
         views.CommentDelete.as_view(),
         name="comment_delete",
+    ),
+    path(
+        "blog/<slug:slug>/comments/<int:pk>/approve/",
+        views.CommentApprove.as_view(),
+        name="comment_approve",
     ),
 ]
 

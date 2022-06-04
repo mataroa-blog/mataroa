@@ -1,0 +1,23 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Comment approve — {{ request.user.username }} at Mataroa{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Comment approve</h1>
+
+    <p>
+        Published at {{ comment.created_at }}
+        <br>On <a href="{{ comment.post.get_absolute_url }}">{{ comment.post }}</a>
+        <br>By {{ comment.name|default:"<em>(no name)</em>" }}
+        /
+        {{ comment.email|default:"<em>(no email)</em>" }}
+    </p>
+    <form method="post">
+        <input type="checkbox" name="is_approved" checked hidden>
+        {% csrf_token %}
+        <input type="submit" value="Approve">
+    </form>
+    {{ comment.body_as_html|safe }}
+</main>
+{% endblock %}
