@@ -11,6 +11,14 @@
 
     <strong>Content</strong>
     <p class="dashboard-list">
+        {% if request.user.comments_on %}
+        <a href="{% url 'comment_pending' %}">
+            Comments pending
+            ({{ comments_pending_count }})
+        </a>
+        <br>
+        {% endif %}
+
         <a href="{% url 'image_list' %}">Images</a>
         <br><a href="{% url 'page_list' %}">Pages</a>
 
