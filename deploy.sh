@@ -14,7 +14,7 @@ set +e
 DID_WE_START_PG=0
 PGDATA=postgres-data/ pg_ctl status | grep 'is running'
 # if pg is running, grep will succeed, which means exit code 0
-if [ ${PIPESTATUS[1]} -eq 1 ]; then
+if [ "${PIPESTATUS[1]}" -eq 1 ]; then
     PGDATA=postgres-data/ pg_ctl start
     DID_WE_START_PG=1
 fi
@@ -39,11 +39,11 @@ git push -v origin master
 git push -v github master
 
 # pull on server and reload
-ssh roa@95.217.177.163 'cd mataroa \
-    && git pull \
-    && source venv/bin/activate \
-    && pip install -U pip \
-    && pip install -r requirements.txt \
-    && python manage.py collectstatic --noinput \
-    && source .envrc && python manage.py migrate \
-    && uwsgi --reload mataroa.pid'
+ssh roa@95.217.177.163 'cd mataroa ' \
+    '&& git pull ' \
+    '&& source venv/bin/activate ' \
+    '&& pip install -U pip ' \
+    '&& pip install -r requirements.txt ' \
+    '&& python manage.py collectstatic --noinput ' \
+    '&& source .envrc && python manage.py migrate ' \
+    '&& uwsgi --reload mataroa.pid'
