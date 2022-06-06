@@ -175,6 +175,7 @@ ALLOWED_CSS_STYLES = [
     "color",
     "display",
     "font-family",
+    "font-size",
     "height",
     "margin",
     "padding",
