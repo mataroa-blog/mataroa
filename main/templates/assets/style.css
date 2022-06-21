@@ -713,7 +713,7 @@ form .helptext {
     {% endif %}
 }
 
-.pages-item-body ul {
+.pages-item-body li {
     {% if not request.theme_sansserif %}
     font-family: serif;
     font-size: 1.1rem;
