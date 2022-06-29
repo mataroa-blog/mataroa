@@ -1,77 +1,71 @@
-/* normalize.css v8.0.1 */
+/* reset */
 html {
+    /* fix line height in all browsers */
     line-height: 1.15;
+    /* prevent adjustments of font size after orientation changes in iOS */
     -webkit-text-size-adjust: 100%;
 }
 
 body {
+    /* remove margin in all browsers */
     margin: 0;
 }
 
-main {
-    display: block;
-}
-
-h1 {
-    font-size: 2em;
-    margin: 0.67em 0;
-}
-
 hr {
-    box-sizing: content-box;
+    /* fix height in Firefox */
     height: 0;
-    overflow: visible;
-}
-
-pre {
-    font-family: monospace, monospace;
-    font-size: 1em;
-}
-
-a {
-    background-color: transparent;
+    /* fix inheritance of border color in Firefox */
+    color: inherit;
 }
 
 abbr[title] {
-    border-bottom: none;
-    text-decoration: underline;
+    /* fix text decoration in Chrome, Edge, Safari. */
     text-decoration: underline dotted;
 }
 
 b,
 strong {
+    /* fix font weight in Edge and Safari */
     font-weight: bolder;
 }
 
 code,
 kbd,
-samp {
-    font-family: monospace, monospace;
+samp,
+pre {
+    /* improve consistency of default fonts in all browsers */
+    font-family: monospace;
+    /* correct the odd 'em' font sizing in all browsers */
     font-size: 1em;
 }
 
 small {
+    /* fix font size in all browsers */
     font-size: 80%;
 }
 
+/* prevent sub and sup from affecting the line height in all browsers */
 sub,
 sup {
-    font-size: 75%;
-    line-height: 0;
-    position: relative;
-    vertical-align: baseline;
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
 }
 
 sub {
-    bottom: -0.25em;
+  bottom: -0.25em;
 }
 
 sup {
-    top: -0.5em;
+  top: -0.5em;
 }
 
-img {
-    border-style: none;
+table {
+    /* remove text indentation from table contents in Chrome and Safari */
+    text-indent: 0;
+    /* fix table border color inheritance in Chrome and Safari */
+    border-color: inherit;
 }
 
 button,
@@ -79,104 +73,77 @@ input,
 optgroup,
 select,
 textarea {
+    /* fix font styles in all browsers */
     font-family: inherit;
     font-size: 100%;
     line-height: 1.15;
+    /* remove margin in Firefox and Safari */
     margin: 0;
 }
 
 button,
-input {
-    overflow: visible;
-}
-
-button,
 select {
+    /* remove inheritance of text transform in Edge and Firefox */
     text-transform: none;
 }
 
 button,
-[type="button"],
-[type="reset"],
-[type="submit"] {
+[type='button'],
+[type='reset'],
+[type='submit'] {
+    /* fix inability to style clickable types in iOS and Safari */
     -webkit-appearance: button;
 }
 
-button::-moz-focus-inner,
-[type="button"]::-moz-focus-inner,
-[type="reset"]::-moz-focus-inner,
-[type="submit"]::-moz-focus-inner {
+/* remove inner border and padding in Firefox */
+::-moz-focus-inner {
     border-style: none;
     padding: 0;
 }
 
-button:-moz-focusring,
-[type="button"]:-moz-focusring,
-[type="reset"]:-moz-focusring,
-[type="submit"]:-moz-focusring {
+:-moz-focusring {
+    /* restore focus styles unset by the previous rule */
     outline: 1px dotted ButtonText;
 }
 
-fieldset {
-    padding: 0.35em 0.75em 0.625em;
-}
-
-legend {
-    box-sizing: border-box;
-    color: inherit;
-    display: table;
-    max-width: 100%;
-    padding: 0;
-    white-space: normal;
+:-moz-ui-invalid {
+    /* remove additional ':invalid' styles in Firefox */
+    box-shadow: none;
 }
 
 progress {
+    /* fix vertical alignment in Chrome and Firefox */
     vertical-align: baseline;
 }
 
-textarea {
-    overflow: auto;
-}
-
-[type="checkbox"],
-[type="radio"] {
-    box-sizing: border-box;
-    padding: 0;
-}
-
-[type="number"]::-webkit-inner-spin-button,
-[type="number"]::-webkit-outer-spin-button {
+::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+    /* fix cursor style of increment and decrement buttons in Safari */
     height: auto;
 }
 
-[type="search"] {
+[type='search'] {
+    /* fix appearance in Chrome and Safari */
     -webkit-appearance: textfield;
+    /* fix outline in Safari */
     outline-offset: -2px;
 }
 
-[type="search"]::-webkit-search-decoration {
+::-webkit-search-decoration {
+    /* remove inner padding in Chrome and Safari on macOS */
     -webkit-appearance: none;
 }
 
 ::-webkit-file-upload-button {
+    /* fix inability to style clickable types in iOS and Safari */
     -webkit-appearance: button;
+    /* change font properties to 'inherit' in Safari. */
     font: inherit;
 }
 
-details {
-    display: block;
-}
-
 summary {
+    /* fix display in Chrome and Safari */
     display: list-item;
-}
-
-template {
-    display: none;
-}
-
-[hidden] {
-    display: none;
 }
 
 /* general */
