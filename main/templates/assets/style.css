@@ -181,6 +181,12 @@ body {
     font-family: sans-serif;
     line-height: 1.5;
 }
+@media (max-width: 34rem) {
+    html,
+    body {
+        font-size: 18px;
+    }
+}
 @media (prefers-color-scheme: dark) {
     body {
         color: #fff;
