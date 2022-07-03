@@ -38,7 +38,8 @@ def get_post_slug(post_title, owner, post=None):
 
     # in case of post_title such as این متن است
     if not slug:
-        slug = str(uuid.uuid4())[:8]
+        generated_uuid = str(uuid.uuid4())[:8]
+        slug = f"{generated_uuid[:3]}-{generated_uuid[3:5]}-{generated_uuid[5:]}"
 
     # if post is not None, then this is an update op
     if post is not None:
