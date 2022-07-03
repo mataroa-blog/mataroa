@@ -184,7 +184,8 @@ body {
 @media (max-width: 34rem) {
     html,
     body {
-        font-size: 18px;
+        /* mobile base font size remains 16px whether zialucia on or off */
+        font-size: 16px;
     }
 }
 @media (prefers-color-scheme: dark) {
