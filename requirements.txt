@@ -6,7 +6,7 @@
 #
 asgiref==3.5.2
     # via django
-bleach==5.0.1
+bleach[css]==5.0.1
     # via -r requirements.in
 certifi==2022.6.15
     # via requests
@@ -32,11 +32,15 @@ sqlparse==0.4.2
     # via django
 stripe==3.5.0
     # via -r requirements.in
+tinycss2==1.1.1
+    # via bleach
 urllib3==1.26.10
     # via requests
 uwsgi==2.0.20
     # via -r requirements.in
 webencodings==0.5.1
-    # via bleach
+    # via
+    #   bleach
+    #   tinycss2
 zipp==3.8.0
     # via importlib-metadata

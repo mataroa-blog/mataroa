@@ -3,5 +3,5 @@ psycopg2-binary
 uwsgi
 markdown
 pygments
-bleach
+bleach[css]
 stripe

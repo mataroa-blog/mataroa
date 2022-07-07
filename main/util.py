@@ -4,6 +4,7 @@ import uuid
 import bleach
 import markdown
 import pygments
+from bleach.css_sanitizer import CSSSanitizer
 from django.conf import settings
 from django.utils.text import slugify
 from pygments.formatters import HtmlFormatter
@@ -127,11 +128,12 @@ def clean_html(dirty_html, strip_tags=False):
     if strip_tags:
         return bleach.clean(dirty_html, strip=True)
 
+    css_sanitizer = CSSSanitizer(allowed_css_properties=denylist.ALLOWED_CSS_STYLES)
     return bleach.clean(
         dirty_html,
         tags=denylist.ALLOWED_HTML_ELEMENTS,
         attributes=denylist.ALLOWED_HTML_ATTRS,
-        styles=denylist.ALLOWED_CSS_STYLES,
+        css_sanitizer=css_sanitizer,
     )
 
 
