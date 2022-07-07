@@ -161,6 +161,7 @@ ALLOWED_HTML_ATTRS = [
     "seamless",
     "span",
     "src",
+    "start",
     "style",
     "title",
     "width",
