@@ -27,6 +27,35 @@
         <input type="submit" value="Save">
     </form>
 
+    <p>
+        <br>
+        Once you click Save:
+    </p>
+    <ol>
+        <li>
+            Your card details will be sent to Stripe (payment processor).
+        </li>
+        <li>
+            We will charge your card immediately, through Stripe.
+        </li>
+        <li>
+            We will store your card within Stripe, so that we can charge you
+            next year.
+        </li>
+        <li>
+            You will be able to cancel your subscription immediately as well,
+            should you want to. You can cancel your subscription at any point,
+            24/7/365, from this billing dashboard with one click.
+        </li>
+        <li>
+            You can also get a refund, no questions asked.
+        </li>
+        <li>
+            All terms of service can be found in our
+            <a href="{% url 'modus' %}">Modus Operandi</a>
+            page.
+        </li>
+    </ol>
 </main>
 {% endblock %}
 
