@@ -189,3 +189,15 @@ class ExportRecordAdmin(admin.ModelAdmin):
     list_display_links = ("id", "name")
 
     ordering = ["-id"]
+
+
+@admin.register(models.Snapshot)
+class SnapshotAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "title",
+        "owner",
+    )
+    list_display_links = ("id", "title")
+
+    ordering = ["-id"]

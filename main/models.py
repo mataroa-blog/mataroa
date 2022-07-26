@@ -344,6 +344,11 @@ class Notification(models.Model):
 
 
 class NotificationRecord(models.Model):
+    """
+    NotificationRecord model is to keep track of all notifications
+    for the newsletter feature.
+    """
+
     notification = models.ForeignKey(Notification, on_delete=models.SET_NULL, null=True)
     post = models.ForeignKey(Post, on_delete=models.SET_NULL, null=True)
     sent_at = models.DateTimeField(default=timezone.now, null=True)
@@ -363,6 +368,8 @@ class NotificationRecord(models.Model):
 
 
 class ExportRecord(models.Model):
+    """ExportRecord model is to keep track of each export email."""
+
     name = models.CharField(max_length=150)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     sent_at = models.DateTimeField(auto_now_add=True)
@@ -372,3 +379,18 @@ class ExportRecord(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Snapshot(models.Model):
+    """Snapshot model is used to keep track of all versions of Posts."""
+
+    title = models.CharField(max_length=300)
+    body = models.TextField(blank=True, null=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return self.title
