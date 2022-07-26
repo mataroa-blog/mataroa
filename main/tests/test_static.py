@@ -3,8 +3,8 @@ from django.urls import reverse
 
 
 class StaticTestCase(TestCase):
-    def test_modus(self):
-        response = self.client.get(reverse("modus"))
+    def test_operandi(self):
+        response = self.client.get(reverse("operandi"))
         self.assertEqual(response.status_code, 200)
 
     def test_privacy(self):

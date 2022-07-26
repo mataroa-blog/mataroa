@@ -1134,8 +1134,8 @@ def comparisons(request):
     return render(request, "main/comparisons.html")
 
 
-def modus(request):
-    return render(request, "main/modus.html")
+def operandi(request):
+    return render(request, "main/operandi.html")
 
 
 def transparency(request):

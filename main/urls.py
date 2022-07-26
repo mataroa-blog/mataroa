@@ -10,7 +10,7 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("blog/", views.blog_index, name="blog_index"),
     path("dashboard/", views.dashboard, name="dashboard"),
-    path("modus/operandi/", views.modus, name="modus"),
+    path("modus/operandi/", views.operandi, name="operandi"),
     path("modus/privacy/", views.privacy, name="privacy"),
     path("modus/transparency/", views.transparency, name="transparency"),
     path("guides/markdown/", views.guides_markdown, name="guides_markdown"),
@@ -53,9 +53,13 @@ urlpatterns += [
 
 # blog posts and post snapshots
 urlpatterns += [
-    path("post-backups/create/", views.SnapshotCreate.as_view(), name="snapshot_create"),
+    path(
+        "post-backups/create/", views.SnapshotCreate.as_view(), name="snapshot_create"
+    ),
     path("post-backups/", views.SnapshotList.as_view(), name="snapshot_list"),
-    path("post-backups/<int:pk>/", views.SnapshotDetail.as_view(), name="snapshot_detail"),
+    path(
+        "post-backups/<int:pk>/", views.SnapshotDetail.as_view(), name="snapshot_detail"
+    ),
     path("new/post/", views.PostCreate.as_view(), name="post_create"),
     path("blog/<slug:slug>/", views.PostDetail.as_view(), name="post_detail"),
     path("posts/<slug:slug>/", views.post_detail_redir, name="post_detail_redir_a"),
