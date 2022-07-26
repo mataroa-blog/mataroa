@@ -53,10 +53,10 @@ urlpatterns += [
 
 # blog posts and post snapshots
 urlpatterns += [
-    path("blog/create/", views.PostCreate.as_view(), name="post_create"),
     path("snapshots/create/", views.SnapshotCreate.as_view(), name="snapshot_create"),
     path("snapshots/", views.SnapshotList.as_view(), name="snapshot_list"),
     path("snapshots/<int:pk>/", views.SnapshotDetail.as_view(), name="snapshot_detail"),
+    path("new/post/", views.PostCreate.as_view(), name="post_create"),
     path("blog/<slug:slug>/", views.PostDetail.as_view(), name="post_detail"),
     path("posts/<slug:slug>/", views.post_detail_redir, name="post_detail_redir_a"),
     path("post/<slug:slug>/", views.post_detail_redir, name="post_detail_redir_b"),
@@ -211,7 +211,7 @@ urlpatterns += [
 # pages - needs to be last due to <slug>
 urlpatterns += [
     path("pages/", views.PageList.as_view(), name="page_list"),
-    path("pages/create/", views.PageCreate.as_view(), name="page_create"),
+    path("new/page/", views.PageCreate.as_view(), name="page_create"),
     path("<slug:slug>/", views.PageDetail.as_view(), name="page_detail"),
     path("<slug:slug>/edit/", views.PageUpdate.as_view(), name="page_update"),
     path("<slug:slug>/delete/", views.PageDelete.as_view(), name="page_delete"),
