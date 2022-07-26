@@ -1,16 +1,16 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}Post Snapshot #{{ object.id }} — {{ request.user.username }} at Mataroa{% endblock %}
+{% block title %}Post Backup #{{ object.id }} — {{ request.user.username }} at Mataroa{% endblock %}
 
 {% block content %}
 <main>
-    <h1>Post Snapshot #{{ object.id }}</h1>
+    <h1>Post Backup #{{ object.id }}</h1>
     <p>
         Saved at
         <time datetime="{{ object.created_at|date:'c' }}">{{ object.created_at|date:"Y-m-d H:i:s" }}</time>.
     </p>
     <p>
-        This is a snapshot of a post, saved while editing it. No changes here
+        This is a backup of a post, saved while editing it. No changes here
         will be saved anywhere. Its only purpose is to be read or copied.
     </p>
 
