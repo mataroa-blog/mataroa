@@ -1,0 +1,25 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Post Snapshots — {{ request.user.username }} at Mataroa{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Post Snapshots</h1>
+    <p>
+        These are the latest snapshots automatically saved, across all posts.
+        Snapshots are saved automatically, every few seconds, from the post
+        create and post edit pages.
+    </p>
+
+    {% for snapshot in snapshot_list %}
+    <div>
+        {{ snapshot.created_at|date:"Y-m-d H:i:s" }}:
+        <a href="{% url 'snapshot_detail' snapshot.id %}">
+            #{{ snapshot.id }}</a>
+        {{ snapshot.title }}
+    </div>
+    {% empty %}
+    <div><em>(none)</em></div>
+    {% endfor %}
+</main>
+{% endblock %}

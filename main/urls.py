@@ -51,9 +51,12 @@ urlpatterns += [
     path("atua/comments/", views.atua_comments, name="atua_comments"),
 ]
 
-# blog posts
+# blog posts and post snapshots
 urlpatterns += [
     path("blog/create/", views.PostCreate.as_view(), name="post_create"),
+    path("snapshots/create/", views.SnapshotCreate.as_view(), name="snapshot_create"),
+    path("snapshots/", views.SnapshotList.as_view(), name="snapshot_list"),
+    path("snapshots/<int:pk>/", views.SnapshotDetail.as_view(), name="snapshot_detail"),
     path("blog/<slug:slug>/", views.PostDetail.as_view(), name="post_detail"),
     path("posts/<slug:slug>/", views.post_detail_redir, name="post_detail_redir_a"),
     path("post/<slug:slug>/", views.post_detail_redir, name="post_detail_redir_b"),

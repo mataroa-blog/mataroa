@@ -1,0 +1,35 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Post Snapshot #{{ object.id }} — {{ request.user.username }} at Mataroa{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Post Snapshot #{{ object.id }}</h1>
+    <p>
+        Saved at
+        <time datetime="{{ object.created_at|date:'c' }}">{{ object.created_at|date:"Y-m-d H:i:s" }}</time>.
+    </p>
+    <p>
+        This is a snapshot of a post, saved while editing it. No changes here
+        will be saved anywhere. Its only purpose is to be read or copied.
+    </p>
+
+    <p>
+        <label for="id_title">Title:</label>
+        <input type="text" id="id_title" maxlength="300" value="{{ object.title }}">
+    </p>
+    <p>
+        <label for="id_body">Content:</label>
+        <textarea
+            id="id_body"
+            cols="60"
+            rows="20"
+            style="min-height: 200px; height: calc(100vh - 450px);"
+        >{{ object.body }}</textarea>
+    </p>
+
+    <p>
+        <a href="{% url 'snapshot_list' %}">« Post Snapshots</a>
+    </p>
+</main>
+{% endblock %}
