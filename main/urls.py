@@ -149,7 +149,7 @@ urlpatterns += [
 
 # blog import, export, webring
 urlpatterns += [
-    path("webring/", views.WebringUpdate.as_view(), name="blog_webring"),
+    path("webring/", views.WebringUpdate.as_view(), name="webring"),
     path("import/", views.BlogImport.as_view(), name="blog_import"),
     path("export/", views_export.export_index, name="export_index"),
     path(

@@ -789,7 +789,7 @@ class PageDelete(LoginRequiredMixin, DeleteView):
         return super().dispatch(request, *args, **kwargs)
 
 
-class WebringUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class WebringUpdate(SuccessMessageMixin, UpdateView):
     model = models.User
     fields = [
         "webring_name",
@@ -802,7 +802,8 @@ class WebringUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_url = reverse_lazy("dashboard")
 
     def get_object(self):
-        return models.User.objects.get(pk=self.request.user.id)
+        if self.request.user.is_authenticated:
+            return models.User.objects.get(pk=self.request.user.id)
 
 
 class AnalyticList(LoginRequiredMixin, TemplateView):

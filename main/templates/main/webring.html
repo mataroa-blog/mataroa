@@ -1,26 +1,34 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}Webring integration — Mataroa{% endblock %}
+{% block title %}Webring Integration — Mataroa{% endblock %}
 
 {% block content %}
 <main>
-    <h1>Webring integration</h1>
+    <h1>Webring Integration</h1>
+
     <p>
-        A <a href="https://en.wikipedia.org/wiki/Webring">webring</a> is a list
-        of website links with a common theme in a circular structure.
+        A <a href="https://en.wikipedia.org/wiki/Webring">webring</a> is a
+        circular list of website links with a common theme.
     </p>
     <p>
-        Below, one can define a name for one’s webring as well as (optionally)
-        an informational URL for the webring. The last two fields are the previous
-        and next websites in the webring.
+        On Mataroa, one can add three links on their blog that will appear
+        at the bottom of every post/page.
     </p>
     <p>
-        All of these will appear in the footer of one’s blog across all pages.
+        These links are:
     </p>
+    <ol>
+        <li>the previous website in the circular list</li>
+        <li>the next website in the circular list</li>
+        <li>an informational website about the webring</li>
+    </ol>
+
+    {% if request.user.is_authenticated %}
     <form method="post">
         {{ form.as_p }}
         {% csrf_token %}
         <input type="submit" value="Save">
     </form>
+    {% endif %}
 </main>
 {% endblock %}
