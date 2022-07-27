@@ -30,7 +30,7 @@ function saveLogEntry() {
         }
     };
 
-    xhr.open('POST', '/snapshots/create/');
+    xhr.open('POST', '/post-backups/create/');
     xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
     xhr.send(formData);
 }
