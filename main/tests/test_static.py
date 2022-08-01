@@ -7,10 +7,6 @@ class StaticTestCase(TestCase):
         response = self.client.get(reverse("operandi"))
         self.assertEqual(response.status_code, 200)
 
-    def test_privacy(self):
-        response = self.client.get(reverse("privacy"))
-        self.assertEqual(response.status_code, 200)
-
     def test_transparency(self):
         response = self.client.get(reverse("transparency"))
         self.assertEqual(response.status_code, 200)

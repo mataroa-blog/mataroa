@@ -1218,10 +1218,6 @@ def sitemap(request):
     return DjSitemapView(request, sitemaps)
 
 
-def privacy(request):
-    return render(request, "main/privacy.html")
-
-
 def guides_markdown(request):
     return render(request, "main/guides_markdown.html")
 
