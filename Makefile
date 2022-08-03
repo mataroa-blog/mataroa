@@ -3,13 +3,13 @@ all: format lint cov
 
 .PHONY: format
 format:
-	@echo Formating Python code
+	$(info Formating Python code)
 	black --exclude '/(\.direnv|\.pyenv)/' .
 	isort --skip-glob .pyenv --profile black .
 
 .PHONY: lint
 lint:
-	@echo Linting Python code
+	$(info Running Python linters)
 	flake8 --exclude=.pyenv/,.direnv/ --ignore=E203,E501,W503
 	isort --check-only --skip-glob .pyenv --profile black .
 	black --check --exclude '/(\.direnv|\.pyenv)/' .
@@ -17,11 +17,13 @@ lint:
 
 .PHONY: cov
 cov:
+	$(info Running test suite)
 	coverage run --source='.' --omit '.pyenv/*' manage.py test
 	coverage report -m
 
 .PHONY: pginit
 pginit:
+	$(info Initialising PostgreSQL database files)
 	PGDATA=postgres-data/ pg_ctl init
 	PGDATA=postgres-data/ pg_ctl start
 	createuser mataroa
@@ -30,8 +32,10 @@ pginit:
 
 .PHONY: pgstart
 pgstart:
+	$(info Start PostgreSQL)
 	PGDATA=postgres-data/ pg_ctl start
 
 .PHONY: pgstop
 pgstop:
+	$(info Stop PostgreSQL)
 	PGDATA=postgres-data/ pg_ctl stop
