@@ -1,4 +1,4 @@
-name: Django CI
+name: Django Build
 
 on:
   push:
@@ -43,5 +43,6 @@ jobs:
     - name: Lint
       run: |
         touch .envrc
+        pip install -r requirements.txt
         pip install -r requirements_dev.txt
         make lint
