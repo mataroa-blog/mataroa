@@ -1,4 +1,3 @@
--r requirements.txt
 pip-tools
 isort
 flake8
