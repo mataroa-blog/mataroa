@@ -54,6 +54,8 @@ snap install core && snap refresh core
 snap install --classic certbot
 snap set certbot trust-plugin-with-root=ok
 certbot certonly -d mataroa.blog,*.mataroa.blog -m person@example.com --agree-tos
+
+caddy reload --config /home/roa/mataroa/Caddyfile --force
 ```
 
 ### DNSimple plugin for Let's Encrypt
