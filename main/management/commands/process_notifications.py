@@ -102,6 +102,14 @@ class Command(BaseCommand):
                 record.delete()
                 continue
 
+            # don't send, if there is no notification object attached
+            if record.notification is None:
+                # also delete record
+                msg = f"Delete as notifications off: '{record.post.title}' as there is no record.notification attached."
+                self.stdout.write(self.style.NOTICE(msg))
+                record.delete()
+                continue
+
             # don't send, if email has unsubscribed since records were enqueued
             if not record.notification.is_active:
                 # also delete record
