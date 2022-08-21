@@ -52,7 +52,4 @@ function initAutoSave() {
 }
 
 // init
-// enable only for superusers for now
-{% if request.user.is_superuser %}
 initAutoSave();
-{% endif %}

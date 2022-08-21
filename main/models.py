@@ -86,6 +86,11 @@ class User(AbstractUser):
         help_text="Enable/disable auto emailing of account exports every month.",
         verbose_name="Mail export",
     )
+    post_backups_on = models.BooleanField(
+        default=False,
+        help_text="Enable/disable automatic post backups.",
+        verbose_name="Post Backups On",
+    )
     export_unsubscribe_key = models.UUIDField(default=uuid.uuid4, unique=True)
 
     # webring related

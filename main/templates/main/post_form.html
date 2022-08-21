@@ -82,6 +82,9 @@
 <script>
     {% include "assets/drag-and-drop-upload.js" %}
     {% include "assets/make-draft-button.js" %}
+
+    {% if request.user.post_backups_on %}
     {% include "assets/save-snapshot.js" %}
+    {% endif %}
 </script>
 {% endblock %}

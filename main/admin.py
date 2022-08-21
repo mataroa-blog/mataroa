@@ -47,6 +47,7 @@ class UserAdmin(DjUserAdmin):
                     "comments_on",
                     "notifications_on",
                     "mail_export_on",
+                    "post_backups_on",
                     "export_unsubscribe_key",
                     "webring_name",
                     "webring_prev_url",

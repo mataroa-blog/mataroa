@@ -27,7 +27,7 @@
         {% endif %}
 
         <br><a href="{% url 'analytic_list' %}">Analytics</a>
-        {% if request.user.is_superuser %}
+        {% if request.user.post_backups_on %}
         <br><a href="{% url 'snapshot_list' %}">Post Backups</a>
         {% endif %}
     </p>
