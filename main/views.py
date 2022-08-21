@@ -1138,6 +1138,10 @@ def operandi(request):
     return render(request, "main/operandi.html")
 
 
+def privacy_redir(request):
+    return redirect("operandi", permanent=True)
+
+
 def transparency(request):
     monthly_revenue = models.User.objects.filter(is_premium=True).count() * 9 / 12
     published_posts = models.Post.objects.filter(published_at__isnull=False).count()
