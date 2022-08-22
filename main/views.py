@@ -360,6 +360,11 @@ class SnapshotCreate(LoginRequiredMixin, CreateView):
 class SnapshotList(LoginRequiredMixin, ListView):
     model = models.Snapshot
 
+    def get_queryset(self):
+        return models.Snapshot.objects.filter(
+            owner=self.request.user,
+        )
+
 
 class SnapshotDetail(LoginRequiredMixin, DetailView):
     model = models.Snapshot
