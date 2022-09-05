@@ -1,0 +1,20 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Mod {{ post_type }} Posts{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Mod {{ post_type }} Posts ({{ post_list|length }})</h1>
+
+    {% include "partials/mod_nav.html" %}
+
+    <ol reversed>
+        {% for post in post_list %}
+        <li>
+            {% include "partials/mod_post.html" with post=post %}
+        </li>
+        {% endfor %}
+    </ol>
+
+</main>
+{% endblock %}

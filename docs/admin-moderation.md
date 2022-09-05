@@ -2,16 +2,19 @@
 
 There are two kinds of dashboards on mataroa.
 
-## Django admin
+## Django Admin Dashboard
 
-One is the built-in Django admin, visitable at `/halsey/`.
+One is the built-in Django admin, visitable at `/dja/`.
 
-## Atua admin
+## Moderation Dashboard
 
-Second is the custom-built Atua dashboard, visitable at:
+Second is the custom-built Moderation dashboard, visitable at:
 
-* `/atua/users/new/`
-* `/atua/posts/new/`
-* `/atua/pages/new/`
+* `/mod/users/new/`
+* `/mod/users/active/`
+* `/mod/users/active-nonnew/`
+* `/mod/posts/new/`
+* `/mod/pages/new/`
+* `/mod/comments/`
 
-et al, see "atua pages" on [main/urls.py](main/urls.py).
+et al, see "moderation pages" on [main/urls.py](main/urls.py).

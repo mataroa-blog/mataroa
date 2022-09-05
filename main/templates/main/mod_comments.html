@@ -1,12 +1,12 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}Atua Comments{% endblock %}
+{% block title %}Mod Comments{% endblock %}
 
 {% block content %}
 <main>
-    <h1>Atua Comments ({{ comment_list|length }})</h1>
+    <h1>Mod Comments ({{ comment_list|length }})</h1>
 
-    {% include "partials/atua_nav.html" %}
+    {% include "partials/mod_nav.html" %}
 
     <ol reversed>
         {% for comment in comment_list %}

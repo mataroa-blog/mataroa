@@ -1,0 +1,20 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Mod {{ page_type }} Pages{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Mod {{ page_type }} Pages ({{ page_list|length }})</h1>
+
+    {% include "partials/mod_nav.html" %}
+
+    <ol reversed>
+        {% for page in page_list %}
+        <li>
+            {% include "partials/mod_page.html" with page=page %}
+        </li>
+        {% endfor %}
+    </ol>
+
+</main>
+{% endblock %}

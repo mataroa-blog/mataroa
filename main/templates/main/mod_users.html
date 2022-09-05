@@ -1,0 +1,20 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Mod {{ user_type }} Users{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Mod {{ user_type }} Users ({{ user_list|length }})</h1>
+
+    {% include "partials/mod_nav.html" %}
+
+    <ol reversed>
+        {% for user in user_list %}
+        <li>
+            {% include "partials/mod_user.html" with user=user %}
+        </li>
+        {% endfor %}
+    </ol>
+
+</main>
+{% endblock %}

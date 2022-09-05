@@ -28,27 +28,29 @@ urlpatterns += [
     path("accounts/delete/", views.UserDelete.as_view(), name="user_delete"),
 ]
 
-# atua pages
+# moderation pages
 urlpatterns += [
-    path("atua/users/premium/", views.atua_users_premium, name="atua_users_premium"),
-    path("atua/users/new/", views.atua_users_new, name="atua_users_new"),
+    path("mod/users/premium/", views.mod_users_premium, name="mod_users_premium"),
+    path("mod/users/new/", views.mod_users_new, name="mod_users_new"),
     path(
-        "atua/users/grandfather/",
-        views.atua_users_grandfather,
-        name="atua_users_grandfather",
     ),
-    path("atua/users/staff/", views.atua_users_staff, name="atua_users_staff"),
-    path("atua/users/active/", views.atua_users_active, name="atua_users_active"),
     path(
-        "atua/users/active-nonnew/",
-        views.atua_users_active_nonnew,
-        name="atua_users_active_nonnew",
+        "mod/users/grandfather/",
+        views.mod_users_grandfather,
+        name="mod_users_grandfather",
     ),
-    path("atua/posts/new/", views.atua_posts_new, name="atua_posts_new"),
-    path("atua/posts/recently/", views.atua_posts_recently, name="atua_posts_recently"),
-    path("atua/pages/new/", views.atua_pages_new, name="atua_pages_new"),
-    path("atua/pages/recently/", views.atua_pages_recently, name="atua_pages_recently"),
-    path("atua/comments/", views.atua_comments, name="atua_comments"),
+    path("mod/users/staff/", views.mod_users_staff, name="mod_users_staff"),
+    path("mod/users/active/", views.mod_users_active, name="mod_users_active"),
+    path(
+        "mod/users/active-nonnew/",
+        views.mod_users_active_nonnew,
+        name="mod_users_active_nonnew",
+    ),
+    path("mod/posts/new/", views.mod_posts_new, name="mod_posts_new"),
+    path("mod/posts/recently/", views.mod_posts_recently, name="mod_posts_recently"),
+    path("mod/pages/new/", views.mod_pages_new, name="mod_pages_new"),
+    path("mod/pages/recently/", views.mod_pages_recently, name="mod_pages_recently"),
+    path("mod/comments/", views.mod_comments, name="mod_comments"),
 ]
 
 # blog posts and post snapshots

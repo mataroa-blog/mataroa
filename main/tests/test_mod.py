@@ -5,141 +5,141 @@ from django.urls import reverse
 from main import models
 
 
-class AtuaAnonTestCase(TestCase):
-    def test_atua_users_get(self):
-        response = self.client.get(reverse("atua_users_premium"))
+class ModAnonTestCase(TestCase):
+    def test_mod_users_get(self):
+        response = self.client.get(reverse("mod_users_premium"))
         self.assertEqual(response.status_code, 404)
-        response = self.client.get(reverse("atua_users_new"))
+        response = self.client.get(reverse("mod_users_new"))
         self.assertEqual(response.status_code, 404)
-        response = self.client.get(reverse("atua_users_grandfather"))
+        response = self.client.get(reverse("mod_users_grandfather"))
         self.assertEqual(response.status_code, 404)
-        response = self.client.get(reverse("atua_users_staff"))
+        response = self.client.get(reverse("mod_users_staff"))
         self.assertEqual(response.status_code, 404)
-        response = self.client.get(reverse("atua_users_active"))
+        response = self.client.get(reverse("mod_users_active"))
         self.assertEqual(response.status_code, 404)
-        response = self.client.get(reverse("atua_users_active_nonnew"))
-        self.assertEqual(response.status_code, 404)
-
-    def test_atua_users_post(self):
-        response = self.client.post(reverse("atua_users_premium"))
-        self.assertEqual(response.status_code, 404)
-        response = self.client.post(reverse("atua_users_new"))
-        self.assertEqual(response.status_code, 404)
-        response = self.client.post(reverse("atua_users_grandfather"))
-        self.assertEqual(response.status_code, 404)
-        response = self.client.post(reverse("atua_users_staff"))
-        self.assertEqual(response.status_code, 404)
-        response = self.client.post(reverse("atua_users_active"))
-        self.assertEqual(response.status_code, 404)
-        response = self.client.post(reverse("atua_users_active_nonnew"))
+        response = self.client.get(reverse("mod_users_active_nonnew"))
         self.assertEqual(response.status_code, 404)
 
-    def test_atua_posts_get(self):
-        response = self.client.get(reverse("atua_posts_new"))
+    def test_mod_users_post(self):
+        response = self.client.post(reverse("mod_users_premium"))
         self.assertEqual(response.status_code, 404)
-        response = self.client.get(reverse("atua_posts_recently"))
+        response = self.client.post(reverse("mod_users_new"))
         self.assertEqual(response.status_code, 404)
-
-    def test_atua_posts_post(self):
-        response = self.client.post(reverse("atua_posts_new"))
+        response = self.client.post(reverse("mod_users_grandfather"))
         self.assertEqual(response.status_code, 404)
-        response = self.client.post(reverse("atua_posts_recently"))
+        response = self.client.post(reverse("mod_users_staff"))
         self.assertEqual(response.status_code, 404)
-
-    def test_atua_pages_get(self):
-        response = self.client.get(reverse("atua_pages_new"))
+        response = self.client.post(reverse("mod_users_active"))
         self.assertEqual(response.status_code, 404)
-        response = self.client.get(reverse("atua_pages_recently"))
+        response = self.client.post(reverse("mod_users_active_nonnew"))
         self.assertEqual(response.status_code, 404)
 
-    def test_atua_pages_post(self):
-        response = self.client.post(reverse("atua_pages_new"))
+    def test_mod_posts_get(self):
+        response = self.client.get(reverse("mod_posts_new"))
         self.assertEqual(response.status_code, 404)
-        response = self.client.post(reverse("atua_pages_recently"))
-        self.assertEqual(response.status_code, 404)
-
-    def test_atua_comments_get(self):
-        response = self.client.get(reverse("atua_comments"))
+        response = self.client.get(reverse("mod_posts_recently"))
         self.assertEqual(response.status_code, 404)
 
-    def test_atua_comments_post(self):
-        response = self.client.post(reverse("atua_comments"))
+    def test_mod_posts_post(self):
+        response = self.client.post(reverse("mod_posts_new"))
+        self.assertEqual(response.status_code, 404)
+        response = self.client.post(reverse("mod_posts_recently"))
+        self.assertEqual(response.status_code, 404)
+
+    def test_mod_pages_get(self):
+        response = self.client.get(reverse("mod_pages_new"))
+        self.assertEqual(response.status_code, 404)
+        response = self.client.get(reverse("mod_pages_recently"))
+        self.assertEqual(response.status_code, 404)
+
+    def test_mod_pages_post(self):
+        response = self.client.post(reverse("mod_pages_new"))
+        self.assertEqual(response.status_code, 404)
+        response = self.client.post(reverse("mod_pages_recently"))
+        self.assertEqual(response.status_code, 404)
+
+    def test_mod_comments_get(self):
+        response = self.client.get(reverse("mod_comments"))
+        self.assertEqual(response.status_code, 404)
+
+    def test_mod_comments_post(self):
+        response = self.client.post(reverse("mod_comments"))
         self.assertEqual(response.status_code, 404)
 
 
-class AtuaNonadminTestCase(TestCase):
+class ModNonadminTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")
         self.client.force_login(self.user)
 
-    def test_atua_users_nonadmin(self):
-        response = self.client.get(reverse("atua_users_premium"))
+    def test_mod_users_nonadmin(self):
+        response = self.client.get(reverse("mod_users_premium"))
         self.assertEqual(response.status_code, 404)
-        response = self.client.get(reverse("atua_users_new"))
+        response = self.client.get(reverse("mod_users_new"))
         self.assertEqual(response.status_code, 404)
-        response = self.client.get(reverse("atua_users_grandfather"))
+        response = self.client.get(reverse("mod_users_grandfather"))
         self.assertEqual(response.status_code, 404)
-        response = self.client.get(reverse("atua_users_staff"))
+        response = self.client.get(reverse("mod_users_staff"))
         self.assertEqual(response.status_code, 404)
-        response = self.client.get(reverse("atua_users_active"))
+        response = self.client.get(reverse("mod_users_active"))
         self.assertEqual(response.status_code, 404)
-        response = self.client.get(reverse("atua_users_active_nonnew"))
-        self.assertEqual(response.status_code, 404)
-
-    def test_atua_posts_nonadmin(self):
-        response = self.client.get(reverse("atua_posts_new"))
-        self.assertEqual(response.status_code, 404)
-        response = self.client.get(reverse("atua_posts_recently"))
+        response = self.client.get(reverse("mod_users_active_nonnew"))
         self.assertEqual(response.status_code, 404)
 
-    def test_atua_pages_nonadmin(self):
-        response = self.client.get(reverse("atua_pages_new"))
+    def test_mod_posts_nonadmin(self):
+        response = self.client.get(reverse("mod_posts_new"))
         self.assertEqual(response.status_code, 404)
-        response = self.client.get(reverse("atua_pages_recently"))
-        self.assertEqual(response.status_code, 404)
-
-    def test_atua_comments_nonadmin(self):
-        response = self.client.get(reverse("atua_comments"))
+        response = self.client.get(reverse("mod_posts_recently"))
         self.assertEqual(response.status_code, 404)
 
+    def test_mod_pages_nonadmin(self):
+        response = self.client.get(reverse("mod_pages_new"))
+        self.assertEqual(response.status_code, 404)
+        response = self.client.get(reverse("mod_pages_recently"))
+        self.assertEqual(response.status_code, 404)
 
-class AtuaAdminTestCase(TestCase):
+    def test_mod_comments_nonadmin(self):
+        response = self.client.get(reverse("mod_comments"))
+        self.assertEqual(response.status_code, 404)
+
+
+class ModAdminTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice", is_superuser=True)
         self.client.force_login(self.user)
 
-    def test_atua_users_admin(self):
-        response = self.client.get(reverse("atua_users_premium"))
+    def test_mod_users_admin(self):
+        response = self.client.get(reverse("mod_users_premium"))
         self.assertEqual(response.status_code, 200)
-        response = self.client.get(reverse("atua_users_new"))
+        response = self.client.get(reverse("mod_users_new"))
         self.assertEqual(response.status_code, 200)
-        response = self.client.get(reverse("atua_users_grandfather"))
+        response = self.client.get(reverse("mod_users_grandfather"))
         self.assertEqual(response.status_code, 200)
-        response = self.client.get(reverse("atua_users_staff"))
+        response = self.client.get(reverse("mod_users_staff"))
         self.assertEqual(response.status_code, 200)
-        response = self.client.get(reverse("atua_users_active"))
+        response = self.client.get(reverse("mod_users_active"))
         self.assertEqual(response.status_code, 200)
-        response = self.client.get(reverse("atua_users_active_nonnew"))
-        self.assertEqual(response.status_code, 200)
-
-    def test_atua_posts_admin(self):
-        response = self.client.get(reverse("atua_posts_new"))
-        self.assertEqual(response.status_code, 200)
-        response = self.client.get(reverse("atua_posts_recently"))
+        response = self.client.get(reverse("mod_users_active_nonnew"))
         self.assertEqual(response.status_code, 200)
 
-    def test_atua_pages_admin(self):
-        response = self.client.get(reverse("atua_pages_new"))
+    def test_mod_posts_admin(self):
+        response = self.client.get(reverse("mod_posts_new"))
         self.assertEqual(response.status_code, 200)
-        response = self.client.get(reverse("atua_pages_recently"))
-        self.assertEqual(response.status_code, 200)
-
-    def test_atua_comments_admin(self):
-        response = self.client.get(reverse("atua_comments"))
+        response = self.client.get(reverse("mod_posts_recently"))
         self.assertEqual(response.status_code, 200)
 
+    def test_mod_pages_admin(self):
+        response = self.client.get(reverse("mod_pages_new"))
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get(reverse("mod_pages_recently"))
+        self.assertEqual(response.status_code, 200)
 
-class AtuaCommentsTestCase(TestCase):
+    def test_mod_comments_admin(self):
+        response = self.client.get(reverse("mod_comments"))
+        self.assertEqual(response.status_code, 200)
+
+
+class ModCommentsTestCase(TestCase):
     def setUp(self):
         self.admin = models.User.objects.create(username="alice", is_superuser=True)
         self.user = models.User.objects.create(username="bob", comments_on=True)

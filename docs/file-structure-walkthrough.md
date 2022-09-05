@@ -112,7 +112,7 @@ It includes:
 * webring
 * analytics
 * notifications subscribe/unsubscribe
-* atua dashboard
+* moderation dashboard
 * sitemaps
 
 Generally,
