@@ -10,9 +10,9 @@ bleach[css]==5.0.1
     # via -r requirements.in
 certifi==2022.6.15
     # via requests
-charset-normalizer==2.1.0
+charset-normalizer==2.1.1
     # via requests
-django==4.1
+django==4.1.1
     # via -r requirements.in
 idna==3.3
     # via requests
@@ -30,11 +30,11 @@ six==1.16.0
     # via bleach
 sqlparse==0.4.2
     # via django
-stripe==4.0.2
+stripe==4.1.0
     # via -r requirements.in
 tinycss2==1.1.1
     # via bleach
-urllib3==1.26.11
+urllib3==1.26.12
     # via requests
 uwsgi==2.0.20
     # via -r requirements.in
