@@ -13,6 +13,17 @@
         <li>
             {% include "partials/mod_user.html" with user=user %}
         </li>
+        {% if with_posts %}
+        <ul>
+            {% for post in user.post_set.all|slice:":10" %}
+            <li>
+                <a href="{{ post.get_absolute_url }}" target="_blank" rel="noopener">
+                    {{ post.title }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
         {% endfor %}
     </ol>
 

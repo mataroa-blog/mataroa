@@ -1271,6 +1271,24 @@ def mod_users_new(request):
     )
 
 
+def mod_users_new_with_posts(request):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        raise Http404()
+
+    one_month_ago = timezone.now() - timedelta(days=30)
+    return render(
+        request,
+        "main/mod_users.html",
+        {
+            "user_type": "New with Posts",
+            "user_list": models.User.objects.filter(
+                date_joined__gte=one_month_ago
+            ).prefetch_related("post_set"),
+            "with_posts": True,
+        },
+    )
+
+
 def mod_users_grandfather(request):
     if not request.user.is_authenticated or not request.user.is_superuser:
         raise Http404()
@@ -1317,6 +1335,25 @@ def mod_users_active(request):
     )
 
 
+def mod_users_active_with_posts(request):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        raise Http404()
+
+    updated_posts = models.Post.objects.filter(
+        updated_at__gte=datetime.now() - timedelta(days=30)
+    ).select_related("owner")
+    active_users = {post.owner for post in updated_posts}
+    return render(
+        request,
+        "main/mod_users.html",
+        {
+            "user_type": "Active with Posts",
+            "user_list": active_users,
+            "with_posts": True,
+        },
+    )
+
+
 def mod_users_active_nonnew(request):
     if not request.user.is_authenticated or not request.user.is_superuser:
         raise Http404()
@@ -1334,6 +1371,28 @@ def mod_users_active_nonnew(request):
         {
             "user_type": "Active Nonnew",
             "user_list": active_nonnew_users,
+        },
+    )
+
+
+def mod_users_active_nonnew_with_posts(request):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        raise Http404()
+
+    updated_posts = models.Post.objects.filter(
+        updated_at__gte=datetime.now() - timedelta(days=30)
+    ).select_related("owner")
+    one_month_ago = timezone.now() - timedelta(days=30)
+    active_nonnew_users = {
+        post.owner for post in updated_posts if post.owner.date_joined < one_month_ago
+    }
+    return render(
+        request,
+        "main/mod_users.html",
+        {
+            "user_type": "Active Nonnew with Posts",
+            "user_list": active_nonnew_users,
+            "with_posts": True,
         },
     )
 

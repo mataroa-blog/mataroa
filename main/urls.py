@@ -33,6 +33,9 @@ urlpatterns += [
     path("mod/users/premium/", views.mod_users_premium, name="mod_users_premium"),
     path("mod/users/new/", views.mod_users_new, name="mod_users_new"),
     path(
+        "mod/users/new-with-posts/",
+        views.mod_users_new_with_posts,
+        name="mod_users_new_with_posts",
     ),
     path(
         "mod/users/grandfather/",
@@ -42,9 +45,19 @@ urlpatterns += [
     path("mod/users/staff/", views.mod_users_staff, name="mod_users_staff"),
     path("mod/users/active/", views.mod_users_active, name="mod_users_active"),
     path(
+        "mod/users/active-with-posts/",
+        views.mod_users_active_with_posts,
+        name="mod_users_active_with_posts",
+    ),
+    path(
         "mod/users/active-nonnew/",
         views.mod_users_active_nonnew,
         name="mod_users_active_nonnew",
+    ),
+    path(
+        "mod/users/active-nonnew-with-posts/",
+        views.mod_users_active_nonnew_with_posts,
+        name="mod_users_active_nonnew_with_posts",
     ),
     path("mod/posts/new/", views.mod_posts_new, name="mod_posts_new"),
     path("mod/posts/recently/", views.mod_posts_recently, name="mod_posts_recently"),
