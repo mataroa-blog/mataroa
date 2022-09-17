@@ -5,6 +5,9 @@ var TIMEOUT_IDS = [];
 function saveLogEntry() {
     console.log("saving...");
     var title = document.getElementById('id_title').value;
+    if (!title) {
+        title = "Untitled"
+    }
     var body = document.getElementById('id_body').value;
 
     // prepare form data
