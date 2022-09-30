@@ -15,9 +15,14 @@ lint:
 	black --check --exclude '/(\.direnv|\.pyenv)/' .
 	shellcheck -x *.sh
 
+.PHONY: test
+test:
+	$(info Running test suite)
+	python -Wall manage.py test
+
 .PHONY: cov
 cov:
-	$(info Running test suite)
+	$(info Generating coverage report)
 	coverage run --source='.' --omit '.pyenv/*' manage.py test
 	coverage report -m
 
