@@ -100,16 +100,17 @@ class Logout(DjLogoutView):
         return super().dispatch(request, *args, **kwargs)
 
 
+def user_create_disabled(request):
+    return render(request, "main/user_create_disabled.html")
+
+
 class UserCreate(CreateView):
     form_class = forms.UserCreationForm
     success_url = reverse_lazy("dashboard")
-    template_name = "main/user_create_disabled.html"
+    template_name = "main/user_create.html"
     success_message = "welcome to mataroa :)"
 
     def form_valid(self, form):
-        # raise always to disable registrations
-        raise PermissionDenied()
-
         if util.is_disallowed(form.cleaned_data.get("username")):
             form.add_error("username", "This username is not available.")
             return self.render_to_response(self.get_context_data(form=form))
