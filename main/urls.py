@@ -62,6 +62,11 @@ urlpatterns += [
         views.mod_users_active_nonnew_with_posts,
         name="mod_users_active_nonnew_with_posts",
     ),
+    path(
+        "mod/users/random-with-posts/",
+        views.mod_users_random_with_posts,
+        name="mod_users_random_with_posts",
+    ),
     path("mod/posts/new/", views.mod_posts_new, name="mod_posts_new"),
     path("mod/posts/recently/", views.mod_posts_recently, name="mod_posts_recently"),
     path("mod/pages/new/", views.mod_pages_new, name="mod_pages_new"),

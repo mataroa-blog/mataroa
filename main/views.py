@@ -1401,6 +1401,23 @@ def mod_users_active_nonnew_with_posts(request):
     )
 
 
+def mod_users_random_with_posts(request):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        raise Http404()
+
+    random_posts = models.Post.objects.all().order_by("?").select_related("owner")[:20]
+    users = {post.owner for post in random_posts}
+    return render(
+        request,
+        "main/mod_users.html",
+        {
+            "user_type": "Active Random with Posts",
+            "user_list": users,
+            "with_posts": True,
+        },
+    )
+
+
 def mod_posts_new(request):
     if not request.user.is_authenticated or not request.user.is_superuser:
         raise Http404()
