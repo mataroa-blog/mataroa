@@ -191,6 +191,7 @@ class ModExpelWithEmailTestCase(TestCase):
     def test_expel(self):
         response = self.client.post(reverse("mod_expel", args=(self.user.id,)))
         self.assertEqual(response.status_code, 302)
+        self.assertFalse(models.User.objects.filter(username="bob").exists())
         self.assertEqual(len(mail.outbox), 1)
         self.assertIn("You have been expelled from Mataroa", mail.outbox[0].subject)
         self.assertIn(
@@ -221,6 +222,7 @@ class ModExpelNoEmailTestCase(TestCase):
     def test_expel(self):
         response = self.client.post(reverse("mod_expel", args=(self.user.id,)))
         self.assertEqual(response.status_code, 302)
+        self.assertFalse(models.User.objects.filter(username="bob").exists())
         self.assertEqual(len(mail.outbox), 1)
         self.assertIn("bob has been expelled from Mataroa", mail.outbox[0].subject)
         self.assertIn(

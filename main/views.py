@@ -1542,7 +1542,12 @@ def mod_expel(request, user_id):
                 bcc=bcc_list,
                 attachments=[(f"{export_name}.zip", f.read(), "application/zip")],
             )
+
+        # send email
         email.send()
+
+        # actual delete operation
+        user.delete()
 
         messages.add_message(request, messages.INFO, "expelled successful")
         return redirect("mod_users_new_with_posts")
