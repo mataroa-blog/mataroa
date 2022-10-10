@@ -1,5 +1,7 @@
+import io
 import re
 import uuid
+import zipfile
 
 import bleach
 import markdown
@@ -170,3 +172,35 @@ def get_protocol():
         return "http:"
     else:
         return "https:"
+
+
+def generate_markdown_export(user_id):
+    """
+    Generates a markdown export ZIP file in /tmp/.
+    Returns (export name, export filepath).
+    """
+    # compile all posts into dictionary
+    user = models.User.objects.get(id=user_id)
+    user_posts = models.Post.objects.filter(owner=user)
+    export_posts = []
+    for p in user_posts:
+        pub_date = p.published_at or p.created_at
+        title = p.slug + ".md"
+        body = f"# {p.title}\n\n"
+        body += f"> Published on {pub_date.strftime('%b %-d, %Y')}\n\n"
+        body += f"{p.body}\n"
+        export_posts.append((title, io.BytesIO(body.encode())))
+
+    # write zip archive in /tmp/
+    export_name = "export-markdown-" + str(uuid.uuid4())[:8]
+    container_dir = f"{user.username}-mataroa-blog"
+    zip_outfile = f"/tmp/{export_name}.zip"
+    with zipfile.ZipFile(
+        zip_outfile, "a", zipfile.ZIP_DEFLATED, False
+    ) as export_archive:
+        for file_name, data in export_posts:
+            export_archive.writestr(
+                export_name + f"/{container_dir}/" + file_name, data.getvalue()
+            )
+
+    return (export_name, zip_outfile)

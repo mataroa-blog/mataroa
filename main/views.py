@@ -20,7 +20,7 @@ from django.http import (
     HttpResponseBadRequest,
     HttpResponseRedirect,
 )
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.views.generic import DetailView, ListView, TemplateView
@@ -1501,4 +1501,54 @@ def mod_comments(request):
             .order_by("-id")
             .select_related("post", "post__owner"),
         },
+    )
+
+
+def mod_expel(request, user_id):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        raise Http404()
+
+    user = get_object_or_404(models.User, id=user_id)
+    if request.method == "POST":
+        subject = f"{user.username} has been expelled from Mataroa"
+        recipient_list = [settings.EXPEL_LOG]
+        bcc_list = []
+        if user.email:
+            subject = "You have been expelled from Mataroa"
+            recipient_list = [user.email]
+            bcc_list = [settings.EXPEL_LOG]
+        url = util.get_protocol() + "//" + settings.CANONICAL_HOST
+        url += f"{reverse_lazy('operandi')}#code-of-content-publication"
+        body = "Hi there,\n"
+        body += "\nMataroa terms of service have changed.\n"
+        body += (
+            "\nYour blog was considered to be outside the new Code of Code Publication:"
+        )
+        body += f"\n{url}\n"
+        body += "\nAs a result, your blog has been deleted. You can find"
+        body += "\na backup of all the words you have written attached."
+
+        # create export
+        export_name, export_path = util.generate_markdown_export(user_id)
+
+        # open export zipfile in memory
+        with open(export_path, "rb") as f:
+            # create email
+            email = mail.EmailMessage(
+                subject=subject,
+                body=body,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=recipient_list,
+                bcc=bcc_list,
+                attachments=[(f"{export_name}.zip", f.read(), "application/zip")],
+            )
+        email.send()
+
+        messages.add_message(request, messages.INFO, "expelled successful")
+        return redirect("mod_users_new_with_posts")
+
+    return render(
+        request,
+        "main/user_confirm_expel.html",
+        {"user": models.User.objects.get(id=user_id)},
     )

@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core import mail
 from django.test import TestCase
 from django.urls import reverse
 
@@ -170,3 +171,60 @@ class ModCommentsTestCase(TestCase):
         self.assertEqual(models.Comment.objects.all().first().body, data["body"])
         self.assertEqual(models.Comment.objects.all().first().post, self.post)
         self.assertEqual(models.Comment.objects.all().first().is_approved, False)
+
+
+class ModExpelWithEmailTestCase(TestCase):
+    def setUp(self):
+        self.admin = models.User.objects.create(username="alice", is_superuser=True)
+        self.user = models.User.objects.create(
+            username="bob", email="bob@example.local"
+        )
+        self.post = models.Post.objects.create(
+            owner=self.user,
+            title="Welcome post",
+            slug="welcome-post",
+            body="Content sentence.",
+            published_at="2020-02-06",
+        )
+        self.client.force_login(self.admin)
+
+    def test_expel(self):
+        response = self.client.post(reverse("mod_expel", args=(self.user.id,)))
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn("You have been expelled from Mataroa", mail.outbox[0].subject)
+        self.assertIn(
+            "Your blog was considered to be outside the new Code of Code Publication",
+            mail.outbox[0].body,
+        )
+        self.assertEqual(mail.outbox[0].to, [self.user.email])
+        self.assertEqual(mail.outbox[0].bcc, [settings.EXPEL_LOG])
+        self.assertEqual(
+            mail.outbox[0].from_email,
+            settings.DEFAULT_FROM_EMAIL,
+        )
+
+
+class ModExpelNoEmailTestCase(TestCase):
+    def setUp(self):
+        self.admin = models.User.objects.create(username="alice", is_superuser=True)
+        self.user = models.User.objects.create(username="bob")
+        self.post = models.Post.objects.create(
+            owner=self.user,
+            title="Welcome post",
+            slug="welcome-post",
+            body="Content sentence.",
+            published_at="2020-02-06",
+        )
+        self.client.force_login(self.admin)
+
+    def test_expel(self):
+        response = self.client.post(reverse("mod_expel", args=(self.user.id,)))
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn("bob has been expelled from Mataroa", mail.outbox[0].subject)
+        self.assertIn(
+            "Your blog was considered to be outside the new Code of Code Publication",
+            mail.outbox[0].body,
+        )
+        self.assertEqual(mail.outbox[0].to, [settings.EXPEL_LOG])

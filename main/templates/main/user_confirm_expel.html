@@ -1,0 +1,13 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Expel {{ user.username }} — Mataroa{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Expel {{ user.username }} for sure?</h1>
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" value="I understand the danger, expel this user!" class="type-danger">
+    </form>
+</main>
+{% endblock %}
