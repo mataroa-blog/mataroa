@@ -5,6 +5,19 @@
 {% block content %}
 <main>
     <h1>Expel {{ user.username }} for sure?</h1>
+
+    <ol>
+        {% for post in user.post_set.all %}
+        <li>
+            <a href="{% url 'post_detail' post.slug %}">
+                {{ post.title }}
+            </a>
+        </li>
+        {% empty %}
+        <li><em>(empty)</em></li>
+        {% endfor %}
+    </ol>
+
     <form method="post">
         {% csrf_token %}
         <input type="submit" value="I understand the danger, expel this user!" class="type-danger">
