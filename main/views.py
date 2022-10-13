@@ -1155,6 +1155,13 @@ def transparency(request):
     monthly_revenue = models.User.objects.filter(is_premium=True).count() * 9 / 12
     published_posts = models.Post.objects.filter(published_at__isnull=False).count()
 
+    zero_users = (
+        models.User.objects.annotate(Count("post")).filter(post__count=0).count()
+    )
+    non_zero_users = (
+        models.User.objects.annotate(Count("post")).filter(post__count__gt=0).count()
+    )
+
     updated_posts = models.Post.objects.filter(
         updated_at__gt=datetime.now() - timedelta(days=30)
     ).select_related("owner")
@@ -1206,6 +1213,8 @@ def transparency(request):
             "premium_users": models.User.objects.filter(is_premium=True).count(),
             "posts": models.Post.objects.all().count(),
             "pages": models.Page.objects.all().count(),
+            "zero_users": zero_users,
+            "non_zero_users": non_zero_users,
             "active_users": active_users,
             "active_nonnew_users": active_nonnew_users,
             "published_posts": published_posts,
