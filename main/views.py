@@ -1414,8 +1414,15 @@ def mod_users_random_with_posts(request):
     if not request.user.is_authenticated or not request.user.is_superuser:
         raise Http404()
 
-    random_posts = models.Post.objects.all().order_by("?").select_related("owner")[:20]
-    users = {post.owner for post in random_posts}
+    users_with_zero_posts = models.User.objects.annotate(Count("post")).filter(
+        post__count=0
+    )
+    users = (
+        models.User.objects.all()
+        .exclude(id__in=users_with_zero_posts)
+        .order_by("?")
+        .prefetch_related("post_set")[:30]
+    )
     return render(
         request,
         "main/mod_users.html",
