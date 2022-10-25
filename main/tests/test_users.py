@@ -1,5 +1,3 @@
-from unittest import skip
-
 from django.test import TestCase
 from django.urls import reverse
 
@@ -12,7 +10,6 @@ class IndexTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-@skip("skip while registrations are disabled")
 class UserCreateTestCase(TestCase):
     def test_user_creation(self):
         data = {
@@ -48,7 +45,6 @@ class UserCreateTestCase(TestCase):
         self.assertTrue(models.User.objects.get(username=data["username"]))
 
 
-@skip("skip while registrations are disabled")
 class UserCreateDisallowedTestCase(TestCase):
     def test_user_creation(self):
         data = {
@@ -61,7 +57,6 @@ class UserCreateDisallowedTestCase(TestCase):
         self.assertContains(response, b"This username is not available.")
 
 
-@skip("skip while registrations are disabled")
 class UserCreateInvalidTestCase(TestCase):
     def test_user_creation_dollar(self):
         data = {

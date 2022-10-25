@@ -23,10 +23,7 @@ urlpatterns = [
 urlpatterns += [
     path("accounts/logout/", views.Logout.as_view(), name="logout"),
     path("accounts/", include("django.contrib.auth.urls")),
-    path("accounts/create/", views.user_create_disabled, name="user_create"),
-    path(
-        "accounts/create/invite/", views.UserCreate.as_view(), name="user_create_invite"
-    ),
+    path("accounts/create/", views.UserCreate.as_view(), name="user_create"),
     path("accounts/edit/", views.UserUpdate.as_view(), name="user_update"),
     path("accounts/delete/", views.UserDelete.as_view(), name="user_delete"),
 ]
