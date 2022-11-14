@@ -20,6 +20,13 @@
         ![{{ image.name }}]({{ request.scheme }}:{{ image.raw_url_absolute }})
     </code>
 
+    <p>
+        Markdown syntax for linkified image to full size version:
+    </p>
+    <code>
+        [![{{ image.name }}]({{ request.scheme }}:{{ image.raw_url_absolute }})]({{ request.scheme }}:{{ image.raw_url_absolute }})
+    </code>
+
     {% if used_by_posts %}
     <p>Used by posts:</p>
     <ul>
