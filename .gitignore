@@ -1,11 +1,9 @@
 # python
 *.pyc
-venv/
 
 # environment
 .envrc
-.direnv/
-.pyenv/
+.venv/
 postgres-data/
 
 # generated static

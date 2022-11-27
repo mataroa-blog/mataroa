@@ -4,15 +4,15 @@ all: format lint cov
 .PHONY: format
 format:
 	$(info Formating Python code)
-	black --exclude '/(\.direnv|\.pyenv)/' .
-	isort --skip-glob .pyenv --profile black .
+	black --exclude '/\.venv/' .
+	isort --skip-glob --profile black .
 
 .PHONY: lint
 lint:
 	$(info Running Python linters)
-	flake8 --exclude=.pyenv/,.direnv/ --ignore=E203,E501,W503
-	isort --check-only --skip-glob .pyenv --profile black .
-	black --check --exclude '/(\.direnv|\.pyenv)/' .
+	flake8 --exclude=.venv/ --ignore=E203,E501,W503
+	isort --check-only --profile black .
+	black --check --exclude '/\.venv/' .
 	shellcheck -x *.sh
 
 .PHONY: test
@@ -23,7 +23,7 @@ test:
 .PHONY: cov
 cov:
 	$(info Generating coverage report)
-	coverage run --source='.' --omit '.pyenv/*' manage.py test
+	coverage run --source='.' --omit '.venv/*' manage.py test
 	coverage report -m
 
 .PHONY: pginit

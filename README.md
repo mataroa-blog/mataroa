@@ -47,32 +47,13 @@ The Django project is [`mataroa`](mataroa). There is one Django app,
 divided into two categories, those under `python manage.py` and those under
 `make`.
 
-### Dependencies with Nix
-
-This project is configured with [Nix](https://nixos.org/) and
-[direnv](https://direnv.net/). The default profile is described in
-[`default.nix`](default.nix) and the example [`.envrc`](.envrc.example)
-defines `use nix` and
-[`layout python`](https://github.com/direnv/direnv/wiki/Python).
-
-`direnv` should create a venv and auto-load the nix profile. In case of lack
-of `direnv`, run `nix-shell` to enable the default nix profile.
-
-To install dependencies, assume `pip` works as the system pip:
+### Dependencies
 
 ```
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements_dev.txt
-```
-
-### Dependencies with venv
-
-If one is not using nix, they can use
-[venv](https://docs.python.org/3/library/venv.html):
-
-```sh
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements_dev.txt
+pip install -r requirements.txt
 ```
 
 ### Environment variables
@@ -201,9 +182,6 @@ on Ubuntu 20.04 LTS.
 Environment variables for production are defined both in `uwsgi.ini` (for uWSGI)
 and in `.envrc` (for manage.py commands such as migrations and cron management
 commands).
-
-Note that the deployment is not configured using nix and thus we install
-dependencies using `venv`.
 
 ```sh
 cp uwsgi.example.ini uwsgi.ini  # edit environment variables in uwsgi.ini

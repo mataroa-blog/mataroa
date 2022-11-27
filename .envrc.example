@@ -4,4 +4,3 @@ export DATABASE_URL=postgres://mataroa:db-password@db:5432/mataroa
 export EMAIL_HOST_USER=smtp-user
 export EMAIL_HOST_PASSWORD=smtp-password
 use nix
-layout python
