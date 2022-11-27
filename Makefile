@@ -5,7 +5,7 @@ all: format lint cov
 format:
 	$(info Formating Python code)
 	black --exclude '/\.venv/' .
-	isort --skip-glob --profile black .
+	isort --profile black .
 
 .PHONY: lint
 lint:

@@ -17,6 +17,11 @@ fi
 cd "$(dirname "$0")"
 
 main() {
+    # check venv is enabled
+    if [[ -z "${VIRTUAL_ENV}" ]]; then
+        exit
+    fi
+
     # make sure linting checks pass
     make lint
 
