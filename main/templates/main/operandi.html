@@ -150,7 +150,7 @@
         related to their account through the dashboard, and then navigating to
         <a href="{% url 'user_update' %}">blog settings</a>, and scrolling all
         the way down. In this case, the user account will be immediately
-        purged from our primary servers and a month later from our database
+        purged from our primary servers and 20 days later from our database
         backups.
     </p>
 
@@ -200,11 +200,8 @@
     </p>
 
     <p>
-        Please bear in mind that Stripe may also collect other data including:
-        <ul>
-            <li>IP address</li>
-            <li>Browser <a href="https://en.wikipedia.org/wiki/User_agent">user agent</a></li>
-        </ul>
+        Please bear in mind that Stripe may also collect other data, such as IP
+        address and browser user agent.
     </p>
 
     <h2 id="service-availability">Service Availability</h2>
@@ -245,7 +242,7 @@
             for all our top-level code dependencies.
         </li>
         <li>We take daily backups of our database.</li>
-        <li>Our backup retention policy is 30 days.</li>
+        <li>Our backup retention policy is 20 days.</li>
         <li>We test our backups every 6 months.</li>
         <li>All passwords are stored in a hashed form.</li>
         <li>All data centers we use have an ISO 27001 certification.</li>
