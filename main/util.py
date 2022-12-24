@@ -32,7 +32,7 @@ def get_approx_number(number):
     return number
 
 
-def get_post_slug(post_title, owner, post=None):
+def create_post_slug(post_title, owner, post=None):
     """
     Generate slug given post title. Optional post arg for post that already
     exists.

@@ -236,7 +236,7 @@ class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        self.object.slug = util.get_post_slug(self.object.title, self.request.user)
+        self.object.slug = util.create_post_slug(self.object.title, self.request.user)
         self.object.owner = self.request.user
         self.object.body = util.remove_control_chars(self.object.body)
         self.object.save()
@@ -264,7 +264,7 @@ class PostUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         # hidden code for slug: if slug is ":gen" then generate it from the title
         if form.cleaned_data.get("slug") == ":gen":
             self.object = form.save(commit=False)
-            self.object.slug = util.get_post_slug(
+            self.object.slug = util.create_post_slug(
                 self.object.title, self.request.user, post=self.object
             )
             self.object.body = util.remove_control_chars(self.object.body)
@@ -274,7 +274,7 @@ class PostUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         # normalise and validate slug
         self.object = form.save(commit=False)
         updated_slug = form.cleaned_data.get("slug")
-        self.object.slug = util.get_post_slug(
+        self.object.slug = util.create_post_slug(
             updated_slug, self.request.user, post=self.object
         )
         self.object.save()
@@ -560,7 +560,7 @@ class BlogImport(LoginRequiredMixin, FormView):
 
                 models.Post.objects.create(
                     title=f.name,
-                    slug=util.get_post_slug(f.name, request.user),
+                    slug=util.create_post_slug(f.name, request.user),
                     body=content,
                     owner=request.user,
                     published_at=None,
