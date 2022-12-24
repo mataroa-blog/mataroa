@@ -19,9 +19,9 @@
     {% endif %}
 
     {% if blog_user.blog_byline %}
-    <p class="byline" itemprop="about">
+    <div class="byline" itemprop="about">
         {{ blog_user.blog_byline_as_html|safe }}
-    </p>
+    </div>
     {% endif %}
 
     <ul class="posts">

@@ -37,9 +37,12 @@ class User(AbstractUser):
     api_key = models.CharField(max_length=32, default=_generate_key, unique=True)
     about = models.TextField(blank=True, null=True)
     blog_title = models.CharField(max_length=500, blank=True, null=True)
-    blog_byline = models.CharField(max_length=500, blank=True, null=True)
-    footer_note = models.CharField(
-        max_length=500,
+    blog_byline = models.TextField(
+        blank=True,
+        null=True,
+        help_text="Supports markdown",
+    )
+    footer_note = models.TextField(
         blank=True,
         null=True,
         default="Powered by [mataroa.blog](https://mataroa.blog/).",
@@ -135,7 +138,7 @@ class User(AbstractUser):
 
     @property
     def blog_byline_as_html(self):
-        return util.md_to_html(self.blog_byline, strip_tags=True)
+        return util.md_to_html(self.blog_byline)
 
     @property
     def about_as_html(self):
