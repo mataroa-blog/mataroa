@@ -170,7 +170,9 @@ def api_post(request, slug):
         if "title" in data:
             post.title = form.cleaned_data["title"]
         if "slug" in data:
-            post.slug = util.create_post_slug(form.cleaned_data["slug"], user, post=post)
+            post.slug = util.create_post_slug(
+                form.cleaned_data["slug"], user, post=post
+            )
         if "body" in data:
             post.body = util.remove_control_chars(form.cleaned_data["body"])
         if "published_at" in data:
