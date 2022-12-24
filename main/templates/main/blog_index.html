@@ -5,14 +5,21 @@
 
 {% block head_extra %}
 <link rel="alternate" type="application/rss+xml" title="RSS" href="{% url 'rss_feed' %}">
-
 {% if blog_user.blog_byline %}
 <meta name="description" content="{{ blog_user.blog_byline_as_text }}">
 {% endif %}
-
 {% endblock %}
 
 {% block content %}
+<nav>
+    {% for page in pages %}
+    <a href="{% url 'page_detail' page.slug %}">{{ page.title }}</a>
+    {% if not forloop.last %}
+    |
+    {% endif %}
+    {% endfor %}
+</nav>
+
 <main class="blog" itemscope itemtype="http://schema.org/Blog">
     {% if blog_user.blog_title %}
     <h1 itemprop="name">{{ blog_user.blog_title }}</h1>

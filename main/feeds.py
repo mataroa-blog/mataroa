@@ -18,7 +18,7 @@ class RSSBlogFeed(Feed):
             raise Http404()
         user = models.User.objects.get(username=request.subdomain)
         self.title = user.blog_title
-        self.description = user.blog_byline_as_html
+        self.description = user.blog_byline_as_text
         self.subdomain = request.subdomain
 
         models.AnalyticPage.objects.create(user=user, path="rss")

@@ -1,15 +1,11 @@
 <footer>
-    —
-    <br>
     {% if blog_user.notifications_on %}
     Subscribe <a href="{% url 'rss_feed' %}">via RSS</a>
     / <a href="{% url 'notification_subscribe' %}">via Email</a>.
     {% else %}
     <a href="{% url 'rss_feed' %}">Subscribe via RSS</a>.
     {% endif %}
-    {% for page in pages %}
-    <a href="{% url 'page_detail' page.slug %}">{{ page.title }}</a>.
-    {% endfor %}
+
     {% if blog_user.footer_note %}
     <br>{{ blog_user.footer_note_as_html|safe }}
     {% endif %}
