@@ -189,6 +189,12 @@ class Post(models.Model):
         return bleach.clean(as_html, strip=True, tags=[])
 
     @property
+    def is_draft(self):
+        if self.published_at:
+            return False
+        return True
+
+    @property
     def is_published(self):
         if not self.published_at:
             # draft case

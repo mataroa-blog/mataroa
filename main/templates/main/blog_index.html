@@ -31,11 +31,30 @@
     </div>
     {% endif %}
 
+    {% if request.user.is_authenticated and request.subdomain == request.user.username %}
+    <div class="drafts">
+        <strong>
+            Drafts
+        </strong>
+        <ul>
+            {% for p in posts %}
+            {% if p.is_draft %}
+            <li>
+                <a href="{% url 'post_detail' p.slug %}">{{ p.title }}</a>
+            </li>
+            {% endif %}
+            {% empty %}
+            <li><em>(empty list)</em> — <a href="{% url 'post_create' %}">new post</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
     <ul class="posts">
         {% for p in posts %}
+        {% if p.published_at %}
         <li>
             <a href="{% url 'post_detail' p.slug %}">{{ p.title }}</a>
-            {% if p.published_at %}
             <small>
                 —
                 <time datetime="{{ p.published_at|date:'Y-m-d' }}" itemprop="datePublished">
@@ -45,10 +64,8 @@
                 — SCHEDULED
                 {% endif %}
             </small>
-            {% else %}
-            <small>— DRAFT</small>
-            {% endif %}
         </li>
+        {% endif %}
         {% endfor %}
     </ul>
 </main>

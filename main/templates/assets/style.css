@@ -551,6 +551,11 @@ form .helptext {
     color: var(--red-color);
 }
 
+.drafts {
+    border: 1px solid var(--light-grey-color);
+    padding: 16px 16px 0;
+}
+
 .posts {
     list-style: none;
     padding-left: 0;

@@ -74,7 +74,7 @@ class PostCreateDraftTestCase(TestCase):
             HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
         )
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "DRAFT")
+        self.assertContains(response, "Drafts")
 
 
 class PostCreateDraftAnonTestCase(TestCase):
@@ -104,6 +104,7 @@ class PostCreateDraftAnonTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.data_published["title"])
         self.assertNotContains(response, self.data_nonpublished["title"])
+        self.assertNotContains(response, "Drafts")
 
 
 class PostDetailTestCase(TestCase):
