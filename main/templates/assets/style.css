@@ -517,7 +517,7 @@ form .helptext {
 }
 
 .comparisons-matrix {
-    overflow: scroll;
+    overflow: auto;
 }
 
 .comparisons table {
