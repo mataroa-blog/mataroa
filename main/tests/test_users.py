@@ -10,7 +10,7 @@ class IndexTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-class UserCreateTestCase(TestCase):
+class UserCreateDisabledTestCase(TestCase):
     def test_user_creation(self):
         data = {
             "username": "alice",
@@ -19,6 +19,19 @@ class UserCreateTestCase(TestCase):
             "blog_title": "New blog",
         }
         response = self.client.post(reverse("user_create"), data)
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(models.User.objects.filter(username=data["username"]).exists())
+
+
+class UserCreateTestCase(TestCase):
+    def test_user_creation(self):
+        data = {
+            "username": "alice",
+            "password1": "abcdef123456",
+            "password2": "abcdef123456",
+            "blog_title": "New blog",
+        }
+        response = self.client.post(reverse("user_create_invite"), data)
         self.assertEqual(response.status_code, 302)
         self.assertTrue(models.User.objects.get(username=data["username"]))
 
@@ -29,7 +42,7 @@ class UserCreateTestCase(TestCase):
             "password2": "abcdef123456",
             "blog_title": "New blog",
         }
-        response = self.client.post(reverse("user_create"), data)
+        response = self.client.post(reverse("user_create_invite"), data)
         self.assertEqual(response.status_code, 302)
         self.assertTrue(models.User.objects.get(username=data["username"]))
 
@@ -40,7 +53,7 @@ class UserCreateTestCase(TestCase):
             "password2": "abcdef123456",
             "blog_title": "New blog",
         }
-        response = self.client.post(reverse("user_create"), data)
+        response = self.client.post(reverse("user_create_invite"), data)
         self.assertEqual(response.status_code, 302)
         self.assertTrue(models.User.objects.get(username=data["username"]))
 
@@ -53,7 +66,7 @@ class UserCreateDisallowedTestCase(TestCase):
             "password2": "abcdef123456",
             "blog_title": "New blog",
         }
-        response = self.client.post(reverse("user_create"), data)
+        response = self.client.post(reverse("user_create_invite"), data)
         self.assertContains(response, b"This username is not available.")
 
 
@@ -65,7 +78,7 @@ class UserCreateInvalidTestCase(TestCase):
             "password2": "abcdef123456",
             "blog_title": "New blog",
         }
-        response = self.client.post(reverse("user_create"), data)
+        response = self.client.post(reverse("user_create_invite"), data)
         self.assertContains(
             response,
             b"Invalid value. Should include only lowercase letters, numbers, and -",
@@ -78,7 +91,7 @@ class UserCreateInvalidTestCase(TestCase):
             "password2": "abcdef123456",
             "blog_title": "New blog",
         }
-        response = self.client.post(reverse("user_create"), data)
+        response = self.client.post(reverse("user_create_invite"), data)
         self.assertContains(
             response,
             b"Invalid value. Cannot be just hyphens.",
@@ -91,7 +104,7 @@ class UserCreateInvalidTestCase(TestCase):
             "password2": "abcdef123456",
             "blog_title": "New blog",
         }
-        response = self.client.post(reverse("user_create"), data)
+        response = self.client.post(reverse("user_create_invite"), data)
         self.assertContains(
             response,
             b"Invalid value. Cannot be just hyphens.",

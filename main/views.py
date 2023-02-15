@@ -100,6 +100,10 @@ class Logout(DjLogoutView):
         return super().dispatch(request, *args, **kwargs)
 
 
+def user_create_disabled(request):
+    return render(request, "main/user_create_disabled.html")
+
+
 class UserCreate(CreateView):
     form_class = forms.UserCreationForm
     success_url = reverse_lazy("dashboard")
