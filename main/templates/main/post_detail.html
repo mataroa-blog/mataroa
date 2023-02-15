@@ -11,9 +11,7 @@
     {% endif %}
 
     <article itemscope itemtype="http://schema.org/BlogPosting">
-        <h1 class="posts-item-title" itemprop="name headline">
-            {{ post.title }}
-        </h1>
+        <h1 class="posts-item-title" itemprop="name headline">{{ post.title }}</h1>
 
         <div class="posts-item-byline">
             {% if post.published_at and post.is_published %}
