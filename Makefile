@@ -44,3 +44,8 @@ pgstart:
 pgstop:
 	$(info Stop PostgreSQL)
 	PGDATA=postgres-data/ pg_ctl stop
+
+.PHONY: pipupgrade
+pipupgrade:
+	$(info Running pip-compile -U)
+	pip-compile -U --resolver=backtracking
