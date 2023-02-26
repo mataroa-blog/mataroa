@@ -63,15 +63,11 @@ def index(request):
                 )
             else:
                 models.AnalyticPage.objects.create(user=request.blog_user, path="index")
-                posts = (
-                    models.Post.objects.filter(
-                        owner=request.blog_user,
-                        published_at__isnull=False,
-                        published_at__lte=timezone.now().date(),
-                    )
-                    .defer("body")
-                    .order_by("-published_at")
-                )
+                posts = models.Post.objects.filter(
+                    owner=request.blog_user,
+                    published_at__isnull=False,
+                    published_at__lte=timezone.now().date(),
+                ).defer("body")
 
             return render(
                 request,
