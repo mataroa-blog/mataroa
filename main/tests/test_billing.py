@@ -65,6 +65,8 @@ class BillingIndexFreeTestCase(TestCase):
         ), patch.object(
             views_billing,
             "_get_payment_methods",
+        ), patch.object(
+            views_billing, "_get_invoices"
         ):
             response = self.client.get(reverse("billing_index"))
         self.assertEqual(response.status_code, 200)
@@ -94,6 +96,8 @@ class BillingIndexPremiumTestCase(TestCase):
             return_value=subscription,
         ), patch.object(
             views_billing, "_get_payment_methods"
+        ), patch.object(
+            views_billing, "_get_invoices"
         ):
 
             response = self.client.get(reverse("billing_index"))
@@ -136,6 +140,8 @@ class BillingCardAddTestCase(TestCase):
             views_billing, "_get_payment_methods"
         ), patch.object(
             views_billing, "_attach_card", return_value=True
+        ), patch.object(
+            views_billing, "_get_invoices"
         ):
 
             response = self.client.post(
@@ -209,6 +215,8 @@ class BillingCancelSubscriptionTwiceTestCase(TestCase):
         ), patch.object(
             views_billing,
             "_get_payment_methods",
+        ), patch.object(
+            views_billing, "_get_invoices"
         ):
 
             response = self.client.get(reverse("billing_subscription_cancel"))
@@ -227,6 +235,8 @@ class BillingCancelSubscriptionTwiceTestCase(TestCase):
         ), patch.object(
             views_billing,
             "_get_payment_methods",
+        ), patch.object(
+            views_billing, "_get_invoices"
         ):
 
             response = self.client.post(reverse("billing_subscription_cancel"))
@@ -259,6 +269,8 @@ class BillingReenableSubscriptionTestCase(TestCase):
         ), patch.object(
             views_billing,
             "_get_payment_methods",
+        ), patch.object(
+            views_billing, "_get_invoices"
         ):
 
             response = self.client.post(reverse("billing_subscription"))

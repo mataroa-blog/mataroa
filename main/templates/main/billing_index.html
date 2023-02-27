@@ -83,7 +83,7 @@
 
     {# stripe case - payment cards #}
     {% if payment_methods %}
-    <p>Payment methods:</p>
+    <p>Cards:</p>
     <ul>
         <!-- this displays only the default card -->
         {% for pm in payment_methods %}
@@ -115,14 +115,31 @@
     </ul>
     {% endif %}
 
-    {# stripe case - premium controls #}
+    {# stripe case - premium add card #}
     {% if request.user.is_premium %}
     <p>
         <a href="{% url 'billing_card' %}">Add new card »</a>
     </p>
+    {% endif %}
+
+    {# stripe case - invoices for premium #}
+    {% if request.user.is_premium %}
     <p>
-        <a href="{% url 'billing_subscription_cancel' %}" class="type-delete">Cancel subscription</a>
+        Invoices:
     </p>
+    <ul>
+        {% for invoice in invoice_list %}
+        <li>
+            ({{ invoice.period_start|date:"Y-m-d" }} – {{ invoice.period_end|date:"Y-m-d" }})
+            {{ invoice.created|date }}
+            {{ invoice.created|time:"H:i:s" }}
+            —
+            <a href="{{ invoice.url }}">see invoice</a>
+            |
+            <a href="{{ invoice.pdf }}">download pdf</a>
+        </li>
+        {% endfor %}
+    </ul>
     {% endif %}
 
     {# stripe case - non-premium controls #}
@@ -138,6 +155,14 @@
         {% endif %}
     </p>
     {% endif %}
+
+    {# stripe case - premium cancel #}
+    {% if request.user.is_premium %}
+    <p style="margin-top: 32px;">
+        <a href="{% url 'billing_subscription_cancel' %}" class="type-delete">Cancel subscription</a>
+    </p>
+    {% endif %}
+
     {% endif %}
 
 </main>

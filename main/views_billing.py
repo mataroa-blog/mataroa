@@ -150,6 +150,34 @@ def _get_payment_methods(stripe_customer_id):
     return payment_methods
 
 
+def _get_invoices(stripe_customer_id):
+    """Get user's invoices and transform them into a dictionary."""
+    stripe.api_key = settings.STRIPE_API_KEY
+
+    # get user invoices
+    try:
+        stripe_invoices = stripe.Invoice.list(customer=stripe_customer_id)
+    except stripe.error.StripeError as ex:
+        logger.error(str(ex))
+        raise Exception("Failed to retrieve invoices data from Stripe.")
+
+    # normalise invoices objects
+    invoice_list = []
+    for stripe_inv in stripe_invoices.data:
+        invoice_list.append(
+            {
+                "id": stripe_inv.id,
+                "url": stripe_inv.hosted_invoice_url,
+                "pdf": stripe_inv.invoice_pdf,
+                "period_start": datetime.fromtimestamp(stripe_inv.period_start),
+                "period_end": datetime.fromtimestamp(stripe_inv.period_end),
+                "created": datetime.fromtimestamp(stripe_inv.created),
+            }
+        )
+
+    return invoice_list
+
+
 @login_required
 def billing_index(request):
     """
@@ -217,6 +245,7 @@ def billing_index(request):
             "current_period_end": current_period_end,
             "current_period_start": current_period_start,
             "payment_methods": payment_methods,
+            "invoice_list": _get_invoices(request.user.stripe_customer_id),
         },
     )
 
