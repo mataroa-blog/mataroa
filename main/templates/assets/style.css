@@ -353,7 +353,7 @@ td {
 
 pre {
     background: var(--airy-grey-color);
-    overflow-x: scroll;
+    overflow-x: auto;
 }
 
 code {
