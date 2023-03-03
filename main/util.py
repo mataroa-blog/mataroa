@@ -204,3 +204,8 @@ def generate_markdown_export(user_id):
             )
 
     return (export_name, zip_outfile)
+
+
+def escape_quotes(input_string):
+    output_string = input_string.replace('"', '\\"')
+    return output_string

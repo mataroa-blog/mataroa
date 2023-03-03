@@ -97,7 +97,9 @@ def export_zola(request):
         for p in posts:
             pub_date = p.published_at or p.created_at.date()
             title = p.slug + ".md"
-            body = prepend_zola_frontmatter(p.body, p.title, pub_date)
+            body = prepend_zola_frontmatter(
+                p.body, util.escape_quotes(p.title), pub_date
+            )
             export_posts.append((title, io.BytesIO(body.encode())))
 
         # create zip archive in memory
@@ -155,7 +157,9 @@ def export_hugo(request):
         for p in posts:
             title = p.slug + ".md"
             pub_date = p.published_at or p.created_at.date()
-            body = prepend_hugo_frontmatter(p.body, p.title, pub_date)
+            body = prepend_hugo_frontmatter(
+                p.body, util.escape_quotes(p.title), pub_date
+            )
             export_posts.append((title, io.BytesIO(body.encode())))
 
         # create zip archive in memory
