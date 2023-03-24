@@ -1531,10 +1531,7 @@ def mod_expel(request, user_id):
         url = util.get_protocol() + "//" + settings.CANONICAL_HOST
         url += f"{reverse_lazy('operandi')}#code-of-content-publication"
         body = "Hi there,\n"
-        body += "\nMataroa terms of service have changed.\n"
-        body += (
-            "\nYour blog was considered to be outside the new Code of Code Publication:"
-        )
+        body += "\nYour blog was considered to be outside our Code of Code Publication:"
         body += f"\n{url}\n"
         body += "\nAs a result, your blog has been deleted. You can find"
         body += "\na backup of all the words you have written attached."
