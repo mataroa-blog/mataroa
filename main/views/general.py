@@ -427,7 +427,7 @@ class CommentCreateAuthor(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 class CommentCreate(SuccessMessageMixin, CreateView):
     model = models.Comment
     fields = ["name", "email", "body"]
-    success_message = "your comment is pending review"
+    success_message = "thanks! your comment will be published soon unless it's spam :)"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
