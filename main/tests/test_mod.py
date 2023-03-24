@@ -195,7 +195,7 @@ class ModExpelWithEmailTestCase(TestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertIn("You have been expelled from Mataroa", mail.outbox[0].subject)
         self.assertIn(
-            "Your blog was considered to be outside the new Code of Code Publication",
+            "Your blog was considered to be outside our Code of Code Publication",
             mail.outbox[0].body,
         )
         self.assertEqual(mail.outbox[0].to, [self.user.email])
@@ -226,7 +226,7 @@ class ModExpelNoEmailTestCase(TestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertIn("bob has been expelled from Mataroa", mail.outbox[0].subject)
         self.assertIn(
-            "Your blog was considered to be outside the new Code of Code Publication",
+            "Your blog was considered to be outside our Code of Code Publication",
             mail.outbox[0].body,
         )
         self.assertEqual(mail.outbox[0].to, [settings.EXPEL_LOG])
