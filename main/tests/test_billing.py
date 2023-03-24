@@ -5,7 +5,8 @@ import stripe
 from django.test import TestCase
 from django.urls import reverse
 
-from main import models, views_billing
+from main import models
+from main.views import billing as views_billing
 
 
 class BillingCannotChangeIsPremiumTestCase(TestCase):
