@@ -73,7 +73,7 @@ class CommentCreateTestCase(TestCase):
             HTTP_HOST="alice." + settings.CANONICAL_HOST,
         )
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "your comment is pending review")
+        self.assertContains(response, "your comment will be published soon")
 
 
 class CommentApprovedCreateTestCase(TestCase):
