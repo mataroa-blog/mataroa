@@ -55,7 +55,8 @@ def dashboard(request):
 
 
 def index(request):
-    search_query = request.GET.get("q", None)
+    search_query = request.GET.get("s", None)
+
     if hasattr(request, "subdomain"):
         if models.User.objects.filter(username=request.subdomain).exists():
             if request.user.is_authenticated and request.user == request.blog_user:
