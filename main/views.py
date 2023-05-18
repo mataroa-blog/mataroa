@@ -55,20 +55,28 @@ def dashboard(request):
 
 
 def index(request):
+    search_query = request.GET.get("q", None)
     if hasattr(request, "subdomain"):
         if models.User.objects.filter(username=request.subdomain).exists():
             if request.user.is_authenticated and request.user == request.blog_user:
-                posts = models.Post.objects.filter(owner=request.blog_user).defer(
-                    "body"
-                )
+                posts = models.Post.objects.filter(owner=request.blog_user)
+
+                if search_query:
+                    posts = posts.filter(search_post=search_query)
+
+                posts = posts.defer("body")
             else:
                 models.AnalyticPage.objects.create(user=request.blog_user, path="index")
                 posts = models.Post.objects.filter(
                     owner=request.blog_user,
                     published_at__isnull=False,
                     published_at__lte=timezone.now().date(),
-                ).defer("body")
+                )
 
+                if search_query:
+                    posts = posts.filter(search_post=search_query)
+
+                posts = posts.defer("body")
             return render(
                 request,
                 "main/blog_index.html",
