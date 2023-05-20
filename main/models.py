@@ -119,6 +119,7 @@ class User(AbstractUser):
 
     # billing
     stripe_customer_id = models.CharField(max_length=100, blank=True, null=True)
+    stripe_subscription_id = models.CharField(max_length=100, blank=True, null=True)
     monero_address = models.CharField(max_length=95, blank=True, null=True)
     is_premium = models.BooleanField(default=False)
     is_grandfathered = models.BooleanField(default=False)
