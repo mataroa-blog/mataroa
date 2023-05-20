@@ -1,4 +1,4 @@
-django
+django==4.1.8
 psycopg2-binary
 uwsgi
 markdown
