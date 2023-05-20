@@ -174,9 +174,19 @@ urlpatterns += [
         name="billing_subscription",
     ),
     path(
+        "billing/subscription/welcome/",
+        billing.billing_welcome,
+        name="billing_welcome",
+    ),
+    path(
         "billing/subscription/cancel/",
         billing.BillingCancel.as_view(),
         name="billing_subscription_cancel",
+    ),
+    path(
+        "billing/stripe/webhook/",
+        billing.billing_stripe_webhook,
+        name="billing_stripe_webhook",
     ),
 ]
 
