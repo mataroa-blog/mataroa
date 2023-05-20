@@ -6,6 +6,7 @@ set -o pipefail
 if [[ "${TRACE-0}" == "1" ]]; then
     set -o xtrace
 fi
+set -e
 
 if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
     echo 'Usage: ./deploy.sh
