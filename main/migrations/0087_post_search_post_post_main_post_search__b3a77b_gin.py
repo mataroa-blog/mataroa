@@ -2,6 +2,7 @@
 
 import django.contrib.postgres.indexes
 import django.contrib.postgres.search
+from django.contrib.postgres.operations import HStoreExtension
 from django.db import migrations
 
 
@@ -12,6 +13,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        HStoreExtension(),
         migrations.AddField(
             model_name="post",
             name="search_post",
