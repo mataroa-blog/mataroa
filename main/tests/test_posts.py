@@ -19,6 +19,8 @@ class PostCreateTestCase(TestCase):
         response = self.client.post(reverse("post_create"), data)
         self.assertEqual(response.status_code, 302)
         self.assertTrue(models.Post.objects.get(title=data["title"]))
+        self.assertTrue(models.Post.objects.filter(search_post=data["title"]))
+        self.assertTrue(models.Post.objects.filter(search_post=data["body"]))
 
     def test_post_multiline_create(self):
         data = {
@@ -35,6 +37,8 @@ one person. And that person may be myself for all I know.
         self.assertEqual(
             models.Post.objects.get(title=data["title"]).body, data["body"]
         )
+        self.assertTrue(models.Post.objects.filter(search_post=data["title"]))
+        self.assertTrue(models.Post.objects.filter(search_post=data))
 
 
 class PostCreateAnonTestCase(TestCase):
