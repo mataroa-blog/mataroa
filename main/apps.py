@@ -6,7 +6,7 @@ class MainConfig(AppConfig):
     name = "main"
 
     def ready(self):
-        from main.models import Post
         from main import signals
+        from main.models import Post
 
         post_save.connect(signals.update_search_post, sender=Post)
