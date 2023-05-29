@@ -72,10 +72,8 @@ def syntax_highlight(text):
     lexer = None
     code_block = ""
     for line in text.split("\n"):
-
         # code block backticks found, either begin or end
         if line[:3] == "```":
-
             if not within_code_block:
                 # then this is the beginning of a block
                 lang = line[3:].strip()

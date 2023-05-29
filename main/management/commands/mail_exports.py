@@ -83,7 +83,6 @@ class Command(BaseCommand):
 
             # reopen zipfile and load in memory
             with open(zip_outfile, "rb") as f:
-
                 # create emails
                 today = datetime.now().date().isoformat()
                 email = mail.EmailMessage(

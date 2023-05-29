@@ -6,7 +6,6 @@ import main.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("main", "0074_populate_api_key_values"),
     ]

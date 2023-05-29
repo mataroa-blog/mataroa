@@ -63,7 +63,6 @@ class Command(BaseCommand):
     help = "Processes new posts and sends email to subscribers"
 
     def handle(self, *args, **options):
-
         # if false, then we do not actually send emails,
         # only process the ones to be canceled
         send_mode = True
@@ -82,7 +81,6 @@ class Command(BaseCommand):
         # which means they have not been sent out already
         notification_records = models.NotificationRecord.objects.filter(sent_at=None)
         for record in notification_records:
-
             # if post has been deleted
             # TODO: test case for this conditional
             if not record.post:

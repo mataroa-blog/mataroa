@@ -99,7 +99,6 @@ class BillingIndexPremiumTestCase(TestCase):
         ), patch.object(
             views_billing, "_get_invoices"
         ):
-
             response = self.client.get(reverse("billing_index"))
 
         self.assertEqual(response.status_code, 200)
@@ -143,7 +142,6 @@ class BillingCardAddTestCase(TestCase):
         ), patch.object(
             views_billing, "_get_invoices"
         ):
-
             response = self.client.post(
                 reverse("billing_card"),
                 data={"card_token": "tok_123"},
@@ -179,7 +177,6 @@ class BillingCancelSubscriptionTestCase(TestCase):
             "_get_subscription",
             return_value=subscription,
         ):
-
             response = self.client.get(reverse("billing_subscription_cancel"))
 
         self.assertEqual(response.status_code, 200)
@@ -191,7 +188,6 @@ class BillingCancelSubscriptionTestCase(TestCase):
             "_get_subscription",
             return_value={"id": "sub_123"},
         ):
-
             response = self.client.post(reverse("billing_subscription_cancel"))
 
         self.assertEqual(response.status_code, 302)
@@ -218,7 +214,6 @@ class BillingCancelSubscriptionTwiceTestCase(TestCase):
         ), patch.object(
             views_billing, "_get_invoices"
         ):
-
             response = self.client.get(reverse("billing_subscription_cancel"))
 
             # need to check inside with context because billing_index needs
@@ -238,7 +233,6 @@ class BillingCancelSubscriptionTwiceTestCase(TestCase):
         ), patch.object(
             views_billing, "_get_invoices"
         ):
-
             response = self.client.post(reverse("billing_subscription_cancel"))
 
             self.assertRedirects(response, reverse("billing_index"))
@@ -272,7 +266,6 @@ class BillingReenableSubscriptionTestCase(TestCase):
         ), patch.object(
             views_billing, "_get_invoices"
         ):
-
             response = self.client.post(reverse("billing_subscription"))
 
             self.assertRedirects(response, reverse("billing_index"))

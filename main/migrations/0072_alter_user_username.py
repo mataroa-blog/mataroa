@@ -6,7 +6,6 @@ import main.validators
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("main", "0071_user_monero_address"),
     ]

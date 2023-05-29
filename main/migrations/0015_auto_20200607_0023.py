@@ -6,7 +6,6 @@ import main.validators
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("main", "0014_auto_20200607_0017"),
     ]

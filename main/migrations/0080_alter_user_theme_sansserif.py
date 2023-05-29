@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("main", "0079_user_theme_sansserif_alter_user_theme_zialucia"),
     ]

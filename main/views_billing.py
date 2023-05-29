@@ -270,7 +270,6 @@ class BillingCard(LoginRequiredMixin, FormView):
         form = self.get_form(form_class)
 
         if form.is_valid():
-
             # create card on stripe
             card_created = _attach_card(
                 request.user, form.cleaned_data.get("card_token")

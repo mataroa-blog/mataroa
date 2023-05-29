@@ -6,7 +6,6 @@ import main.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("main", "0072_alter_user_username"),
     ]

@@ -1079,7 +1079,6 @@ class NotificationRecordList(LoginRequiredMixin, ListView):
         ].exclude(id__in=to_exclude)
 
         for nr in context["notificationrecord_list_unsent"]:
-
             # if post was deleted, delete nr as well
             if nr.post is None:
                 nr.delete()

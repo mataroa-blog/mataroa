@@ -19,7 +19,6 @@ class Command(BaseCommand):
 
         # for every post that was published today
         for p in posts:
-
             # ignore blog if notifications are not on
             if not p.owner.notifications_on:
                 continue
@@ -30,7 +29,6 @@ class Command(BaseCommand):
             )
 
             for notification in notification_list:
-
                 # verify subscriber has not already been notified
                 if models.NotificationRecord.objects.filter(
                     notification=notification,
