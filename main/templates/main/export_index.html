@@ -12,17 +12,18 @@
     <ul>
         <li><a href="#export-markdown">Markdown</a>: all blog posts as .md files, zip archived</li>
         <li><a href="#export-book">Book</a>: all blog posts as chapters in an .epub book</li>
-        <li><a href="#export-print">Print</a>: render all blog posts in one page</li>
-        <li><a href="#export-zola">Zola</a>: simple static site generator that we like</li>
-        <li><a href="#export-hugo">Hugo</a>: very popular and reliable static site generators</li>
+        <li><a href="#export-print">Print</a>: renders all blog posts in one page</li>
+        <li><a href="#export-zola">Zola</a>: reliable and simple static site generator</li>
+        <li><a href="#export-hugo">Hugo</a>: reliable and very popular static site generators</li>
     </ul>
 
     {% if not request.user.is_authenticated %}
     <h2 id="redirect">Redirect</h2>
     {% endif %}
     <p>
-        If you're retiring your mataroa blog, we can also <strong>redirect to your new domain</strong>.
-        You can configure this in the bottom field of your
+        If you are retiring your mataroa blog, we can also
+        <strong>redirect to your new domain</strong>.
+        You can configure this in the bottom last field of your
         <a href="{% url 'user_update' %}">blog settings</a>.
     </p>
 
@@ -52,8 +53,9 @@
 
     <h2 id="export-print">Print</h2>
     <p>
-        Renders all blog posts in one page. Useful for exporting the blog into PDF,
-        or printing in dead trees form, or anything else that might require bulk copying.
+        Renders all blog posts in one page. Useful for exporting the blog into
+        PDF, or printing in dead trees form, or anything that might require bulk
+        copying.
     </p>
 
     {% if request.user.is_authenticated %}
@@ -62,9 +64,10 @@
 
     <h2 id="export-zola">Zola</h2>
     <p>
-        <a href="https://www.getzola.org/">Zola</a> is a
+        <a href="https://www.getzola.org/">Zola</a>
+        is a
         <a href="https://davidwalsh.name/introduction-static-site-generators">static site generator</a>
-        similar to <a href="https://gohugo.io/">Hugo</a>.
+        which focuses in simplicity and lack of verbosity.
     </p>
     <p>
         To install Zola
@@ -114,7 +117,7 @@
     <p>Ready!</p>
 
     <p>
-        You can also host it for free on a number of platforms. There in a large numner of guides on
+        You can also host it for free on a number of platforms. There is a large number of guides on
         <a href="https://gohugo.io/hosting-and-deployment/">gohugo.io</a> including
         <a href="https://gohugo.io/hosting-and-deployment/hosting-on-netlify/">Netlify</a>,
         <a href="https://gohugo.io/hosting-and-deployment/hosting-on-github/">GitHub</a>,
