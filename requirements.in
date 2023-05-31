@@ -5,3 +5,4 @@ markdown
 pygments
 bleach[css]
 stripe
+mistletoe
