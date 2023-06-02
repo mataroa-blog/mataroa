@@ -125,5 +125,5 @@ class RSSFeedFormatTestCase(TestCase):
         )
         self.assertContains(response, f"<title>{self.user.blog_title}</title>")
         self.assertContains(
-            response, f"<description>{self.user.blog_byline}</description>"
+            response, f"<description>{self.user.blog_byline}\n</description>"
         )

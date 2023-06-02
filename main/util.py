@@ -5,7 +5,6 @@ import zipfile
 
 import bleach
 import mistletoe
-from mistletoe import HTMLRenderer
 import pygments
 from bleach.css_sanitizer import CSSSanitizer
 from django.conf import settings
@@ -67,7 +66,7 @@ def create_post_slug(post_title, owner, post=None):
     return slug
 
 
-class PygmentsRenderer(HTMLRenderer):
+class PygmentsRenderer(mistletoe.HTMLRenderer):
     """Highlights markdown codeblocks within a markdown text."""
     formatter = HtmlFormatter()
     formatter.noclasses = True
