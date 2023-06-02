@@ -44,12 +44,12 @@ main() {
     pip install -r requirements.txt
 
     # make sure tests pass
-    python manage.py test
 
     # stop postgres server
     if [ $DID_WE_START_PG -eq 1 ]; then
         PGDATA=postgres-data/ pg_ctl stop
     fi
+    make test
 
     # push origin srht
     git push -v origin master
