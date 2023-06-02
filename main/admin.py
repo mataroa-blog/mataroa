@@ -16,7 +16,6 @@ class UserAdmin(DjUserAdmin):
         "date_joined",
         "last_login",
         "blog_title",
-        "blog_byline",
         "stripe_customer_id",
         "is_premium",
         "mail_export_on",
