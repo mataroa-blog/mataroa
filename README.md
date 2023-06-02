@@ -28,6 +28,7 @@ On how to contribute using email patches see
 
 Also checkout our docs on:
 
+* [Coding Conventions](docs/coding-conventions.md)
 * [Git Commit Message Guidelines](docs/commit-messages.md)
 * [File Structure Walkthrough](docs/file-structure-walkthrough.md)
 * [Dependencies](docs/dependencies.md)
