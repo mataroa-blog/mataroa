@@ -2,12 +2,13 @@ import io
 import re
 import uuid
 import zipfile
-
-import bleach
 import mistletoe
+import bleach
 from bleach.css_sanitizer import CSSSanitizer
+
 from django.conf import settings
 from django.utils.text import slugify
+
 from pygments.formatters import HtmlFormatter
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name, guess_lexer
