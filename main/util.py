@@ -67,16 +67,19 @@ def create_post_slug(post_title, owner, post=None):
 
 class PygmentsRenderer(mistletoe.HTMLRenderer):
     """Highlights markdown codeblocks within a markdown text."""
+
     formatter = HtmlFormatter()
     formatter.noclasses = True
 
-    def __init__(self, *extras, style='default'):
+    def __init__(self, *extras, style="default"):
         super().__init__(*extras)
         self.formatter.style = get_style_by_name(style)
 
     def render_block_code(self, token):
         code = token.children[0].content
-        lexer = get_lexer_by_name(token.language) if token.language else guess_lexer(code)
+        lexer = (
+            get_lexer_by_name(token.language) if token.language else guess_lexer(code)
+        )
         return highlight(code, lexer, self.formatter)
 
 
