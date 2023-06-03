@@ -4,13 +4,14 @@ import uuid
 import zipfile
 
 import bleach
-import markdown
-import pygments
+import mistletoe
 from bleach.css_sanitizer import CSSSanitizer
 from django.conf import settings
 from django.utils.text import slugify
+from pygments import highlight
 from pygments.formatters import HtmlFormatter
-from pygments.lexers import ClassNotFound, get_lexer_by_name, get_lexer_for_filename
+from pygments.lexers import get_lexer_by_name, guess_lexer
+from pygments.styles import get_style_by_name
 
 from main import denylist, models
 
@@ -64,60 +65,22 @@ def create_post_slug(post_title, owner, post=None):
     return slug
 
 
-def syntax_highlight(text):
+class PygmentsRenderer(mistletoe.HTMLRenderer):
     """Highlights markdown codeblocks within a markdown text."""
 
-    processed_text = ""
-    within_code_block = False
-    lexer = None
-    code_block = ""
-    for line in text.split("\n"):
-        # code block backticks found, either begin or end
-        if line[:3] == "```":
-            if not within_code_block:
-                # then this is the beginning of a block
-                lang = line[3:].strip()
+    formatter = HtmlFormatter()
+    formatter.noclasses = True
 
-                if lang:
-                    # then this is a *code* block
-                    within_code_block = True
-                    lang_filename = "file." + lang
-                    try:
-                        lexer = get_lexer_for_filename(lang_filename)
-                    except ClassNotFound:
-                        try:
-                            lexer = get_lexer_by_name(lang)
-                        except ClassNotFound:
-                            # can't find lexer, just use C lang as default
-                            lexer = get_lexer_by_name("c")
+    def __init__(self, *extras, style="default"):
+        super().__init__(*extras)
+        self.formatter.style = get_style_by_name(style)
 
-                    # continue because we don't want to add backticks in the processed text
-                    continue
-                else:
-                    # no lang, so just a generic block (non-code)
-                    lexer = None
-
-            else:
-                # then this is the end of a code block
-                # actual highlighting happens here
-                within_code_block = False
-                highlighted_block = pygments.highlight(
-                    code_block,
-                    lexer,
-                    HtmlFormatter(style="solarized-light", noclasses=True, cssclass=""),
-                )
-                processed_text += highlighted_block
-                code_block = ""  # reset code_block variable
-
-                # continue because we don't want to add backticks in the processed text
-                continue
-
-        if within_code_block:
-            code_block += line + "\n"
-        else:
-            processed_text += line + "\n"
-
-    return processed_text
+    def render_block_code(self, token):
+        code = token.children[0].content
+        lexer = (
+            get_lexer_by_name(token.language) if token.language else guess_lexer(code)
+        )
+        return highlight(code, lexer, self.formatter)
 
 
 def clean_html(dirty_html, strip_tags=False):
@@ -141,15 +104,7 @@ def md_to_html(markdown_string, strip_tags=False):
     """Return HTML formatted string, given a markdown one."""
     if not markdown_string:
         return ""
-    dirty_html = markdown.markdown(
-        syntax_highlight(markdown_string),
-        extensions=[
-            "markdown.extensions.fenced_code",
-            "markdown.extensions.tables",
-            "markdown.extensions.footnotes",
-            "markdown.extensions.toc",
-        ],
-    )
+    dirty_html = mistletoe.markdown(markdown_string, renderer=PygmentsRenderer)
     return clean_html(dirty_html, strip_tags)
 
 
