@@ -5,13 +5,12 @@ import zipfile
 
 import bleach
 import mistletoe
-import pygments
 from bleach.css_sanitizer import CSSSanitizer
 from django.conf import settings
 from django.utils.text import slugify
 from pygments.formatters import HtmlFormatter
 from pygments import highlight
-from pygments.lexers import ClassNotFound, get_lexer_by_name, get_lexer_for_filename, guess_lexer
+from pygments.lexers import get_lexer_by_name, guess_lexer
 from pygments.styles import get_style_by_name
 
 from main import denylist, models
@@ -75,7 +74,6 @@ class PygmentsRenderer(mistletoe.HTMLRenderer):
         super().__init__(*extras)
         self.formatter.style = get_style_by_name(style)
 
-
     def render_block_code(self, token):
         code = token.children[0].content
         lexer = get_lexer_by_name(token.language) if token.language else guess_lexer(code)
@@ -97,6 +95,7 @@ def clean_html(dirty_html, strip_tags=False):
         attributes=denylist.ALLOWED_HTML_ATTRS,
         css_sanitizer=css_sanitizer,
     )
+
 
 def md_to_html(markdown_string, strip_tags=False):
     """Return HTML formatted string, given a markdown one."""
