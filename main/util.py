@@ -2,15 +2,14 @@ import io
 import re
 import uuid
 import zipfile
-import mistletoe
-import bleach
-from bleach.css_sanitizer import CSSSanitizer
 
+import bleach
+import mistletoe
+from bleach.css_sanitizer import CSSSanitizer
 from django.conf import settings
 from django.utils.text import slugify
-
-from pygments.formatters import HtmlFormatter
 from pygments import highlight
+from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_by_name, guess_lexer
 from pygments.styles import get_style_by_name
 
