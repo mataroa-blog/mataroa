@@ -100,7 +100,7 @@ class ImageRawTestCase(TestCase):
             reverse("image_raw", args=(self.image.slug, self.image.extension)),
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(self.image.data, response.content)
+        self.assertEqual(self.image.data.tobytes(), response.content)
 
 
 class ImageRawWrongExtTestCase(TestCase):
