@@ -10,7 +10,7 @@
     </p>
 
     <strong>Content</strong>
-    <p class="dashboard-list">
+    <div class="dashboard-list">
         {% if request.user.comments_on %}
         <a href="{% url 'comment_pending' %}">
             Comments pending
@@ -30,10 +30,10 @@
         {% if request.user.post_backups_on %}
         <br><a href="{% url 'snapshot_list' %}">Post Backups</a>
         {% endif %}
-    </p>
+    </div>
 
     <strong>Manage</strong>
-    <p class="dashboard-list">
+    <div class="dashboard-list">
         <a href="{% url 'webring' %}">Webring</a>
         <br><a href="{% url 'api_docs' %}">API</a>
 
@@ -43,15 +43,19 @@
 
         <br><a href="{% url 'blog_import' %}">Import posts</a>
         <br><a href="{% url 'export_index' %}">Export blog</a>
-    </p>
+    </div>
 
     <strong>Account</strong>
-    <p class="dashboard-list">
+    <div class="dashboard-list">
         <a href="{% url 'user_update' %}">Blog settings</a>
         <br><a href="{% url 'password_change' %}">Change password</a>
         <br><a href="{% url 'operandi' %}">Modus operandi</a>
         <br><a href="mailto:admin@mataroa.blog">Help and support</a>
-        <br><a href="{% url 'logout' %}">Log out</a>
-    </p>
+        <br>
+        <form method="post" action="{% url 'logout' %}" class="form-inline">
+            {% csrf_token %}
+            <input type="submit" value="Log out">
+        </form>
+    </div>
 </main>
 {% endblock %}
