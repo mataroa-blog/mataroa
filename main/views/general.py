@@ -549,25 +549,27 @@ class BlogImport(LoginRequiredMixin, FormView):
     def post(self, request, *args, **kwargs):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        files = request.FILES.getlist("file")
         if form.is_valid():
-            for f in files:
-                try:
-                    content = f.read().decode("utf-8")
-                except (UnicodeDecodeError, ValueError):
-                    form.add_error("file", "File is not valid UTF-8.")
-                    return self.form_invalid(form)
-
-                models.Post.objects.create(
-                    title=f.name,
-                    slug=util.create_post_slug(f.name, request.user),
-                    body=content,
-                    owner=request.user,
-                    published_at=None,
-                )
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
+
+    def form_valid(self, form):
+        files = form.cleaned_data["file"]
+        for f in files:
+            try:
+                content = f.read().decode("utf-8")
+            except (UnicodeDecodeError, ValueError):
+                form.add_error("file", "File is not valid UTF-8.")
+                return self.form_invalid(form)
+            models.Post.objects.create(
+                title=f.name,
+                slug=util.create_post_slug(f.name, self.request.user),
+                body=content,
+                owner=self.request.user,
+                published_at=None,
+            )
+        return HttpResponseRedirect(self.get_success_url())
 
 
 def image_raw(request, slug, extension):
