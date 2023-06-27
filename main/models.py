@@ -6,6 +6,8 @@ import uuid
 import bleach
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.contrib.postgres.indexes import GinIndex
+from django.contrib.postgres.search import SearchVectorField
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
@@ -174,10 +176,12 @@ class Post(models.Model):
         null=True,
         help_text="Leave blank to keep as draft/unpublished. Use a future date for auto-posting.",
     )
+    search_post = SearchVectorField(null=True, blank=True)
 
     class Meta:
         ordering = ["-published_at", "-created_at"]
         unique_together = [["slug", "owner"]]
+        indexes = [GinIndex(fields=["search_post"])]
 
     @property
     def body_as_html(self):

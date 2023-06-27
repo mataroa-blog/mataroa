@@ -66,7 +66,13 @@ def api_posts(request):
 
     # handle GET case
     if request.method == "GET":
+        search_query = request.GET.get("s", None)
+
         post_list = models.Post.objects.filter(owner=user)
+
+        if search_query:
+            post_list = post_list.filter(search_post=search_query)
+
         post_list = [
             {
                 "title": p.title,
