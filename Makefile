@@ -27,6 +27,6 @@ cov:
 	coverage report -m
 
 .PHONY: upgrade
-pipupgrade:
+upgrade:
 	$(info Running pip-compile -U)
 	pip-compile -U --resolver=backtracking
