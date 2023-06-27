@@ -161,6 +161,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Email
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+if DEBUG:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 EMAIL_USE_TLS = True
 EMAIL_HOST = "smtp.postmarkapp.com"
 EMAIL_HOST_BROADCASTS = "smtp-broadcasts.postmarkapp.com"
