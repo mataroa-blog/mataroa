@@ -1,5 +1,5 @@
-pip-tools==6.10.0
-isort==5.10.1
+black==23.3.0
+coverage==7.2.5
 flake8==6.0.0
-black==22.10.0
-coverage==6.5.0
+isort==5.12.0
+pip-tools==6.13.0
