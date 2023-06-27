@@ -28,28 +28,12 @@ main() {
     # static
     python manage.py collectstatic --noinput
 
-    # start postgres server
-    set +e
-    DID_WE_START_PG=0
-    PGDATA=postgres-data/ pg_ctl status | grep 'is running'
-    # if pg is running, grep will succeed, which means exit code 0
-    if [ "${PIPESTATUS[1]}" -eq 1 ]; then
-        PGDATA=postgres-data/ pg_ctl start
-        DID_WE_START_PG=1
-    fi
-    set -e
-
     # make sure latest requirements are installed
     pip install -U pip
     pip install -r requirements.txt
 
     # make sure tests pass
     make test
-
-    # stop postgres server
-    if [ $DID_WE_START_PG -eq 1 ]; then
-        PGDATA=postgres-data/ pg_ctl stop
-    fi
 
     # push origin srht
     git push -v origin master
