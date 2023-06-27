@@ -13,9 +13,82 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic.edit import FormView
 
-from main import forms
+from main import forms, util
 
 logger = logging.getLogger(__name__)
+
+
+# def _get_client_secret(stripe_customer_id):
+#     try:
+#         stripe_invoice = stripe.Invoice.upcoming(customer=stripe_customer_id)
+#     except stripe.error.StripeError as ex:
+#         logger.error(str(ex))
+#         raise Exception("Failed to get latest invoice from Stripe.")
+
+#     try:
+#         stripe_payment_intent = stripe.PaymentIntent.retrieve(stripe_invoice.payment_intent)
+#     except stripe.error.StripeError as ex:
+#         logger.error(str(ex))
+#         raise Exception("Failed to get payment intent from Stripe.")
+
+#     return stripe_payment_intent.client_secret
+
+
+def _create_stripe_subscription(customer_id):
+    stripe.api_key = settings.STRIPE_API_KEY
+
+    # expand subscription's latest invoice and invoice's payment_intent
+    # so we can pass it to the front end to confirm the payment
+    try:
+        stripe_subscription = stripe.Subscription.create(
+            customer=customer_id,
+            items=[
+                {
+                    "price": settings.STRIPE_PRICE_ID,
+                }
+            ],
+            payment_behavior="default_incomplete",
+            payment_settings={"save_default_payment_method": "on_subscription"},
+            expand=["latest_invoice.payment_intent"],
+        )
+    except stripe.error.StripeError as ex:
+        logger.error(str(ex))
+        raise Exception("Failed to create subscription on Stripe.")
+
+    return {
+        "stripe_subscription_id": stripe_subscription.id,
+        "stripe_client_secret": stripe_subscription.latest_invoice.payment_intent.client_secret,
+    }
+
+
+def _get_stripe_subscription(stripe_subscription_id):
+    stripe.api_key = settings.STRIPE_API_KEY
+
+    try:
+        stripe_subscription = stripe.Subscription.retrieve(stripe_subscription_id)
+    except stripe.error.StripeError as ex:
+        logger.error(str(ex))
+        raise Exception("Failed to get subscription from Stripe.")
+
+    return stripe_subscription
+
+
+# def _enable_subscription():
+#     # create card on stripe
+#     card_created = _attach_card(request.user, form.cleaned_data.get("card_token"))
+#     if not card_created:
+#         form.add_error(None, "Failed to add card. Please try again.")
+#         return self.form_invalid(form)
+
+#     # create subscription on stripe
+#     subscription = _get_stripe_subscription(
+#         request.user.stripe_customer_id, create=True
+#     )
+
+#     # update user as premium subscribed
+#     if subscription and not request.user.is_premium:
+#         request.user.is_premium = True
+#         request.user.save()
 
 
 def _attach_card(user, card_token):
@@ -70,44 +143,6 @@ def _attach_card(user, card_token):
             return False
 
     return True
-
-
-def _get_subscription(stripe_customer_id, create=False):
-    """Get subscription or create if it doesn't exist and second arg is True."""
-    stripe.api_key = settings.STRIPE_API_KEY
-
-    try:
-        stripe_subs = stripe.Subscription.list(customer=stripe_customer_id)
-    except stripe.error.StripeError as ex:
-        logger.error(str(ex))
-        raise Exception("Failed to get subscriptions from Stripe.")
-
-    if len(stripe_subs.data) > 1:
-        raise Exception("More than one subscription belonging to user.")
-
-    if len(stripe_subs.data) == 1:
-        subscription = stripe_subs.data[0]
-        return subscription
-
-    # if create arg is false, then return None to convey there is no subscription
-    if not create:
-        return None
-
-    try:
-        subscription = stripe.Subscription.create(
-            customer=stripe_customer_id,
-            items=[
-                {
-                    "price": settings.STRIPE_PRICE_ID,
-                }
-            ],
-            expand=["latest_invoice.payment_intent"],
-        )
-    except stripe.error.StripeError as ex:
-        logger.error(str(ex))
-        raise Exception("Failed to create subscription on Stripe.")
-
-    return subscription
 
 
 def _get_payment_methods(stripe_customer_id):
@@ -211,10 +246,10 @@ def billing_index(request):
         request.user.save()
 
     # get subscription if exists
-    subscription = _get_subscription(request.user.stripe_customer_id)
     current_period_start = None
     current_period_end = None
-    if subscription:
+    if request.user.stripe_subscription_id:
+        subscription = _get_stripe_subscription(request.user.stripe_subscription_id)
         current_period_start = datetime.utcfromtimestamp(
             subscription["current_period_start"]
         )
@@ -223,12 +258,12 @@ def billing_index(request):
         )
 
     # update user.is_premium in case of subscription being activated directly on Stripe
-    if subscription and not request.user.is_premium:
+    if request.user.stripe_subscription_id and not request.user.is_premium:
         request.user.is_premium = True
         request.user.save()
 
     # update user.is_premium if subscription has been canceled directly on Stripe
-    if subscription is None:
+    if not request.user.stripe_subscription_id:
         request.user.is_premium = False
         request.user.save()
 
@@ -251,7 +286,10 @@ def billing_index(request):
 
 
 class BillingCard(LoginRequiredMixin, FormView):
-    """View that receive a card token and starts subscription if not already existing."""
+    """
+    View that creates a payment intent and renders the card form on GET.
+    Accepts
+    """
 
     form_class = forms.StripeForm
     template_name = "main/billing_card.html"
@@ -260,34 +298,31 @@ class BillingCard(LoginRequiredMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["stripe_customer_id"] = self.request.user.stripe_customer_id
         context["stripe_public_key"] = settings.STRIPE_PUBLIC_KEY
-        context["stripe_price_id"] = settings.STRIPE_PRICE_ID
         return context
+
+    def get(self, request, *args, **kwargs):
+        stripe.api_key = settings.STRIPE_API_KEY
+
+        if not request.user.stripe_subscription_id:
+            data = _create_stripe_subscription(request.user.stripe_customer_id)
+            request.user.stripe_subscription_id = data["stripe_subscription_id"]
+            request.user.save()
+
+        context = self.get_context_data()
+        context["stripe_client_secret"] = data["stripe_client_secret"]
+
+        url = f"{util.get_protocol()}//{settings.CANONICAL_HOST}"
+        url += reverse_lazy("billing_welcome")
+        context["stripe_return_url"] = url
+
+        return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
 
         if form.is_valid():
-            # create card on stripe
-            card_created = _attach_card(
-                request.user, form.cleaned_data.get("card_token")
-            )
-            if not card_created:
-                form.add_error(None, "Failed to add card. Please try again.")
-                return self.form_invalid(form)
-
-            # create subscription on stripe
-            subscription = _get_subscription(
-                request.user.stripe_customer_id, create=True
-            )
-
-            # update user as premium subscribed
-            if subscription and not request.user.is_premium:
-                request.user.is_premium = True
-                request.user.save()
-
             messages.success(request, self.success_message)
             return self.form_valid(form)
         else:
@@ -393,7 +428,7 @@ class BillingCancel(LoginRequiredMixin, View):
     success_message = "premium subscription canceled"
 
     def post(self, request, *args, **kwargs):
-        subscription = _get_subscription(request.user.stripe_customer_id)
+        subscription = _get_stripe_subscription(request.user.stripe_customer_id)
         try:
             stripe.Subscription.delete(subscription["id"])
         except stripe.error.StripeError as ex:
@@ -420,7 +455,7 @@ class BillingCancel(LoginRequiredMixin, View):
         if not request.user.is_premium:
             return redirect("billing_index")
 
-        subscription = _get_subscription(request.user.stripe_customer_id)
+        subscription = _get_stripe_subscription(request.user.stripe_customer_id)
         if not subscription:
             return redirect("billing_index")
 
@@ -438,9 +473,40 @@ def billing_subscription(request):
         if request.user.is_grandfathered:
             return redirect("dashboard")
 
-        subscription = _get_subscription(request.user.stripe_customer_id, create=True)
+        subscription = _get_stripe_subscription(request.user.stripe_customer_id)
         if subscription:
             request.user.is_premium = True
             request.user.save()
         messages.success(request, "premium subscription enabled")
         return redirect("billing_index")
+
+
+@login_required
+def billing_welcome(request):
+    """
+    View that Stripe returns to if subscription initialisation is successful.
+    Adds a message alert and redirects to billing_index.
+    """
+    payment_intent = request.GET.get("payment_intent")
+
+    stripe.api_key = settings.STRIPE_API_KEY
+    stripe_intent = stripe.PaymentIntent.retrieve(payment_intent)
+
+    if stripe_intent["status"] == "succeeded":
+        messages.success(request, "premium subscription enabled")
+    elif stripe_intent["status"] == "processing":
+        messages.info(request, "payment is currently processing")
+    else:
+        messages.error(
+            request,
+            "something is wrong. don't sweat it, worst case you get a premium for free",
+        )
+
+    return redirect("billing_index")
+
+
+def billing_stripe_webhook(request):
+    # https://stripe.com/docs/webhooks
+    # possible events:
+    #   * payment_intent.succeeded
+    return HttpResponse()

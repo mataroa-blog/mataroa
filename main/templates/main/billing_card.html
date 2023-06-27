@@ -15,21 +15,22 @@
     <h1>Subscribe to Premium</h1>
     {% endif %}
 
-    <form method="post" id="subscription-form">
-        {{ form.non_field_errors }}
+    <form id="payment-form" data-secret="{{ client_secret }}">
 
-        <div id="card-element"></div>
-        <div id="card-element-errors" role="alert"></div>
-
-        {{ form.card_token }}
+        <div id="payment-element">
+            {# stripe.js will create stripe elements forms here #}
+        </div>
 
         {% csrf_token %}
-        <input type="submit" value="Save">
+        <input id="submit" type="submit" value="Submit" style="margin-top: 16px;">
+        <div id="error-message">
+            <!-- Display error message to your customers here -->
+        </div>
     </form>
 
     <p>
         <br>
-        Once you click Save:
+        Once you click Submit:
     </p>
     <ol>
         <li>
@@ -61,43 +62,36 @@
 
 {% block scripts %}
 <script>
-    var stripe = Stripe("{{ stripe_public_key }}");
-    var elements = stripe.elements();
+    const stripe = Stripe('{{ stripe_public_key }}');
+    const options = {
+        clientSecret: '{{ stripe_client_secret }}',
+    };
+    const elements = stripe.elements(options);
+    const paymentElement = elements.create('payment');
+    paymentElement.mount('#payment-element');
 
-    var card = elements.create('card');
-    card.mount('#card-element');
-    card.on('change', function (event) {
-        var errorContainer = document.getElementById('card-element-errors');
-        if (event.error) {
-            errorContainer.textContent = event.error.message;
+    const form = document.getElementById('payment-form');
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const { error } = await stripe.confirmPayment({
+            elements,
+            confirmParams: {
+                return_url: '{{ stripe_return_url }}',
+            },
+        });
+
+        if (error) {
+            // This point will only be reached if there is an immediate error when
+            // confirming the payment. Show error to your customer (for example, payment
+            // details incomplete)
+            const messageContainer = document.querySelector('#error-message');
+            messageContainer.textContent = error.message;
         } else {
-            errorContainer.textContent = '';
+            // Your customer will be redirected to your `return_url`. For some payment
+            // methods like iDEAL, your customer will be redirected to an intermediate
+            // site first to authorize the payment, then redirected to the `return_url`.
         }
-    });
-
-    var form = document.getElementById('subscription-form');
-    form.addEventListener('submit', function (ev) {
-        ev.preventDefault();
-
-        // disable submit button
-        var submitButton = document.querySelector('input[type="submit"]');
-        submitButton.disabled = true;
-
-        // get stripe token
-        stripe.createToken(card)
-            .then(function (result) {
-
-                if (result.error) {
-                    var errorContainer = document.getElementById('card-element-errors');
-                    errorContainer.textContent = result.error.message;
-                } else {
-                    document.getElementById('id_card_token').value = result.token.id;
-                    form.submit();
-                }
-
-                // re-enable submit button
-                submitButton.disabled = false;
-            });
     });
 </script>
 {% endblock %}
