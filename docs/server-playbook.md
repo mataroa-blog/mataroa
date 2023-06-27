@@ -20,8 +20,8 @@ apt install python3 python3-dev python3-venv build-essential git
 
 ```sh
 apt install -y debian-keyring debian-archive-keyring apt-transport-https
-curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | apt-key add -
-curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee -a /etc/apt/sources.list.d/caddy-stable.list
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list
 apt update
 apt install caddy
 ```
@@ -29,8 +29,7 @@ apt install caddy
 ## User
 
 ```sh
-useradd -m -s /bin/bash roa
-passwd roa
+adduser deploy  # no password
 ```
 
 ## PostgreSQL
