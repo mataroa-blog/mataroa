@@ -26,7 +26,7 @@ urlpatterns += [
     path("accounts/", include("django.contrib.auth.urls")),
     path("accounts/create/", general.user_create_disabled, name="user_create"),
     path(
-        "accounts/create/invite/",
+        "accounts/create/consciousness-only/",
         general.UserCreate.as_view(),
         name="user_create_invite",
     ),
