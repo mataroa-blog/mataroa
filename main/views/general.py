@@ -57,10 +57,15 @@ def dashboard(request):
 def index(request):
     if hasattr(request, "subdomain"):
         if models.User.objects.filter(username=request.subdomain).exists():
+            drafts = []
             if request.user.is_authenticated and request.user == request.blog_user:
                 posts = models.Post.objects.filter(owner=request.blog_user).defer(
                     "body"
                 )
+                drafts = models.Post.objects.filter(
+                    owner=request.blog_user,
+                    published_at__isnull=True,
+                ).defer("body")
             else:
                 models.AnalyticPage.objects.create(user=request.blog_user, path="index")
                 posts = models.Post.objects.filter(
@@ -76,6 +81,7 @@ def index(request):
                     "subdomain": request.subdomain,
                     "blog_user": request.blog_user,
                     "posts": posts,
+                    "drafts": drafts,
                     "pages": models.Page.objects.filter(
                         owner=request.blog_user, is_hidden=False
                     ).defer("body"),
