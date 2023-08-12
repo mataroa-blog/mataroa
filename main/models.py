@@ -148,6 +148,10 @@ class User(AbstractUser):
     def footer_note_as_html(self):
         return util.md_to_html(self.footer_note)
 
+    @property
+    def post_count(self):
+        return Post.objects.filter(owner=self).count()
+
     def get_export_unsubscribe_url(self):
         domain = self.custom_domain or f"{self.username}.{settings.CANONICAL_HOST}"
         path = reverse("export_unsubscribe_key", args={self.export_unsubscribe_key})
