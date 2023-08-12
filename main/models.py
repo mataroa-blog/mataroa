@@ -123,6 +123,9 @@ class User(AbstractUser):
     is_premium = models.BooleanField(default=False)
     is_grandfathered = models.BooleanField(default=False)
 
+    # moderation
+    is_approved = models.BooleanField(default=False)
+
     class Meta:
         ordering = ["-id"]
 

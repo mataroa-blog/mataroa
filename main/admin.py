@@ -43,6 +43,11 @@ class YearCreatedListFilter(admin.SimpleListFilter):
             )
 
 
+@admin.action(description="Mark selected users as approved")
+def make_approved(modeladmin, request, queryset):
+    queryset.update(is_approved=True)
+
+
 @admin.register(models.User)
 class UserAdmin(DjUserAdmin):
     list_display = (
@@ -54,6 +59,7 @@ class UserAdmin(DjUserAdmin):
         "is_premium",
         "mail_export_on",
         "post_count",
+        "is_approved",
         "blog_title",
         "date_joined",
         "last_login",
@@ -61,6 +67,7 @@ class UserAdmin(DjUserAdmin):
     list_display_links = ("id", "username")
     list_filter = (YearCreatedListFilter, "is_premium", "mail_export_on", "comments_on")
     search_fields = ("username", "email", "stripe_customer_id", "blog_title")
+    actions = [make_approved]
 
     @admin.display
     def blog_url(self, obj):
