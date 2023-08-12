@@ -8,19 +8,19 @@ asgiref==3.7.2
     # via django
 bleach[css]==6.0.0
     # via -r requirements.in
-certifi==2023.5.7
+certifi==2023.7.22
     # via requests
 charset-normalizer==3.2.0
     # via requests
-django==4.2.3
+django==4.2.4
     # via -r requirements.in
 idna==3.4
     # via requests
-markdown==3.4.3
+markdown==3.4.4
     # via -r requirements.in
-psycopg2-binary==2.9.6
+psycopg2-binary==2.9.7
     # via -r requirements.in
-pygments==2.15.1
+pygments==2.16.1
     # via -r requirements.in
 requests==2.31.0
     # via stripe
@@ -34,9 +34,9 @@ tinycss2==1.1.1
     # via bleach
 typing-extensions==4.7.1
     # via asgiref
-urllib3==2.0.3
+urllib3==2.0.4
     # via requests
-uwsgi==2.0.21
+uwsgi==2.0.22
     # via -r requirements.in
 webencodings==0.5.1
     # via
