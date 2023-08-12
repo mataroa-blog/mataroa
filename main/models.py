@@ -267,7 +267,7 @@ class Page(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     is_hidden = models.BooleanField(
         default=False,
-        help_text="If checked, page link will not appear on the blog footer.",
+        help_text="If checked, page link will not appear on the blog header.",
     )
 
     class Meta:
