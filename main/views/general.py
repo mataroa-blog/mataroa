@@ -26,7 +26,7 @@ from django.utils import timezone
 from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 
-from main import denylist, forms, models, util
+from main import billingutils, denylist, forms, models, util
 from main.sitemaps import PageSitemap, PostSitemap, StaticSitemap
 
 
@@ -180,6 +180,16 @@ class UserDelete(LoginRequiredMixin, DeleteView):
 
     def get_object(self):
         return self.request.user
+
+    def form_valid(self, form):
+        success_url = self.get_success_url()
+        if self.request.user.is_premium:
+            try:
+                billingutils.cancel_subscription(self.object)
+            except Exception:
+                return HttpResponse("Subscription could not be canceled.", status=503)
+        self.object.delete()
+        return HttpResponseRedirect(success_url)
 
 
 def post_detail_redir(request, slug):
