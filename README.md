@@ -14,8 +14,7 @@ Archives at
 
 ### Tools
 
-[Victor Freire](https://freire.dev.br/) has created
-[mata](https://git.sr.ht/~glorifiedgluer/mata/), a CLI tool for Mataroa.
+* [mataroa-cli](https://github.com/mataroa-blog/mataroa-cli)
 
 ## Contributing
 
