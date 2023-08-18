@@ -5,8 +5,7 @@ import stripe
 from django.test import TestCase
 from django.urls import reverse
 
-from main import models
-from main.views import billing as views_billing
+from main import billingutils, models
 
 
 class BillingCannotChangeIsPremiumTestCase(TestCase):
@@ -62,12 +61,12 @@ class BillingIndexFreeTestCase(TestCase):
         with patch.object(
             stripe.Customer, "create", return_value={"id": "cus_123abcdefg"}
         ), patch.object(
-            views_billing, "_get_subscription", return_value=None
+            billingutils, "get_subscription", return_value=None
         ), patch.object(
-            views_billing,
-            "_get_payment_methods",
+            billingutils,
+            "get_payment_methods",
         ), patch.object(
-            views_billing, "_get_invoices"
+            billingutils, "get_invoices"
         ):
             response = self.client.get(reverse("billing_index"))
         self.assertEqual(response.status_code, 200)
@@ -92,13 +91,13 @@ class BillingIndexPremiumTestCase(TestCase):
         with patch.object(
             stripe.Customer, "create", return_value={"id": "cus_123abcdefg"}
         ), patch.object(
-            views_billing,
-            "_get_subscription",
+            billingutils,
+            "get_subscription",
             return_value=subscription,
         ), patch.object(
-            views_billing, "_get_payment_methods"
+            billingutils, "get_payment_methods"
         ), patch.object(
-            views_billing, "_get_invoices"
+            billingutils, "get_invoices"
         ):
             response = self.client.get(reverse("billing_index"))
 
@@ -133,15 +132,15 @@ class BillingCardAddTestCase(TestCase):
         with patch.object(
             stripe.Customer, "create", return_value={"id": "cus_123abcdefg"}
         ), patch.object(
-            views_billing,
-            "_get_subscription",
+            billingutils,
+            "get_subscription",
             return_value=subscription,
         ), patch.object(
-            views_billing, "_get_payment_methods"
+            billingutils, "get_payment_methods"
         ), patch.object(
-            views_billing, "_attach_card", return_value=True
+            billingutils, "attach_card", return_value=True
         ), patch.object(
-            views_billing, "_get_invoices"
+            billingutils, "get_invoices"
         ):
             response = self.client.post(
                 reverse("billing_card"),
@@ -174,8 +173,8 @@ class BillingCancelSubscriptionTestCase(TestCase):
             "current_period_start": datetime.now().timestamp(),
         }
         with patch.object(
-            views_billing,
-            "_get_subscription",
+            billingutils,
+            "get_subscription",
             return_value=subscription,
         ):
             response = self.client.get(reverse("billing_subscription_cancel"))
@@ -185,8 +184,8 @@ class BillingCancelSubscriptionTestCase(TestCase):
 
     def test_cancel_subscription_post(self):
         with patch.object(stripe.Subscription, "delete"), patch.object(
-            views_billing,
-            "_get_subscription",
+            billingutils,
+            "get_subscription",
             return_value={"id": "sub_123"},
         ):
             response = self.client.post(reverse("billing_subscription_cancel"))
@@ -206,14 +205,14 @@ class BillingCancelSubscriptionTwiceTestCase(TestCase):
 
     def test_cancel_subscription_get(self):
         with patch.object(
-            views_billing, "_get_subscription", return_value=None
+            billingutils, "get_subscription", return_value=None
         ), patch.object(
             stripe.Customer, "create", return_value={"id": "cus_123abcdefg"}
         ), patch.object(
-            views_billing,
-            "_get_payment_methods",
+            billingutils,
+            "get_payment_methods",
         ), patch.object(
-            views_billing, "_get_invoices"
+            billingutils, "get_invoices"
         ):
             response = self.client.get(reverse("billing_subscription_cancel"))
 
@@ -223,16 +222,16 @@ class BillingCancelSubscriptionTwiceTestCase(TestCase):
 
     def test_cancel_subscription_post(self):
         with patch.object(stripe.Subscription, "delete"), patch.object(
-            views_billing,
-            "_get_subscription",
+            billingutils,
+            "get_subscription",
             return_value=None,
         ), patch.object(
             stripe.Customer, "create", return_value={"id": "cus_123abcdefg"}
         ), patch.object(
-            views_billing,
-            "_get_payment_methods",
+            billingutils,
+            "get_payment_methods",
         ), patch.object(
-            views_billing, "_get_invoices"
+            billingutils, "get_invoices"
         ):
             response = self.client.post(reverse("billing_subscription_cancel"))
 
@@ -256,16 +255,16 @@ class BillingReenableSubscriptionTestCase(TestCase):
             "current_period_start": datetime.now().timestamp(),
         }
         with patch.object(stripe.Subscription, "delete"), patch.object(
-            views_billing,
-            "_get_subscription",
+            billingutils,
+            "get_subscription",
             return_value=subscription,
         ), patch.object(
             stripe.Customer, "create", return_value={"id": "cus_123abcdefg"}
         ), patch.object(
-            views_billing,
-            "_get_payment_methods",
+            billingutils,
+            "get_payment_methods",
         ), patch.object(
-            views_billing, "_get_invoices"
+            billingutils, "get_invoices"
         ):
             response = self.client.post(reverse("billing_subscription"))
 
