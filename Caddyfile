@@ -7,55 +7,27 @@
 *.mataroa.blog, mataroa.blog {
 	route {
 		file_server /static/* {
-			root /home/deploy/mataroa
+			root /var/www/mataroa
 		}
 		reverse_proxy 127.0.0.1:5000
 	}
 
-	tls /etc/letsencrypt/live/mataroa.blog/fullchain.pem /etc/letsencrypt/live/mataroa.blog/privkey.pem
+	tls /etc/caddy/mataroa-blog-cert.pem /etc/caddy/mataroa-blog-key.pem
 
 	encode zstd gzip
-
-	log {
-		output file /var/log/caddy-mataroa.log {
-			roll_size 1gb
-			roll_keep 1
-			roll_keep_for 720h
-		}
-		format filter {
-			wrap console
-			fields {
-				request>headers>Authorization delete
-			}
-		}
-	}
 }
 
 :443 {
 	route {
 		file_server /static/* {
-			root /home/deploy/mataroa
+			root /var/www/mataroa
 		}
 		reverse_proxy 127.0.0.1:5000
 	}
 
-	tls zf+caddy@sirodoht.com {
+	tls person@example.com {
 		on_demand
 	}
 
 	encode zstd gzip
-
-	log {
-		output file /var/log/caddy-customdomains.log {
-			roll_size 1gb
-			roll_keep 1
-			roll_keep_for 720h
-		}
-		format filter {
-			wrap console
-			fields {
-				request>headers>Authorization delete
-			}
-		}
-	}
 }
