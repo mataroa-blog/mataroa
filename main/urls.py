@@ -32,6 +32,7 @@ urlpatterns += [
     ),
     path("accounts/edit/", general.UserUpdate.as_view(), name="user_update"),
     path("accounts/delete/", general.UserDelete.as_view(), name="user_delete"),
+    path("accounts/domain/", general.domain_check, name="domain_check"),
 ]
 
 # moderation pages

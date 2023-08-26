@@ -225,3 +225,18 @@ class UserUpdateCommentsOnTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         updated_user = models.User.objects.get(id=self.user.id)
         self.assertEqual(updated_user.comments_on, data["comments_on"])
+
+
+class UserDomainCheckTestCase(TestCase):
+    def setUp(self):
+        self.user = models.User.objects.create(
+            username="alice", custom_domain="example.com"
+        )
+
+    def test_domain_exists(self):
+        response = self.client.get(reverse("domain_check") + "?domain=example.com")
+        self.assertEqual(response.status_code, 200)
+
+    def test_domain_unknown(self):
+        response = self.client.get(reverse("domain_check") + "?domain=randomdomain.com")
+        self.assertEqual(response.status_code, 403)
