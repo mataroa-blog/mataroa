@@ -1,7 +1,13 @@
+{
+	on_demand_tls {
+		ask http://127.0.0.1:5000/accounts/domain/
+	}
+}
+
 *.mataroa.blog, mataroa.blog {
 	route {
 		file_server /static/* {
-			root /home/roa/mataroa
+			root /home/deploy/mataroa
 		}
 		reverse_proxy 127.0.0.1:5000
 	}
@@ -28,7 +34,7 @@
 :443 {
 	route {
 		file_server /static/* {
-			root /home/roa/mataroa
+			root /home/deploy/mataroa
 		}
 		reverse_proxy 127.0.0.1:5000
 	}
