@@ -1,8 +1,30 @@
 #!/usr/bin/env bash
 
-cd /home/roa/mataroa || exit 1
+set -o errexit
+set -o nounset
+set -o pipefail
+if [[ "${TRACE-0}" == "1" ]]; then
+    set -o xtrace
+fi
 
-source .envrc
+if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
+    echo 'Usage: ./backup-database.sh
 
-pg_dump -Fc --no-acl mataroa -h localhost -U mataroa -f /home/roa/mataroa.dump -w
-/usr/local/bin/mc cp /home/roa/mataroa.dump s3scw/tamaroa/backups/postgres-mataroa-"$(date --utc +%Y-%m-%d-%H-%M-%S)"/
+This script dumps the mataroa postgres database and uploads it into an S3-compatible server.'
+    exit
+fi
+
+cd "$(dirname "$0")"
+
+main() {
+    # source for PGPASSWORD variable
+    source /var/www/mataroa/.envrc
+
+    # dump database in the home folder
+    pg_dump -Fc --no-acl mataroa -h localhost -U mataroa -f /home/deploy/mataroa.dump -w
+
+    # upload using minio client
+    /usr/local/bin/mc cp /home/deploy/mataroa.dump s3scw/mataroa/backups/postgres-mataroa-"$(date --utc +%Y-%m-%d-%H-%M-%S)"/
+}
+
+main "$@"
