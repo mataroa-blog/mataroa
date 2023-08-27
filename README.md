@@ -31,8 +31,11 @@ Also checkout our docs on:
 * [Git Commit Message Guidelines](docs/commit-messages.md)
 * [File Structure Walkthrough](docs/file-structure-walkthrough.md)
 * [Dependencies](docs/dependencies.md)
+* [Deployment](docs/deployment.md)
 * [Server Playbook](docs/server-playbook.md)
 * [Admin and Moderation](docs/admin-moderation.md)
+* [Databse Backup](docs/database-backup.md)
+* [Server Migration](docs/server-migration.md)
 
 ## Development
 
@@ -173,79 +176,40 @@ make lint
 
 ## Deployment
 
+See [Deployment](./docs/deployment.md) for more details.
+
 Deployment is configured using [uWSGI](https://uwsgi.readthedocs.io/en/latest/)
 and [Caddy](https://caddyserver.com/).
-
-A [server playbook](/docs/server-playbook.md) document is also available, based
-on Ubuntu 20.04 LTS.
 
 Environment variables for production are defined both in `uwsgi.ini` (for uWSGI)
 and in `.envrc` (for manage.py commands such as migrations and cron management
 commands).
 
-```sh
-cp uwsgi.example.ini uwsgi.ini  # edit environment variables in uwsgi.ini
-uwsgi uwsgi.ini  # start djago app
-caddy start --config /home/roa/mataroa/Caddyfile  # start caddy server
-```
-
-To reload or stop the uWSGI process:
+To reload the uWSGI process:
 
 ```sh
-uwsgi --reload mataroa.pid
-uwsgi --stop mataroa.pid
-
-# or find the PID and kill that directly
-ps aux|grep uwsgi
-kill -9 <PID>
+sudo systemctl reload mataroa.uwsgi
 ```
 
-To reload or store the Caddy webserver:
+To reload Caddy:
 
 ```sh
-caddy reload --config /home/roa/mataroa/Caddyfile
-caddy stop
+systemctl restart caddy  # root only
 ```
-
-Also, two cronjobs (used by the email newsletter feature) need to be installed.
-The schedule is subject to the administrator’s preference. Indicatively:
-
-```sh
-*/5 * * * * bash -c 'cd /home/roa/mataroa && source ./venv/bin/activate && source .envrc && python manage.py enqueue_notifications'
-*/10 * * * * bash -c 'cd /home/roa/mataroa && source ./venv/bin/activate && source .envrc && python manage.py process_notifications'
-0 0 1 * * bash -c 'cd /home/roa/mataroa && source ./venv/bin/activate && source .envrc && python manage.py mail_exports'
-```
-
-Documentation about these commands can be found in section [Management](#Management).
-
-Finally, certain [setting variables](mataroa/settings.py) may need to be redefined:
-
-* `ADMINS`
-* `CANONICAL_HOST`
-* `EMAIL_HOST` and `EMAIL_HOST_BROADCAST`
-
 ## Backup
 
-To automate backup, one can run [`backup-database.sh`](backup-database.sh) which
-dumps the database and uploads it into any S3-compatible object storage cloud
-using the [MinIO client](https://min.io/). This script needs the database password
-as an environment variable. The key must be `PGPASSWORD`. The variable can live
-in `.envrc` as such:
+See [Database Backup](docs/database-backup.md) for details. In summary:
+
+To create a database dump:
 
 ```sh
-export PGPASSWORD=db-password
+pg_dump -Fc --no-acl mataroa -h localhost -U mataroa -f /home/deploy/mataroa.dump -w
 ```
 
 To restore a database dump:
 
 ```sh
 pg_restore -v -h localhost -cO --if-exists -d mataroa -U mataroa -W mataroa.dump
-```
-
-To add on cron:
-
-```sh
-0 */6 * * * /home/roa/mataroa/backup-database.sh
 ```
 
 ## Management
@@ -271,7 +235,8 @@ a Stripe account with a single
 [Product](https://stripe.com/docs/billing/prices-guide) (eg. "Mataroa Premium
 Plan").
 
-To configure, add the following variables from your Stripe account to your `.envrc`:
+To configure, add the following variables from your Stripe account to your
+`.envrc`:
 
 ```sh
 export STRIPE_API_KEY="sk_test_XXX"
