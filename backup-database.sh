@@ -17,6 +17,7 @@ fi
 cd "$(dirname "$0")"
 
 main() {
+    # shellcheck disable=SC1091
     # source for PGPASSWORD variable
     source /var/www/mataroa/.envrc
 
