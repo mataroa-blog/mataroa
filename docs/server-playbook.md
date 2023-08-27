@@ -4,7 +4,18 @@ This is a basic playbook on how to setup a new mataroa instance.
 
 Based and tested on Ubuntu 22.04.
 
-## Timezone
+## Set editor
+
+Optional.
+
+```sh
+select-editor
+update-alternatives --config editor
+echo 'export EDITOR=vim;' >> ~/.bashrc
+source ~/.bashrc
+```
+
+## Set timezone
 
 ```sh
 timedatectl set-timezone UTC
@@ -17,13 +28,13 @@ apt update
 unattended-upgrade
 ```
 
-## Python and Git
+## Install Python and Git
 
 ```sh
 apt install -y python3 python3-dev python3-venv build-essential git
 ```
 
-## Caddy
+## Install Caddy
 
 From: https://caddyserver.com/docs/install#debian-ubuntu-raspbian
 
@@ -35,7 +46,7 @@ apt update
 apt install caddy
 ```
 
-## User
+## Setup deploy user
 
 ```sh
 adduser deploy  # leave password empty three times
@@ -46,7 +57,7 @@ mkdir www
 chown -R deploy:www-data www
 ```
 
-## PostgreSQL
+## Install and setup PostgreSQL
 
 ```sh
 apt install postgresql
@@ -61,7 +72,7 @@ exit
 
 Note: Change 'xxx' with whatever password you choose.
 
-## acme.sh
+## Install acme.sh and get certificates
 
 We use Automatic DNS API integration with DNSimple in this case, because
 wildcard domain auto-renew is much harder otherwise.
@@ -70,20 +81,23 @@ https://github.com/acmesh-official/acme.sh/wiki/dnsapi#dns_dnsimple
 
 ```sh
 curl https://get.acme.sh | sh -s email=person@example.com
+# installation also inserts a cronjob for auto-renewal
+
+# setup DNSimple API
 echo 'export DNSimple_OAUTH_TOKEN="token-here"' >> /root/.acme.sh/acme.sh.env
 
 # issue cert
 acme.sh --issue --dns dns_dnsimple -d mataroa.blog -d *.mataroa.blog
 
 # we "install" (copy) the cert because we should not use the cert from acme.sh's internal store
-acme.sh --install-cert -d mataroa.blog -d *.mataroa.blog --key-file /etc/caddy/mataroa-blog-key.pem --fullchain-file /etc/caddy/mataroa-blog-cert.pem --reloadcmd "systemctl restart caddy"
+acme.sh --install-cert -d mataroa.blog -d *.mataroa.blog --key-file /etc/caddy/mataroa-blog-key.pem --fullchain-file /etc/caddy/mataroa-blog-cert.pem --reloadcmd "chown caddy:www-data /etc/caddy/mataroa-blog-{cert,key}.pem && systemctl restart caddy"
 ```
 
 Note: acme.sh's default SSL provider is ZeroSSL which does not accept email with
 plus-subaddressing. It will not error gracefully, just fail with a cryptic
 message (tested with acmesh v3.0.7).
 
-## Clone and configure
+## Clone repository and configure
 
 ```sh
 sudo -i -u deploy
@@ -111,7 +125,7 @@ after all) but uWSGI has multiple extensions and compile options which change
 depending on the distribution. For this reason, we install from PyPI, which is
 consistent.
 
-## systemd
+## Add systemd entry
 
 ```sh
 cp /var/www/mataroa/mataroa.uwsgi.service /lib/systemd/system/mataroa.uwsgi.service
@@ -126,10 +140,20 @@ systemctl start mataroa.uwsgi
 systemctl status mataroa.uwsgi
 ```
 
-## MinIO
+At this point DNS should also be set and just rebooting should result in the
+instance showing the landing.
 
-```sh
-wget https://dl.min.io/client/mc/release/linux-amd64/mc
-chmod +x mc
-mv mc /usr/local/bin/
+## Setup Cronjobs
+
+Two every 5/10 miniutes for notifications:
+
+```
+*/5 * * * * bash -c 'cd /var/www/mataroa && source .venv/bin/activate && source .envrc && python manage.py enqueue_notifications'
+*/10 * * * * bash -c 'cd /var/www/mataroa && source .venv/bin/activate && source .envrc && python manage.py process_notifications'
+```
+
+One monthly for mail exports
+
+```
+0 0 * * * bash -c 'cd /var/www/mataroa && source .venv/bin/activate && source .envrc && python manage.py mail_exports'
 ```
