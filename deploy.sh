@@ -36,20 +36,20 @@ main() {
     make test
 
     # push origin srht
-    git push -v origin master
+    git push -v origin main
 
     # push on github
-    git push -v github master
+    git push -v github main
 
     # pull on server and reload
-    ssh roa@95.217.177.163 'cd mataroa ' \
+    ssh deploy@95.217.30.133 'cd /var/www/mataroa ' \
         '&& git pull ' \
-        '&& source venv/bin/activate ' \
+        '&& source .venv/bin/activate ' \
         '&& pip install -U pip ' \
         '&& pip install -r requirements.txt ' \
         '&& python manage.py collectstatic --noinput ' \
         '&& source .envrc && python manage.py migrate ' \
-        '&& uwsgi --reload mataroa.pid'
+        '&& sudo systemctl reload mataroa.uwsgi'
 }
 
 main "$@"
