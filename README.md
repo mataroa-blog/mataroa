@@ -176,14 +176,18 @@ make lint
 
 ## Deployment
 
-See [Deployment](./docs/deployment.md) for more details.
+See the [Deployment](./docs/deployment.md) document for an overview on steps
+required to deploy a mataroa instance.
 
-Deployment is configured using [uWSGI](https://uwsgi.readthedocs.io/en/latest/)
-and [Caddy](https://caddyserver.com/).
+See the [Server Playbook](./docs/server-playbook.md) document for a detailed
+run through of setting up a mataroa instance on an Ubuntu 22.04 LTS system
+using [uWSGI](https://uwsgi.readthedocs.io/en/latest/) and
+[Caddy](https://caddyserver.com/).
 
-Environment variables for production are defined both in `uwsgi.ini` (for uWSGI)
-and in `.envrc` (for manage.py commands such as migrations and cron management
-commands).
+See the [Server Migration](./docs/server-migration.md) document for a guide on
+how to migrate servers.
+
+### Useful Commands
 
 To reload the uWSGI process:
 
@@ -196,6 +200,26 @@ To reload Caddy:
 ```sh
 systemctl restart caddy  # root only
 ```
+
+uWSGI logs:
+
+```sh
+journalctl -fb -u mataroa.uwsgi
+```
+
+Caddy logs:
+
+```sh
+journalctl -fb -u caddy
+```
+
+Get an overview with systemd status:
+
+```sh
+systemctl status caddy
+systemctl status mataroa.uwsgi
+```
+
 ## Backup
 
 See [Database Backup](docs/database-backup.md) for details. In summary:
