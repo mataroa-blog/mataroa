@@ -134,6 +134,14 @@ class User(AbstractUser):
         return f"//{self.username}.{settings.CANONICAL_HOST}"
 
     @property
+    def blog_url(self):
+        url = f"{util.get_protocol()}"
+        if self.custom_domain:
+            return url + f"//{self.custom_domain}"
+        else:
+            return url + f"//{self.username}.{settings.CANONICAL_HOST}"
+
+    @property
     def blog_byline_as_text(self):
         linker = bleach.linkifier.Linker(callbacks=[lambda attrs, new: None])
         html_text = util.md_to_html(self.blog_byline, strip_tags=True)
