@@ -802,3 +802,17 @@ svg .analytics-chart-text {
     margin-top: 8px;
     color: var(--red-color);
 }
+
+/* adminextra */
+.adminextra-table {
+    max-width: 100%;
+    margin-top: 32px;
+    margin-bottom: 32px;
+    overflow: auto;
+}
+
+.adminextra-table td {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

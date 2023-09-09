@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import include, path, re_path
 
 from main import feeds
-from main.views import api, billing, export, general
+from main.views import adminextra, api, billing, export, general
 
 admin.site.site_header = "mataroa admin"
 
@@ -33,6 +33,11 @@ urlpatterns += [
     path("accounts/edit/", general.UserUpdate.as_view(), name="user_update"),
     path("accounts/delete/", general.UserDelete.as_view(), name="user_delete"),
     path("accounts/domain/", general.domain_check, name="domain_check"),
+]
+
+# adminextra
+urlpatterns += [
+    path("adminextra/users/", adminextra.users, name="adminextra_users"),
 ]
 
 # moderation pages
