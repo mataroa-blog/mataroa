@@ -19,10 +19,14 @@
         <tbody>
             {% for user in user_list %}
             <tr>
-                <td style="width: 1%; min-width: 50px;">{{ user.id }}</td>
-                <td style="width: 7%; min-width: 150px;">{{ user.username }}</td>
+                <td style="width: 1%; min-width: 50px;">
+                    <a href="{% url 'admin:main_user_change' user.id %}">
+                        {{ user.id }}
+                    </a>
+                </td>
+                <td style="width: 7%; min-width: 200px;">{{ user.username }}</td>
                 <td style="width: 15%; min-width: 350px;">
-                    <a href="{{ user.blog_url }">
+                    <a href="{{ user.blog_url }}">
                         {{ user.blog_url }}
                     </a>
                 </td>
