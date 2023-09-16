@@ -6,45 +6,39 @@
 <main>
     <h1>Adminextra Users</h1>
 </main>
-<section class="adminextra-table">
-    <table>
-        <thead>
-            <th>ID</th>
-            <th>Username</th>
-            <th>Blog URL</th>
-            <th>Email</th>
-            <th>Posts</th>
-        </thead>
+<section class="adminextra-content">
 
-        <tbody>
-            {% for user in user_list %}
-            <tr>
-                <td style="width: 1%; min-width: 50px;">
-                    <a href="{% url 'admin:main_user_change' user.id %}">
-                        {{ user.id }}
+    {% for user in user_list %}
+    <div class="adminextra-content-row">
+        <div class="adminextra-content-row-id">
+            <a href="{% url 'admin:main_user_change' user.id %}">
+                {{ user.id }}
+            </a>
+        </div>
+        <div class="adminextra-content-row-username">
+            {{ user.username }}
+        </div>
+        <div class="adminextra-content-row-url">
+            <a href="{{ user.blog_url }}">
+                {{ user.blog_url }}
+            </a>
+        </div>
+        <div class="adminextra-content-row-email">
+            {{ user.email }}
+        </div>
+        <div class="adminextra-content-row-posts">
+            <ul>
+                {% for post in user.post_set.all %}
+                <li>
+                    <a href="{{ post.get_absolute_url }}" target="_blank" rel="noopener">
+                        {{ post.title }}
                     </a>
-                </td>
-                <td style="width: 7%; min-width: 200px;">{{ user.username }}</td>
-                <td style="width: 15%; min-width: 350px;">
-                    <a href="{{ user.blog_url }}">
-                        {{ user.blog_url }}
-                    </a>
-                </td>
-                <td style="width: 7%; min-width: 250px;">{{ user.email }}</td>
-                <td>
-                    <ul>
-                        {% for post in user.post_set.all %}
-                        <li>
-                            <a href="{{ post.get_absolute_url }}" target="_blank" rel="noopener">
-                                {{ post.title }}
-                            </a>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endfor %}
+
 </section>
 {% endblock %}

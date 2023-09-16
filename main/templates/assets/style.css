@@ -804,15 +804,76 @@ svg .analytics-chart-text {
 }
 
 /* adminextra */
-.adminextra-table {
+.adminextra-content {
     max-width: 100%;
-    margin-top: 32px;
     margin-bottom: 32px;
     overflow: auto;
 }
 
-.adminextra-table td {
-    overflow: hidden;
+.adminextra-content-row {
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--light-grey-color);
+}
+@media (max-width: 34rem) {
+    .adminextra-content-row {
+        padding: 8px 0;
+    }
+}
+
+.adminextra-content-row div {
+    box-sizing: border-box;
+    padding: 4px;
+}
+
+.adminextra-content-row ul {
+    margin: 0;
+}
+
+.adminextra-content-row-id {
+    width: 45px;
     white-space: nowrap;
+}
+@media (max-width: 34rem) {
+    .adminextra-content-row-id a {
+        color: darksalmon;
+    }
+}
+
+.adminextra-content-row-username {
+    width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.adminextra-content-row-url {
+    width: 400px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 34rem) {
+    .adminextra-content-row-url a {
+        color: var(--dark-grey-color);
+        text-decoration: underline;
+    }
+}
+
+.adminextra-content-row-email {
+    width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+@media (max-width: 34rem) {
+    .adminextra-content-row-email {
+        color: var(--dark-grey-color);
+    }
+}
+
+.adminextra-content-row-posts {
+    overflow: hidden;
     text-overflow: ellipsis;
 }
