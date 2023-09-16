@@ -5,7 +5,7 @@ RUN apt-get update && \
     swig \
     libssl-dev \
     dpkg-dev \
-    netcat \
+    netcat-traditional \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt /code/
