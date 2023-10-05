@@ -347,7 +347,6 @@ tr:nth-child(even) {
 
 th,
 td {
-    max-width: 0px;
     padding: 4px;
 }
 
