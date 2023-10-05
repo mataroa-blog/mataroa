@@ -631,9 +631,9 @@ class ImageList(LoginRequiredMixin, FormView):
                     self.extension = "jpeg"
                 data = f.read()
 
-                # file limit 6MB but say it's 5MB
-                if len(data) > 6 * 1000 * 1000:
-                    form.add_error("file", "File too big. Limit is 5MB.")
+                # file limit 1.2MB but say it's 1MB
+                if len(data) > 1.2 * 1000 * 1000:
+                    form.add_error("file", "File too big. Limit is 1MB.")
                     return self.form_invalid(form)
 
                 self.slug = str(uuid.uuid4())[:8]
