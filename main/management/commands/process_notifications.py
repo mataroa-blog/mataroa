@@ -49,7 +49,6 @@ def get_email(post, notification):
         body=body,
         from_email=f"{blog_title} <{post.owner.username}@{settings.EMAIL_FROM_HOST}>",
         to=[notification.email],
-        reply_to=[post.owner.email],
         headers={
             "X-PM-Message-Stream": "newsletters",
             "List-Unsubscribe": unsubscribe_url,

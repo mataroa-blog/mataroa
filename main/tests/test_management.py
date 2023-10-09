@@ -187,7 +187,7 @@ class ProcessNotificationsTest(TestCase):
 
         # email headers
         self.assertEqual(mail.outbox[0].to, [self.notification.email])
-        self.assertEqual(mail.outbox[0].reply_to, [self.user.email])
+        self.assertEqual(mail.outbox[0].reply_to, [])
         self.assertEqual(
             mail.outbox[0].from_email,
             f"{self.user.username} <{self.user.username}@{settings.EMAIL_FROM_HOST}>",
