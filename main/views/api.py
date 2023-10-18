@@ -136,7 +136,7 @@ def api_post(request, slug):
             )
 
     # get post
-    post_list = models.Post.objects.filter(slug=slug)
+    post_list = models.Post.objects.filter(slug=slug, owner=user)
     if not post_list:
         return JsonResponse({"ok": False, "error": "Not found."}, status=404)
     post = post_list.first()

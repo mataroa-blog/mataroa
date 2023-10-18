@@ -45,7 +45,7 @@ class APIResetKeyTestCase(TestCase):
         self.assertNotEqual(self.api_key, new_api_key)
 
 
-class APIPostListAnonTestCase(TestCase):
+class APIListAnonTestCase(TestCase):
     """Test cases for anonymous POST / GET / PATCH / DELETE on /api/posts/."""
 
     def test_posts_get(self):
@@ -65,7 +65,7 @@ class APIPostListAnonTestCase(TestCase):
         self.assertEqual(response.status_code, 405)
 
 
-class APIPostAnonTestCase(TestCase):
+class APISingleAnonTestCase(TestCase):
     """Test cases for anonymous GET / PATCH / DELETE on /api/posts/<post-slug>/."""
 
     def setUp(self):
@@ -108,7 +108,7 @@ class APIPostAnonTestCase(TestCase):
         self.assertEqual(response.status_code, 403)
 
 
-class APIPostListPostAuthTestCase(TestCase):
+class APIListPostAuthTestCase(TestCase):
     """Test cases for auth-related POST /api/posts/ aka post creation."""
 
     def setUp(self):
@@ -138,7 +138,7 @@ class APIPostListPostAuthTestCase(TestCase):
         self.assertEqual(response.status_code, 400)
 
 
-class APIPostListPostTestCase(TestCase):
+class APIListPostTestCase(TestCase):
     """Test cases for POST /api/posts/ aka post creation."""
 
     def setUp(self):
@@ -251,7 +251,7 @@ class APIPostListPostTestCase(TestCase):
         models.Post.objects.all().first().delete()
 
 
-class APIPostListPatchAuthTestCase(TestCase):
+class APIListPatchAuthTestCase(TestCase):
     """Test cases for auth-related PATCH /api/posts/<post-slug>/ aka post update."""
 
     def setUp(self):
@@ -290,7 +290,7 @@ class APIPostListPatchAuthTestCase(TestCase):
         self.assertEqual(response.status_code, 403)
 
 
-class APIPostListPatchTestCase(TestCase):
+class APIListPatchTestCase(TestCase):
     """Test cases for PATCH /api/posts/<post-slug>/ aka post update."""
 
     def setUp(self):
@@ -474,13 +474,13 @@ class APIPostListPatchTestCase(TestCase):
                 "title": "Hi Bob, it's Alice",
             },
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 404)
         self.assertEqual(models.Post.objects.all().count(), 1)
         self.assertEqual(models.Post.objects.all().first().title, data["title"])
         models.Post.objects.all().first().delete()
 
 
-class APIPostGetAuthTestCase(TestCase):
+class APIGetAuthTestCase(TestCase):
     """Test cases for auth-related GET /api/posts/<post-slug>/ aka post retrieve."""
 
     def setUp(self):
@@ -514,7 +514,7 @@ class APIPostGetAuthTestCase(TestCase):
         self.assertEqual(response.json(), {"ok": False, "error": "Not authorized."})
 
 
-class APIPostGetTestCase(TestCase):
+class APIGetTestCase(TestCase):
     """Test cases for GET /api/posts/<post-slug>/ aka post retrieve."""
 
     def setUp(self):
@@ -561,7 +561,7 @@ class APIPostGetTestCase(TestCase):
         self.assertFalse(response.json()["ok"])
 
 
-class APIPostDeleteAuthTestCase(TestCase):
+class APIDeleteAuthTestCase(TestCase):
     """Test cases for auth-related DELETE /api/posts/<post-slug>/ aka post retrieve."""
 
     def setUp(self):
@@ -600,11 +600,10 @@ class APIPostDeleteAuthTestCase(TestCase):
             reverse("api_post", args=(self.post.slug,)),
             HTTP_AUTHORIZATION=f"Bearer {user_b.api_key}",
         )
-        self.assertEqual(response.status_code, 403)
-        self.assertEqual(response.json(), {"ok": False, "error": "Not allowed."})
+        self.assertEqual(response.status_code, 404)
 
 
-class APIPostDeleteTestCase(TestCase):
+class APIDeleteTestCase(TestCase):
     """Test cases for DELETE /api/posts/<post-slug>/ aka post retrieve."""
 
     def setUp(self):
@@ -639,7 +638,7 @@ class APIPostDeleteTestCase(TestCase):
         self.assertFalse(response.json()["ok"])
 
 
-class APIPostListGetTestCase(TestCase):
+class APIListGetTestCase(TestCase):
     """Test cases for GET /api/posts/ aka post list."""
 
     def setUp(self):
@@ -690,3 +689,57 @@ class APIPostListGetTestCase(TestCase):
             },
             post_list,
         )
+
+
+class APISingleGetTestCase(TestCase):
+    """Test posts with the same slug return across different users."""
+
+    def setUp(self):
+        # user 1
+        self.user1 = models.User.objects.create(username="alice")
+        self.data = {
+            "title": "Test 1",
+            "published_at": "2021-06-01",
+        }
+        response = self.client.post(
+            reverse("api_posts"),
+            HTTP_AUTHORIZATION=f"Bearer {self.user1.api_key}",
+            content_type="application/json",
+            data=self.data,
+        )
+        self.assertEqual(response.status_code, 200)
+        # user 2, same post
+        self.user2 = models.User.objects.create(username="bob")
+        self.data = {
+            "title": "Test 1",
+            "published_at": "2021-06-02",
+        }
+        response = self.client.post(
+            reverse("api_posts"),
+            HTTP_AUTHORIZATION=f"Bearer {self.user2.api_key}",
+            content_type="application/json",
+            data=self.data,
+        )
+        self.assertEqual(response.status_code, 200)
+        # verify objects
+        self.assertEqual(models.Post.objects.all().count(), 2)
+        self.assertEqual(models.Post.objects.all()[0].slug, "test-1")
+        self.assertEqual(models.Post.objects.all()[1].slug, "test-1")
+
+    def test_get(self):
+        # user 1
+        response = self.client.get(
+            reverse("api_post", args=("test-1",)),
+            HTTP_AUTHORIZATION=f"Bearer {self.user1.api_key}",
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["published_at"], "2021-06-01")
+        # user 2
+        response = self.client.get(
+            reverse("api_post", args=("test-1",)),
+            HTTP_AUTHORIZATION=f"Bearer {self.user2.api_key}",
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["published_at"], "2021-06-02")
