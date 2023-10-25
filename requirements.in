@@ -4,4 +4,4 @@ uwsgi
 markdown
 pygments
 bleach[css]
-stripe
+stripe==5.5.0
