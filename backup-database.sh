@@ -24,8 +24,8 @@ main() {
     # dump database in the home folder
     pg_dump -Fc --no-acl mataroa -h localhost -U mataroa -f /home/deploy/mataroa.dump -w
 
-    # upload using minio client
-    /usr/local/bin/mc cp /home/deploy/mataroa.dump s3scw/mataroa/backups/postgres-mataroa-"$(date --utc +%Y-%m-%d-%H-%M-%S)"/
+    # upload using aws cli
+    /home/deploy/venv-backups/bin/aws s3 cp /home/deploy/mataroa.dump s3://mataroa-bucket/backups/postgres-mataroa-"$(date --utc +%Y%m%d-%H%M%S)"/
 }
 
 main "$@"
