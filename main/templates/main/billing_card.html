@@ -4,6 +4,11 @@
 
 {% block head_extra %}
 <script src="https://js.stripe.com/v3/?advancedFraudSignals=false"></script>
+<style>
+    [data-submitting] input[type="submit"] {
+        opacity: 0.8;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -18,8 +23,11 @@
 
         {% csrf_token %}
         <input id="submit" type="submit" value="Submit" style="margin-top: 16px;">
-        <div id="error-message">
-            <!-- Display error message to your customers here -->
+        <div id="loading-message" style="margin-top: 16px;">
+            <!-- loading message for users here -->
+        </div>
+        <div id="error-message" style="margin-top: 16px; color: red;">
+            <!-- error message for users here -->
         </div>
     </form>
 
@@ -53,6 +61,22 @@
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
 
+        // if form is already submitting, do nothing
+        if (form.hasAttribute('data-submitting')) {
+            return;
+        }
+
+        // add [data-submitting] attribute to stop multiple submissions
+        form.setAttribute('data-submitting', '');
+
+        // add loading message
+        const loadingContainer = document.querySelector('#loading-message');
+        loadingContainer.textContent = 'Submitting...';
+
+        // clear error if exists
+        const messageContainer = document.querySelector('#error-message');
+        messageContainer.textContent = '';
+
         const { error } = await stripe.confirmSetup({
             elements,
             confirmParams: {
@@ -64,13 +88,16 @@
             // This point will only be reached if there is an immediate error when
             // confirming the payment. Show error to your customer (for example, payment
             // details incomplete)
-            const messageContainer = document.querySelector('#error-message');
             messageContainer.textContent = error.message;
+            loadingContainer.textContent = '';
         } else {
             // Your customer will be redirected to your `return_url`. For some payment
             // methods like iDEAL, your customer will be redirected to an intermediate
             // site first to authorize the payment, then redirected to the `return_url`.
         }
+
+        // remove [data-submitting] attribute
+        form.removeAttribute('data-submitting');
     });
 </script>
 {% endblock %}
