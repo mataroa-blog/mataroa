@@ -1,6 +1,6 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}Add card — Mataroa{% endblock %}
+{% block title %}Subscribe to Premium — Mataroa{% endblock %}
 
 {% block head_extra %}
 <script src="https://js.stripe.com/v3/?advancedFraudSignals=false"></script>
@@ -8,7 +8,7 @@
 
 {% block content %}
 <main>
-    <h1>Add card</h1>
+    <h1>Subscribe to Premium</h1>
 
     <form id="payment-form" data-secret="{{ client_secret }}">
 
@@ -32,8 +32,24 @@
             Your card details will be sent to Stripe (payment processor).
         </li>
         <li>
+            We will charge your card immediately, through Stripe.
+        </li>
+        <li>
             We will store your card within Stripe, so that we can charge you
             next year.
+        </li>
+        <li>
+            You will be able to cancel your subscription immediately as well,
+            should you want to. You can cancel your subscription at any point,
+            24/7/365, from this billing dashboard with one click.
+        </li>
+        <li>
+            You can also get a refund, no questions asked.
+        </li>
+        <li>
+            All terms of service can be found in our
+            <a href="{% url 'operandi' %}">Modus Operandi</a>
+            page.
         </li>
     </ol>
 </main>
@@ -53,7 +69,7 @@
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        const { error } = await stripe.confirmSetup({
+        const { error } = await stripe.confirmPayment({
             elements,
             confirmParams: {
                 return_url: '{{ stripe_return_url }}',
