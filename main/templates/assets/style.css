@@ -148,6 +148,17 @@ summary {
 
 /* general */
 :root {
+    {% if request.theme_zialucia %}
+    font-size: 20px;
+    {% endif %}
+    font-family: sans-serif;
+    line-height: 1.5;
+
+    color-scheme: light dark;
+
+    /* this colour is only used in dark mode */
+    --dark-mode-color: #212529;
+
     --link-color: #1175e2;
     --ascent-color: #006cdf;
     --dark-grey-color: #757575;
@@ -158,40 +169,26 @@ summary {
     --purple-color: #cd1ecd;
 }
 
+@media (max-width: 34rem) {
+    :root {
+        /* mobile base font size remains 16px whether zialucia on or off */
+        font-size: 16px;
+    }
+}
+
 /* dark mode
  * create a new color (dark-mode-color)
  * override existing colors */
 @media (prefers-color-scheme: dark) {
     :root {
-        --dark-mode-color: #212529;
+        color: #fff;
+        background: var(--dark-mode-color);
 
         --link-color: #70b3ff;
         --dark-grey-color: #78828a;
         --light-grey-color: #353535;
         --airy-grey-color: #2b2b2b;
         --purple-color: #dd47ec;
-    }
-}
-
-html,
-body {
-    {% if request.theme_zialucia %}
-    font-size: 20px;
-    {% endif %}
-    font-family: sans-serif;
-    line-height: 1.5;
-}
-@media (max-width: 34rem) {
-    html,
-    body {
-        /* mobile base font size remains 16px whether zialucia on or off */
-        font-size: 16px;
-    }
-}
-@media (prefers-color-scheme: dark) {
-    body {
-        color: #fff;
-        background: var(--dark-mode-color);
     }
 }
 
@@ -553,6 +550,7 @@ form .helptext {
 .drafts {
     border: 1px solid var(--light-grey-color);
     padding: 16px 16px 0;
+    margin-bottom: 32px;
 }
 
 .posts {

@@ -10,13 +10,13 @@ bleach[css]==6.1.0
     # via -r requirements.in
 certifi==2023.7.22
     # via requests
-charset-normalizer==3.3.1
+charset-normalizer==3.3.2
     # via requests
-django==4.2.6
+django==4.2.7
     # via -r requirements.in
 idna==3.4
     # via requests
-markdown==3.5
+markdown==3.5.1
     # via -r requirements.in
 psycopg2-binary==2.9.9
     # via -r requirements.in
@@ -36,7 +36,7 @@ typing-extensions==4.8.0
     # via asgiref
 urllib3==2.0.7
     # via requests
-uwsgi==2.0.22
+uwsgi==2.0.23
     # via -r requirements.in
 webencodings==0.5.1
     # via
