@@ -456,6 +456,8 @@ def billing_welcome(request):
     stripe_intent = stripe.PaymentIntent.retrieve(payment_intent)
 
     if stripe_intent["status"] == "succeeded":
+        request.user.is_premium = True
+        request.user.save()
         messages.success(request, "premium subscription enabled")
     elif stripe_intent["status"] == "processing":
         messages.info(request, "payment is currently processing")
