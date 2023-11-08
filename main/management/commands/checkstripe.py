@@ -29,8 +29,8 @@ class Command(BaseCommand):
                 ).exists():
                     self.stdout.write(
                         self.style.NOTICE(
-                            f"Customer not found in mataroa "
-                            "database: {subscription.customer}"
+                            "Customer not found in mataroa "
+                            f"database: {subscription.customer}"
                         )
                     )
 
