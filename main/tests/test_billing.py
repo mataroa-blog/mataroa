@@ -116,7 +116,10 @@ class BillingCardAddTestCase(TestCase):
         self.client.force_login(self.user)
 
     def test_card_add_get(self):
-        response = self.client.get(reverse("billing_card"))
+        with patch.object(
+            stripe.SetupIntent, "create", return_value={"client_secret": "seti_123abc"}
+        ):
+            response = self.client.get(reverse("billing_card"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, b"Add card")
 

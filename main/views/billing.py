@@ -38,7 +38,7 @@ def _create_setup_intent(customer_id):
         raise Exception("Failed to create setup intent on Stripe.")
 
     return {
-        "stripe_client_secret": stripe_setup_intent.client_secret,
+        "stripe_client_secret": stripe_setup_intent["client_secret"],
     }
 
 
