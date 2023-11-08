@@ -195,16 +195,6 @@ def billing_index(request):
             subscription["current_period_end"]
         )
 
-    # update user.is_premium in case of subscription being activated directly on Stripe
-    if request.user.stripe_subscription_id and not request.user.is_premium:
-        request.user.is_premium = True
-        request.user.save()
-
-    # update user.is_premium if subscription has been canceled directly on Stripe
-    if not request.user.stripe_subscription_id:
-        request.user.is_premium = False
-        request.user.save()
-
     # transform into list of values
     payment_methods = _get_payment_methods(request.user.stripe_customer_id).values()
 
