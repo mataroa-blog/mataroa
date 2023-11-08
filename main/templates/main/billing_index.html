@@ -129,9 +129,10 @@
     </p>
     <ul>
         {% for invoice in invoice_list %}
-        <li>
-            ({{ invoice.period_start|date:"Y-m-d" }} – {{ invoice.period_end|date:"Y-m-d" }})
-            {{ invoice.created|date }}
+        <li
+            <span title="Period: {{ invoice.period_start|date:"Y-m-d" }} – {{ invoice.period_end|date:"Y-m-d" }}">
+                {{ invoice.created|date }}
+            </span>
             {{ invoice.created|time:"H:i:s" }}
             —
             <a href="{{ invoice.url }}">see invoice</a>
@@ -151,7 +152,7 @@
             <input type="submit" value="Subscribe to Premium »">
         </form>
         {% else %}
-        <a href="{% url 'billing_card' %}">Subscribe to Premium »</a>
+        <a href="{% url 'billing_subscribe' %}">Subscribe to Premium »</a>
         {% endif %}
     </p>
     {% endif %}
@@ -164,6 +165,5 @@
     {% endif %}
 
     {% endif %}
-
 </main>
 {% endblock %}
