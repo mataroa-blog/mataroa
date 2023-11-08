@@ -35,7 +35,7 @@ Also checkout our docs on:
 * [Deployment](docs/deployment.md)
 * [Server Playbook](docs/server-playbook.md)
 * [Admin and Moderation](docs/admin-moderation.md)
-* [Databse Backup](docs/database-backup.md)
+* [Database Backup](docs/database-backup.md)
 * [Server Migration](docs/server-migration.md)
 
 ## Development
