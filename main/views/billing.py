@@ -450,17 +450,6 @@ def billing_subscription(request):
     request.user.is_premium = True
     request.user.save()
 
-    # url = f"{util.get_protocol()}//{settings.CANONICAL_HOST}"
-    # url += reverse_lazy("billing_welcome")
-
-    # context = self.get_context_data()
-    # context["stripe_client_secret"] = data["stripe_client_secret"]
-    # context["stripe_return_url"] = url
-
-    # return self.render_to_response(context)
-
-    # subscription = _get_stripe_subscription(request.user.stripe_subscription_id)
-    # if subscription:
     messages.success(request, "premium subscription enabled")
     return redirect("billing_index")
 
