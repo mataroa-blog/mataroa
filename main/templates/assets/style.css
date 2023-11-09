@@ -550,7 +550,7 @@ form .helptext {
 .drafts {
     border: 1px solid var(--light-grey-color);
     padding: 16px 16px 0;
-    margin-bottom: 32px;
+    margin-bottom: 24px;
 }
 
 .posts {
