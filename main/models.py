@@ -424,3 +424,11 @@ class Snapshot(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Onboard(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    code = models.UUIDField(default=uuid.uuid4, unique=True)
+    problems = models.CharField(max_length=300)
+    quality = models.CharField(max_length=300)
+    created_at = models.DateTimeField(auto_now_add=True)

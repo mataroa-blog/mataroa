@@ -107,7 +107,6 @@ class UserAdmin(DjUserAdmin):
             },
         ),
     )
-
     ordering = ["-id"]
 
 
@@ -124,13 +123,12 @@ class PostAdmin(admin.ModelAdmin):
         "published_at",
     )
     search_fields = ("title", "slug", "body", "owner__username")
+    ordering = ["-id"]
 
     @admin.display
     def post_url(self, obj):
         url = util.get_protocol() + obj.get_proper_url()
         return format_html(f'<a href="{url}">{url}</a>')
-
-    ordering = ["-id"]
 
 
 @admin.register(models.Page)
@@ -144,7 +142,6 @@ class PageAdmin(admin.ModelAdmin):
         "updated_at",
         "is_hidden",
     )
-
     ordering = ["-id"]
 
 
@@ -158,7 +155,6 @@ class ImageAdmin(admin.ModelAdmin):
         "owner",
         "uploaded_at",
     )
-
     ordering = ["-id"]
 
 
@@ -170,7 +166,6 @@ class AnalyticPageAdmin(admin.ModelAdmin):
         "path",
         "created_at",
     )
-
     ordering = ["-id"]
 
 
@@ -181,7 +176,6 @@ class AnalyticPostAdmin(admin.ModelAdmin):
         "post",
         "created_at",
     )
-
     ordering = ["-id"]
 
 
@@ -196,7 +190,6 @@ class CommentAdmin(admin.ModelAdmin):
         "body",
         "created_at",
     )
-
     ordering = ["-id"]
 
 
@@ -209,7 +202,6 @@ class NotificationAdmin(admin.ModelAdmin):
         "unsubscribe_key",
         "is_active",
     )
-
     ordering = ["-id"]
 
 
@@ -222,7 +214,6 @@ class NotificationRecordAdmin(admin.ModelAdmin):
         "notification",
         "post",
     )
-
     ordering = ["-id"]
 
 
@@ -235,7 +226,6 @@ class ExportRecordAdmin(admin.ModelAdmin):
         "user",
     )
     list_display_links = ("id", "name")
-
     ordering = ["-id"]
 
 
@@ -247,5 +237,14 @@ class SnapshotAdmin(admin.ModelAdmin):
         "owner",
     )
     list_display_links = ("id", "title")
+    ordering = ["-id"]
 
+
+@admin.register(models.Onboard)
+class OnboardAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "user",
+        "created_at",
+    )
     ordering = ["-id"]
