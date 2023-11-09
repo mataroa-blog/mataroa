@@ -24,11 +24,15 @@ urlpatterns = [
 urlpatterns += [
     path("accounts/logout/", general.Logout.as_view(), name="logout"),
     path("accounts/", include("django.contrib.auth.urls")),
-    path("accounts/create/", general.user_create_disabled, name="user_create"),
     path(
-        "accounts/create/consciousness-only/",
-        general.UserCreate.as_view(),
-        name="user_create_invite",
+        "accounts/create/",
+        general.UserCreateStepOne.as_view(),
+        name="user_create",
+    ),
+    path(
+        "accounts/humanity-diagnostics/<uuid:onboard_code>/",
+        general.UserCreateStepTwo.as_view(),
+        name="user_create_step_two",
     ),
     path("accounts/edit/", general.UserUpdate.as_view(), name="user_update"),
     path("accounts/delete/", general.UserDelete.as_view(), name="user_delete"),

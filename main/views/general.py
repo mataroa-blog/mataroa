@@ -120,14 +120,26 @@ class Logout(DjLogoutView):
         return super().dispatch(request, *args, **kwargs)
 
 
-def user_create_disabled(request):
-    return render(request, "main/user_create_disabled.html")
+class UserCreateStepOne(CreateView):
+    form_class = forms.OnboardForm
+    template_name = "main/user_create_step_one.html"
+
+    def form_valid(self, form):
+        self.object = form.save()
+        if not form.cleaned_data["sunflower"]:
+            # this is a bot
+            messages.error(
+                self.request,
+                "If you are not a robot please go back and check the box!",
+            )
+            return redirect("index")
+        return redirect("user_create_step_two", onboard_code=self.object.code)
 
 
-class UserCreate(CreateView):
+class UserCreateStepTwo(CreateView):
     form_class = forms.UserCreationForm
     success_url = reverse_lazy("dashboard")
-    template_name = "main/user_create.html"
+    template_name = "main/user_create_step_two.html"
     success_message = "welcome to mataroa :)"
 
     def form_valid(self, form):
@@ -137,6 +149,8 @@ class UserCreate(CreateView):
         self.object = form.save(commit=False)
         self.object.blog_title = self.object.username
         self.object.save()
+        self.onboard.user = self.object
+        self.onboard.save()
         user = authenticate(
             username=form.cleaned_data.get("username"),
             password=form.cleaned_data.get("password1"),
@@ -144,6 +158,15 @@ class UserCreate(CreateView):
         login(self.request, user)
         messages.success(self.request, self.success_message)
         return HttpResponseRedirect(self.get_success_url())
+
+    def dispatch(self, request, *args, **kwargs):
+        self.onboard = get_object_or_404(
+            models.Onboard,
+            code=kwargs["onboard_code"],
+        )
+        if self.onboard.user:
+            return redirect("index")
+        return super().dispatch(request, *args, **kwargs)
 
 
 class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):

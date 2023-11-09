@@ -6,6 +6,14 @@ from django.core import validators as dj_validators
 from main import models
 
 
+class OnboardForm(forms.ModelForm):
+    sunflower = forms.BooleanField(required=False)
+
+    class Meta:
+        model = models.Onboard
+        fields = ["problems", "quality"]
+
+
 class UserCreationForm(DjUserCreationForm):
     class Meta:
         model = get_user_model()

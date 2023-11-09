@@ -24,6 +24,13 @@ class UserCreateDisabledTestCase(TestCase):
 
 
 class UserCreateTestCase(TestCase):
+    def setUp(self):
+        data = {
+            "problems": "sure",
+            "quality": "nope",
+        }
+        self.onboard = models.Onboard.objects.create(**data)
+
     def test_user_creation(self):
         data = {
             "username": "alice",
@@ -31,7 +38,9 @@ class UserCreateTestCase(TestCase):
             "password2": "abcdef123456",
             "blog_title": "New blog",
         }
-        response = self.client.post(reverse("user_create_invite"), data)
+        response = self.client.post(
+            reverse("user_create_step_two", args=(self.onboard.code,)), data
+        )
         self.assertEqual(response.status_code, 302)
         self.assertTrue(models.User.objects.get(username=data["username"]))
 
@@ -42,7 +51,9 @@ class UserCreateTestCase(TestCase):
             "password2": "abcdef123456",
             "blog_title": "New blog",
         }
-        response = self.client.post(reverse("user_create_invite"), data)
+        response = self.client.post(
+            reverse("user_create_step_two", args=(self.onboard.code,)), data
+        )
         self.assertEqual(response.status_code, 302)
         self.assertTrue(models.User.objects.get(username=data["username"]))
 
@@ -53,12 +64,21 @@ class UserCreateTestCase(TestCase):
             "password2": "abcdef123456",
             "blog_title": "New blog",
         }
-        response = self.client.post(reverse("user_create_invite"), data)
+        response = self.client.post(
+            reverse("user_create_step_two", args=(self.onboard.code,)), data
+        )
         self.assertEqual(response.status_code, 302)
         self.assertTrue(models.User.objects.get(username=data["username"]))
 
 
 class UserCreateDisallowedTestCase(TestCase):
+    def setUp(self):
+        data = {
+            "problems": "sure",
+            "quality": "nope",
+        }
+        self.onboard = models.Onboard.objects.create(**data)
+
     def test_user_creation(self):
         data = {
             "username": "settings",
@@ -66,11 +86,20 @@ class UserCreateDisallowedTestCase(TestCase):
             "password2": "abcdef123456",
             "blog_title": "New blog",
         }
-        response = self.client.post(reverse("user_create_invite"), data)
+        response = self.client.post(
+            reverse("user_create_step_two", args=(self.onboard.code,)), data
+        )
         self.assertContains(response, b"This username is not available.")
 
 
 class UserCreateInvalidTestCase(TestCase):
+    def setUp(self):
+        data = {
+            "problems": "sure",
+            "quality": "nope",
+        }
+        self.onboard = models.Onboard.objects.create(**data)
+
     def test_user_creation_dollar(self):
         data = {
             "username": "with$dollar",
@@ -78,7 +107,9 @@ class UserCreateInvalidTestCase(TestCase):
             "password2": "abcdef123456",
             "blog_title": "New blog",
         }
-        response = self.client.post(reverse("user_create_invite"), data)
+        response = self.client.post(
+            reverse("user_create_step_two", args=(self.onboard.code,)), data
+        )
         self.assertContains(
             response,
             b"Invalid value. Should include only lowercase letters, numbers, and -",
@@ -91,7 +122,9 @@ class UserCreateInvalidTestCase(TestCase):
             "password2": "abcdef123456",
             "blog_title": "New blog",
         }
-        response = self.client.post(reverse("user_create_invite"), data)
+        response = self.client.post(
+            reverse("user_create_step_two", args=(self.onboard.code,)), data
+        )
         self.assertContains(
             response,
             b"Invalid value. Cannot be just hyphens.",
@@ -104,7 +137,9 @@ class UserCreateInvalidTestCase(TestCase):
             "password2": "abcdef123456",
             "blog_title": "New blog",
         }
-        response = self.client.post(reverse("user_create_invite"), data)
+        response = self.client.post(
+            reverse("user_create_step_two", args=(self.onboard.code,)), data
+        )
         self.assertContains(
             response,
             b"Invalid value. Cannot be just hyphens.",
