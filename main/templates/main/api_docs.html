@@ -25,6 +25,7 @@
             One can <a href="{% url 'api_reset' %}">reset their API key</a>.
             This will invalidate their key and issue a new one.
         </li>
+        <li>The API is at <code>https://mataroa.blog/api/</code></li>
         <li>All API endpoints end with a trailing slash.</li>
         <li>
             <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type">Content type</a>
@@ -76,7 +77,7 @@
     {{ protocol }}//{{ host }}/api/posts/
 </code></pre>
 
-    <h2>GET /api/posts/&lt;post-slug&gt;</h2>
+    <h2>GET /api/posts/&lt;post-slug&gt;/</h2>
     <p>
         Get single post.
     </p>
@@ -102,7 +103,7 @@
     {{ protocol }}//{{ host }}/api/posts/new-blog/
 </code></pre>
 
-    <h2>PATCH /api/posts/&lt;post-slug&gt;</h2>
+    <h2>PATCH /api/posts/&lt;post-slug&gt;/</h2>
     <p>
         Update existing post.
     </p>
@@ -138,7 +139,7 @@
 </code></pre>
 
 
-    <h2>DELETE /api/posts/&lt;post-slug&gt;</h2>
+    <h2>DELETE /api/posts/&lt;post-slug&gt;/</h2>
     <p>
         Delete post.
     </p>
