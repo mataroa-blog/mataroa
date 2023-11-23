@@ -42,8 +42,16 @@ urlpatterns += [
 # adminextra
 urlpatterns += [
     path("adminextra/users/", adminextra.user_list, name="adminextra_user_list"),
-    path("adminextra/users/<int:user_id>/approve/", adminextra.user_approve, name="adminextra_user_approve"),
-    path("adminextra/users/<int:user_id>/unapprove/", adminextra.user_unapprove, name="adminextra_user_unapprove"),
+    path(
+        "adminextra/users/<int:user_id>/approve/",
+        adminextra.user_approve,
+        name="adminextra_user_approve",
+    ),
+    path(
+        "adminextra/users/<int:user_id>/unapprove/",
+        adminextra.user_unapprove,
+        name="adminextra_user_unapprove",
+    ),
 ]
 
 # blog posts and post snapshots
