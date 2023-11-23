@@ -1,8 +1,0 @@
-<a href="{{ post.owner.blog_absolute_url }}" target="_blank" rel="noopener">
-    <span style="color: #999">{{ post.owner }}</span></a>
-
-/ <a href="{{ post.get_absolute_url }}" target="_blank" rel="noopener">
-    {{ post.title }}</a>
-
-/ <a href="{% url 'admin:main_post_change' post.id %}">
-    <small>{{ post.created_at }}</small></a>

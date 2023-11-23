@@ -44,50 +44,6 @@ urlpatterns += [
     path("adminextra/users/", adminextra.users, name="adminextra_users"),
 ]
 
-# moderation pages
-urlpatterns += [
-    path("mod/users/premium/", general.mod_users_premium, name="mod_users_premium"),
-    path("mod/users/new/", general.mod_users_new, name="mod_users_new"),
-    path(
-        "mod/users/new-with-posts/",
-        general.mod_users_new_with_posts,
-        name="mod_users_new_with_posts",
-    ),
-    path(
-        "mod/users/grandfather/",
-        general.mod_users_grandfather,
-        name="mod_users_grandfather",
-    ),
-    path("mod/users/staff/", general.mod_users_staff, name="mod_users_staff"),
-    path("mod/users/active/", general.mod_users_active, name="mod_users_active"),
-    path(
-        "mod/users/active-with-posts/",
-        general.mod_users_active_with_posts,
-        name="mod_users_active_with_posts",
-    ),
-    path(
-        "mod/users/active-nonnew/",
-        general.mod_users_active_nonnew,
-        name="mod_users_active_nonnew",
-    ),
-    path(
-        "mod/users/active-nonnew-with-posts/",
-        general.mod_users_active_nonnew_with_posts,
-        name="mod_users_active_nonnew_with_posts",
-    ),
-    path(
-        "mod/users/random-with-posts/",
-        general.mod_users_random_with_posts,
-        name="mod_users_random_with_posts",
-    ),
-    path("mod/users/<int:user_id>/expel/", general.mod_expel, name="mod_expel"),
-    path("mod/posts/new/", general.mod_posts_new, name="mod_posts_new"),
-    path("mod/posts/recently/", general.mod_posts_recently, name="mod_posts_recently"),
-    path("mod/pages/new/", general.mod_pages_new, name="mod_pages_new"),
-    path("mod/pages/recently/", general.mod_pages_recently, name="mod_pages_recently"),
-    path("mod/comments/", general.mod_comments, name="mod_comments"),
-]
-
 # blog posts and post snapshots
 urlpatterns += [
     path(
