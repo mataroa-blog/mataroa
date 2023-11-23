@@ -41,7 +41,7 @@ urlpatterns += [
 
 # adminextra
 urlpatterns += [
-    path("adminextra/users/", adminextra.users, name="adminextra_users"),
+    path("adminextra/users/", adminextra.user_list, name="adminextra_user_list"),
 ]
 
 # blog posts and post snapshots

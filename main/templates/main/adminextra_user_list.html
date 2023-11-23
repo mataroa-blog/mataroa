@@ -15,8 +15,25 @@
                 {{ user.id }}
             </a>
         </div>
+        <div class="adminextra-content-row-id2">
+            {{ user.stripe_customer_id|default:"" }}
+        </div>
         <div class="adminextra-content-row-username">
+            <span>{{ user.class_status }}</span>
+            {% if user.is_approved %}
+            <span>✅</span>
+            {% endif %}
             {{ user.username }}
+        </div>
+        <div class="adminextra-content-row-actions">
+            [
+                {% if not user.is_approved %}
+                <a style="color: green;" href="{% url 'adminextra_user_approve' user.id %}">approve</a>
+                | <a style="color: red;" href="{% url 'admin:main_user_delete' user.id %}">delete</a>
+                {% else %}
+                <a href="{% url 'adminextra_user_unapprove' user.id %}">unapprove</a>
+                {% endif %}
+            ]
         </div>
         <div class="adminextra-content-row-url">
             <a href="{{ user.blog_url }}">
