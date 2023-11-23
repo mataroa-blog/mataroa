@@ -1,0 +1,14 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Approve {{ user.username }} — Mataroa{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Confirm approving {{ user.username }}?</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" value="Approve user">
+    </form>
+</main>
+{% endblock %}

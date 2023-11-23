@@ -830,6 +830,8 @@ svg .analytics-chart-text {
 .adminextra-content-row-id {
     width: 45px;
     white-space: nowrap;
+    font-family: monospace;
+    line-height: 1.8;
 }
 @media (max-width: 34rem) {
     .adminextra-content-row-id a {
@@ -837,9 +839,27 @@ svg .analytics-chart-text {
     }
 }
 
+.adminextra-content-row-id2 {
+    width: 115px;
+    font-family: monospace;
+    font-size: 70%;
+    line-height: 2;
+    white-space: nowrap;
+}
+
 .adminextra-content-row-username {
     width: 250px;
     white-space: nowrap;
+    font-family: monospace;
+    line-height: 1.8;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.adminextra-content-row-actions {
+    width: 250px;
+    white-space: nowrap;
+    font-family: monospace;
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -847,6 +867,8 @@ svg .analytics-chart-text {
 .adminextra-content-row-url {
     width: 400px;
     white-space: nowrap;
+    font-family: monospace;
+    line-height: 1.8;
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -861,6 +883,8 @@ svg .analytics-chart-text {
 .adminextra-content-row-email {
     width: 300px;
     white-space: nowrap;
+    font-family: monospace;
+    line-height: 1.8;
     overflow: hidden;
     text-overflow: ellipsis;
 }
