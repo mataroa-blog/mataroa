@@ -30,8 +30,8 @@
             {% if user.onboard_set.first is not None %}
             <div>
                 <ul>
-                    <li>{{ user.onboard_set.first.problems }}</li>
-                    <li>{{ user.onboard_set.first.quality }}</li>
+                    <li title="{{ user.onboard_set.first.problems }}">{{ user.onboard_set.first.problems }}</li>
+                    <li title="{{ user.onboard_set.first.quality }}">{{ user.onboard_set.first.quality }}</li>
                 </ul>
             </div>
             {% endif %}
