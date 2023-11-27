@@ -818,6 +818,10 @@ svg .analytics-chart-text {
     }
 }
 
+.adminextra-content-row:nth-child(even) {
+    background: var(--airy-grey-color);
+}
+
 .adminextra-content-row div {
     box-sizing: border-box;
     padding: 4px;
