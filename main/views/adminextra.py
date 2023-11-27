@@ -57,6 +57,7 @@ def user_approve(request, user_id):
 
     raise Http404()
 
+
 def user_unapprove(request, user_id):
     if not request.user.is_authenticated or not request.user.is_superuser:
         raise Http404()

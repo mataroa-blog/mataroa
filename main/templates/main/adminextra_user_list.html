@@ -36,19 +36,13 @@
             </div>
             {% endif %}
         </div>
-        <div class="adminextra-content-row-actions">
+        <div class="adminextra-content-row-actions" id="actions-{{ user.id }}">
             [
                 {% if not user.is_approved %}
-                <form method="post" class="form-inline" action="{% url 'adminextra_user_approve' user.id %}">
-                    {% csrf_token %}
-                    <input type="submit" value="approve" style="color: green;">
-                </form>
+                <span onclick="approveUser('{{ user.id }}')" style="color: green; cursor: pointer;">approve</span>
                 | <a style="color: red;" href="{% url 'admin:main_user_delete' user.id %}" target="_blank">delete</a>
                 {% else %}
-                <form method="post" class="form-inline" action="{% url 'adminextra_user_unapprove' user.id %}">
-                    {% csrf_token %}
-                    <input type="submit" value="unapprove">
-                </form>
+                <span onclick="unapproveUser('{{ user.id }}')" style="color: blue; cursor: pointer;">unapprove</span>
                 {% endif %}
             ]
         </div>
@@ -75,4 +69,32 @@
     {% endfor %}
 
 </section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function approveUser(userID) {
+        fetch(`/adminextra/users/${userID}/approve/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            }
+        })
+            .then(() => {
+                document.getElementById(`actions-${userID}`).innerHTML = 'approved';
+            });
+    }
+
+    function unapproveUser(userID) {
+        fetch(`/adminextra/users/${userID}/unapprove/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            }
+        })
+            .then(() => {
+                document.getElementById(`actions-${userID}`).innerHTML = 'unapproved';
+            });
+    }
+</script>
 {% endblock %}
