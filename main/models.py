@@ -438,3 +438,6 @@ class Onboard(models.Model):
     problems = models.CharField(max_length=300)
     quality = models.CharField(max_length=300)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Prb: {self.problems} / Qlt: {self.quality}"

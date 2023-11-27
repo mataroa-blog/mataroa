@@ -21,17 +21,34 @@
         <div class="adminextra-content-row-username">
             <span>{{ user.class_status }}</span>
             {% if user.is_approved %}
-            <span>✅</span>
+            <span title="approved">✅</span>
             {% endif %}
-            {{ user.username }}
+            <span>
+                {{ user.username }}
+            </span>
+
+            {% if user.onboard_set.first is not None %}
+            <div>
+                <ul>
+                    <li>{{ user.onboard_set.first.problems }}</li>
+                    <li>{{ user.onboard_set.first.quality }}</li>
+                </ul>
+            </div>
+            {% endif %}
         </div>
         <div class="adminextra-content-row-actions">
             [
                 {% if not user.is_approved %}
-                <a style="color: green;" href="{% url 'adminextra_user_approve' user.id %}">approve</a>
-                | <a style="color: red;" href="{% url 'admin:main_user_delete' user.id %}">delete</a>
+                <form method="post" class="form-inline" action="{% url 'adminextra_user_approve' user.id %}">
+                    {% csrf_token %}
+                    <input type="submit" value="approve" style="color: green;">
+                </form>
+                | <a style="color: red;" href="{% url 'admin:main_user_delete' user.id %}" target="_blank">delete</a>
                 {% else %}
-                <a href="{% url 'adminextra_user_unapprove' user.id %}">unapprove</a>
+                <form method="post" class="form-inline" action="{% url 'adminextra_user_unapprove' user.id %}">
+                    {% csrf_token %}
+                    <input type="submit" value="unapprove">
+                </form>
                 {% endif %}
             ]
         </div>
