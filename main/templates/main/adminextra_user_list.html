@@ -11,11 +11,11 @@
     {% for user in user_list %}
     <div class="adminextra-content-row">
         <div class="adminextra-content-row-id">
-            <a href="{% url 'admin:main_user_change' user.id %}">
+            <a href="{% url 'admin:main_user_change' user.id %}" target="_blank" title="{{ user.date_joined }}">
                 {{ user.id }}
             </a>
         </div>
-        <div class="adminextra-content-row-id2">
+        <div class="adminextra-content-row-id2" style="padding-top: 8px;">
             {{ user.stripe_customer_id|default:"" }}
         </div>
         <div class="adminextra-content-row-username">
