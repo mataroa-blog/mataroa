@@ -102,6 +102,7 @@ class UserAdmin(DjUserAdmin):
                     "monero_address",
                     "is_premium",
                     "is_grandfathered",
+                    "is_approved",
                     "api_key",
                 ),
             },
