@@ -182,7 +182,6 @@ NOTIFICATIONS_FROM_EMAIL = "Mataroa Notifications <notifications@mataroa.blog>"
 EMAIL_FROM_HOST = "mataroa.blog"
 SERVER_EMAIL = "DC Parlov <server@mataroa.blog>"
 EMAIL_SUBJECT_PREFIX = "[Mataroa Notification] "
-EXPEL_LOG = "Mataroa Expeller <admin+expel@mataroa.blog>"
 
 
 # Security middleware
