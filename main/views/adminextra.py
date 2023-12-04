@@ -32,6 +32,8 @@ def user_list(request):
             .order_by("-id")
             .prefetch_related("post_set")
         )
+    if "premium" in mode:
+        user_list = user_list.filter(is_premium=True).order_by("-id")
     if "reverse" in mode:
         user_list = user_list.order_by("id")
 
