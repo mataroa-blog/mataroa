@@ -165,6 +165,12 @@ STORAGES = {
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
+# Default forms.URLField scheme
+# https://docs.djangoproject.com/en/5.0/ref/settings/#forms-urlfield-assume-https
+
+FORMS_URLFIELD_ASSUME_HTTPS = True
+
+
 # Email
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
