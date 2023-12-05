@@ -14,7 +14,7 @@ All notable changes to this project will be documented in this file.
 
 ## [1.0.0](https://github.com/mataroa-blog/mataroa/compare/5ff277da71fb653631ea38407cd6154e831be540...v1.0) - 2023-09-06
 
-This is an initial numbered release after 3+ years of active development.
+This is an initial numbered release after 3+ years of development.
 
 * Core blogging functionalities
 * Export functionalities
