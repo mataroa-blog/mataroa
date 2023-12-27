@@ -207,6 +207,11 @@ STRIPE_PUBLIC_KEY = os.environ.get("STRIPE_PUBLIC_KEY", "")
 STRIPE_PRICE_ID = os.environ.get("STRIPE_PRICE_ID", "")
 
 
+# Translate
+
+TRANSLATE_API_TOKEN = os.environ.get("TRANSLATE_API_TOKEN", "")
+
+
 # Logging
 # https://docs.djangoproject.com/en/4.1/ref/logging/#default-logging-configuration
 

@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import messages
 from django.db.models import Count
 from django.http import Http404
@@ -18,6 +19,7 @@ def user_list(request):
             "main/adminextra_user_list.html",
             {
                 "user_list": user_list,
+                "TRANSLATE_API_TOKEN": settings.TRANSLATE_API_TOKEN,
             },
         )
 
@@ -42,6 +44,7 @@ def user_list(request):
         "main/adminextra_user_list.html",
         {
             "user_list": user_list[:1000],
+            "TRANSLATE_API_TOKEN": settings.TRANSLATE_API_TOKEN,
         },
     )
 
