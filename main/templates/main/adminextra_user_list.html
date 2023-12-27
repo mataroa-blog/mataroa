@@ -2,6 +2,16 @@
 
 {% block title %}Adminextra Users{% endblock %}
 
+{% block head_extra %}
+<style>
+button {
+    background: white;
+    border: 1px solid darkgrey;
+    cursor: pointer;
+}
+</style>
+{% endblock %}
+
 {% block content %}
 <main>
     <h1>Adminextra Users</h1>
@@ -61,6 +71,9 @@
                     <a href="{{ post.get_absolute_url }}" target="_blank" rel="noopener">
                         {{ post.title }}
                     </a>
+                    <small>
+                        <button onclick="translatePost(event)">translate</button>
+                    </small>
                 </li>
                 {% endfor %}
             </ul>
@@ -94,6 +107,35 @@
         })
             .then(() => {
                 document.getElementById(`actions-${userID}`).innerHTML = 'unapproved';
+            });
+    }
+
+    function translatePost(evt) {
+        const text = evt.target.parentNode.parentElement.querySelector('a').text.trim();
+        const encodedCredentials = btoa('admin' + ':' + '{{ TRANSLATE_API_TOKEN }}');
+        const headers = new Headers({
+            'Authorization': 'Basic ' + encodedCredentials,
+        });
+        const body = {
+            'model': 'phi',
+            'prompt': 'Hello!',
+            'stream': false,
+            'raw': true,
+        }
+        fetch('https://translate.mataroa.blog/api/generate', {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(body),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('translate response not ok: ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                //document.getElementById(`actions-${userID}`).innerHTML = 'unapproved';
             });
     }
 </script>
