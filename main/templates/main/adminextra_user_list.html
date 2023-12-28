@@ -117,7 +117,7 @@ button {
         });
         const body = {
             'model': 'mistral',
-            'prompt': `[INST] Translate the following to English: ${text} [/INST]`,
+            'prompt': `[INST] Translate the following to English. Do not say any premable, just the translated text: ${text} [/INST]`,
             'stream': false,
             'raw': true,
         }
