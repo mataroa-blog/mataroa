@@ -110,14 +110,14 @@ button {
     }
 
     function translatePost(evt) {
-        const text = evt.target.parentNode.parentElement.querySelector('a').text.trim();
+        const text = evt.target.parentElement.parentElement.querySelector('a').text.trim();
         const encodedCredentials = btoa('admin' + ':' + '{{ TRANSLATE_API_TOKEN }}');
         const headers = new Headers({
             'Authorization': 'Basic ' + encodedCredentials,
         });
         const body = {
             'model': 'mistral',
-            'prompt': '[INST] say hello [/INST]',
+            'prompt': `[INST] Translate the following to English: ${text} [/INST]`,
             'stream': false,
             'raw': true,
         }
@@ -134,8 +134,7 @@ button {
                 return response.json();
             })
             .then(data => {
-                console.log(data);
-                //document.getElementById(`actions-${userID}`).innerHTML = 'unapproved';
+                evt.target.parentElement.parentElement.querySelector('a').text = data.response;
             });
     }
 </script>
