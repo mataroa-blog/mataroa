@@ -69,8 +69,7 @@ button {
                 {% for post in user.post_set.all %}
                 <li>
                     <a href="{{ post.get_absolute_url }}" target="_blank" rel="noopener">
-                        {{ post.title }}
-                    </a>
+                        {{ post.title }}</a>
                     <small>
                         <button onclick="translatePost(event)">translate</button>
                     </small>
@@ -125,6 +124,7 @@ button {
         fetch('https://translate.mataroa.blog/api/generate', {
             method: 'POST',
             headers: headers,
+            credentials: 'include',
             body: JSON.stringify(body),
         })
             .then(response => {
