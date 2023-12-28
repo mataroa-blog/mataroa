@@ -36,7 +36,7 @@ main() {
     make test
 
     # push origin srht
-    git push -v origin main
+    git push -v srht main
 
     # push on github
     git push -v github main
