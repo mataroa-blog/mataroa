@@ -110,7 +110,8 @@ button {
     }
 
     function translatePost(evt) {
-        const isDebug = '{{ DEBUG }}';
+        // prepare request options
+        const isDebug = {{ DEBUG }};
         const text = evt.target.parentElement.parentElement.querySelector('a').text.trim();
         const encodedCredentials = btoa('admin' + ':' + '{{ TRANSLATE_API_TOKEN }}');
         const headers = new Headers({
@@ -119,28 +120,63 @@ button {
         const body = {
             'model': 'mistral',
             'prompt': `[INST] Translate the following to English. Do not include translator's notes. Do not say any premable, just the translated text: ${text} [/INST]`,
-            'stream': false,
+            'stream': true,
             'raw': true,
         };
+
+        // setup fetch
+        const controller = new AbortController();
+        const signal = controller.signal;
         const options = {
             method: 'POST',
             body: JSON.stringify(body),
+            signal: controller.signal,
         };
         if (!isDebug) {
             options.headers = headers;
             options.credentials = 'include';
         }
+
+        // indicate request is loading
         evt.target.textContent = '...';
+
+        // make request
         fetch('{{ TRANSLATE_API_URL }}', options)
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('translate response not ok: ' + response.statusText);
+
+                // handle streaming request
+                if (response.body.getReader) {
+                    const reader = response.body.getReader();
+                    const textDecoder = new TextDecoder();
+                    evt.target.parentElement.parentElement.querySelector('a').text = '';
+                    evt.target.parentElement.parentElement.querySelector('a').style.color = 'green';
+                    function handleChunk(result) {
+                        if (result.done) {
+                            // stream done, cleanup
+                            controller.abort();
+                            return;
+                        }
+
+                        // get chunk, process it, then get next chunk
+                        let chunk = textDecoder.decode(result.value);
+                        const chunkContent = JSON.parse(chunk).response;
+                        evt.target.parentElement.parentElement.querySelector('a').text += chunkContent;
+                        return reader.read().then(handleChunk);
+                    }
+
+                    // start reading stream
+                    return reader.read().then(handleChunk);
+                } else {
+                    // handle non-streaming request
+                    if (!response.ok) {
+                        throw new Error('translate request failed: ' + response.statusText);
+                    }
+                    const data = response.json();
+                    evt.target.parentElement.parentElement.querySelector('a').text = data.response;
+                    evt.target.parentElement.parentElement.querySelector('a').style.color = 'green';
                 }
-                return response.json();
             })
             .then(data => {
-                evt.target.parentElement.parentElement.querySelector('a').text = data.response;
-                evt.target.parentElement.parentElement.querySelector('a').style.color = 'green';
                 evt.target.remove();
             });
     }
