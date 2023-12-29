@@ -1220,6 +1220,10 @@ def transparency(request):
     non_zero_users = (
         models.User.objects.annotate(Count("post")).filter(post__count__gt=0).count()
     )
+    zero_users_percentage = round(zero_users * 100 / models.User.objects.all().count())
+    non_zero_users_percentage = round(
+        non_zero_users * 100 / models.User.objects.all().count()
+    )
 
     updated_posts = models.Post.objects.filter(
         updated_at__gt=datetime.now() - timedelta(days=30)
@@ -1274,6 +1278,8 @@ def transparency(request):
             "pages": models.Page.objects.all().count(),
             "zero_users": zero_users,
             "non_zero_users": non_zero_users,
+            "zero_users_percentage": zero_users_percentage,
+            "non_zero_users_percentage": non_zero_users_percentage,
             "active_users": active_users,
             "active_nonnew_users": active_nonnew_users,
             "published_posts": published_posts,
