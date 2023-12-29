@@ -110,6 +110,7 @@ button {
     }
 
     function translatePost(evt) {
+        const isDebug = '{{ DEBUG }}';
         const text = evt.target.parentElement.parentElement.querySelector('a').text.trim();
         const encodedCredentials = btoa('admin' + ':' + '{{ TRANSLATE_API_TOKEN }}');
         const headers = new Headers({
@@ -117,16 +118,20 @@ button {
         });
         const body = {
             'model': 'mistral',
-            'prompt': `[INST] Translate the following to English. Do not say any premable, just the translated text: ${text} [/INST]`,
+            'prompt': `[INST] Translate the following to English. Do not include translator's notes. Do not say any premable, just the translated text: ${text} [/INST]`,
             'stream': false,
             'raw': true,
-        }
-        fetch('https://translate.mataroa.blog/api/generate', {
+        };
+        const options = {
             method: 'POST',
-            headers: headers,
-            credentials: 'include',
             body: JSON.stringify(body),
-        })
+        };
+        if (!isDebug) {
+            options.headers = headers;
+            options.credentials = 'include';
+        }
+        evt.target.textContent = '...';
+        fetch('{{ TRANSLATE_API_URL }}', options)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('translate response not ok: ' + response.statusText);
@@ -135,6 +140,8 @@ button {
             })
             .then(data => {
                 evt.target.parentElement.parentElement.querySelector('a').text = data.response;
+                evt.target.parentElement.parentElement.querySelector('a').style.color = 'green';
+                evt.target.remove();
             });
     }
 </script>

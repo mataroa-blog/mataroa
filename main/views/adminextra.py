@@ -19,7 +19,9 @@ def user_list(request):
             "main/adminextra_user_list.html",
             {
                 "user_list": user_list,
+                "TRANSLATE_API_URL": settings.TRANSLATE_API_URL,
                 "TRANSLATE_API_TOKEN": settings.TRANSLATE_API_TOKEN,
+                "DEBUG": "true" if settings.DEBUG else "false",
             },
         )
 
@@ -44,7 +46,9 @@ def user_list(request):
         "main/adminextra_user_list.html",
         {
             "user_list": user_list[:1000],
+            "TRANSLATE_API_URL": settings.TRANSLATE_API_URL,
             "TRANSLATE_API_TOKEN": settings.TRANSLATE_API_TOKEN,
+            "DEBUG": "true" if settings.DEBUG else "false",
         },
     )
 
