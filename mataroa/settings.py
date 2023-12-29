@@ -209,7 +209,9 @@ STRIPE_PRICE_ID = os.environ.get("STRIPE_PRICE_ID", "")
 
 # Translate
 
-TRANSLATE_API_URL = os.environ.get("TRANSLATE_API_URL", "https://translate.mataroa.blog/api/generate")
+TRANSLATE_API_URL = os.environ.get(
+    "TRANSLATE_API_URL", "https://translate.mataroa.blog/api/generate"
+)
 TRANSLATE_API_TOKEN = os.environ.get("TRANSLATE_API_TOKEN", "")
 
 
