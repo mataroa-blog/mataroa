@@ -1220,10 +1220,16 @@ def transparency(request):
     non_zero_users = (
         models.User.objects.annotate(Count("post")).filter(post__count__gt=0).count()
     )
-    zero_users_percentage = round(zero_users * 100 / models.User.objects.all().count())
-    non_zero_users_percentage = round(
-        non_zero_users * 100 / models.User.objects.all().count()
-    )
+
+    zero_users_percentage = 0
+    non_zero_users_percentage = 0
+    if models.User.objects.all().count() > 0:
+        zero_users_percentage = round(
+            zero_users * 100 / models.User.objects.all().count()
+        )
+        non_zero_users_percentage = round(
+            non_zero_users * 100 / models.User.objects.all().count()
+        )
 
     updated_posts = models.Post.objects.filter(
         updated_at__gt=datetime.now() - timedelta(days=30)
