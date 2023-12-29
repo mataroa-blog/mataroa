@@ -1217,18 +1217,25 @@ def transparency(request):
     zero_users = (
         models.User.objects.annotate(Count("post")).filter(post__count=0).count()
     )
-    non_zero_users = (
-        models.User.objects.annotate(Count("post")).filter(post__count__gt=0).count()
+    one_users = (
+        models.User.objects.annotate(Count("post")).filter(post__count=1).count()
+    )
+    twoplus_users = (
+        models.User.objects.annotate(Count("post")).filter(post__count__gt=1).count()
     )
 
     zero_users_percentage = 0
-    non_zero_users_percentage = 0
+    one_users_percentage = 0
+    twoplus_users_percentage = 0
     if models.User.objects.all().count() > 0:
+        one_users_percentage = round(
+            one_users * 100 / models.User.objects.all().count()
+        )
         zero_users_percentage = round(
             zero_users * 100 / models.User.objects.all().count()
         )
-        non_zero_users_percentage = round(
-            non_zero_users * 100 / models.User.objects.all().count()
+        twoplus_users_percentage = round(
+            twoplus_users * 100 / models.User.objects.all().count()
         )
 
     updated_posts = models.Post.objects.filter(
@@ -1283,9 +1290,11 @@ def transparency(request):
             "posts": models.Post.objects.all().count(),
             "pages": models.Page.objects.all().count(),
             "zero_users": zero_users,
-            "non_zero_users": non_zero_users,
+            "one_users": one_users,
+            "twoplus_users": twoplus_users,
             "zero_users_percentage": zero_users_percentage,
-            "non_zero_users_percentage": non_zero_users_percentage,
+            "one_users_percentage": one_users_percentage,
+            "twoplus_users_percentage": twoplus_users_percentage,
             "active_users": active_users,
             "active_nonnew_users": active_nonnew_users,
             "published_posts": published_posts,
