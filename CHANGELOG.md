@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0]
+
+* Introduce local LLM translate feature on moderation dashboard
+
 ## [1.1.0](https://github.com/mataroa-blog/mataroa/compare/v1.0...v1.1) - 2023-12-05
 
 ### Important changes
