@@ -42,6 +42,13 @@ class User(AbstractUser):
         null=True,
         help_text="Supports markdown",
     )
+    subscribe_note = models.CharField(
+        max_length=350,
+        blank=True,
+        null=True,
+        default="Subscribe via [RSS](/rss/) / [via Email](/newsletter/).",
+        help_text="Default: Subscribe via [RSS](/rss/) / [via Email](/newsletter/).",
+    )
     footer_note = models.TextField(
         blank=True,
         null=True,
@@ -80,7 +87,7 @@ class User(AbstractUser):
         verbose_name="Comments",
     )
     notifications_on = models.BooleanField(
-        default=False,
+        default=True,
         help_text="Allow/disallow people subscribing for email newsletter for new posts.",
         verbose_name="Newsletter",
     )
@@ -155,6 +162,10 @@ class User(AbstractUser):
     @property
     def about_as_html(self):
         return util.md_to_html(self.about, strip_tags=True)
+
+    @property
+    def subscribe_note_as_html(self):
+        return util.md_to_html(self.subscribe_note)
 
     @property
     def footer_note_as_html(self):
