@@ -12,7 +12,7 @@ certifi==2023.11.17
     # via requests
 charset-normalizer==3.3.2
     # via requests
-django==5.0
+django==5.0.1
     # via -r requirements.in
 idna==3.6
     # via requests
@@ -28,11 +28,11 @@ six==1.16.0
     # via bleach
 sqlparse==0.4.4
     # via django
-stripe==7.7.0
+stripe==7.10.0
     # via -r requirements.in
 tinycss2==1.2.1
     # via bleach
-typing-extensions==4.8.0
+typing-extensions==4.9.0
     # via
     #   asgiref
     #   stripe
