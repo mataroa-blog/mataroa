@@ -29,6 +29,6 @@ cov:
 .PHONY: upgrade
 upgrade:
 	$(info Running pip-compile -U)
-	pip-compile -U requirements.in --resolver=backtracking
+	pip-compile -U requirements.in
 	pip install --upgrade pip
 	pip install -r requirements.txt
