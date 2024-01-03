@@ -176,6 +176,7 @@ class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         "email",
         "blog_title",
         "blog_byline",
+        "subscribe_note",
         "footer_note",
         "theme_zialucia",
         "theme_sansserif",
@@ -183,7 +184,6 @@ class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         "comments_on",
         "notifications_on",
         "mail_export_on",
-        "about",
         "redirect_domain",
     ]
     template_name = "main/user_update.html"
