@@ -4,7 +4,7 @@ pginit:
 	PGDATA=postgres-data/ pg_ctl init
 	PGDATA=postgres-data/ pg_ctl start
 	createuser mataroa
-	psql -U postgres -c "ALTER USER mataroa CREATEDB;"
+	psql -U $$(whoami) -d postgres -c "ALTER USER mataroa CREATEDB;"
 	psql -U mataroa -d postgres -c "CREATE DATABASE mataroa;"
 
 .PHONY: pgstart
