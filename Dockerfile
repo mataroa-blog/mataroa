@@ -1,5 +1,8 @@
-FROM python:3.10
-ENV PYTHONUNBUFFERED 1
+FROM python:3.11
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONFAULTHANDLER=1
+
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     swig \
