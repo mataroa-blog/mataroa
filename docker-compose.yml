@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   db:
-    image: postgres:12.8
+    image: postgres:14
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
@@ -27,6 +27,7 @@ services:
       - "8000:8000"
     depends_on:
       - db
+        condition: service_healthy
     environment:
       DEBUG: 1
       DATABASE_URL: postgres://postgres:postgres@db:5432/postgres
