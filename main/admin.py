@@ -99,6 +99,7 @@ class UserAdmin(DjUserAdmin):
                     "webring_prev_url",
                     "webring_next_url",
                     "stripe_customer_id",
+                    "stripe_subscription_id",
                     "monero_address",
                     "is_premium",
                     "is_grandfathered",
