@@ -41,6 +41,7 @@ urlpatterns += [
 
 # adminextra
 urlpatterns += [
+    path("adminextra/cards/", adminextra.user_cards, name="adminextra_user_cards"),
     path("adminextra/users/", adminextra.user_list, name="adminextra_user_list"),
     path(
         "adminextra/users/<int:user_id>/approve/",
@@ -51,6 +52,11 @@ urlpatterns += [
         "adminextra/users/<int:user_id>/unapprove/",
         adminextra.user_unapprove,
         name="adminextra_user_unapprove",
+    ),
+    path(
+        "adminextra/users/<int:user_id>/delete/",
+        adminextra.user_delete,
+        name="adminextra_user_delete",
     ),
 ]
 

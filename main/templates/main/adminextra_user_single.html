@@ -1,0 +1,246 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Adminextra Cards{% endblock %}
+
+{% block head_extra %}
+<style>
+button {
+    background: white;
+    border: 1px solid darkgrey;
+    cursor: pointer;
+}
+img {
+    width: 100%;
+}
+.button-approve { color: green; cursor: pointer; }
+.button-approve:hover { text-decoration: underline; }
+.button-delete { color: red; cursor: pointer; }
+.button-delete:hover { text-decoration: underline; }
+</style>
+{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Adminextra Cards</h1>
+</main>
+<section class="adminextra-content">
+    <div class="adminextra-content-cards">
+
+        <div class="adminextra-content-cards-col1">
+            <h2>Account</h2>
+
+            <p>
+                ID: <a href="{% url 'admin:main_user_change' user.id %}" target="_blank" title="{{ user.date_joined }}">
+                    {{ user.id }}
+                </a>
+            </p>
+            <p>
+                {{ user.stripe_customer_id|default:"" }}
+            </p>
+            <p>
+                <span>{{ user.class_status }}</span>
+                {% if user.is_approved %}
+                <span title="approved">✅</span>
+                {% endif %}
+                <span>
+                    {{ user.username }}
+                </span>
+
+                {% if user.onboard_set.first is not None %}
+                <div>
+                    <ul>
+                        <li title="{{ user.onboard_set.first.problems }}">{{ user.onboard_set.first.problems }}</li>
+                        <li title="{{ user.onboard_set.first.quality }}">{{ user.onboard_set.first.quality }}</li>
+                    </ul>
+                </div>
+                {% endif %}
+            </p>
+            <p>
+                [
+                    {% if not user.is_approved %}
+
+                    <span onclick="approveUser('{{ user.id }}')" class="button-approve">approve</span>
+                    | <span onclick="deleteUser('{{ user.id }}')" class="button-delete">delete</span>
+
+                    {% else %}
+
+                    <span onclick="unapproveUser('{{ user.id }}')" style="color: blue; cursor: pointer;">unapprove</span>
+
+                    {% endif %}
+                ]
+            </p>
+            <p>
+                <a href="{{ user.blog_url }}" target="_blank">
+                    {{ user.blog_url }}
+                </a>
+            </p>
+            <p>
+                <span style="font-family: monospace;">{{ user.email }}</span>
+            </p>
+        </div>
+
+        <div class="adminextra-content-cards-col2">
+            <div>
+                <div>
+                    <h2>Post Titles</h2>
+                </div>
+
+                <ul>
+                    {% for post in user.post_set.all %}
+                    <li>
+                        <a href="{{ post.get_absolute_url }}" target="_blank" rel="noopener">
+                            {{ post.title }}</a>
+                        <small>
+                            <button onclick="translatePost(event)">translate</button>
+                        </small>
+                    </li>
+                    {% empty %}
+                    <li>
+                        <em>(empty)</em>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="adminextra-content-cards-col3">
+            <div>
+                <h2>Post Bodies</h2>
+
+                {% for post in user.post_set.all %}
+                <h3>
+                    <a href="{{ post.get_absolute_url }}" target="_blank" rel="noopener">
+                        {{ post.title }}</a>
+                    <small>
+                        <button onclick="translatePost(event)">translate</button>
+                    </small>
+                </h3>
+                <div>
+                    {{ post.body_as_html|safe }}
+                </div>
+                <hr>
+                {% empty %}
+                <em>(empty)</em>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function deleteUser(userID) {
+        if (!confirm('DELETE for sure? There is no turning back.')) {
+            return false;
+        }
+
+        fetch(`/adminextra/users/${userID}/delete/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            }
+        })
+            .then(() => {
+                document.location.reload();
+            });
+    }
+
+    function approveUser(userID) {
+        fetch(`/adminextra/users/${userID}/approve/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            }
+        })
+            .then(() => {
+                document.location.reload();
+            });
+    }
+
+    function unapproveUser(userID) {
+        fetch(`/adminextra/users/${userID}/unapprove/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            }
+        })
+            .then(() => {
+                document.getElementById(`actions-${userID}`).innerHTML = 'unapproved';
+            });
+    }
+
+    function translatePost(evt) {
+        // prepare request options
+        const isDebug = {{ DEBUG }};
+        const text = evt.target.parentElement.parentElement.querySelector('a').text.trim();
+        const encodedCredentials = btoa('admin' + ':' + '{{ TRANSLATE_API_TOKEN }}');
+        const headers = new Headers({
+            'Authorization': 'Basic ' + encodedCredentials,
+        });
+        const body = {
+            'model': 'mistral',
+            'prompt': `[INST] ${text} - Translate and summarise the above to English. Do not include translator's notes. Do not be verbose. Use up to 10 words. [/INST]`,
+            'stream': true,
+            'raw': true,
+        };
+
+        // setup fetch
+        const controller = new AbortController();
+        const signal = controller.signal;
+        const options = {
+            method: 'POST',
+            body: JSON.stringify(body),
+            signal: controller.signal,
+        };
+        if (!isDebug) {
+            options.headers = headers;
+            options.credentials = 'include';
+        }
+
+        // indicate request is loading
+        evt.target.textContent = '...';
+
+        // make request
+        fetch('{{ TRANSLATE_API_URL }}', options)
+            .then(response => {
+
+                // handle streaming request
+                if (response.body.getReader) {
+                    const reader = response.body.getReader();
+                    const textDecoder = new TextDecoder();
+                    evt.target.parentElement.parentElement.querySelector('a').text = '';
+                    evt.target.parentElement.parentElement.querySelector('a').style.color = 'green';
+                    function handleChunk(result) {
+                        if (result.done) {
+                            // stream done, cleanup
+                            controller.abort();
+                            return;
+                        }
+
+                        // get chunk, process it, then get next chunk
+                        let chunk = textDecoder.decode(result.value);
+                        const chunkContent = JSON.parse(chunk).response;
+                        evt.target.parentElement.parentElement.querySelector('a').text += chunkContent;
+                        return reader.read().then(handleChunk);
+                    }
+
+                    // start reading stream
+                    return reader.read().then(handleChunk);
+                } else {
+                    // handle non-streaming request
+                    if (!response.ok) {
+                        throw new Error('translate request failed: ' + response.statusText);
+                    }
+                    const data = response.json();
+                    evt.target.parentElement.parentElement.querySelector('a').text = data.response;
+                    evt.target.parentElement.parentElement.querySelector('a').style.color = 'green';
+                }
+            })
+            .then(data => {
+                evt.target.remove();
+            });
+    }
+</script>
+{% endblock %}

@@ -902,3 +902,21 @@ svg .analytics-chart-text {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.adminextra-content-cards {
+    display: flex;
+}
+
+.adminextra-content-cards-col1 {
+    width: 400px;
+}
+
+.adminextra-content-cards-col2 {
+    display: flex;
+    width: 600px;
+}
+
+.adminextra-content-cards-col3 {
+    display: flex;
+    width: calc(100vw - 1000px);
+}

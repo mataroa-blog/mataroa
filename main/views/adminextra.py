@@ -1,10 +1,27 @@
 from django.conf import settings
 from django.contrib import messages
 from django.db.models import Count
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from main import models
+
+
+def user_cards(request):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        raise Http404()
+
+    user = models.User.objects.filter(is_approved=False).order_by("?").first()
+    return render(
+        request,
+        "main/adminextra_user_single.html",
+        {
+            "user": user,
+            "TRANSLATE_API_URL": settings.TRANSLATE_API_URL,
+            "TRANSLATE_API_TOKEN": settings.TRANSLATE_API_TOKEN,
+            "DEBUG": "true" if settings.DEBUG else "false",
+        },
+    )
 
 
 def user_list(request):
@@ -51,6 +68,19 @@ def user_list(request):
             "DEBUG": "true" if settings.DEBUG else "false",
         },
     )
+
+
+def user_delete(request, user_id):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        raise Http404()
+
+    user = get_object_or_404(models.User, id=user_id)
+    if request.method == "POST":
+        user.delete()
+        messages.add_message(request, messages.SUCCESS, "user has been deleted")
+        return JsonResponse({"ok": True})
+
+    raise Http404()
 
 
 def user_approve(request, user_id):
