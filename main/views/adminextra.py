@@ -11,18 +11,17 @@ def user_cards(request):
     if not request.user.is_authenticated or not request.user.is_superuser:
         raise Http404()
 
-    user = (
+    user_list = (
         models.User.objects.annotate(count=Count("post"))
         .filter(count__gt=0, is_approved=False)
         .order_by("?")
-        .first()
     )
     return render(
         request,
         "main/adminextra_user_single.html",
         {
-            "user": user,
-            "count": models.User.objects.filter(is_approved=False).count(),
+            "user": user_list.first(),
+            "count": user_list.count(),
             "TRANSLATE_API_URL": settings.TRANSLATE_API_URL,
             "TRANSLATE_API_TOKEN": settings.TRANSLATE_API_TOKEN,
             "DEBUG": "true" if settings.DEBUG else "false",
