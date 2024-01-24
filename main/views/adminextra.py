@@ -17,6 +17,7 @@ def user_cards(request):
         "main/adminextra_user_single.html",
         {
             "user": user,
+            "count": models.User.objects.filter(is_approved=False).count(),
             "TRANSLATE_API_URL": settings.TRANSLATE_API_URL,
             "TRANSLATE_API_TOKEN": settings.TRANSLATE_API_TOKEN,
             "DEBUG": "true" if settings.DEBUG else "false",

@@ -21,7 +21,10 @@ img {
 
 {% block content %}
 <main>
-    <h1>Adminextra Cards</h1>
+    <h1>
+        Adminextra Cards
+        <small>({{ count }})</small>
+    </h1>
 </main>
 <section class="adminextra-content">
     <div class="adminextra-content-cards">
@@ -111,9 +114,6 @@ img {
                 <h3>
                     <a href="{{ post.get_absolute_url }}" target="_blank" rel="noopener">
                         {{ post.title }}</a>
-                    <small>
-                        <button onclick="translatePost(event)">translate</button>
-                    </small>
                 </h3>
                 <div>
                     {{ post.body_as_html|safe }}
