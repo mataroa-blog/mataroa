@@ -11,6 +11,9 @@ def user_cards(request):
     if not request.user.is_authenticated or not request.user.is_superuser:
         raise Http404()
 
+    if hasattr(request, "subdomain"):
+        return redirect(f"//{settings.CANONICAL_HOST}{request.path}")
+
     user_list = (
         models.User.objects.annotate(count=Count("post"))
         .filter(count__gt=0, is_approved=False)
@@ -32,6 +35,9 @@ def user_cards(request):
 def user_list(request):
     if not request.user.is_authenticated or not request.user.is_superuser:
         raise Http404()
+
+    if hasattr(request, "subdomain"):
+        return redirect(f"//{settings.CANONICAL_HOST}{request.path}")
 
     # handle simple case first
     if not request.GET.get("mode"):
