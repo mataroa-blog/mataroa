@@ -908,15 +908,17 @@ svg .analytics-chart-text {
 }
 
 .adminextra-content-cards-col1 {
-    width: 400px;
+    width: 20vw;
 }
 
 .adminextra-content-cards-col2 {
-    display: flex;
-    width: 600px;
+    width: 20vw;
 }
 
 .adminextra-content-cards-col3 {
-    display: flex;
-    width: calc(100vw - 1000px);
+    width: 30vw;
+}
+
+.adminextra-content-cards-col4 {
+    width: 30vw;
 }

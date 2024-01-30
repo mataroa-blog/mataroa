@@ -19,12 +19,19 @@ def user_cards(request):
         .filter(count__gt=0, is_approved=False)
         .order_by("?")
     )
+    user = user_list.first()
+    post_list = models.Post.objects.filter(owner=user)
+    post_list_halfpoint = post_list.count() / 2
+    post_list_a = post_list[:post_list_halfpoint]
+    post_list_b = post_list[post_list_halfpoint:]
     return render(
         request,
         "main/adminextra_user_single.html",
         {
-            "user": user_list.first(),
-            "count": user_list.count(),
+            "user": user,
+            "user_count": user_list.count(),
+            "post_list_a": post_list_a,
+            "post_list_b": post_list_b,
             "TRANSLATE_API_URL": settings.TRANSLATE_API_URL,
             "TRANSLATE_API_TOKEN": settings.TRANSLATE_API_TOKEN,
             "DEBUG": "true" if settings.DEBUG else "false",

@@ -105,11 +105,26 @@ img {
 
         <div class="adminextra-content-cards-col3">
             <div>
-                <h2>Post Bodies</h2>
-
-                {% for post in user.post_set.all %}
+                {% for post in post_list_a %}
                 <h3>
-                    <a href="{{ post.get_absolute_url }}" target="_blank" rel="noopener">
+                    # <a href="{{ post.get_absolute_url }}" target="_blank" rel="noopener">
+                        {{ post.title }}</a>
+                </h3>
+                <div>
+                    {{ post.body_as_html|safe }}
+                </div>
+                <hr>
+                {% empty %}
+                <em>(empty)</em>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="adminextra-content-cards-col4">
+            <div>
+                {% for post in post_list_b %}
+                <h3>
+                    # <a href="{{ post.get_absolute_url }}" target="_blank" rel="noopener">
                         {{ post.title }}</a>
                 </h3>
                 <div>
