@@ -21,7 +21,7 @@ def user_cards(request):
     )
     user = user_list.first()
     post_list = models.Post.objects.filter(owner=user)
-    post_list_halfpoint = post_list.count() / 2
+    post_list_halfpoint = post_list.count() // 2 if post_list.count() > 1 else 1
     post_list_a = post_list[:post_list_halfpoint]
     post_list_b = post_list[post_list_halfpoint:]
     return render(
