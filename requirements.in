@@ -4,4 +4,4 @@ uwsgi
 markdown
 pygments
 bleach[css]
-stripe
+stripe<8.0.0
