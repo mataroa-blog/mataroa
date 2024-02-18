@@ -11,7 +11,7 @@ class OnboardForm(forms.ModelForm):
 
     class Meta:
         model = models.Onboard
-        fields = ["problems", "quality"]
+        fields = ["problems", "quality", "seo"]
 
 
 class UserCreationForm(DjUserCreationForm):

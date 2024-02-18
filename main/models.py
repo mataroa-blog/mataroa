@@ -448,6 +448,7 @@ class Onboard(models.Model):
     code = models.UUIDField(default=uuid.uuid4, unique=True)
     problems = models.CharField(max_length=300)
     quality = models.CharField(max_length=300)
+    seo = models.CharField(max_length=300)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

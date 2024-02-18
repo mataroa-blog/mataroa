@@ -64,6 +64,18 @@
         </p>
 
         <p>
+            <label for="id_seo">
+                Are you making this blog for SEO purposes?
+            </label>
+            {% if form.seo.errors %}
+                {% for error in form.seo.errors %}
+                    <span class="form-error">{{ error|escape }}</span><br>
+                {% endfor %}
+            {% endif %}
+            {{ form.seo }}
+        </p>
+
+        <p>
             <label for="id_sunflower">
                 I am not a robot:
             </label>
