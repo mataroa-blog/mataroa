@@ -51,6 +51,43 @@ The Django project is [`mataroa`](mataroa). There is one Django app,
 divided into two categories, those under `python manage.py` and those under
 `make`.
 
+### Set up subdomains
+
+Because mataroa works primarily with subdomain, one needs to add to their `/etc/hosts`
+a few custom entries.
+
+Important note: there needs to be an entry of each user account created in the local
+development environment, so that the web server can respond to it.
+
+The first in the following is the default: `mataroalocal.blog`, only one required. The
+rest are included as examples of users one can create in their local environment. The
+easiest way to create them is to go through the sign up page
+(`http://mataroalocal.blog:8000/accounts/create/` using default values).
+
+```
+127.0.0.1 mataroalocal.blog
+
+127.0.0.1 random.mataroalocal.blog
+127.0.0.1 paul.mataroalocal.blog
+127.0.0.1 anyusername.mataroalocal.blog
+```
+
+### Docker
+
+> [!NOTE]  
+> This is the last step for initial Docker setup. See the "Environment variables"
+> section below, for further configuration details.
+
+To set up a development environment with Docker and Docker Compose, run the following
+to start the web server and database:
+
+```
+docker compose up
+```
+
+The database data will be saved in the git-ignored docker volume
+`docker-postgres-data`, located in the root of the project.
+
 ### Dependencies
 
 ```
@@ -74,6 +111,8 @@ cp .envrc.example .envrc
 `.envrc` should contain the following variables:
 
 ```sh
+# .envrc
+
 export DEBUG=1
 export SECRET_KEY=some-secret-key
 export DATABASE_URL=postgres://mataroa:db-password@db:5432/mataroa
@@ -85,9 +124,30 @@ When on production, also include/update the following variables (see
 [Deployment](#Deployment) and [Backup](#Backup)):
 
 ```sh
+# .envrc
+
 export DEBUG=0
 export PGPASSWORD=db-password
 ```
+
+When on Docker, to change or populate environment variables, edit the `environment`
+key of the `web` service either directly on `docker-compose.yml` or by overriding it
+using the standard named git-ignored `docker-compose.override.yml`.
+
+```sh
+# docker-compose.override.yml
+
+version: "3.8"
+
+services:
+  web:
+    environment:
+      EMAIL_HOST_USER=smtp-user
+      EMAIL_HOST_PASSWORD=smtp-password
+```
+
+Finally, stop and start `docker compose up` again. It should pick up the override file
+as it has the default name `docker-compose.override.yml`.
 
 ### Database
 
@@ -112,21 +172,6 @@ python manage.py loaddata dev-data
 * `dev-data` is defined in [`main/fixtures/dev-data.json`](main/fixtures/dev-data.json)
 * Credentials of the fixtured user are `admin` / `admin`.
 
-### Subdomains
-
-To develop locally with subdomains, one needs something like this in their
-`/etc/hosts`:
-
-```
-127.0.0.1 mataroalocal.blog
-127.0.0.1 random.mataroalocal.blog
-127.0.0.1 test.mataroalocal.blog
-127.0.0.1 mylocalusername.mataroalocal.blog
-```
-
-`/etc/hosts` does not support wildcard entries, thus there needs to be one entry
-per mataroa user/blog.
-
 ### Serve
 
 To run the Django development server:
@@ -134,16 +179,6 @@ To run the Django development server:
 ```sh
 python manage.py runserver
 ```
-
-### Docker
-
-If Docker and docker-compose are preferred, then:
-
-1. Set `DATABASE_URL` in `.envrc` to `postgres://postgres:postgres@db:5432/postgres`
-1. Run `docker-compose up -d`.
-
-The database data will be saved in the git-ignored directory / Docker volume
-`docker-postgres-data`, located in the root of the project.
 
 ## Testing
 
