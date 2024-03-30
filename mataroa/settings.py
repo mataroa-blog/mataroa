@@ -27,6 +27,8 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "nonrandom_secret")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if os.environ.get("DEBUG") == "1" else False
 
+LOCALDEV_MODE = True if os.environ.get("LOCALDEV_MODE") == "1" else False
+
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
@@ -38,7 +40,7 @@ ALLOWED_HOSTS = [
 ADMINS = [("Theodore Keloglou", "zf@sirodoht.com")]
 
 CANONICAL_HOST = os.environ.get("DOMAIN", "mataroa.blog")
-if DEBUG:
+if LOCALDEV_MODE:
     CANONICAL_HOST = "mataroalocal.blog:8000"
 
 
@@ -174,7 +176,7 @@ FORMS_URLFIELD_ASSUME_HTTPS = True
 # Email
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-if DEBUG:
+if LOCALDEV_MODE:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 EMAIL_USE_TLS = True
 EMAIL_HOST = "smtp.postmarkapp.com"
@@ -194,7 +196,7 @@ EMAIL_TEST_RECEIVE_LIST = os.environ.get("EMAIL_TEST_RECEIVE_LIST")
 
 # Security middleware
 
-if not DEBUG:
+if not LOCALDEV_MODE:
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = "DENY"
     SESSION_COOKIE_SECURE = True

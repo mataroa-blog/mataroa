@@ -12,7 +12,14 @@ export DOMAIN=mataroa.blog
 export EMAIL=admin@mataroa.blog
 
 # Show exceptions and tracebacks on errors
+# 1: show
+# 0: don't show
 export DEBUG=1
+
+# Stop real emails and turn https off
+# 1: stop and off
+# 0: do not stop and on
+export LOCALDEV_MODE=1
 
 # Session cookies secret
 export SECRET_KEY=some-secret-key

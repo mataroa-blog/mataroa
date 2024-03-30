@@ -3,6 +3,7 @@ domain: "{{ lookup('env', 'DOMAIN') }}"
 email: "{{ lookup('env', 'EMAIL') }}"
 
 debug: "{{ lookup('env', 'DEBUG') }}"
+localdev_mode: "{{ lookup('env', 'LOCALDEV_MODE') }}"
 
 secret_key: "{{ lookup('env', 'SECRET_KEY') }}"
 
