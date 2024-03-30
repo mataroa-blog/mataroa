@@ -21,3 +21,6 @@ mataroa.pid
 # docker
 docker-postgres-data/
 docker-compose.override.yml
+
+# mdbook docs
+/book/
