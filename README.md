@@ -93,11 +93,12 @@ to start the web server and database:
 docker compose up
 ```
 
-Now mataroa should be locally accessible at:
+If you have also configured hosts as described above in the "Set up subdomains"
+section, mataroa should now be locally accessible at
 [http://mataroalocal.blog:8000/](http://mataroalocal.blog:8000/)
 
-The database data will be saved in the git-ignored docker volume
-`docker-postgres-data`, located in the root of the project.
+Note: The database data are saved in the git-ignored `docker-postgres-data` docker
+volume, located in the root of the project.
 
 ### Dependencies
 
@@ -191,7 +192,8 @@ To run the Django development server:
 python manage.py runserver
 ```
 
-Now mataroa should be locally accessible at:
+If you have also configured hosts as described above in the "Set up subdomains"
+section, mataroa should now be locally accessible at
 [http://mataroalocal.blog:8000/](http://mataroalocal.blog:8000/)
 
 ## Testing
