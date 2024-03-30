@@ -1,0 +1,26 @@
+# inventory.yaml
+
+# Server IP and user with ssh access
+export ANSIBLE_HOST=
+export ANSIBLE_USER=root
+
+
+# vars.yaml
+
+# Show exceptions and tracebacks on errors
+export DEBUG=1
+
+# Database connection
+export DATABASE_URL=postgres://mataroa:@localhost:5432/mataroa
+
+# Session cookies secret
+export SECRET_KEY=some-secret-key
+
+# SMTP credentials
+export EMAIL_HOST_USER=
+export EMAIL_HOST_PASSWORD=
+
+# Stripe payments details
+export STRIPE_API_KEY=
+export STRIPE_PUBLIC_KEY=
+export STRIPE_PRICE_ID=

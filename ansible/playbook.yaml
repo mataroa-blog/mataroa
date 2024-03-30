@@ -1,0 +1,108 @@
+---
+- hosts: virtualmachines
+  vars_files:
+    - vars.yaml
+  become: yes
+  tasks:
+    # smoke test and essential dependencies
+    - name: ping
+      ansible.builtin.ping:
+    - name: essentials
+      ansible.builtin.apt:
+        update_cache: yes
+        name:
+          - vim
+          - git
+          - python3.11
+          - python3.11-venv
+          - python3.11-dev
+        state: present
+
+    # deploy user and directory
+    - name: www directory
+      ansible.builtin.file:
+        path: /var/www
+        state: directory
+        mode: '0755'
+    - name: create user
+      ansible.builtin.user:
+        name: deploy
+        password: ""
+        shell: /bin/bash
+        groups:
+          - sudo
+          - www-data
+        append: yes
+        createhome: yes
+        skeleton: '/etc/skel'
+        generate_ssh_key: yes
+        ssh_key_type: 'ed25519'
+    - name: www ownership
+      ansible.builtin.file:
+        path: /var/www
+        owner: deploy
+        group: www-data
+        recurse: yes
+
+    # repository
+    - name: clone
+      ansible.builtin.git:
+        repo: https://github.com/mataroa-blog/mataroa
+        dest: /var/www/mataroa
+        version: ansible
+        accept_hostkey: true
+      become_user: deploy
+    - name: dependencies
+      ansible.builtin.pip:
+        virtualenv_command: python3 -m venv .venv
+        virtualenv: /var/www/mataroa/.venv
+        requirements: /var/www/mataroa/requirements.txt
+      become_user: deploy
+
+    # systemd
+    - name: systemd template
+      ansible.builtin.template:
+        src: mataroa.service.j2
+        dest: /etc/systemd/system/mataroa.service
+        owner: root
+        group: root
+        mode: '0644'
+    - name: systemd reload
+      ansible.builtin.systemd:
+        daemon_reload: true
+    - name: systemd enable
+      ansible.builtin.systemd:
+        name: mataroa
+        enabled: yes
+    - name: systemd start
+      ansible.builtin.systemd:
+        name: mataroa
+        state: restarted
+
+    # deployment specific
+    - name: collectstatic
+      ansible.builtin.shell:
+        cmd: |
+          source .venv/bin/activate
+          python3 manage.py collectstatic --no-input
+        chdir: /var/www/mataroa
+      args:
+        executable: /bin/bash
+      become_user: deploy
+    - name: migrations
+      ansible.builtin.shell:
+        cmd: |
+          source .venv/bin/activate
+          python3 manage.py migrate --no-input
+        chdir: /var/www/mataroa
+      args:
+        executable: /bin/bash
+      become_user: deploy
+    - name: gunicorn restart
+      ansible.builtin.systemd:
+        name: mataroa
+        state: restarted
+    - name: caddy restart
+      ansible.builtin.systemd:
+        name: caddy
+        state: restarted
