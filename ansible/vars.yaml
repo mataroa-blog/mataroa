@@ -1,5 +1,15 @@
 ---
 debug: "{{ lookup('env', 'DEBUG') }}"
+
 secret_key: "{{ lookup('env', 'SECRET_KEY') }}"
+
+database_url: "{{ lookup('env', 'SECRET_KEY') }}"
+postgres_username: "{{ lookup('env', 'POSTGRES_USERNAME') }}"
+postgres_password: "{{ lookup('env', 'POSTGRES_PASSWORD') }}"
+
 email_host_user: "{{ lookup('env', 'EMAIL_HOST_USER') }}"
 email_host_password: "{{ lookup('env', 'EMAIL_HOST_PASSWORD') }}"
+
+stripe_api_key: "{{ lookup('env', 'STRIPE_API_KEY') }}"
+stripe_public_key: "{{ lookup('env', 'STRIPE_PUBLIC_KEY') }}"
+stripe_price_id: "{{ lookup('env', 'STRIPE_PRICE_ID') }}"

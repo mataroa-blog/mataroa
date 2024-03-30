@@ -58,13 +58,13 @@
       become_user: postgres
     - name: pg database
       community.general.postgresql_db:
-        name: "{{ postgres_database }}"
+        name: mataroa
         owner: "{{ postgres_username }}"
         state: present
       become_user: postgres
     - name: pg permissions
       community.postgresql.postgresql_privs:
-        db: "{{ postgres_database }}"
+        db: mataroa
         privs: ALL
         objs: ALL_IN_SCHEMA
         role: "{{ postgres_username }}"
