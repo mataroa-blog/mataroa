@@ -53,8 +53,9 @@ divided into two categories, those under `python manage.py` and those under
 
 ### Set up subdomains
 
-Because mataroa works primarily with subdomain, one needs to add to their `/etc/hosts`
-a few custom entries.
+Because mataroa works primarily with subdomain, one cannot access the basic web app
+using the standard `http://127.0.0.1:8000` or `http://localhost:8000` URLs. What we do
+for local development is adding a few custom entries on our `/etc/hosts` system file.
 
 Important note: there needs to be an entry of each user account created in the local
 development environment, so that the web server can respond to it.
