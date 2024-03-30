@@ -60,18 +60,25 @@ for local development is adding a few custom entries on our `/etc/hosts` system 
 Important note: there needs to be an entry of each user account created in the local
 development environment, so that the web server can respond to it.
 
-The first in the following is the default: `mataroalocal.blog`, only one required. The
-rest are included as examples of users one can create in their local environment. The
+The first line is the main needed: `mataroalocal.blog`. The rest are included as
+examples of other users one can create in their local environment. The
 easiest way to create them is to go through the sign up page
 (`http://mataroalocal.blog:8000/accounts/create/` using default values).
 
 ```
+# /etc/hosts
+
 127.0.0.1 mataroalocal.blog
 
-127.0.0.1 random.mataroalocal.blog
 127.0.0.1 paul.mataroalocal.blog
+127.0.0.1 random.mataroalocal.blog
 127.0.0.1 anyusername.mataroalocal.blog
 ```
+
+This will enable us to access mataroa locally (once we start the web server) at
+[http://mataroalocal.blog:8000/](http://mataroalocal.blog:8000/)
+and if we make a user account with username `paul`, then we will be able to access it at
+[http://paul.mataroalocal.blog:8000/](http://paul.mataroalocal.blog:8000/)
 
 ### Docker
 
@@ -85,6 +92,9 @@ to start the web server and database:
 ```
 docker compose up
 ```
+
+Now mataroa should be locally accessible at:
+[http://mataroalocal.blog:8000/](http://mataroalocal.blog:8000/)
 
 The database data will be saved in the git-ignored docker volume
 `docker-postgres-data`, located in the root of the project.
@@ -180,6 +190,9 @@ To run the Django development server:
 ```sh
 python manage.py runserver
 ```
+
+Now mataroa should be locally accessible at:
+[http://mataroalocal.blog:8000/](http://mataroalocal.blog:8000/)
 
 ## Testing
 
