@@ -7,14 +7,20 @@ export ANSIBLE_USER=root
 
 # vars.yaml
 
+# Domain name and email for Caddy
+export DOMAIN=mataroa.blog
+export EMAIL=admin@mataroa.blog
+
 # Show exceptions and tracebacks on errors
 export DEBUG=1
 
-# Database connection
-export DATABASE_URL=postgres://mataroa:@localhost:5432/mataroa
-
 # Session cookies secret
 export SECRET_KEY=some-secret-key
+
+# Database connection
+export DATABASE_URL=postgres://mataroa:xxx@localhost:5432/mataroa
+export POSTGRES_USERNAME=mataroa
+export POSTGRES_PASSWORD=xxx
 
 # SMTP credentials
 export EMAIL_HOST_USER=
