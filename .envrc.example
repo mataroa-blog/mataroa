@@ -1,5 +1,24 @@
+# Exceptions and tracebacks on errors
+# 1: show
+# 0: don't show
 export DEBUG=1
+
+# Stop real emails and turn https off
+# 1: stop and off
+# 0: do not stop and on
+export LOCALDEV_MODE=1
+
+# Session cookies secret
 export SECRET_KEY=some-secret-key
-export DATABASE_URL=postgres://mataroa:db-password@db:5432/mataroa
-export EMAIL_HOST_USER=smtp-user
-export EMAIL_HOST_PASSWORD=smtp-password
+
+# Database connection
+export DATABASE_URL=postgres://mataroa:xxx@localhost:5432/mataroa
+
+# SMTP credentials
+export EMAIL_HOST_USER=
+export EMAIL_HOST_PASSWORD=
+
+# Stripe payments details
+export STRIPE_API_KEY=
+export STRIPE_PUBLIC_KEY=
+export STRIPE_PRICE_ID=

@@ -9,7 +9,10 @@ Group=www-data
 WorkingDirectory=/var/www/mataroa
 ExecStart=/var/www/mataroa/.venv/bin/gunicorn -b 127.0.0.1:5000 -w 4 mataroa.wsgi
 ExecReload=/bin/kill -HUP $MAINPID
+Environment="DOMAIN={{ domain }}"
+Environment="EMAIL={{ email }}"
 Environment="DEBUG={{ debug }}"
+Environment="LOCALDEV_MODE={{ localdev_mode }}"
 Environment="SECRET_KEY={{ secret_key }}"
 Environment="DATABASE_URL={{ database_url }}"
 Environment="EMAIL_HOST_USER={{ email_host_user }}"
