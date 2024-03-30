@@ -1,9 +1,12 @@
 ---
+domain: "{{ lookup('env', 'DOMAIN') }}"
+email: "{{ lookup('env', 'EMAIL') }}"
+
 debug: "{{ lookup('env', 'DEBUG') }}"
 
 secret_key: "{{ lookup('env', 'SECRET_KEY') }}"
 
-database_url: "{{ lookup('env', 'SECRET_KEY') }}"
+database_url: "{{ lookup('env', 'DATABASE_URL') }}"
 postgres_username: "{{ lookup('env', 'POSTGRES_USERNAME') }}"
 postgres_password: "{{ lookup('env', 'POSTGRES_PASSWORD') }}"
 
