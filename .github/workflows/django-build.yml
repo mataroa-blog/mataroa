@@ -25,10 +25,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python 3.10
+    - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.10'
+        python-version: '3.11'
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
@@ -43,6 +43,6 @@ jobs:
     - name: Lint
       run: |
         touch .envrc
-        pip install -r requirements_dev.txt
+        pip install -r requirements.dev.txt
         pip install -r requirements.txt
         make lint
