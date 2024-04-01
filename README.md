@@ -19,24 +19,14 @@ Archives at
 
 ## Contributing
 
-Feel free to open a PR on [GitHub](https://github.com/mataroa-blog/mataroa) or
-send an email patch to
-[~sirodoht/public-inbox@lists.sr.ht](mailto:~sirodoht/public-inbox@lists.sr.ht).
+Open a PR on [GitHub](https://github.com/mataroa-blog/mataroa).
 
-On how to contribute using email patches see
+Send an email patch to
+[~sirodoht/public-inbox@lists.sr.ht](mailto:~sirodoht/public-inbox@lists.sr.ht).
+See how to contribute using email patches here:
 [git-send-email.io](https://git-send-email.io/).
 
-Also checkout our docs on:
-
-* [Coding Conventions](docs/coding-conventions.md)
-* [Git Commit Message Guidelines](docs/commit-messages.md)
-* [File Structure Walkthrough](docs/file-structure-walkthrough.md)
-* [Dependencies](docs/dependencies.md)
-* [Deployment](docs/deployment.md)
-* [Server Playbook](docs/server-playbook.md)
-* [Admin and Moderation](docs/admin-moderation.md)
-* [Database Backup](docs/database-backup.md)
-* [Server Migration](docs/server-migration.md)
+Read our docs at [docs.mataroa.blog](https://docs.mataroa.blog/)
 
 ## Development
 
