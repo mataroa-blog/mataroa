@@ -50,8 +50,8 @@
             {% endif %}
             {% if request.user.is_superuser %}
             | <a href="{% url 'admin:index' %}">DjA</a>
-            | <a href="{% url 'adminextra_user_list' %}">AeList</a>
-            | <a href="{% url 'adminextra_user_cards' %}">AeCards</a>
+            | <a href="{% url 'adminextra_user_list' %}">AeLst</a>
+            | <a href="{% url 'adminextra_user_cards' %}">AeCrds</a>
             {% endif %}
         </nav>
         {% endif %}
