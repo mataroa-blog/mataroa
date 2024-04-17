@@ -1,5 +1,6 @@
 # Summary
 
+- [README](../README.md)
 - [Coding Conventions](./coding-conventions.md)
 - [Git Commit Message Guidelines](./commit-messages.md)
 - [File Structure Walkthrough](./file-structure-walkthrough.md)
