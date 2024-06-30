@@ -25,9 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY", "nonrandom_secret")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True if os.getenv("DEBUG") == "1" else False
+DEBUG = os.getenv("DEBUG") == "1"
 
-LOCALDEV_MODE = True if os.getenv("LOCALDEV_MODE") == "1" else False
+LOCALDEV_MODE = os.getenv("LOCALDEV_MODE") == "1"
 
 ALLOWED_HOSTS = [
     "127.0.0.1",

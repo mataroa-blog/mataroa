@@ -223,9 +223,7 @@ class Post(models.Model):
 
     @property
     def is_draft(self):
-        if self.published_at:
-            return False
-        return True
+        return not self.published_at
 
     @property
     def is_published(self):
