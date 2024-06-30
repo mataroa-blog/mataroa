@@ -30,14 +30,14 @@ DEBUG = True if os.environ.get("DEBUG") == "1" else False
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
-    ".mataroa.blog",
+    f".{os.environ.get('DOMAIN', 'mataroa.blog')}",
     ".mataroalocal.blog",
     "*",
 ]
 
 ADMINS = [("Theodore Keloglou", "zf@sirodoht.com")]
 
-CANONICAL_HOST = "mataroa.blog"
+CANONICAL_HOST = os.environ.get("DOMAIN", "mataroa.blog")
 if DEBUG:
     CANONICAL_HOST = "mataroalocal.blog:8000"
 
@@ -183,10 +183,10 @@ EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = 587
 
-DEFAULT_FROM_EMAIL = "Mataroa <admin@mataroa.blog>"
-NOTIFICATIONS_FROM_EMAIL = "Mataroa Notifications <notifications@mataroa.blog>"
-EMAIL_FROM_HOST = "mataroa.blog"
-SERVER_EMAIL = "DC Parlov <server@mataroa.blog>"
+EMAIL_FROM_HOST = CANONICAL_HOST
+DEFAULT_FROM_EMAIL = f"Mataroa <admin@{EMAIL_FROM_HOST}>"
+NOTIFICATIONS_FROM_EMAIL = f"Mataroa Notifications <notifications@{EMAIL_FROM_HOST}>"
+SERVER_EMAIL = f"DC Parlov <server@{EMAIL_FROM_HOST}>"
 EMAIL_SUBJECT_PREFIX = "[Mataroa Notification] "
 
 EMAIL_TEST_RECEIVE_LIST = os.environ.get("EMAIL_TEST_RECEIVE_LIST")
