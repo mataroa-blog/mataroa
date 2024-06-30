@@ -22,24 +22,24 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY", "nonrandom_secret")
+SECRET_KEY = os.getenv("SECRET_KEY", "nonrandom_secret")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True if os.environ.get("DEBUG") == "1" else False
+DEBUG = True if os.getenv("DEBUG") == "1" else False
 
-LOCALDEV_MODE = True if os.environ.get("LOCALDEV_MODE") == "1" else False
+LOCALDEV_MODE = True if os.getenv("LOCALDEV_MODE") == "1" else False
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
-    f".{os.environ.get('DOMAIN', 'mataroa.blog')}",
+    f".{os.getenv('DOMAIN', 'mataroa.blog')}",
     ".mataroalocal.blog",
     "*",
 ]
 
 ADMINS = [("Theodore Keloglou", "zf@sirodoht.com")]
 
-CANONICAL_HOST = os.environ.get("DOMAIN", "mataroa.blog")
+CANONICAL_HOST = os.getenv("DOMAIN", "mataroa.blog")
 if LOCALDEV_MODE:
     CANONICAL_HOST = "mataroalocal.blog:8000"
 
@@ -104,7 +104,7 @@ DATETIME_FORMAT = "F j, Y, P"
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-database_url = os.environ.get("DATABASE_URL", "")
+database_url = os.getenv("DATABASE_URL", "")
 database_url = parse.urlparse(database_url)
 # e.g. postgres://mataroa:password@127.0.0.1:5432/mataroa
 database_name = database_url.path[1:]  # url.path is '/mataroa'
@@ -181,8 +181,8 @@ if LOCALDEV_MODE:
 EMAIL_USE_TLS = True
 EMAIL_HOST = "smtp.postmarkapp.com"
 EMAIL_HOST_BROADCASTS = "smtp-broadcasts.postmarkapp.com"
-EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = 587
 
 EMAIL_FROM_HOST = CANONICAL_HOST
@@ -206,17 +206,17 @@ if not LOCALDEV_MODE:
 # Stripe
 # https://stripe.com/docs/api
 
-STRIPE_API_KEY = os.environ.get("STRIPE_API_KEY", "")
-STRIPE_PUBLIC_KEY = os.environ.get("STRIPE_PUBLIC_KEY", "")
-STRIPE_PRICE_ID = os.environ.get("STRIPE_PRICE_ID", "")
+STRIPE_API_KEY = os.getenv("STRIPE_API_KEY", "")
+STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY", "")
+STRIPE_PRICE_ID = os.getenv("STRIPE_PRICE_ID", "")
 
 
 # Translate
 
-TRANSLATE_API_URL = os.environ.get(
+TRANSLATE_API_URL = os.getenv(
     "TRANSLATE_API_URL", "https://translate.mataroa.blog/api/generate"
 )
-TRANSLATE_API_TOKEN = os.environ.get("TRANSLATE_API_TOKEN", "")
+TRANSLATE_API_TOKEN = os.getenv("TRANSLATE_API_TOKEN", "")
 
 
 # Logging
