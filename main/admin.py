@@ -8,41 +8,6 @@ from django.utils.html import format_html
 from main import models, util
 
 
-class YearCreatedListFilter(admin.SimpleListFilter):
-    title = "year created"
-    parameter_name = "year_created"
-
-    def lookups(self, request, model_admin):
-        return [
-            ("2020", "in 2020"),
-            ("2021", "in 2021"),
-            ("2022", "in 2022"),
-            ("2023", "in 2023"),
-        ]
-
-    def queryset(self, request, queryset):
-        if self.value() == "2020":
-            return queryset.filter(
-                date_joined__gte=date(2020, 1, 1),
-                date_joined__lte=date(2020, 12, 31),
-            )
-        if self.value() == "2021":
-            return queryset.filter(
-                date_joined__gte=date(2021, 1, 1),
-                date_joined__lte=date(2021, 12, 31),
-            )
-        if self.value() == "2022":
-            return queryset.filter(
-                date_joined__gte=date(2022, 1, 1),
-                date_joined__lte=date(2022, 12, 31),
-            )
-        if self.value() == "2023":
-            return queryset.filter(
-                date_joined__gte=date(2023, 1, 1),
-                date_joined__lte=date(2023, 12, 31),
-            )
-
-
 @admin.action(description="Mark selected users as approved")
 def make_approved(modeladmin, request, queryset):
     queryset.update(is_approved=True)
@@ -65,7 +30,7 @@ class UserAdmin(DjUserAdmin):
         "last_login",
     )
     list_display_links = ("id", "username")
-    list_filter = (YearCreatedListFilter, "is_premium", "mail_export_on", "comments_on")
+    list_filter = ("is_premium", "mail_export_on", "comments_on")
     search_fields = ("username", "email", "stripe_customer_id", "blog_title")
     actions = [make_approved]
 
