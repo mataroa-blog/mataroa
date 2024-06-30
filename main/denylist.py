@@ -170,6 +170,7 @@ ALLOWED_HTML_ATTRS = [
     "src",
     "start",
     "style",
+    "target",
     "title",
     "width",
 ]
