@@ -161,7 +161,7 @@ def remove_control_chars(text):
     See http://www.unicode.org/reports/tr44/#General_Category_Values
     """
     control_char_string = "".join(denylist.DISALLOWED_CHARACTERS)
-    control_char_re = re.compile("[%s]" % re.escape(control_char_string))
+    control_char_re = re.compile(f"[{re.escape(control_char_string)}]")
     return control_char_re.sub(" ", text)
 
 

@@ -1,41 +1,56 @@
 # Deployment
 
-How to deploy a new mataroa instance?
+## Step 1: Ansible
 
-1. Get a linux server
-1. Follow the [server playbook](./server-playbook.md)
-1. Update [mataroa/settings](../mataroa/settings.py)
-    * `ADMINS`
-    * `CANONICAL_HOST`
-    * `EMAIL_HOST` and `EMAIL_HOST_BROADCAST`
-1. Adjust the [deploy.sh](../deploy.sh) script
-    * Change IP
-1. Enable `deploy` user to reload the uwsgi systemd service. To do this...
+We use ansible to provision a Debian 12 Linux server.
 
-...add `deploy` user to sudo/wheel group:
+(1a) First, set up configuration files:
 
 ```sh
-adduser deploy sudo
+cd ansible/
+# Make a copy of the example file
+cp .envrc.example .envrc
+
+# Edit parameters as required
+vim .envrc
+
+# Load variables into environment
+source .envrc
 ```
 
-Then, edit sudoers with:
+(1b) Then, provision:
 
 ```sh
-visudo
+ansible-playbook playbook.yaml -v
 ```
 
-and add the following:
+## Step 2: Wildcard certificates
 
-```
-# Allow deploy user to restart apps
-%deploy ALL=NOPASSWD: /usr/bin/systemctl reload mataroa.uwsgi
-```
+We use Automatic DNS API integration with DNSimple:
 
-Rumours are the only way to see the results is to reboot :/
-
-But once you do (!) — then:
+https://github.com/acmesh-official/acme.sh/wiki/dnsapi#dns_dnsimple
 
 ```sh
-sudo -i -u deploy
-sudo systemctl reload mataroa.uwsgi
+curl https://get.acme.sh | sh -s email=person@example.com
+# Note: Installation inserts a cronjob for auto-renewal
+
+# Setup DNSimple API
+echo 'export DNSimple_OAUTH_TOKEN="token-here"' >> /root/.acme.sh/acme.sh.env
+
+# Issue cert
+acme.sh --issue --dns dns_dnsimple -d mataroa.blog -d *.mataroa.blog
+
+# We "install" (copy) the cert because we should not use the cert from acme.sh's internal store
+acme.sh --install-cert -d mataroa.blog -d *.mataroa.blog --key-file /etc/caddy/mataroa-blog-key.pem --fullchain-file /etc/caddy/mataroa-blog-cert.pem --reloadcmd "chown caddy:www-data /etc/caddy/mataroa-blog-{cert,key}.pem && systemctl restart caddy"
 ```
+
+Note: acme.sh's default SSL provider is ZeroSSL which does not accept email with
+plus-subaddressing. It will not error gracefully, just fail with a cryptic
+message (tested with acmesh v3.0.7).
+
+## Step 3: Cronjobs and Automated backups
+
+There are a few cronjobs that need setting up and, of course, backups are essential:
+
+* (3a) [Cronjobs](./cronjobs.md)
+* (3b) [Database Backup](./database-backup.md)
