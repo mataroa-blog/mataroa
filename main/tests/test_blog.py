@@ -251,9 +251,9 @@ class BlogExportEpubTestCase(TestCase):
         response = self.client.post(reverse("export_epub"))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response["Content-Type"], "application/epub")
-        self.assertContains(response, "OEBPS/titlepage.xhtml".encode("utf-8"))
-        self.assertContains(response, "OEBPS/toc.xhtml".encode("utf-8"))
-        self.assertContains(response, "OEBPS/author.xhtml".encode("utf-8"))
+        self.assertContains(response, b"OEBPS/titlepage.xhtml")
+        self.assertContains(response, b"OEBPS/toc.xhtml")
+        self.assertContains(response, b"OEBPS/author.xhtml")
 
 
 class BlogNotificationListTestCase(TestCase):
