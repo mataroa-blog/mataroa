@@ -228,11 +228,11 @@ class Post(models.Model):
 
     @property
     def is_published(self):
+        # draft case
         if not self.published_at:
-            # draft case
             return False
-        if self.published_at > timezone.now().date():
-            # future publishing date case
+        # future publishing date case
+        if self.published_at > timezone.now().date():  # noqa: SIM103
             return False
         return True
 
