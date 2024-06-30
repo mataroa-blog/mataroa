@@ -338,7 +338,7 @@ class BillingCardDelete(LoginRequiredMixin, View):
 
         # check if card id is valid for user
         card_id = self.kwargs.get(self.slug_url_kwarg)
-        if card_id not in self.stripe_payment_methods.keys():
+        if card_id not in self.stripe_payment_methods:
             mail_admins(
                 "User tried to delete card with invalid Stripe card ID",
                 f"user.id={request.user.id}\nuser.username={request.user.username}",
@@ -360,7 +360,7 @@ def billing_card_default(request, stripe_payment_method_id):
 
     stripe_payment_methods = _get_payment_methods(request.user.stripe_customer_id)
 
-    if stripe_payment_method_id not in stripe_payment_methods.keys():
+    if stripe_payment_method_id not in stripe_payment_methods:
         return HttpResponseBadRequest("Invalid Card ID.")
 
     stripe.api_key = settings.STRIPE_API_KEY
