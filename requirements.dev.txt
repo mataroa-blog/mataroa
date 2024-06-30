@@ -1,6 +1,4 @@
-pip-tools==7.3.0
-isort==5.10.1
-flake8==6.1.0
-black==23.11.0
-coverage==7.3.2
-ansible==9.4.0
+pip-tools==7.4.1
+ruff==0.5.0
+coverage==7.5.4
+ansible==10.1.0

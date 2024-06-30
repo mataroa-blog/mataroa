@@ -197,23 +197,35 @@ python manage.py test
 For coverage, run:
 
 ```sh
-make cov
+coverage run --source='.' --omit '.venv/*' manage.py test
+coverage report -m
 ```
 
 ## Code linting & formatting
 
-The following tools are used for code linting and formatting:
+We use [ruff](https://github.com/astral-sh/ruff) for Python code formatting and linting.
 
-* [black](https://github.com/psf/black) for code formatting
-* [isort](https://github.com/pycqa/isort) for imports order consistency
-* [flake8](https://gitlab.com/pycqa/flake8) for code linting
-* [shellcheck](https://github.com/koalaman/shellcheck) for shell scripts
-
-To use:
+To format:
 
 ```sh
-make format
-make lint
+ruff format
+```
+
+To lint:
+
+```sh
+ruff check
+ruff check --fix
+```
+
+## Python dependencies
+
+We use [pip-tools](https://github.com/jazzband/pip-tools) to manage our Python dependencies:
+
+```sh
+pip-compile -U requirements.in
+pip install --upgrade pip
+pip install -r requirements.txt
 ```
 
 ## Deployment
