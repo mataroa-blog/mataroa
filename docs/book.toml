@@ -2,5 +2,5 @@
 authors = ["Theodore Keloglou"]
 language = "en"
 multilingual = false
-src = "docs"
-title = "Mataroa Docs"
+src = "src"
+title = "Mataroa Documentation"

@@ -23,4 +23,4 @@ docker-postgres-data/
 docker-compose.override.yml
 
 # mdbook docs
-/book/
+/docs/book/
