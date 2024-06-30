@@ -73,7 +73,7 @@ def export_markdown(request):
 def export_zola(request):
     if request.method == "POST":
         # load zola templates
-        with open("./export_base_zola/config.toml", "r") as zola_config_file:
+        with open("./export_base_zola/config.toml") as zola_config_file:
             zola_config = (
                 zola_config_file.read()
                 .replace("example.com", f"{request.user.username}.mataroa.blog")
@@ -82,13 +82,13 @@ def export_zola(request):
                     "Example blog description", f"{request.user.blog_byline or ''}"
                 )
             )
-        with open("./export_base_zola/style.css", "r") as zola_styles_file:
+        with open("./export_base_zola/style.css") as zola_styles_file:
             zola_styles = zola_styles_file.read()
-        with open("./export_base_zola/index.html", "r") as zola_index_file:
+        with open("./export_base_zola/index.html") as zola_index_file:
             zola_index = zola_index_file.read()
-        with open("./export_base_zola/post.html", "r") as zola_post_file:
+        with open("./export_base_zola/post.html") as zola_post_file:
             zola_post = zola_post_file.read()
-        with open("./export_base_zola/_index.md", "r") as zola_content_index_file:
+        with open("./export_base_zola/_index.md") as zola_content_index_file:
             zola_content_index = zola_content_index_file.read()
 
         # get all user posts and add them into export_posts encoded
@@ -129,7 +129,7 @@ def export_zola(request):
 def export_hugo(request):
     if request.method == "POST":
         # load hugo templates
-        with open("./export_base_hugo/config.toml", "r") as hugo_config_file:
+        with open("./export_base_hugo/config.toml") as hugo_config_file:
             blog_title = request.user.blog_title or f"{request.user.username} blog"
             blog_byline = request.user.blog_byline or ""
             hugo_config = (
@@ -138,17 +138,17 @@ def export_hugo(request):
                 .replace("Example blog title", blog_title)
                 .replace("Example blog description", blog_byline)
             )
-        with open("./export_base_hugo/theme.toml", "r") as hugo_theme_file:
+        with open("./export_base_hugo/theme.toml") as hugo_theme_file:
             hugo_theme = hugo_theme_file.read()
-        with open("./export_base_hugo/style.css", "r") as hugo_styles_file:
+        with open("./export_base_hugo/style.css") as hugo_styles_file:
             hugo_styles = hugo_styles_file.read()
-        with open("./export_base_hugo/single.html", "r") as hugo_single_file:
+        with open("./export_base_hugo/single.html") as hugo_single_file:
             hugo_single = hugo_single_file.read()
-        with open("./export_base_hugo/list.html", "r") as hugo_list_file:
+        with open("./export_base_hugo/list.html") as hugo_list_file:
             hugo_list = hugo_list_file.read()
-        with open("./export_base_hugo/index.html", "r") as hugo_index_file:
+        with open("./export_base_hugo/index.html") as hugo_index_file:
             hugo_index = hugo_index_file.read()
-        with open("./export_base_hugo/baseof.html", "r") as hugo_baseof_file:
+        with open("./export_base_hugo/baseof.html") as hugo_baseof_file:
             hugo_baseof = hugo_baseof_file.read()
 
         # get all user posts and add them into export_posts encoded
@@ -302,9 +302,9 @@ def export_epub(request):
         epub_uuid = str(uuid.uuid4())
 
         # load mimetype and container.xml
-        with open("./export_base_epub/mimetype", "r") as mimetype_file:
+        with open("./export_base_epub/mimetype") as mimetype_file:
             mimetype_content = mimetype_file.read()
-        with open("./export_base_epub/container.xml", "r") as container_xml_file:
+        with open("./export_base_epub/container.xml") as container_xml_file:
             container_xml_content = container_xml_file.read()
 
         # process posts
@@ -329,7 +329,7 @@ def export_epub(request):
                 + "\n"
             )
             content_opf_spine += f'    <itemref idref="{chapter["id"]}"/>' + "\n"
-        with open("./export_base_epub/content.opf", "r") as opf_content_file:
+        with open("./export_base_epub/content.opf") as opf_content_file:
             content_opf_content = opf_content_file.read()
 
             content_opf_content = content_opf_content.replace(
@@ -370,7 +370,7 @@ def export_epub(request):
                 f'      <li><a href="{chapter["link"]}">{chapter["title"]}</a></li>'
                 + "\n"
             )
-        with open("./export_base_epub/toc.xhtml", "r") as toc_xhtml_file:
+        with open("./export_base_epub/toc.xhtml") as toc_xhtml_file:
             toc_xhtml_content = toc_xhtml_file.read()
             toc_xhtml_content = toc_xhtml_content.replace(
                 "<!-- chapters list -->", toc_xhtml_body
@@ -399,7 +399,7 @@ def export_epub(request):
             chapter_title="About the Author",
             chapter_link="author.xhtml",
         )
-        with open("./export_base_epub/toc.ncx", "r") as toc_ncx_file:
+        with open("./export_base_epub/toc.ncx") as toc_ncx_file:
             toc_ncx_content = toc_ncx_file.read()
 
             toc_ncx_content = toc_ncx_content.replace(
