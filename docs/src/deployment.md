@@ -47,3 +47,10 @@ acme.sh --install-cert -d mataroa.blog -d *.mataroa.blog --key-file /etc/caddy/m
 Note: acme.sh's default SSL provider is ZeroSSL which does not accept email with
 plus-subaddressing. It will not error gracefully, just fail with a cryptic
 message (tested with acmesh v3.0.7).
+
+## Step 3: Cronjobs and Automated backups
+
+There are a few cronjobs that need setting up and, of course, backups are essential:
+
+* (3a) [Cronjobs](./cronjobs.md)
+* (3b) [Database Backup](./database-backup.md)
