@@ -17,7 +17,7 @@ Current list of top-level PyPI dependencies (source at [requirements.in](/requir
 
 * [Django](https://pypi.org/project/Django/)
 * [psycopg2-binary](https://pypi.org/project/psycopg2-binary/)
-* [uWSGI](https://pypi.org/project/uWSGI/)
+* [gunicorn](https://pypi.org/project/gunicorn/)
 * [Markdown](https://pypi.org/project/Markdown/)
 * [Pygments](https://pypi.org/project/Pygments/)
 * [bleach](https://pypi.org/project/bleach/)
@@ -27,7 +27,7 @@ Current list of top-level PyPI dependencies (source at [requirements.in](/requir
 
 After approving a dependency, the process to add it is:
 
-1. Assuming a venv is activated and `requirements_dev.txt` are installed.
+1. Assuming a venv is activated and `requirements.dev.txt` are installed.
 1. Add new dependency in [`requirements.in`](/requirements.in).
 1. Run `pip-compile` to generate [`requirements.txt`](/requirements.txt)
 1. Run `pip install -r requirements.txt`
@@ -38,7 +38,7 @@ When a new Django version is out it’s a good idea to upgrade everything.
 
 Steps:
 
-1. Assuming a venv is activated and `requirements_dev.txt` are installed.
+1. Assuming a venv is activated and `requirements.dev.txt` are installed.
 1. Run `pip-compile -U` to generate an upgraded `requirements.txt`.
 1. Run `git diff requirements.txt` and spot non-patch level vesion bumps.
 1. Examine release notes of each one.
