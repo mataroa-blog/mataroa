@@ -19,7 +19,7 @@ export DEBUG=1
 # Stop real emails and turn https off
 # 1: stop and off
 # 0: do not stop and on
-export LOCALDEV_MODE=1
+export LOCALDEV=1
 
 # Session cookies secret
 export SECRET_KEY=some-secret-key
