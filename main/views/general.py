@@ -116,7 +116,7 @@ def domain_check(request):
 
 class Logout(DjLogoutView):
     def dispatch(self, request, *args, **kwargs):
-        messages.add_message(request, messages.INFO, "logged out")
+        messages.info(request, "logged out")
         return super().dispatch(request, *args, **kwargs)
 
 
