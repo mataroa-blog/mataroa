@@ -95,7 +95,7 @@ volume, located in the root of the project.
 ```
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements_dev.txt
+pip install -r requirements.dev.txt
 pip install -r requirements.txt
 ```
 
@@ -221,20 +221,12 @@ make lint
 See the [Deployment](./docs/deployment.md) document for an overview on steps
 required to deploy a mataroa instance.
 
-See the [Server Playbook](./docs/server-playbook.md) document for a detailed
-run through of setting up a mataroa instance on an Ubuntu 22.04 LTS system
-using [uWSGI](https://uwsgi.readthedocs.io/en/latest/) and
-[Caddy](https://caddyserver.com/).
-
-See the [Server Migration](./docs/server-migration.md) document for a guide on
-how to migrate servers.
-
 ### Useful Commands
 
-To reload the uWSGI process:
+To reload the gunicorn process:
 
 ```sh
-sudo systemctl reload mataroa.uwsgi
+sudo systemctl reload mataroa
 ```
 
 To reload Caddy:
@@ -243,10 +235,10 @@ To reload Caddy:
 systemctl restart caddy  # root only
 ```
 
-uWSGI logs:
+gunicorn logs:
 
 ```sh
-journalctl -fb -u mataroa.uwsgi
+journalctl -fb -u mataroa
 ```
 
 Caddy logs:
@@ -259,7 +251,7 @@ Get an overview with systemd status:
 
 ```sh
 systemctl status caddy
-systemctl status mataroa.uwsgi
+systemctl status mataroa
 ```
 
 ## Backup
