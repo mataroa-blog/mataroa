@@ -1,11 +1,6 @@
-from datetime import timedelta
-
 from django.conf import settings
 from django.core import mail
 from django.core.management.base import BaseCommand
-from django.utils import timezone
-
-from main import models, util
 
 
 def get_mail_connection():
@@ -51,11 +46,13 @@ class Command(BaseCommand):
         self.stdout.write(self.style.NOTICE("Processing test bulk mails."))
 
         if not settings.EMAIL_TEST_RECEIVE_LIST:
-            self.stdout.write(self.style.NOTICE("Setting EMAIL_TEST_RECEIVE_LIST not set."))
+            self.stdout.write(
+                self.style.NOTICE("Setting EMAIL_TEST_RECEIVE_LIST not set.")
+            )
             return
 
         message_list = []
-        for address in settings.EMAIL_TEST_RECEIVE_LIST.split(','):
+        for address in settings.EMAIL_TEST_RECEIVE_LIST.split(","):
             email = get_email(address)
             message_list.append(email)
 
@@ -66,5 +63,7 @@ class Command(BaseCommand):
         # sent out messages
         count = connection.send_messages(message_list)
         self.stdout.write(
-            self.style.SUCCESS(f"Test broadcast sent. Total {count}/{len(message_list)} emails.")
+            self.style.SUCCESS(
+                f"Test broadcast sent. Total {count}/{len(message_list)} emails."
+            )
         )
