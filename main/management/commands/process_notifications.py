@@ -75,12 +75,14 @@ class Command(BaseCommand):
         self.stdout.write(self.style.NOTICE("Processing notifications."))
 
         # list of messages to sent out
-        message_list = []
+        message_list = set()
 
         # get all notification records without sent_at
         # which means they have not been sent out already
         notification_records = models.NotificationRecord.objects.filter(sent_at=None)
         for record in notification_records:
+            # if post has been deleted
+            # TODO: test case for this conditional
             if not record.post:
                 # delete record
                 msg = (
@@ -135,24 +137,33 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.NOTICE(msg))
                 continue
 
-            # add email object to list
-            email = get_email(record.post, record.notification)
-            message_list.append(email)
-
             # don't queue for sending, if send mode is off
             if not send_mode:
                 continue
 
-            # sent out messages
-            connection = get_mail_connection()
-            connection.send_messages(message_list)
+            # add email object to list
+            email = get_email(record.post, record.notification)
+            message_list.add(email)
 
-            # logs
+            # log time email was added to the send-out list
+            # ideally we would like to log when each one was sent
             record.sent_at = timezone.now()
             record.save()
             msg = f"Logging record for '{record.post.title}' to '{record.notification.email}'."
             self.stdout.write(self.style.SUCCESS(msg))
 
-            time.sleep(0.1)
+        # return if send mode is off
+        if not send_mode:
+            self.stdout.write(
+                self.style.SUCCESS("Notifications processed. No emails were sent.")
+            )
+            return
 
-        self.stdout.write(self.style.SUCCESS("Notifications processed."))
+        # sent out messages
+        connection = get_mail_connection()
+        for message in message_list:
+            connection.send_messages([message])
+            time.sleep(0.1)
+        self.stdout.write(
+            self.style.SUCCESS(f"Broadcast sent. Total {len(message_list)} emails.")
+        )

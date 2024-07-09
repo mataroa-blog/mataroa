@@ -1,3 +1,5 @@
+import time
+
 from django.conf import settings
 from django.core import mail
 from django.core.management.base import BaseCommand
@@ -51,19 +53,22 @@ class Command(BaseCommand):
             )
             return
 
-        message_list = []
+        message_list = set()
         for address in settings.EMAIL_TEST_RECEIVE_LIST.split(","):
             email = get_email(address)
-            message_list.append(email)
+            message_list.add(email)
 
             msg = f"Logging record for '{address}'."
             self.stdout.write(self.style.SUCCESS(msg))
 
-        connection = get_mail_connection()
         # sent out messages
-        count = connection.send_messages(message_list)
+        connection = get_mail_connection()
+        for message in message_list:
+            connection.send_messages([message])
+            time.sleep(0.1)
+
         self.stdout.write(
             self.style.SUCCESS(
-                f"Test broadcast sent. Total {count}/{len(message_list)} emails."
+                f"Test broadcast sent. Total {len(message_list)} emails."
             )
         )
