@@ -1,3 +1,4 @@
+import time
 from datetime import timedelta
 
 from django.conf import settings
@@ -80,8 +81,6 @@ class Command(BaseCommand):
         # which means they have not been sent out already
         notification_records = models.NotificationRecord.objects.filter(sent_at=None)
         for record in notification_records:
-            # if post has been deleted
-            # TODO: test case for this conditional
             if not record.post:
                 # delete record
                 msg = (
@@ -136,32 +135,24 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.NOTICE(msg))
                 continue
 
-            # don't queue for sending, if send mode is off
-            if not send_mode:
-                continue
-
             # add email object to list
             email = get_email(record.post, record.notification)
             message_list.append(email)
 
-            # log time email was added to the send-out list
-            # ideally we would like to log when each one was sent
-            # which is infeasible given the mass send strategy of newsletters
+            # don't queue for sending, if send mode is off
+            if not send_mode:
+                continue
+
+            # sent out messages
+            connection = get_mail_connection()
+            connection.send_messages(message_list)
+
+            # logs
             record.sent_at = timezone.now()
             record.save()
             msg = f"Logging record for '{record.post.title}' to '{record.notification.email}'."
             self.stdout.write(self.style.SUCCESS(msg))
 
-        # return if send mode is off
-        if not send_mode:
-            self.stdout.write(
-                self.style.SUCCESS("Notifications processed. No emails were sent.")
-            )
-            return
+            time.sleep(0.1)
 
-        # sent out messages
-        connection = get_mail_connection()
-        connection.send_messages(message_list)
-        self.stdout.write(
-            self.style.SUCCESS(f"Broadcast sent. Total {len(message_list)} emails.")
-        )
+        self.stdout.write(self.style.SUCCESS("Notifications processed."))

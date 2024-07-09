@@ -177,8 +177,8 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 if DEBUG:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 EMAIL_USE_TLS = True
-EMAIL_HOST = "smtp.eu.mailgun.org"
-EMAIL_HOST_BROADCASTS = "smtp.eu.mailgun.org"
+EMAIL_HOST = "smtp.postmarkapp.com"
+EMAIL_HOST_BROADCASTS = "smtp-broadcasts.postmarkapp.com"
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = 587

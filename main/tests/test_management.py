@@ -170,7 +170,6 @@ class ProcessNotificationsTest(TestCase):
 
         # logging
         self.assertIn("Processing notifications.", output.getvalue())
-        self.assertIn("Broadcast sent. Total 1 emails.", output.getvalue())
         self.assertIn(
             "Logging record for 'Yesterday post' to 'zf@sirodoht.com'",
             output.getvalue(),
@@ -273,7 +272,6 @@ class ProcessNotificationsCanceledTest(TestCase):
             "Skip as record is canceled: 'Yesterday post' for 'zf@sirodoht.com'.",
             output.getvalue(),
         )
-        self.assertIn("Broadcast sent. Total 0 emails.", output.getvalue())
 
         # email
         self.assertEqual(len(mail.outbox), 0)
@@ -339,7 +337,6 @@ class ProcessNotificationsUnpublishedTest(TestCase):
             "Delete as post is now a draft: 'Yesterday post' for 'zf@sirodoht.com'.",
             output.getvalue(),
         )
-        self.assertIn("Broadcast sent. Total 0 emails.", output.getvalue())
 
         # email
         self.assertEqual(len(mail.outbox), 0)
