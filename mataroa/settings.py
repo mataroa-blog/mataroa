@@ -178,7 +178,7 @@ if DEBUG:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 EMAIL_USE_TLS = True
 EMAIL_HOST = "smtp.eu.mailgun.org"
-EMAIL_HOST_BROADCASTS = "smtp-broadcasts.postmarkapp.com"
+EMAIL_HOST_BROADCASTS = "smtp.eu.mailgun.org"
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = 587
@@ -188,6 +188,8 @@ NOTIFICATIONS_FROM_EMAIL = "Mataroa Notifications <notifications@mataroa.blog>"
 EMAIL_FROM_HOST = "mataroa.blog"
 SERVER_EMAIL = "DC Parlov <server@mataroa.blog>"
 EMAIL_SUBJECT_PREFIX = "[Mataroa Notification] "
+
+EMAIL_TEST_RECEIVE_LIST = os.environ.get("EMAIL_TEST_RECEIVE_LIST")
 
 
 # Security middleware
