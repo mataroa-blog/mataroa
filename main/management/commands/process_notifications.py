@@ -77,6 +77,8 @@ class Command(BaseCommand):
         # list of messages to sent out
         message_list = set()
 
+        connection = get_mail_connection()
+
         # get all notification records without sent_at
         # which means they have not been sent out already
         notification_records = models.NotificationRecord.objects.filter(sent_at=None)
@@ -144,9 +146,12 @@ class Command(BaseCommand):
             # add email object to list
             email = get_email(record.post, record.notification)
             message_list.add(email)
+            # sent out messages
+            connection.send_messages([email])
+            # give it some space
+            time.sleep(0.2)
 
-            # log time email was added to the send-out list
-            # ideally we would like to log when each one was sent
+            # log time email was sent out
             record.sent_at = timezone.now()
             record.save()
             msg = f"Logging record for '{record.post.title}' to '{record.notification.email}'."
@@ -159,11 +164,6 @@ class Command(BaseCommand):
             )
             return
 
-        # sent out messages
-        connection = get_mail_connection()
-        for message in message_list:
-            connection.send_messages([message])
-            time.sleep(0.1)
         self.stdout.write(
             self.style.SUCCESS(f"Broadcast sent. Total {len(message_list)} emails.")
         )
