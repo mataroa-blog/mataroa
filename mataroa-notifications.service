@@ -1,0 +1,9 @@
+[Unit]
+Description=Process mataroa notifications
+
+[Service]
+Type=oneshot
+ExecStart=/var/www/mataroa/.venv/bin/python /var/www/mataroa/manage.py
+
+[Install]
+WantedBy=multi-user.target

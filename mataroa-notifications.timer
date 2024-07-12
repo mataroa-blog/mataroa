@@ -1,0 +1,8 @@
+[Unit]
+Description=Run mataroa-notifications every day at 1PM UTC
+
+[Timer]
+OnCalendar=*-*-* 00:30:00
+
+[Install]
+WantedBy=timers.target
