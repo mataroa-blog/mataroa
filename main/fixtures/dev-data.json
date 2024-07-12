@@ -114,8 +114,7 @@
     "fields": {
       "notification": 1,
       "post": 1,
-      "sent_at": "2022-04-02T22:57:16.108",
-      "is_canceled": false
+      "sent_at": "2022-04-02T22:57:16.108"
     }
   },
   {
@@ -124,8 +123,7 @@
     "fields": {
       "notification": 2,
       "post": 1,
-      "sent_at": "2022-04-02T22:57:16.109",
-      "is_canceled": false
+      "sent_at": "2022-04-02T22:57:16.109"
     }
   },
   {
@@ -134,8 +132,7 @@
     "fields": {
       "notification": 1,
       "post": 2,
-      "sent_at": "2022-04-02T22:57:16.109",
-      "is_canceled": false
+      "sent_at": "2022-04-02T22:57:16.109"
     }
   },
   {
@@ -144,8 +141,7 @@
     "fields": {
       "notification": 2,
       "post": 2,
-      "sent_at": "2022-04-02T22:57:16.110",
-      "is_canceled": false
+      "sent_at": "2022-04-02T22:57:16.110"
     }
   }
 ]

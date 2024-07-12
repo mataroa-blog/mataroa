@@ -7,59 +7,24 @@
     <h1>Newsletter</h1>
 
     <p>
+        <strong>Who:</strong>
         For the current list of registered emails, see
         <a href="{% url 'notification_list' %}">Subscribers</a>.
     </p>
-
     <p>
-        The following are emails records scheduled to be sent at 13:00 UTC on
-        the day after their publication date.
+        <strong>When:</strong>
+        Every day at 10:00 UTC all posts published the day before are emailed to
+        subscribers.
     </p>
-
-    <ul>
-        {% regroup notificationrecord_list_unsent by post as post_list %}
-        {% for post, notificationrecord_list in post_list %}
-
-        <li>
-            <a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a>
-
-            {% if notificationrecord_list.0.scheduled_at %}
-            scheduled for
-            <time datetime="{{ post.first.scheduled_at|date:'Y-m-d' }}">
-                {{ notificationrecord_list.0.scheduled_at|date:'Y-m-d' }}
-            </time>
-            to:
-            {% else %}
-            to be cancelled as unpublished:
-            {% endif %}
-
-            {% for nr in notificationrecord_list %}
-            <br>
-
-            {% if nr.is_canceled %}
-            <s>{{ nr.notification.email }}</s>
-            {% else %}
-            {{ nr.notification.email }}
-            | <a href="{% url 'notificationrecord_delete' nr.id %}" class="type-delete">cancel</a>
-            {% endif %}
-
-            {% endfor %}
-        </li>
-
-        {% empty %}
-        <li><i>No records</i></li>
-        {% endfor %}
-    </ul>
-
     <p>
-        Note: Newsletter emails are delivered in raw plain text as seen in the editor.
-        Images are included as links only.
+        <strong>What:</strong>
+        Newsletter emails are delivered in raw plain text (markdown source) as seen in
+        the editor. Images are included as links only.
     </p>
 
     <p>
-        The following are emails records that have been sent in the past.
+        <strong>Past newsletters:</strong>
     </p>
-
     <ul>
         {% regroup notificationrecord_list_sent by post as post_list %}
         {% for post, notificationrecord_list in post_list %}
@@ -70,7 +35,7 @@
             <time datetime="{{ notificationrecord_list.0.sent_at|date:'Y-m-d' }}">
                 {{ notificationrecord_list.0.sent_at|date:'Y-m-d' }}
             </time>
-            to:
+            to these {{ notificationrecord_list|length }} subscribers:
 
             {% for nr in notificationrecord_list %}
             <br>{{ nr.notification.email }}
@@ -80,6 +45,5 @@
         <li><i>No records</i></li>
         {% endfor %}
     </ul>
-
 </main>
 {% endblock %}

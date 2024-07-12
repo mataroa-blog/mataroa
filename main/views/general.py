@@ -1122,80 +1122,12 @@ class NotificationRecordList(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        context["notificationrecord_list_unsent"] = (
-            context["notificationrecord_list"]
-            .filter(sent_at__isnull=True)
-            .order_by("post", "is_canceled")  # order needed for {% regroup %}
-        )
-
-        # keep a list of records too old to show
-        to_exclude = []
-        for nr in context["notificationrecord_list_unsent"]:
-            two_days_ago = timezone.now().date() - timedelta(days=2)
-            if nr.is_canceled and nr.post.published_at < two_days_ago:
-                to_exclude.append(nr.id)
-                continue
-
-        # exclude too old records
-        context["notificationrecord_list_unsent"] = context[
-            "notificationrecord_list_unsent"
-        ].exclude(id__in=to_exclude)
-
-        for nr in context["notificationrecord_list_unsent"]:
-            # if post was deleted, delete nr as well
-            if nr.post is None:
-                nr.delete()
-                continue
-
-            # do not show if post is not published
-            if not nr.post.published_at:
-                nr.scheduled_at = None
-                continue
-
-            # show scheduled day as the next one after publication date
-            nr.scheduled_at = nr.post.published_at + timedelta(days=1)
-
         context["notificationrecord_list_sent"] = (
             context["notificationrecord_list"]
             .filter(sent_at__isnull=False)
             .filter(post__isnull=False)  # do not show nr for deleted posts
         )
         return context
-
-
-class NotificationRecordDelete(LoginRequiredMixin, DeleteView):
-    model = models.Post
-    success_url = reverse_lazy("notificationrecord_list")
-    success_message = "email to '%(email)s' canceled"
-
-    def get_queryset(self):
-        queryset = models.NotificationRecord.objects.filter(
-            notification__blog_user__username=self.request.user.username
-        )
-        return queryset
-
-    def form_valid(self, form):
-        self.object.is_canceled = True
-        self.object.save()
-        messages.success(
-            self.request, self.success_message % self.object.notification.__dict__
-        )
-        success_url = self.get_success_url()
-        return HttpResponseRedirect(success_url)
-
-    def dispatch(self, request, *args, **kwargs):
-        notificationrecord = self.get_object()
-        if request.user != notificationrecord.notification.blog_user:
-            raise PermissionDenied()
-
-        if notificationrecord.sent_at:
-            messages.error(
-                request, "bad news — this notification email has already been sent :/"
-            )
-            return redirect("notificationrecord_list")
-
-        return super().dispatch(request, *args, **kwargs)
 
 
 def comparisons(request):
