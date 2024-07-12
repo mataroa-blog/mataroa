@@ -207,6 +207,7 @@ class Post(models.Model):
         null=True,
         help_text="Leave blank to keep as draft/unpublished. Use a future date for auto-posting.",
     )
+    broadcasted_at = models.DateTimeField(null=True, default=None)
 
     class Meta:
         ordering = ["-published_at", "-created_at"]
@@ -399,7 +400,6 @@ class NotificationRecord(models.Model):
     notification = models.ForeignKey(Notification, on_delete=models.SET_NULL, null=True)
     post = models.ForeignKey(Post, on_delete=models.SET_NULL, null=True)
     sent_at = models.DateTimeField(default=timezone.now, null=True)
-    is_canceled = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["-sent_at"]

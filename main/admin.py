@@ -84,7 +84,7 @@ class PostAdmin(admin.ModelAdmin):
         "post_url",
         "owner",
         "created_at",
-        "updated_at",
+        "broadcasted_at",
         "published_at",
     )
     search_fields = ("title", "slug", "body", "owner__username")
@@ -175,7 +175,6 @@ class NotificationRecordAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "sent_at",
-        "is_canceled",
         "notification",
         "post",
     )
