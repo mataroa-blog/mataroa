@@ -1,5 +1,5 @@
 [Unit]
-Description=Run mataroa-notifications every day at 10AM UTC
+Description=Run mataroa-notifications every day
 
 [Timer]
 OnCalendar=*-*-* 10:00:00

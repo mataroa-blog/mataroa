@@ -110,20 +110,31 @@ class Command(BaseCommand):
                     self.stdout.write(self.style.NOTICE(msg))
                     continue
 
-                # keep count of all emails of this run
-                count_sent += 1
-
-                # sent out email
-                email = get_email(post, notification)
-                connection.send_messages([email])
-
-                # log time email was sent out
-                models.NotificationRecord.objects.create(
+                # log record
+                record, created = models.NotificationRecord.objects.get_or_create(
                     notification=notification,
                     post=post,
                 )
-                msg = f"Email sent for '{post.title}' to '{notification.email}'."
-                self.stdout.write(self.style.SUCCESS(msg))
+                # check if this post id has already been sent to this email
+                # could be because the published_at date has been changed
+                if created:
+
+                    # keep count of all emails of this run
+                    count_sent += 1
+
+                    # sent out email
+                    email = get_email(post, notification)
+                    connection.send_messages([email])
+
+                    msg = f"Email sent for '{post.title}' to '{notification.email}'."
+                    self.stdout.write(self.style.SUCCESS(msg))
+                else:
+                    msg = (
+                        f"No email sent for '{post.title}' to '{notification.email}'. "
+                        f"Email was sent {record.sent_at}"
+                    )
+                    self.stdout.write(self.style.NOTICE(msg))
+
 
             # broadcast for this post done
             if not options["dryrun"]:
