@@ -145,11 +145,10 @@ instance showing the landing.
 
 ## Setup Cronjobs
 
-Two every 5/10 miniutes for notifications:
+One at 10am for email notifications (newsletters):
 
 ```
-*/5 * * * * bash -c 'cd /var/www/mataroa && source .venv/bin/activate && source .envrc && python manage.py enqueue_notifications'
-*/10 * * * * bash -c 'cd /var/www/mataroa && source .venv/bin/activate && source .envrc && python manage.py process_notifications'
+0 10 * * * * bash -c 'cd /var/www/mataroa && source .venv/bin/activate && source .envrc && python manage.py processnotifications'
 ```
 
 One monthly for mail exports
