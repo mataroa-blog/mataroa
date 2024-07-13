@@ -649,6 +649,11 @@ class ImageList(LoginRequiredMixin, FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["images"] = models.Image.objects.filter(owner=self.request.user)
+
+        context["total_quota"] = 0
+        for image in models.Image.objects.filter(owner=self.request.user):
+            context["total_quota"] += image.data_size
+        context["total_quota"] = round(context["total_quota"], 2)
         return context
 
     def post(self, request, *args, **kwargs):

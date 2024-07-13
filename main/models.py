@@ -274,6 +274,11 @@ class Image(models.Model):
         return base64.b64encode(self.data).decode("utf-8")
 
     @property
+    def data_size(self):
+        """Get image size in MB."""
+        return round(len(self.data) / (1024 * 1024), 2)
+
+    @property
     def raw_url_absolute(self):
         path = reverse(
             "image_raw", kwargs={"slug": self.slug, "extension": self.extension}

@@ -20,6 +20,13 @@
     </form>
 </main>
 
+<section>
+    <p>
+        <strong>Using:</strong> {{ images|length }} out of 1000 images.
+        {{ total_quota }}MB out of 100MB.
+    </p>
+</section>
+
 <section class="images-grid">
     {% for image in images %}
     <a href="{% url 'image_detail' image.slug %}" class="images-grid-item">
