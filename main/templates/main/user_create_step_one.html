@@ -11,28 +11,13 @@
     <h1>Sign up to start your blog</h1>
 
     <p>
-        Registrations were closed until recently because of people and robots
-        who signed up and posted content that significantly deteriorates
-        the experience of the web for their fellow web citizens.
-    </p>
-
-    <p>
-        Now, we screen blog authors manually and blogs that aim at taking
-        advantage of other people will be purged immediately and without any
-        notice.
-    </p>
-
-    <p>
-        To sign up, we ask that one reads the circumstances of our registration
-        closing era and promises that they will not contribute to the
-        degradation of the open web but rather to its humane growth and
-        enrichment.
+        The web is dominated by low-quality spam content for SEO or other purposes.
+        Mataroa does not tolerate any such or other machine-generated content that is not
+        designed to be read by humans. We delete accounts that violate this rule daily.
     </p>
     <p>
-        The circumstances are outlined in this blog post:
-        <a href="https://hey.mataroa.blog/blog/closing-registrations/">
-            https://hey.mataroa.blog/blog/closing-registrations/
-        </a>
+        To help us in this endeavour, we ask three questions that help us
+        distinguish between a real person and a robot.
     </p>
 
     <form method="post">
@@ -40,7 +25,7 @@
 
         <p>
             <label for="id_problems">
-                Do you understand the problems outlined in the blog post?
+                What do you think of low-quality spam content as part your web experience?
             </label>
             {% if form.problems.errors %}
                 {% for error in form.problems.errors %}
@@ -52,8 +37,7 @@
 
         <p>
             <label for="id_quality">
-                Do you plan to publish blog posts that deteriorate the quality
-                of the web?
+                Do you plan to publish articles that are designed to be read by non-humans?
             </label>
             {% if form.quality.errors %}
                 {% for error in form.quality.errors %}
@@ -65,7 +49,7 @@
 
         <p>
             <label for="id_seo">
-                Are you making this blog for SEO purposes?
+                Are you making this blog to manipulate search engine results?
             </label>
             {% if form.seo.errors %}
                 {% for error in form.seo.errors %}
