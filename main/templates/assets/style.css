@@ -1,42 +1,12 @@
 /* reset */
 html {
-    /* fix line height in all browsers */
     line-height: 1.15;
     /* prevent adjustments of font size after orientation changes in iOS */
     -webkit-text-size-adjust: 100%;
 }
 
 body {
-    /* remove margin in all browsers */
     margin: 0;
-}
-
-hr {
-    /* fix height in Firefox */
-    height: 0;
-    /* fix inheritance of border color in Firefox */
-    color: inherit;
-}
-
-abbr[title] {
-    /* fix text decoration in Chrome, Edge, Safari. */
-    text-decoration: underline dotted;
-}
-
-b,
-strong {
-    /* fix font weight in Edge and Safari */
-    font-weight: bolder;
-}
-
-code,
-kbd,
-samp,
-pre {
-    /* improve consistency of default fonts in all browsers */
-    font-family: monospace;
-    /* correct the odd 'em' font sizing in all browsers */
-    font-size: 1em;
 }
 
 small {
@@ -52,11 +22,9 @@ sup {
     position: relative;
     vertical-align: baseline;
 }
-
 sub {
     bottom: -0.25em;
 }
-
 sup {
     top: -0.5em;
 }
@@ -93,57 +61,6 @@ button,
 [type='submit'] {
     /* fix inability to style clickable types in iOS and Safari */
     -webkit-appearance: button;
-}
-
-/* remove inner border and padding in Firefox */
-::-moz-focus-inner {
-    border-style: none;
-    padding: 0;
-}
-
-:-moz-focusring {
-    /* restore focus styles unset by the previous rule */
-    outline: 1px dotted ButtonText;
-}
-
-:-moz-ui-invalid {
-    /* remove additional ':invalid' styles in Firefox */
-    box-shadow: none;
-}
-
-progress {
-    /* fix vertical alignment in Chrome and Firefox */
-    vertical-align: baseline;
-}
-
-::-webkit-inner-spin-button,
-::-webkit-outer-spin-button {
-    /* fix cursor style of increment and decrement buttons in Safari */
-    height: auto;
-}
-
-[type='search'] {
-    /* fix appearance in Chrome and Safari */
-    -webkit-appearance: textfield;
-    /* fix outline in Safari */
-    outline-offset: -2px;
-}
-
-::-webkit-search-decoration {
-    /* remove inner padding in Chrome and Safari on macOS */
-    -webkit-appearance: none;
-}
-
-::-webkit-file-upload-button {
-    /* fix inability to style clickable types in iOS and Safari */
-    -webkit-appearance: button;
-    /* change font properties to 'inherit' in Safari. */
-    font: inherit;
-}
-
-summary {
-    /* fix display in Chrome and Safari */
-    display: list-item;
 }
 
 /* general */
