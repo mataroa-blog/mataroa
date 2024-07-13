@@ -16,6 +16,9 @@ urlpatterns = [
     path("modus/privacy/", general.privacy_redir, name="privacy_redir"),
     path("guides/markdown/", general.guides_markdown, name="guides_markdown"),
     path("guides/images/", general.guides_images, name="guides_images"),
+    path(
+        "guides/custom-domain/", general.guides_customdomain, name="guides_customdomain"
+    ),
     path("guides/comments/", general.guides_comments, name="guides_comments"),
     path("guides/comparisons/", general.comparisons, name="comparisons"),
 ]

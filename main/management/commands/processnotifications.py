@@ -118,7 +118,6 @@ class Command(BaseCommand):
                 # check if this post id has already been sent to this email
                 # could be because the published_at date has been changed
                 if created:
-
                     # keep count of all emails of this run
                     count_sent += 1
 
@@ -134,7 +133,6 @@ class Command(BaseCommand):
                         f"Email was sent {record.sent_at}"
                     )
                     self.stdout.write(self.style.NOTICE(msg))
-
 
             # broadcast for this post done
             if not options["dryrun"]:

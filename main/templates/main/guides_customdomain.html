@@ -1,0 +1,42 @@
+{% extends 'main/layout.html' %}
+
+{% load static %}
+
+{% block title %}Custom Domain Guide — Mataroa{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Custom Domain Guide</h1>
+    <p>
+        We offer custom domains with managed TLS (https) to users who pay for the
+        Premium Plan.
+    </p>
+
+    <h2>Set up</h2>
+    <p>
+        Add an A record in your domain's DNS settings with IP:
+    </p>
+    <div>
+        <code>95.217.30.133</code>
+    </div>
+
+    <h2>Notes</h2>
+    <p>
+        We only support <strong>one domain</strong>. This means that we cannot
+        auto-redirect a naked domain (e.g. example.com) to its www version (i.e.
+        www.example.com). To do this, you would need to choose one version and then
+        host/serve/create some kind of redirect mechanism for the other version.
+    </p>
+    <p>
+        If you use <strong>Cloudflare</strong>, take care to have "Proxied" turned
+        off. This means that the setting should be in mode "DNS Only".
+    </p>
+    <p>
+        Other things to try: dig, online DNS lookup tools, private/incognito mode,
+        different browser, different computer/phone.
+    </p>
+</main>
+
+{% include 'partials/footer.html' %}
+
+{% endblock %}

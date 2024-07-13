@@ -1270,3 +1270,10 @@ def guides_comments(request):
         request,
         "main/guides_comments.html",
     )
+
+
+def guides_customdomain(request):
+    return render(
+        request,
+        "main/guides_customdomain.html",
+    )
