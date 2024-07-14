@@ -1277,3 +1277,10 @@ def guides_customdomain(request):
         request,
         "main/guides_customdomain.html",
     )
+
+
+def guides_pricing(request):
+    return render(
+        request,
+        "main/guides_pricing.html",
+    )
