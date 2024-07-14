@@ -13,11 +13,6 @@ postgres-data/
 .coverage
 htmlcov/
 
-# uwsgi
-uwsgi.ini
-uwsgi-log.txt
-mataroa.pid
-
 # docker
 docker-postgres-data/
 docker-compose.override.yml

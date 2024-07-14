@@ -66,9 +66,7 @@ class BillingIndexFreeTestCase(TestCase):
         ), patch.object(
             billing,
             "_get_payment_methods",
-        ), patch.object(
-            billing, "_get_invoices"
-        ):
+        ), patch.object(billing, "_get_invoices"):
             response = self.client.get(reverse("billing_index"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, b"Free Plan")
@@ -95,9 +93,7 @@ class BillingIndexPremiumTestCase(TestCase):
             billing,
             "_get_stripe_subscription",
             return_value=subscription,
-        ), patch.object(
-            billing, "_get_payment_methods"
-        ), patch.object(
+        ), patch.object(billing, "_get_payment_methods"), patch.object(
             billing, "_get_invoices"
         ):
             response = self.client.get(reverse("billing_index"))
@@ -135,9 +131,7 @@ class BillingCardAddTestCase(TestCase):
             billing,
             "_get_stripe_subscription",
             return_value=subscription,
-        ), patch.object(
-            billing, "_get_payment_methods"
-        ), patch.object(
+        ), patch.object(billing, "_get_payment_methods"), patch.object(
             billing, "_get_invoices"
         ):
             response = self.client.post(
@@ -205,9 +199,7 @@ class BillingCancelSubscriptionTwiceTestCase(TestCase):
         ), patch.object(
             billing,
             "_get_payment_methods",
-        ), patch.object(
-            billing, "_get_invoices"
-        ):
+        ), patch.object(billing, "_get_invoices"):
             response = self.client.get(reverse("billing_subscription_cancel"))
 
             # need to check inside with context because billing_index needs
@@ -224,9 +216,7 @@ class BillingCancelSubscriptionTwiceTestCase(TestCase):
         ), patch.object(
             billing,
             "_get_payment_methods",
-        ), patch.object(
-            billing, "_get_invoices"
-        ):
+        ), patch.object(billing, "_get_invoices"):
             response = self.client.post(reverse("billing_subscription_cancel"))
 
             self.assertRedirects(response, reverse("billing_index"))
@@ -269,9 +259,7 @@ class BillingReenableSubscriptionTestCase(TestCase):
         ), patch.object(
             billing,
             "_get_payment_methods",
-        ), patch.object(
-            billing, "_get_invoices"
-        ):
+        ), patch.object(billing, "_get_invoices"):
             response = self.client.post(reverse("billing_subscription"))
 
             self.assertRedirects(response, reverse("billing_index"))

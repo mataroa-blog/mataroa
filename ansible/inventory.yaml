@@ -1,0 +1,5 @@
+virtualmachines:
+  hosts:
+    main:
+      ansible_host: "{{ lookup('env', 'ANSIBLE_HOST') }}"
+      ansible_user: "{{ lookup('env', 'ANSIBLE_USER') }}"

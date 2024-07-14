@@ -22,23 +22,25 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY", "nonrandom_secret")
+SECRET_KEY = os.getenv("SECRET_KEY", "nonrandom_secret")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True if os.environ.get("DEBUG") == "1" else False
+DEBUG = os.getenv("DEBUG") == "1"
+
+LOCALDEV = os.getenv("LOCALDEV") == "1"
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
-    ".mataroa.blog",
+    f".{os.getenv('DOMAIN', 'mataroa.blog')}",
     ".mataroalocal.blog",
     "*",
 ]
 
 ADMINS = [("Theodore Keloglou", "zf@sirodoht.com")]
 
-CANONICAL_HOST = "mataroa.blog"
-if DEBUG:
+CANONICAL_HOST = os.getenv("DOMAIN", "mataroa.blog")
+if LOCALDEV:
     CANONICAL_HOST = "mataroalocal.blog:8000"
 
 
@@ -102,7 +104,7 @@ DATETIME_FORMAT = "F j, Y, P"
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-database_url = os.environ.get("DATABASE_URL", "")
+database_url = os.getenv("DATABASE_URL", "")
 database_url = parse.urlparse(database_url)
 # e.g. postgres://mataroa:password@127.0.0.1:5432/mataroa
 database_name = database_url.path[1:]  # url.path is '/mataroa'
@@ -174,19 +176,19 @@ FORMS_URLFIELD_ASSUME_HTTPS = True
 # Email
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-if DEBUG:
+if LOCALDEV:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 EMAIL_USE_TLS = True
 EMAIL_HOST = "smtp.postmarkapp.com"
 EMAIL_HOST_BROADCASTS = "smtp-broadcasts.postmarkapp.com"
-EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = 587
 
-DEFAULT_FROM_EMAIL = "Mataroa <admin@mataroa.blog>"
-NOTIFICATIONS_FROM_EMAIL = "Mataroa Notifications <notifications@mataroa.blog>"
-EMAIL_FROM_HOST = "mataroa.blog"
-SERVER_EMAIL = "DC Parlov <server@mataroa.blog>"
+EMAIL_FROM_HOST = CANONICAL_HOST
+DEFAULT_FROM_EMAIL = f"Mataroa <admin@{EMAIL_FROM_HOST}>"
+NOTIFICATIONS_FROM_EMAIL = f"Mataroa Notifications <notifications@{EMAIL_FROM_HOST}>"
+SERVER_EMAIL = f"DC Parlov <server@{EMAIL_FROM_HOST}>"
 EMAIL_SUBJECT_PREFIX = "[Mataroa Notification] "
 
 EMAIL_TEST_RECEIVE_LIST = os.environ.get("EMAIL_TEST_RECEIVE_LIST")
@@ -194,7 +196,7 @@ EMAIL_TEST_RECEIVE_LIST = os.environ.get("EMAIL_TEST_RECEIVE_LIST")
 
 # Security middleware
 
-if not DEBUG:
+if not LOCALDEV:
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = "DENY"
     SESSION_COOKIE_SECURE = True
@@ -204,17 +206,17 @@ if not DEBUG:
 # Stripe
 # https://stripe.com/docs/api
 
-STRIPE_API_KEY = os.environ.get("STRIPE_API_KEY", "")
-STRIPE_PUBLIC_KEY = os.environ.get("STRIPE_PUBLIC_KEY", "")
-STRIPE_PRICE_ID = os.environ.get("STRIPE_PRICE_ID", "")
+STRIPE_API_KEY = os.getenv("STRIPE_API_KEY", "")
+STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY", "")
+STRIPE_PRICE_ID = os.getenv("STRIPE_PRICE_ID", "")
 
 
 # Translate
 
-TRANSLATE_API_URL = os.environ.get(
+TRANSLATE_API_URL = os.getenv(
     "TRANSLATE_API_URL", "https://translate.mataroa.blog/api/generate"
 )
-TRANSLATE_API_TOKEN = os.environ.get("TRANSLATE_API_TOKEN", "")
+TRANSLATE_API_TOKEN = os.getenv("TRANSLATE_API_TOKEN", "")
 
 
 # Logging

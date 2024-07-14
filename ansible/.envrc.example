@@ -1,4 +1,17 @@
-# Exceptions and tracebacks on errors
+# inventory.yaml
+
+# Server IP and user with ssh access
+export ANSIBLE_HOST=
+export ANSIBLE_USER=root
+
+
+# vars.yaml
+
+# Domain name and email for Caddy
+export DOMAIN=mataroa.blog
+export EMAIL=admin@mataroa.blog
+
+# Show exceptions and tracebacks on errors
 # 1: show
 # 0: don't show
 export DEBUG=1
@@ -13,6 +26,8 @@ export SECRET_KEY=some-secret-key
 
 # Database connection
 export DATABASE_URL=postgres://mataroa:xxx@localhost:5432/mataroa
+export POSTGRES_USERNAME=mataroa
+export POSTGRES_PASSWORD=xxx
 
 # SMTP credentials
 export EMAIL_HOST_USER=

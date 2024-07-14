@@ -35,7 +35,7 @@ def _create_setup_intent(customer_id):
         )
     except stripe.error.StripeError as ex:
         logger.error(str(ex))
-        raise Exception("Failed to create setup intent on Stripe.")
+        raise Exception("Failed to create setup intent on Stripe.") from ex
 
     return {
         "stripe_client_secret": stripe_setup_intent["client_secret"],
@@ -61,7 +61,7 @@ def _create_stripe_subscription(customer_id):
         )
     except stripe.error.StripeError as ex:
         logger.error(str(ex))
-        raise Exception("Failed to create subscription on Stripe.")
+        raise Exception("Failed to create subscription on Stripe.") from ex
 
     return {
         "stripe_subscription_id": stripe_subscription["id"],
@@ -78,7 +78,7 @@ def _get_stripe_subscription(stripe_subscription_id):
         stripe_subscription = stripe.Subscription.retrieve(stripe_subscription_id)
     except stripe.error.StripeError as ex:
         logger.error(str(ex))
-        raise Exception("Failed to get subscription from Stripe.")
+        raise Exception("Failed to get subscription from Stripe.") from ex
 
     return stripe_subscription
 
@@ -94,7 +94,7 @@ def _get_payment_methods(stripe_customer_id):
         ).invoice_settings.default_payment_method
     except stripe.error.StripeError as ex:
         logger.error(str(ex))
-        raise Exception("Failed to retrieve customer data from Stripe.")
+        raise Exception("Failed to retrieve customer data from Stripe.") from ex
 
     # get payment methods
     try:
@@ -104,7 +104,7 @@ def _get_payment_methods(stripe_customer_id):
         )
     except stripe.error.StripeError as ex:
         logger.error(str(ex))
-        raise Exception("Failed to retrieve payment methods from Stripe.")
+        raise Exception("Failed to retrieve payment methods from Stripe.") from ex
 
     # normalise payment methods
     payment_methods = {}
@@ -132,7 +132,7 @@ def _get_invoices(stripe_customer_id):
         stripe_invoices = stripe.Invoice.list(customer=stripe_customer_id)
     except stripe.error.StripeError as ex:
         logger.error(str(ex))
-        raise Exception("Failed to retrieve invoices data from Stripe.")
+        raise Exception("Failed to retrieve invoices data from Stripe.") from ex
 
     # normalise invoices objects
     invoice_list = []
@@ -179,7 +179,7 @@ def billing_index(request):
             stripe_response = stripe.Customer.create()
         except stripe.error.StripeError as ex:
             logger.error(str(ex))
-            raise Exception("Failed to create customer on Stripe.")
+            raise Exception("Failed to create customer on Stripe.") from ex
         request.user.stripe_customer_id = stripe_response["id"]
         request.user.save()
 
@@ -338,7 +338,7 @@ class BillingCardDelete(LoginRequiredMixin, View):
 
         # check if card id is valid for user
         card_id = self.kwargs.get(self.slug_url_kwarg)
-        if card_id not in self.stripe_payment_methods.keys():
+        if card_id not in self.stripe_payment_methods:
             mail_admins(
                 "User tried to delete card with invalid Stripe card ID",
                 f"user.id={request.user.id}\nuser.username={request.user.username}",
@@ -360,7 +360,7 @@ def billing_card_default(request, stripe_payment_method_id):
 
     stripe_payment_methods = _get_payment_methods(request.user.stripe_customer_id)
 
-    if stripe_payment_method_id not in stripe_payment_methods.keys():
+    if stripe_payment_method_id not in stripe_payment_methods:
         return HttpResponseBadRequest("Invalid Card ID.")
 
     stripe.api_key = settings.STRIPE_API_KEY
