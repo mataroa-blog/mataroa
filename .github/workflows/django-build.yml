@@ -45,4 +45,4 @@ jobs:
         touch .envrc
         pip install -r requirements.dev.txt
         pip install -r requirements.txt
-        make lint
+        ruff check .
