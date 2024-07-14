@@ -123,7 +123,13 @@ class Command(BaseCommand):
 
                     # sent out email
                     email = get_email(post, notification)
-                    connection.send_messages([email])
+                    try:
+                        connection.send_messages([email])
+                    except Exception as ex:
+                        msg = f"Failed to send '{post.title}' to {notification.email}."
+                        self.stdout.write(self.style.ERROR(msg))
+                        record.delete()
+                        self.stdout.write(self.style.ERROR(ex))
 
                     msg = f"Email sent for '{post.title}' to '{notification.email}'."
                     self.stdout.write(self.style.SUCCESS(msg))
