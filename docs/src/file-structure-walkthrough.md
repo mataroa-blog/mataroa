@@ -77,8 +77,7 @@ Condensed and commented sources file tree:
 │   └── wsgi.py
 ├── requirements.in # user-editable requirements file
 ├── requirements.txt # pip-compile generated version-locked dependencies
-├── requirements_dev.txt # user-editable development requirements
-└── uwsgi.example.ini # example configuration for uWSGI
+└── requirements.dev.txt # user-editable development requirements
 ```
 
 ## [`main/urls.py`](/main/urls.py)
