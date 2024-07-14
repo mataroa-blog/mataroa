@@ -207,7 +207,7 @@ class Post(models.Model):
         null=True,
         help_text="Leave blank to keep as draft/unpublished. Use a future date for auto-posting.",
     )
-    broadcasted_at = models.DateTimeField(null=True, default=None)
+    broadcasted_at = models.DateTimeField(blank=True, null=True, default=None)
 
     class Meta:
         ordering = ["-published_at", "-created_at"]
