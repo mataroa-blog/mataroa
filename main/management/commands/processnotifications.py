@@ -48,7 +48,12 @@ Unsubscribe:
 
 def get_email(post, notification):
     """Returns the email object, containing all info needed to be sent."""
-    blog_title = post.owner.blog_title or post.owner.username
+
+    blog_title = post.owner.username
+    # email sender name cannot contain commas
+    if post.owner.blog_title and "," not in post.owner.blog_title:
+        blog_title = post.owner.blog_title
+
     unsubscribe_url = util.get_protocol() + notification.get_unsubscribe_url()
     body = get_email_body(post, notification)
     email = mail.EmailMessage(
