@@ -93,6 +93,9 @@ class Command(BaseCommand):
 
         # for all posts that were published yesterday
         for post in post_list:
+            # assume no notification will fail
+            no_send_failures = True
+
             notification_list = models.Notification.objects.filter(
                 blog_user=post.owner,
                 is_active=True,
@@ -126,6 +129,7 @@ class Command(BaseCommand):
                     try:
                         connection.send_messages([email])
                     except Exception as ex:
+                        no_send_failures = False
                         msg = f"Failed to send '{post.title}' to {notification.email}."
                         self.stdout.write(self.style.ERROR(msg))
                         record.delete()
@@ -141,7 +145,7 @@ class Command(BaseCommand):
                     self.stdout.write(self.style.NOTICE(msg))
 
             # broadcast for this post done
-            if not options["dryrun"]:
+            if not options["dryrun"] and no_send_failures:
                 post.broadcasted_at = timezone.now()
                 post.save()
 
