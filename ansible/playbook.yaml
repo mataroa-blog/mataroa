@@ -20,6 +20,7 @@
           - python3.11-dev
           - python3.11-venv
           - vim
+          - rclone
         state: present
 
     # caddy

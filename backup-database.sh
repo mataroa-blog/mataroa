@@ -25,7 +25,7 @@ main() {
     pg_dump -Fc --no-acl mataroa -h localhost -U mataroa -f /home/deploy/mataroa.dump -w
 
     # upload using aws cli
-    /home/deploy/venv-backups/bin/aws s3 cp /home/deploy/mataroa.dump s3://mataroa-bucket/backups/postgres-mataroa-"$(date --utc +%Y%m%d-%H%M%S)"/
+    /usr/bin/rclone copy --progress /home/deploy/mataroa.dump scaleway:bucket/mataroa-backups/postgres-mataroa-"$(date --utc +%Y%m%d-%H%M%S)"/
 }
 
 main "$@"
