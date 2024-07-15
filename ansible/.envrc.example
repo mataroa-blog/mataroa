@@ -33,6 +33,9 @@ export POSTGRES_PASSWORD=xxx
 export EMAIL_HOST_USER=
 export EMAIL_HOST_PASSWORD=
 
+# Receivers for email tests (comma separated)
+export EMAIL_TEST_RECEIVE_LIST=
+
 # Stripe payments details
 export STRIPE_API_KEY=
 export STRIPE_PUBLIC_KEY=
