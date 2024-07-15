@@ -287,12 +287,12 @@ pg_restore -v -h localhost -cO --if-exists -d mataroa -U mataroa -W mataroa.dump
 In addition to the standard Django management commands, there are also:
 
 * `processnotifications`: sends notification emails for new blog posts of existing records.
-* `mail_exports`: emails users of their blog exports.
+* `mailexports`: emails users of their blog exports.
 
 They are triggered using the standard `manage.py` Django way; eg:
 
 ```sh
-python manage.py enqueue_notifications
+python manage.py processnotifications
 ```
 
 ## Billing
