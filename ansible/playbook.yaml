@@ -112,10 +112,52 @@
       become_user: deploy
 
     # systemd
-    - name: systemd template
+    - name: systemd main service
       ansible.builtin.template:
         src: mataroa.service.j2
         dest: /etc/systemd/system/mataroa.service
+        owner: root
+        group: root
+        mode: '0644'
+    - name: systemd notifications timer
+      ansible.builtin.template:
+        src: mataroa-notifications.timer.j2
+        dest: /etc/systemd/system/mataroa-notifications.timer
+        owner: root
+        group: root
+        mode: '0644'
+    - name: systemd notifications service
+      ansible.builtin.template:
+        src: mataroa-notifications.service.j2
+        dest: /etc/systemd/system/mataroa-notifications.service
+        owner: root
+        group: root
+        mode: '0644'
+    - name: systemd exports timer
+      ansible.builtin.template:
+        src: mataroa-exports.timer.j2
+        dest: /etc/systemd/system/mataroa-exports.timer
+        owner: root
+        group: root
+        mode: '0644'
+    - name: systemd exports service
+      ansible.builtin.template:
+        src: mataroa-exports.service.j2
+        dest: /etc/systemd/system/mataroa-exports.service
+        owner: root
+        group: root
+        mode: '0644'
+    - name: systemd backup timer
+      ansible.builtin.template:
+        src: mataroa-backup.timer.j2
+        dest: /etc/systemd/system/mataroa-backup.timer
+        owner: root
+        group: root
+        mode: '0644'
+    - name: systemd backup service
+      ansible.builtin.template:
+        src: mataroa-backup.service.j2
+        dest: /etc/systemd/system/mataroa-backup.service
         owner: root
         group: root
         mode: '0644'

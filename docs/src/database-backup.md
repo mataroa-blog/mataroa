@@ -17,13 +17,13 @@ export PGPASSWORD=db-password
 To create a database dump run:
 
 ```sh
-pg_dump -Fc --no-acl mataroa -h localhost -U mataroa -f /home/deploy/mataroa.dump -w
+pg_dump -Fc --no-acl mataroa -h localhost -U mataroa -f /home/deploy/mataroa.dump -W
 ```
 
 To restore a database dump run:
 
 ```sh
-pg_restore -v -h localhost -cO --if-exists -d mataroa -U mataroa -W mataroa.dump
+pg_restore --disable-triggers -j 4 -v -h localhost -cO --if-exists -d mataroa -U mataroa -W mataroa.dump
 ```
 
 ## Initialise and configure backup script
@@ -50,25 +50,9 @@ mv mc /usr/local/bin/
 1. Add `mc` alias using the command below (run as `deploy` user):
 
 ```sh
-mc alias set s3scw https://purple.s3.nl-ams.scw.cloud xxx xxx --api S3v4
+mc alias set s3scw https://example.s3.fr-par.scw.cloud xxx xxx --api S3v4
 
 # verify entry
 cat /home/deploy/.mc/config.json
 mc ls s3scw
 ```
-
-## Setup cronjob
-
-Run as `deploy` user:
-
-```sh
-crontab -e
-```
-
-Append:
-
-```
-0 */6 * * * /home/deploy/backup-database.sh
-```
-
-This means "run every 6 hours".
