@@ -1,0 +1,8 @@
+[Unit]
+Description=Run mataroa-backup every 6 hours
+
+[Timer]
+OnCalendar=*-*-* 00/6:00:00
+
+[Install]
+WantedBy=timers.target
