@@ -29,16 +29,17 @@ def get_email_body(user):
     export email.
     """
     today = datetime.now().date().strftime("%B %d, %Y")
-    body = "Greetings,\n"
-    body += "\n"
-    body += f"This is the {today} edition of your Mataroa blog export.\n"
-    body += "\n"
-    body += "Please find your blog’s zip archive in markdown format attached.\n"
-    body += "\n"
-    body += "---\n"
-    body += "Stop receiving exports:\n"
-    body += get_unsubscribe_url(user) + "\n"
+    body = f"""Greetings,
 
+This is the {today} edition of your Mataroa blog export.
+
+Please find your blog’s zip archive in markdown format attached.
+
+---
+
+Stop receiving exports:
+{get_unsubscribe_url(user)}
+"""
     return body
 
 
@@ -47,9 +48,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         if timezone.now().day != 1:
-            self.stdout.write(
-                self.style.NOTICE("No action. Not the first day of the month.")
-            )
+            msg = "No action. Not the first day of the month."
+            self.stdout.write(self.style.NOTICE(msg))
             return
 
         self.stdout.write(self.style.NOTICE("Processing email exports."))
@@ -64,9 +64,11 @@ class Command(BaseCommand):
             for p in user_posts:
                 pub_date = p.published_at or p.created_at
                 title = p.slug + ".md"
-                body = f"# {p.title}\n\n"
-                body += f"> Published on {pub_date.strftime('%b %-d, %Y')}\n\n"
-                body += f"{p.body}\n"
+                body = (
+                    f"# {p.title}\n\n"
+                    f"> Published on {pub_date.strftime('%b %-d, %Y')}\n\n"
+                    f"{p.body}\n"
+                )
                 export_posts.append((title, io.BytesIO(body.encode())))
 
             # write zip archive in /tmp/

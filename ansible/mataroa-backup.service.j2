@@ -1,0 +1,10 @@
+[Unit]
+Description=Backup mataroa database
+
+[Service]
+Type=oneshot
+User=deploy
+ExecStart=/bin/bash -c '/home/deploy/backup-database.sh'
+
+[Install]
+WantedBy=multi-user.target

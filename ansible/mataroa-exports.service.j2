@@ -1,0 +1,10 @@
+[Unit]
+Description=Send mataroa exports
+
+[Service]
+Type=oneshot
+User=deploy
+ExecStart=/bin/bash -c 'source /var/www/mataroa/.envrc && /var/www/mataroa/.venv/bin/python /var/www/mataroa/manage.py mailexports'
+
+[Install]
+WantedBy=multi-user.target

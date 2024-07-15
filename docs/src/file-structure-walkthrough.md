@@ -37,7 +37,7 @@ Condensed and commented sources file tree:
 │   ├── management/ # commands under `python manage.py`
 │   │   └── commands/
 │   │       └── processnotifications.py
-│   │       └── mail_exports.py
+│   │       └── mailexports.py
 │   ├── middleware.py # mostly subdomain routing
 │   ├── migrations/
 │   ├── models.py

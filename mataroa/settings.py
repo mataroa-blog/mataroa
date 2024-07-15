@@ -196,7 +196,7 @@ EMAIL_TEST_RECEIVE_LIST = os.environ.get("EMAIL_TEST_RECEIVE_LIST")
 
 # Security middleware
 
-if not LOCALDEV:
+if not DEBUG and not LOCALDEV:
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = "DENY"
     SESSION_COOKIE_SECURE = True

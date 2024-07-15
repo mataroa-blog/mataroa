@@ -14,10 +14,17 @@ Once everything works:
 1. Verify all production variables and canonical server names exist in settings et al.
 1. Disconnect production server from public IP. This is not a zero-downtime migration — to be clear.
 1. Run backup-database.sh one last time.
+1. Assign elastic/floating IP to new server.
+1. Run TLS certificate (naked and wildcard) generations.
 1. `scp` database dump into new server.
 1. Restore database dump in new server.
-1. Switch elastic/floating IP to new server.
-1. Start new server on main domain.
+1. Start mataroa and caddy systemd services
+
+Later:
+
+1. Setup cronjobs / systemd timers
+1. Setup healthcheks for recurring jobs.
+1. Verify DEBUG is 0.
 
 The above assume the migrator has a floating IP that they can move around. If
 not, there are two problems. The migrator needs to coordinate DNS but much

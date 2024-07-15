@@ -1,0 +1,8 @@
+[Unit]
+Description=Run mataroa-exports every first of the month
+
+[Timer]
+OnCalendar=*-*-01 06:00:00
+
+[Install]
+WantedBy=timers.target

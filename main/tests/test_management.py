@@ -9,7 +9,7 @@ from django.test import TestCase
 from django.utils import timezone
 
 from main import models
-from main.management.commands import mail_exports, processnotifications
+from main.management.commands import mailexports, processnotifications
 
 
 class ProcessNotificationsTest(TestCase):
@@ -136,7 +136,7 @@ class MailExportsTest(TestCase):
         self.post_b = models.Post.objects.create(owner=self.user, **post_data)
 
     def test_mail_backend(self):
-        connection = mail_exports.get_mail_connection()
+        connection = mailexports.get_mail_connection()
         self.assertEqual(connection.host, settings.EMAIL_HOST_BROADCASTS)
 
     def test_command(self):
@@ -148,13 +148,13 @@ class MailExportsTest(TestCase):
             # Django default test runner overrides SMTP EmailBackend with locmem,
             # but because we re-import the SMTP backend in
             # processnotifications.get_mail_connection, we need to mock it here too.
-            mail_exports,
+            mailexports,
             "get_mail_connection",
             return_value=mail.get_connection(
                 "django.core.mail.backends.locmem.EmailBackend"
             ),
         ):
-            call_command("mail_exports", stdout=output)
+            call_command("mailexports", stdout=output)
 
         # export records
         records = models.ExportRecord.objects.all()
