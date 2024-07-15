@@ -1,9 +1,0 @@
-[Unit]
-Description=Process mataroa notifications
-
-[Service]
-Type=oneshot
-ExecStart=/bin/bash -c 'source /var/www/mataroa/.envrc && /var/www/mataroa/.venv/bin/python /var/www/mataroa/manage.py processnotifications --no-dryrun'
-
-[Install]
-WantedBy=multi-user.target
