@@ -314,7 +314,7 @@ blockquote {
 }
 
 .posts-item-brand::before {
-    content: "» ";
+    content: "« ";
 }
 
 /* footer */
