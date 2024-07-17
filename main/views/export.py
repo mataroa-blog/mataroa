@@ -24,10 +24,11 @@ def prepend_zola_frontmatter(body, post_title, pub_date):
     return frontmatter + body
 
 
-def prepend_hugo_frontmatter(body, post_title, pub_date):
+def prepend_hugo_frontmatter(body, post_title, pub_date, post_slug):
     frontmatter = "+++\n"
     frontmatter += f'title = "{post_title}"\n'
     frontmatter += f"date = {pub_date}\n"
+    frontmatter += f'url = "blog/{post_slug}"\n'
     frontmatter += "+++\n"
     frontmatter += "\n"
 
@@ -158,7 +159,7 @@ def export_hugo(request):
             title = p.slug + ".md"
             pub_date = p.published_at or p.created_at.date()
             body = prepend_hugo_frontmatter(
-                p.body, util.escape_quotes(p.title), pub_date
+                p.body, util.escape_quotes(p.title), pub_date, p.slug
             )
             export_posts.append((title, io.BytesIO(body.encode())))
 
