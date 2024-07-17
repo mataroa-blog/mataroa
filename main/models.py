@@ -238,7 +238,7 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         path = reverse("post_detail", kwargs={"slug": self.slug})
-        return f"//{self.owner.username}.{settings.CANONICAL_HOST}{path}"
+        return f"//{self.owner.blog_url}{path}"
 
     def get_proper_url(self):
         """Returns custom domain URL if custom_domain exists, else subdomain URL."""
