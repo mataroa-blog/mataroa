@@ -36,10 +36,12 @@ class RSSFeedTestCase(TestCase):
         )
 
     def test_rss_feed_with_custom_domain(self):
-        # HELP ???
+        self.user.custom_domain = "mataroa-blog.com"
+        self.user.save()
+
         response = self.client.get(
             reverse("rss_feed"),
-            HTTP_HOST=self.user.username + "." + settings.CANONICAL_HOST,
+            HTTP_HOST=self.user.custom_domain,
         )
 
         self.assertEqual(response.status_code, 200)
@@ -49,7 +51,7 @@ class RSSFeedTestCase(TestCase):
         self.assertContains(response, self.data["body"])
         self.assertContains(
             response,
-            f"//{self.user.username}.{settings.CANONICAL_HOST}/blog/{self.data['slug']}/</link>",
+            f"//{self.user.custom_domain}/blog/{self.data['slug']}/</link>",
         )
         
 
