@@ -23,7 +23,11 @@
 </main>
 
 <footer>
-    --
-    <br><a href="/rss.xml">RSS</a>
+    {{ with .OutputFormats.Get "rss" -}}
+        <p>
+            Subscribe via
+            {{ printf `<a href=%q title=%q>RSS</a>` .Permalink site.Title | safeHTML }}
+        </p>
+    {{ end }}
 </footer>
 {{ end }}
