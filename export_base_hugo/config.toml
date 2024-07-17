@@ -5,3 +5,8 @@ theme = "mataroa"
 
 [params]
     description = "Example blog description"
+
+[outputFormats]
+  [outputFormats.RSS]
+    mediatype = "application/rss"
+    baseName = "rss"

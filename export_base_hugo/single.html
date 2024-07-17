@@ -20,6 +20,13 @@
     </article>
 </main>
 <footer>
-    <a href="/">← archive</a>
+    {{- with .Site.GetPage "/" }}
+        {{- with .OutputFormats.Get "rss" }}
+            <p>
+                Subscribe via
+                {{ printf `<a href=%q title=%q>RSS</a>` .Permalink site.Title | safeHTML }}
+            </p>
+        {{- end }}
+    {{- end }}
 </footer>
 {{ end }}
