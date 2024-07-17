@@ -32,7 +32,7 @@ six==1.16.0
     # via bleach
 sqlparse==0.5.0
     # via django
-stripe==8.11.0
+stripe==10.3.0
     # via -r requirements.in
 tinycss2==1.2.1
     # via bleach
