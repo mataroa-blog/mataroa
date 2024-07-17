@@ -1,6 +1,6 @@
-import stripe
 from django.conf import settings
 from django.core.management.base import BaseCommand
+from stripe import StripeClient
 
 from main import models
 
@@ -9,17 +9,17 @@ class Command(BaseCommand):
     help = "Check Stripe data is in sync with database."
 
     def handle(self, *args, **options):
-        stripe.api_key = settings.STRIPE_API_KEY
+        stripe = StripeClient(api_key=settings.STRIPE_API_KEY)
 
         total_count = 0
         last = None
         while True:
             if last:
-                subscription_list = stripe.Subscription.list(
-                    limit=100, starting_after=last.id
+                subscription_list = stripe.subscriptions.list(
+                    params={"limit": 100, "starting_after": last.id}
                 )
             else:
-                subscription_list = stripe.Subscription.list(limit=100)
+                subscription_list = stripe.subscriptions.list(params={"limit": 100})
             total_count += len(subscription_list)
             print(f"Current total: {total_count}")
 
