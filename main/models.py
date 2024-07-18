@@ -143,11 +143,10 @@ class User(AbstractUser):
 
     @property
     def blog_url(self):
-        url = f"{util.get_protocol()}"
         if self.custom_domain:
-            return url + f"//{self.custom_domain}"
+            return f"//{self.custom_domain}"
         else:
-            return url + f"//{self.username}.{settings.CANONICAL_HOST}"
+            return f"//{self.username}.{settings.CANONICAL_HOST}"
 
     @property
     def blog_byline_as_text(self):
