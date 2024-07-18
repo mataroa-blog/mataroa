@@ -18,7 +18,7 @@ tasks:
       sudo -u root apt install shellcheck
       cd mataroa
       touch .envrc
-      pip3 install -r requirements_dev.txt
+      pip3 install -r requirements.dev.txt
       pip3 install -r requirements.txt
       export PATH=/home/build/.local/bin:$PATH
       make lint
