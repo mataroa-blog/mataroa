@@ -21,4 +21,4 @@ tasks:
       pip3 install -r requirements.dev.txt
       pip3 install -r requirements.txt
       export PATH=/home/build/.local/bin:$PATH
-      make lint
+      ruff check
