@@ -1,5 +1,6 @@
 from datetime import date
 
+from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
 
@@ -674,7 +675,7 @@ class APIListGetTestCase(TestCase):
                 "slug": "hello-world",
                 "body": "## Hey\n\nHey world.",
                 "published_at": "2020-01-01",
-                "url": f"{util.get_protocol()}//{self.user.blog_url}/blog/hello-world/",
+                "url": f"{util.get_protocol()}//{self.user.username}.{settings.CANONICAL_HOST}/blog/hello-world/",
             },
             post_list,
         )
@@ -684,7 +685,7 @@ class APIListGetTestCase(TestCase):
                 "slug": "bye-world",
                 "body": "## Bye\n\nBye world.",
                 "published_at": "2020-09-14",
-                "url": f"{util.get_protocol()}//{self.user.blog_url}/blog/bye-world/",
+                "url": f"{util.get_protocol()}//{self.user.username}.{settings.CANONICAL_HOST}/blog/bye-world/",
             },
             post_list,
         )

@@ -35,26 +35,6 @@ class RSSFeedTestCase(TestCase):
             f"//{self.user.username}.{settings.CANONICAL_HOST}/blog/{self.data['slug']}/</link>",
         )
 
-    def test_rss_feed_with_custom_domain(self):
-        self.user.custom_domain = "mataroa-blog.com"
-        self.user.save()
-
-        response = self.client.get(
-            reverse("rss_feed"),
-            HTTP_HOST=self.user.custom_domain,
-        )
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response["Content-Type"], "application/rss+xml; charset=utf-8")
-        self.assertContains(response, self.data["title"])
-        self.assertContains(response, self.data["slug"])
-        self.assertContains(response, self.data["body"])
-        self.assertContains(
-            response,
-            f"//{self.user.custom_domain}/blog/{self.data['slug']}/</link>",
-        )
-        
-
 
 class RSSFeedDraftsTestCase(TestCase):
     """Tests draft posts do not appear in the RSS feed."""

@@ -143,10 +143,11 @@ class User(AbstractUser):
 
     @property
     def blog_url(self):
+        url = f"{util.get_protocol()}"
         if self.custom_domain:
-            return f"//{self.custom_domain}"
+            return url + f"//{self.custom_domain}"
         else:
-            return f"//{self.username}.{settings.CANONICAL_HOST}"
+            return url + f"//{self.username}.{settings.CANONICAL_HOST}"
 
     @property
     def blog_byline_as_text(self):
@@ -237,7 +238,7 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         path = reverse("post_detail", kwargs={"slug": self.slug})
-        return f"//{self.owner.blog_url}{path}"
+        return f"//{self.owner.username}.{settings.CANONICAL_HOST}{path}"
 
     def get_proper_url(self):
         """Returns custom domain URL if custom_domain exists, else subdomain URL."""
