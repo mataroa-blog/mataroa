@@ -43,6 +43,8 @@ CANONICAL_HOST = os.getenv("DOMAIN", "mataroa.blog")
 if LOCALDEV:
     CANONICAL_HOST = "mataroalocal.blog:8000"
 
+INSTANCE_NAME = os.getenv("INSTANCE_NAME", "Mataroa")
+INSTANCE_DESCRIPTION = os.getenv("INSTANCE_DESCRIPTION", "Naked blogging platform.")
 
 # Application definition
 

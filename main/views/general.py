@@ -98,7 +98,14 @@ def index(request):
     if request.user.is_authenticated:
         return redirect("blog_index")
 
-    return render(request, "main/landing.html")
+    return render(
+        request,
+        "main/landing.html",
+        {
+            "instance_name": settings.INSTANCE_NAME,
+            "instance_description": settings.INSTANCE_DESCRIPTION
+        }
+    )
 
 
 def domain_check(request):
