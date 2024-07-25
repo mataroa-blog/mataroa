@@ -129,7 +129,7 @@
     </p>
     <ul>
         {% for invoice in invoice_list %}
-        <li
+        <li>
             <span title="Period: {{ invoice.period_start|date:"Y-m-d" }} – {{ invoice.period_end|date:"Y-m-d" }}">
                 {{ invoice.created|date }}
             </span>
