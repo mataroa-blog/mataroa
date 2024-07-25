@@ -2,7 +2,6 @@ import json
 import logging
 from datetime import datetime
 
-import stripe
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -19,6 +18,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.edit import FormView
+from stripe import StripeClient, StripeError
 
 from main import forms, models, util
 
@@ -26,14 +26,16 @@ logger = logging.getLogger(__name__)
 
 
 def _create_setup_intent(customer_id):
-    stripe.api_key = settings.STRIPE_API_KEY
+    stripe = StripeClient(api_key=settings.STRIPE_API_KEY)
 
     try:
-        stripe_setup_intent = stripe.SetupIntent.create(
-            automatic_payment_methods={"enabled": True},
-            customer=customer_id,
+        stripe_setup_intent = stripe.setup_intents.create(
+            params={
+                "customer": customer_id,
+                "automatic_payment_methods": {"enabled": True},
+            }
         )
-    except stripe.error.StripeError as ex:
+    except StripeError as ex:
         logger.error(str(ex))
         raise Exception("Failed to create setup intent on Stripe.") from ex
 
@@ -43,23 +45,21 @@ def _create_setup_intent(customer_id):
 
 
 def _create_stripe_subscription(customer_id):
-    stripe.api_key = settings.STRIPE_API_KEY
+    stripe = StripeClient(api_key=settings.STRIPE_API_KEY)
 
     # expand subscription's latest invoice and invoice's payment_intent
     # so we can pass it to the front end to confirm the payment
     try:
-        stripe_subscription = stripe.Subscription.create(
-            customer=customer_id,
-            items=[
-                {
-                    "price": settings.STRIPE_PRICE_ID,
-                }
-            ],
-            payment_behavior="default_incomplete",
-            payment_settings={"save_default_payment_method": "on_subscription"},
-            expand=["latest_invoice.payment_intent"],
+        stripe_subscription = stripe.subscriptions.create(
+            params={
+                "customer": customer_id,
+                "items": [{"price": settings.STRIPE_PRICE_ID}],
+                "payment_behavior": "default_incomplete",
+                "payment_settings": {"save_default_payment_method": "on_subscription"},
+                "expand": ["latest_invoice.payment_intent"],
+            }
         )
-    except stripe.error.StripeError as ex:
+    except StripeError as ex:
         logger.error(str(ex))
         raise Exception("Failed to create subscription on Stripe.") from ex
 
@@ -72,11 +72,13 @@ def _create_stripe_subscription(customer_id):
 
 
 def _get_stripe_subscription(stripe_subscription_id):
-    stripe.api_key = settings.STRIPE_API_KEY
+    stripe = StripeClient(api_key=settings.STRIPE_API_KEY)
 
     try:
-        stripe_subscription = stripe.Subscription.retrieve(stripe_subscription_id)
-    except stripe.error.StripeError as ex:
+        stripe_subscription = stripe.subscriptions.retrieve(
+            subscription_exposed_id=stripe_subscription_id
+        )
+    except StripeError as ex:
         logger.error(str(ex))
         raise Exception("Failed to get subscription from Stripe.") from ex
 
@@ -85,24 +87,26 @@ def _get_stripe_subscription(stripe_subscription_id):
 
 def _get_payment_methods(stripe_customer_id):
     """Get user's payment methods and transform them into a dictionary."""
-    stripe.api_key = settings.STRIPE_API_KEY
+    stripe = StripeClient(api_key=settings.STRIPE_API_KEY)
 
     # get default payment method id
     try:
-        default_pm_id = stripe.Customer.retrieve(
-            stripe_customer_id
+        default_pm_id = stripe.customers.retrieve(
+            customer=stripe_customer_id
         ).invoice_settings.default_payment_method
-    except stripe.error.StripeError as ex:
+    except StripeError as ex:
         logger.error(str(ex))
         raise Exception("Failed to retrieve customer data from Stripe.") from ex
 
     # get payment methods
     try:
-        stripe_payment_methods = stripe.PaymentMethod.list(
-            customer=stripe_customer_id,
-            type="card",
+        stripe_payment_methods = stripe.payment_methods.list(
+            params={
+                "customer": stripe_customer_id,
+                "type": "card",
+            }
         )
-    except stripe.error.StripeError as ex:
+    except StripeError as ex:
         logger.error(str(ex))
         raise Exception("Failed to retrieve payment methods from Stripe.") from ex
 
@@ -125,12 +129,12 @@ def _get_payment_methods(stripe_customer_id):
 
 def _get_invoices(stripe_customer_id):
     """Get user's invoices and transform them into a dictionary."""
-    stripe.api_key = settings.STRIPE_API_KEY
+    stripe = StripeClient(api_key=settings.STRIPE_API_KEY)
 
     # get user invoices
     try:
-        stripe_invoices = stripe.Invoice.list(customer=stripe_customer_id)
-    except stripe.error.StripeError as ex:
+        stripe_invoices = stripe.invoices.list(params={"customer": stripe_customer_id})
+    except StripeError as ex:
         logger.error(str(ex))
         raise Exception("Failed to retrieve invoices data from Stripe.") from ex
 
@@ -171,13 +175,13 @@ def billing_index(request):
     if request.user.monero_address:
         return render(request, "main/billing_index.html")
 
-    stripe.api_key = settings.STRIPE_API_KEY
+    stripe = StripeClient(api_key=settings.STRIPE_API_KEY)
 
     # create stripe customer for user if it does not exist
     if not request.user.stripe_customer_id:
         try:
-            stripe_response = stripe.Customer.create()
-        except stripe.error.StripeError as ex:
+            stripe_response = stripe.customers.create()
+        except StripeError as ex:
             logger.error(str(ex))
             raise Exception("Failed to create customer on Stripe.") from ex
         request.user.stripe_customer_id = stripe_response["id"]
@@ -225,8 +229,6 @@ class BillingSubscribe(LoginRequiredMixin, FormView):
         return context
 
     def get(self, request, *args, **kwargs):
-        stripe.api_key = settings.STRIPE_API_KEY
-
         data = _create_stripe_subscription(request.user.stripe_customer_id)
         request.user.stripe_subscription_id = data["stripe_subscription_id"]
         request.user.save()
@@ -263,7 +265,6 @@ class BillingCard(LoginRequiredMixin, FormView):
         return context
 
     def get(self, request, *args, **kwargs):
-        stripe.api_key = settings.STRIPE_API_KEY
         context = self.get_context_data()
 
         data = _create_setup_intent(request.user.stripe_customer_id)
@@ -306,9 +307,11 @@ class BillingCardDelete(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         card_id = self.kwargs.get(self.slug_url_kwarg)
+
+        stripe = StripeClient(api_key=settings.STRIPE_API_KEY)
         try:
-            stripe.PaymentMethod.detach(card_id)
-        except stripe.error.StripeError as ex:
+            stripe.payment_methods.detach(payment_method=card_id)
+        except StripeError as ex:
             logger.error(str(ex))
             messages.error(request, "payment processor unresponsive; please try again")
             return redirect(reverse_lazy("billing_index"))
@@ -363,15 +366,17 @@ def billing_card_default(request, stripe_payment_method_id):
     if stripe_payment_method_id not in stripe_payment_methods:
         return HttpResponseBadRequest("Invalid Card ID.")
 
-    stripe.api_key = settings.STRIPE_API_KEY
+    stripe = StripeClient(api_key=settings.STRIPE_API_KEY)
     try:
-        stripe.Customer.modify(
-            request.user.stripe_customer_id,
-            invoice_settings={
-                "default_payment_method": stripe_payment_method_id,
+        stripe.customers.update(
+            customer=request.user.stripe_customer_id,
+            params={
+                "invoice_settings": {
+                    "default_payment_method": stripe_payment_method_id,
+                }
             },
         )
-    except stripe.error.StripeError as ex:
+    except StripeError as ex:
         logger.error(str(ex))
         return HttpResponse("Could not change default card.", status=503)
 
@@ -388,9 +393,11 @@ class BillingCancel(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         subscription = _get_stripe_subscription(request.user.stripe_subscription_id)
+
+        stripe = StripeClient(api_key=settings.STRIPE_API_KEY)
         try:
-            stripe.Subscription.delete(subscription["id"])
-        except stripe.error.StripeError as ex:
+            stripe.subscriptions.cancel(subscription_exposed_id=subscription["id"])
+        except StripeError as ex:
             logger.error(str(ex))
             return HttpResponse("Subscription could not be canceled.", status=503)
         request.user.is_premium = False
@@ -452,8 +459,8 @@ def billing_welcome(request):
     """
     payment_intent = request.GET.get("payment_intent")
 
-    stripe.api_key = settings.STRIPE_API_KEY
-    stripe_intent = stripe.PaymentIntent.retrieve(payment_intent)
+    stripe = StripeClient(api_key=settings.STRIPE_API_KEY)
+    stripe_intent = stripe.payment_intents.retrieve(intent=payment_intent)
 
     if stripe_intent["status"] == "succeeded":
         request.user.is_premium = True
@@ -474,8 +481,8 @@ def billing_welcome(request):
 def billing_card_confirm(request):
     setup_intent = request.GET.get("setup_intent")
 
-    stripe.api_key = settings.STRIPE_API_KEY
-    stripe_intent = stripe.SetupIntent.retrieve(setup_intent)
+    stripe = StripeClient(api_key=settings.STRIPE_API_KEY)
+    stripe_intent = stripe.setup_intents.retrieve(intent=setup_intent)
 
     if stripe_intent["status"] == "succeeded":
         messages.success(request, "payment method added")
@@ -499,10 +506,11 @@ def billing_stripe_webhook(request):
     See: https://stripe.com/docs/webhooks
     """
 
-    stripe.api_key = settings.STRIPE_API_KEY
+    stripe = StripeClient(api_key=settings.STRIPE_API_KEY)
     data = json.loads(request.body)
 
     try:
+        # TODO: I actually don't know how to do this on the new api
         event = stripe.Event.construct_from(data, stripe.api_key)
     except ValueError as ex:
         logger.error(str(ex))
