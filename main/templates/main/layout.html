@@ -7,7 +7,7 @@
         <title>{% block title %}{% endblock %}</title>
 
         {% if not request.subdomain %}
-        <meta name="description" content="Blogging platform for minimalists.">
+        <meta name="description" content="{{ instance_description }}">
         <meta name="keywords" content="blog, blogging, platform, fast, simple, minimal">
         {% endif %}
 

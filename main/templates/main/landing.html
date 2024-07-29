@@ -1,13 +1,12 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}Mataroa — Blogging platform for minimalists{% endblock %}
+{% block title %}{{ instance_name }} - {{ instance_description }}{% endblock %}
 
 {% block content %}
 <main>
-    <h1>Mataroa blog</h1>
-    <p>
-        Naked blogging platform, for minimalists. <em>Just write.</em>
-    </p>
+    <h1>{{ instance_name }}</h1>
+    <p>{{ instance_description }} <em>Just write.</em></p>
+
     <ul class="lead">
         <li><b>Get your own simple blog in 1 minute</b> → <a href="{% url 'user_create' %}">Sign up</a></li>
         <ul>

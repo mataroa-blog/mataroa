@@ -37,6 +37,7 @@ def host_middleware(get_response):
             # * the lists indexes are different because CANONICAL_HOST has no subdomain
             # * also validation will happen inside views
             request.subdomain = host_parts[0]
+            request.instance_description = settings.INSTANCE_DESCRIPTION
 
             # check if subdomain exists
             if models.User.objects.filter(username=request.subdomain).exists():

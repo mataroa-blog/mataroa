@@ -11,7 +11,8 @@ class IndexTestCase(TestCase):
     def test_index(self):
         response = self.client.get(reverse("index"))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Mataroa")
+        self.assertContains(response, settings.INSTANCE_NAME)
+        self.assertContains(response, settings.INSTANCE_DESCRIPTION)
 
 
 class BlogIndexTestCase(TestCase):
