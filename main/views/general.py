@@ -634,8 +634,8 @@ class BlogImport(LoginRequiredMixin, FormView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-def image_raw(request, slug, extension):
-    image = models.Image.objects.filter(slug=slug).first()
+async def image_raw(request, slug, extension):
+    image = await models.Image.objects.filter(slug=slug).afirst()
     if not image or extension != image.extension:
         raise Http404()
     return HttpResponse(image.data, content_type="image/" + image.extension)
