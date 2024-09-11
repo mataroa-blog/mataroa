@@ -15,6 +15,11 @@
 	tls /etc/caddy/mataroa-blog-cert.pem /etc/caddy/mataroa-blog-key.pem
 
 	encode zstd gzip
+
+	log {
+		output stdout
+		format console
+	}
 }
 
 :443 {
@@ -30,4 +35,9 @@
 	}
 
 	encode zstd gzip
+
+	log {
+		output stdout
+		format console
+	}
 }
