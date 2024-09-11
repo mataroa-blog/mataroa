@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.contrib.syndication.views import Feed
 from django.http import Http404
+from django.core.exceptions import SuspiciousOperation
 from django.utils import timezone
 
 from main import models
@@ -14,6 +15,7 @@ class RSSBlogFeed(Feed):
     subdomain = ""
 
     def __call__(self, request, *args, **kwargs):
+        raise SuspiciousOperation()
         if not hasattr(request, "subdomain"):
             raise Http404()
         user = models.User.objects.get(username=request.subdomain)
