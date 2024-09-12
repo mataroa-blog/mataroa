@@ -7,11 +7,11 @@
     <h1>404</h1>
     <h2>Page Not Found</h2>
     <p>The URL you requested does not exist on this blog. Got lost?</p>
-    <p>Go <a href="#" onclick="history.back();">back</a> or return to the <a href="{% url 'index' %}">homepage</a>.</p>
+    <p><a href="#" onclick="history.back();">← Go back</a> or return to the <a href="{% url 'index' %}">homepage</a>.</p>
 </main>
 
-{% include 'partials/webring.html' %}
+{% include 'partials/error_webring.html' %}
 
-{% include 'partials/footer_blog.html' %}
+{% include 'partials/error_footer_blog.html' %}
 
 {% endblock %}

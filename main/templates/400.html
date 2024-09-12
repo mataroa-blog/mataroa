@@ -7,11 +7,11 @@
     <h1>400</h1>
     <h2>Bad Request</h2>
     <p>You made a request in a way that we don't understand. That's all we know.</p>
-    <p>Go <a href="#" onclick="history.back();">back</a> or return to the <a href="{% url 'index' %}">homepage</a>.</p>
+    <p><a href="#" onclick="history.back();">← Go back</a> or return to the <a href="{% url 'index' %}">homepage</a>.</p>
 </main>
 
-{% include 'partials/webring.html' %}
+{% include 'partials/error_webring.html' %}
 
-{% include 'partials/footer_blog.html' %}
+{% include 'partials/error_footer_blog.html' %}
 
 {% endblock %}
