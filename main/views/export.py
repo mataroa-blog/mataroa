@@ -91,6 +91,8 @@ def export_zola(request):
             zola_post = zola_post_file.read()
         with open("./export_base_zola/_index.md") as zola_content_index_file:
             zola_content_index = zola_content_index_file.read()
+        with open("./export_base_zola/404.html") as zola_404_file:
+            zola_404 = zola_404_file.read()
 
         # get all user posts and add them into export_posts encoded
         posts = models.Post.objects.filter(owner=request.user)
@@ -113,6 +115,7 @@ def export_zola(request):
             export_archive.writestr(export_name + "/static/style.css", zola_styles)
             export_archive.writestr(export_name + "/templates/index.html", zola_index)
             export_archive.writestr(export_name + "/templates/post.html", zola_post)
+            export_archive.writestr(export_name + "/templates/404.html", zola_404)
             export_archive.writestr(
                 export_name + "/content/_index.md", zola_content_index
             )
@@ -151,6 +154,8 @@ def export_hugo(request):
             hugo_index = hugo_index_file.read()
         with open("./export_base_hugo/baseof.html") as hugo_baseof_file:
             hugo_baseof = hugo_baseof_file.read()
+        with open("./export_base_hugo/404.html") as hugo_404_file:
+            hugo_404 = hugo_404_file.read()
 
         # get all user posts and add them into export_posts encoded
         posts = models.Post.objects.filter(owner=request.user)
@@ -178,6 +183,9 @@ def export_hugo(request):
             )
             export_archive.writestr(
                 export_name + "/themes/mataroa/layouts/index.html", hugo_index
+            )
+            export_archive.writestr(
+                export_name + "/themes/mataroa/layouts/404.html", hugo_404
             )
             export_archive.writestr(
                 export_name + "/themes/mataroa/layouts/_default/single.html",
