@@ -102,7 +102,7 @@
       ansible.builtin.git:
         repo: https://github.com/mataroa-blog/mataroa
         dest: /var/www/mataroa
-        version: ansible
+        version: main
         accept_hostkey: true
       become_user: deploy
     - name: dependencies
