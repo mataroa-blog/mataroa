@@ -1,0 +1,17 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}404 — Page Not Found{% endblock %}
+
+{% block content %}
+<main>
+    <h1>404</h1>
+    <h2>Page Not Found</h2>
+    <p>The URL you requested does not exist on this blog. Got lost?</p>
+    <p><a href="#" onclick="history.back();">← Go back</a> or return to the <a href="{% url 'index' %}">homepage</a>.</p>
+</main>
+
+{% include 'partials/error_webring.html' %}
+
+{% include 'partials/error_footer_blog.html' %}
+
+{% endblock %}

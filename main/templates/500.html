@@ -1,0 +1,17 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}500 — Internal Server Error{% endblock %}
+
+{% block content %}
+<main>
+    <h1>500</h1>
+    <h2>Internal Server Error</h2>
+    <p>An error occurred processing your request. That's all we know.</p>
+    <p><a href="#" onclick="history.back();">← Go back</a> or return to the <a href="{% url 'index' %}">homepage</a>.</p>
+</main>
+
+{% include 'partials/error_webring.html' %}
+
+{% include 'partials/error_footer_blog.html' %}
+
+{% endblock %}

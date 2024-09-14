@@ -1,0 +1,17 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}403 — Permission Denied{% endblock %}
+
+{% block content %}
+<main>
+    <h1>403</h1>
+    <h2>Permission Denied</h2>
+    <p>Looks like you tried to do something you're not allowed to. Oops?</p>
+    <p><a href="#" onclick="history.back();">← Go back</a> or return to the <a href="{% url 'index' %}">homepage</a>.</p>
+</main>
+
+{% include 'partials/error_webring.html' %}
+
+{% include 'partials/error_footer_blog.html' %}
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'index.html' %}
+
+{% block title %}404 — Page Not Found{% endblock title %}
+
+{% block content %}
+<main>
+    <h1>404</h1>
+    <h2>Page Not Found</h2>
+    <p>The URL you requested does not exist on this blog. Got lost?</p>
+    <p><a href="#" onclick="history.back();">← Go back</a> or return to the <a href="/">homepage</a>.</p>
+</main>
+<footer>
+    Subscribe via <a href="/{{ config.feed_filename }}">RSS</a>.
+</footer>
+{% endblock content %}

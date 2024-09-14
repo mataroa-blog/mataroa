@@ -1,0 +1,7 @@
+<footer>
+    {{ request.blog_user.subscribe_note_as_html|safe }}
+
+    {% if request.blog_user.footer_note %}
+    {{ request.blog_user.footer_note_as_html|safe }}
+    {% endif %}
+</footer>
