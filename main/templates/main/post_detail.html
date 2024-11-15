@@ -25,6 +25,14 @@
             | <a href="{% url 'post_update' post.slug %}">Edit post</a>
             | <a href="{% url 'post_delete' post.slug %}">Del</a>
             {% endif %}
+
+            {% if post.is_draft %}
+            <blockquote>
+                <strong>
+                    ⚠️ This post is accessible to anyone with the link!
+                </strong>
+            </blockquote>
+            {%  endif %}
         </div>
 
         <div class="posts-item-body" itemprop="articleBody">
