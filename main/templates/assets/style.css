@@ -493,21 +493,6 @@ form .helptext {
     margin: 16px 0 24px;
 }
 
-.webring {
-    margin-top: 64px;
-    display: flex;
-    justify-content: space-between;
-}
-
-.webring-name {
-    color: #000;
-}
-@media (prefers-color-scheme: dark) {
-    .webring-name {
-        color: #fff;
-    }
-}
-
 /* post detail */
 .posts-item-brand {
     display: block;

@@ -181,9 +181,8 @@ urlpatterns += [
     ),
 ]
 
-# blog import, export, webring
+# blog import, export
 urlpatterns += [
-    path("webring/", general.WebringUpdate.as_view(), name="webring"),
     path("import/", general.BlogImport.as_view(), name="blog_import"),
     path("export/", export.export_index, name="export_index"),
     path(
