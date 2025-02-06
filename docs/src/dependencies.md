@@ -39,7 +39,7 @@ When a new Django version is out it’s a good idea to upgrade everything.
 Steps:
 
 1. Assuming a venv is activated and `requirements.dev.txt` are installed.
-1. Run `pip-compile -U` to generate an upgraded `requirements.txt`.
+1. Run `pip-compile -U --no-strip-extras` to generate an upgraded `requirements.txt`.
 1. Run `git diff requirements.txt` and spot non-patch level vesion bumps.
 1. Examine release notes of each one.
 1. Unless something comes up, make sure tests and smoke tests pass.
