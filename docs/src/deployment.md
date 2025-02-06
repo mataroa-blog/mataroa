@@ -55,3 +55,12 @@ There are a few cronjobs that need setting up and, of course, backups are essent
 
 * (3a) [Cronjobs](./cronjobs.md)
 * (3b) [Database Backup](./database-backup.md)
+
+## Step 4: Deploy changes
+
+```sh
+git push origin main
+source .venv/bin/activate
+cd ansible/
+ansible-playbook -v deploy.yaml
+```
