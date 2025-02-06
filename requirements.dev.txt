@@ -1,4 +1,4 @@
 pip-tools==7.4.1
-ruff==0.5.0
-coverage==7.5.4
-ansible==10.1.0
+ruff==0.9.4
+coverage==7.6.10
+ansible==11.2.0
