@@ -194,7 +194,7 @@ EMAIL_PORT = 587
 EMAIL_FROM_HOST = CANONICAL_HOST
 DEFAULT_FROM_EMAIL = f"Mataroa <admin@{EMAIL_FROM_HOST}>"
 NOTIFICATIONS_FROM_EMAIL = f"Mataroa Notifications <notifications@{EMAIL_FROM_HOST}>"
-SERVER_EMAIL = f"DC Parlov <server@{EMAIL_FROM_HOST}>"
+SERVER_EMAIL = f"Mataroa Server <server@{EMAIL_FROM_HOST}>"
 EMAIL_SUBJECT_PREFIX = "[Mataroa Notification] "
 
 EMAIL_TEST_RECEIVE_LIST = os.environ.get("EMAIL_TEST_RECEIVE_LIST")
