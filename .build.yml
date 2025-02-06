@@ -6,7 +6,8 @@ packages:
 tasks:
   - build: |
       cd mataroa
-      pip3 install -r requirements.txt
+      python3 -m venv .venv
+      .venv/bin/pip install -r requirements.txt
   - test: |
       cd mataroa
       sudo -u postgres psql -U postgres -d postgres -c "ALTER USER postgres WITH PASSWORD 'postgres';"
@@ -18,7 +19,8 @@ tasks:
       sudo -u root apt install shellcheck
       cd mataroa
       touch .envrc
-      pip3 install -r requirements.dev.txt
-      pip3 install -r requirements.txt
+      python3 -m venv .venv
+      .venv/bin/pip install -r requirements.dev.txt
+      .venv/bin/pip install -r requirements.txt
       export PATH=/home/build/.local/bin:$PATH
       ruff check
