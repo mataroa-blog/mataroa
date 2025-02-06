@@ -38,7 +38,7 @@ logger = logging.getLogger(__name__)
 @login_required
 def blog_index(request):
     return redirect(
-        f'//{request.user.username}.{settings.CANONICAL_HOST}{reverse("index")}'
+        f"//{request.user.username}.{settings.CANONICAL_HOST}{reverse('index')}"
     )
 
 

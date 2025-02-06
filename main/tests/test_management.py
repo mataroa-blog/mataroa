@@ -49,16 +49,17 @@ class ProcessNotificationsTest(TestCase):
     def test_command(self):
         output = StringIO()
 
-        with patch.object(
-            timezone, "now", return_value=datetime(2020, 1, 2, 13, 00)
-        ), patch.object(
-            # Django default test runner overrides SMTP EmailBackend with locmem,
-            # but because we re-import the SMTP backend in
-            # processnotifications.get_mail_connection, we need to mock it here too.
-            processnotifications,
-            "get_mail_connection",
-            return_value=mail.get_connection(
-                "django.core.mail.backends.locmem.EmailBackend"
+        with (
+            patch.object(timezone, "now", return_value=datetime(2020, 1, 2, 13, 00)),
+            patch.object(
+                # Django default test runner overrides SMTP EmailBackend with locmem,
+                # but because we re-import the SMTP backend in
+                # processnotifications.get_mail_connection, we need to mock it here too.
+                processnotifications,
+                "get_mail_connection",
+                return_value=mail.get_connection(
+                    "django.core.mail.backends.locmem.EmailBackend"
+                ),
             ),
         ):
             call_command("processnotifications", "--no-dryrun", stdout=output)
@@ -142,16 +143,17 @@ class MailExportsTest(TestCase):
     def test_command(self):
         output = StringIO()
 
-        with patch.object(
-            timezone, "now", return_value=datetime(2020, 1, 1, 00, 00)
-        ), patch.object(
-            # Django default test runner overrides SMTP EmailBackend with locmem,
-            # but because we re-import the SMTP backend in
-            # processnotifications.get_mail_connection, we need to mock it here too.
-            mailexports,
-            "get_mail_connection",
-            return_value=mail.get_connection(
-                "django.core.mail.backends.locmem.EmailBackend"
+        with (
+            patch.object(timezone, "now", return_value=datetime(2020, 1, 1, 00, 00)),
+            patch.object(
+                # Django default test runner overrides SMTP EmailBackend with locmem,
+                # but because we re-import the SMTP backend in
+                # processnotifications.get_mail_connection, we need to mock it here too.
+                mailexports,
+                "get_mail_connection",
+                return_value=mail.get_connection(
+                    "django.core.mail.backends.locmem.EmailBackend"
+                ),
             ),
         ):
             call_command("mailexports", stdout=output)

@@ -438,7 +438,7 @@ def export_epub(request):
 
             # write post / chapter  files
             for chapter in content_chapters:
-                export_archive.writestr(f'OEBPS/{chapter["link"]}', chapter["body"])
+                export_archive.writestr(f"OEBPS/{chapter['link']}", chapter["body"])
 
             # write images
             for img in models.Image.objects.filter(owner=request.user):

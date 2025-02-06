@@ -59,14 +59,17 @@ class BillingIndexFreeTestCase(TestCase):
         self.client.force_login(self.user)
 
     def test_index(self):
-        with patch.object(
-            stripe.Customer, "create", return_value={"id": "cus_123abcdefg"}
-        ), patch.object(
-            billing, "_get_stripe_subscription", return_value=None
-        ), patch.object(
-            billing,
-            "_get_payment_methods",
-        ), patch.object(billing, "_get_invoices"):
+        with (
+            patch.object(
+                stripe.Customer, "create", return_value={"id": "cus_123abcdefg"}
+            ),
+            patch.object(billing, "_get_stripe_subscription", return_value=None),
+            patch.object(
+                billing,
+                "_get_payment_methods",
+            ),
+            patch.object(billing, "_get_invoices"),
+        ):
             response = self.client.get(reverse("billing_index"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, b"Free Plan")
@@ -87,14 +90,17 @@ class BillingIndexPremiumTestCase(TestCase):
             "current_period_end": one_year_later.timestamp(),
             "current_period_start": datetime.now().timestamp(),
         }
-        with patch.object(
-            stripe.Customer, "create", return_value={"id": "cus_123abcdefg"}
-        ), patch.object(
-            billing,
-            "_get_stripe_subscription",
-            return_value=subscription,
-        ), patch.object(billing, "_get_payment_methods"), patch.object(
-            billing, "_get_invoices"
+        with (
+            patch.object(
+                stripe.Customer, "create", return_value={"id": "cus_123abcdefg"}
+            ),
+            patch.object(
+                billing,
+                "_get_stripe_subscription",
+                return_value=subscription,
+            ),
+            patch.object(billing, "_get_payment_methods"),
+            patch.object(billing, "_get_invoices"),
         ):
             response = self.client.get(reverse("billing_index"))
 
@@ -125,14 +131,17 @@ class BillingCardAddTestCase(TestCase):
             "current_period_end": one_year_later.timestamp(),
             "current_period_start": datetime.now().timestamp(),
         }
-        with patch.object(
-            stripe.Customer, "create", return_value={"id": "cus_123abcdefg"}
-        ), patch.object(
-            billing,
-            "_get_stripe_subscription",
-            return_value=subscription,
-        ), patch.object(billing, "_get_payment_methods"), patch.object(
-            billing, "_get_invoices"
+        with (
+            patch.object(
+                stripe.Customer, "create", return_value={"id": "cus_123abcdefg"}
+            ),
+            patch.object(
+                billing,
+                "_get_stripe_subscription",
+                return_value=subscription,
+            ),
+            patch.object(billing, "_get_payment_methods"),
+            patch.object(billing, "_get_invoices"),
         ):
             response = self.client.post(
                 reverse("billing_card"),
@@ -171,10 +180,13 @@ class BillingCancelSubscriptionTestCase(TestCase):
         self.assertContains(response, b"Cancel Premium")
 
     def test_cancel_subscription_post(self):
-        with patch.object(stripe.Subscription, "delete"), patch.object(
-            billing,
-            "_get_stripe_subscription",
-            return_value={"id": "sub_123"},
+        with (
+            patch.object(stripe.Subscription, "delete"),
+            patch.object(
+                billing,
+                "_get_stripe_subscription",
+                return_value={"id": "sub_123"},
+            ),
         ):
             response = self.client.post(reverse("billing_subscription_cancel"))
 
@@ -192,14 +204,17 @@ class BillingCancelSubscriptionTwiceTestCase(TestCase):
         self.client.force_login(self.user)
 
     def test_cancel_subscription_get(self):
-        with patch.object(
-            billing, "_get_stripe_subscription", return_value=None
-        ), patch.object(
-            stripe.Customer, "create", return_value={"id": "cus_123abcdefg"}
-        ), patch.object(
-            billing,
-            "_get_payment_methods",
-        ), patch.object(billing, "_get_invoices"):
+        with (
+            patch.object(billing, "_get_stripe_subscription", return_value=None),
+            patch.object(
+                stripe.Customer, "create", return_value={"id": "cus_123abcdefg"}
+            ),
+            patch.object(
+                billing,
+                "_get_payment_methods",
+            ),
+            patch.object(billing, "_get_invoices"),
+        ):
             response = self.client.get(reverse("billing_subscription_cancel"))
 
             # need to check inside with context because billing_index needs
@@ -207,16 +222,22 @@ class BillingCancelSubscriptionTwiceTestCase(TestCase):
             self.assertRedirects(response, reverse("billing_index"))
 
     def test_cancel_subscription_post(self):
-        with patch.object(stripe.Subscription, "delete"), patch.object(
-            billing,
-            "_get_stripe_subscription",
-            return_value=None,
-        ), patch.object(
-            stripe.Customer, "create", return_value={"id": "cus_123abcdefg"}
-        ), patch.object(
-            billing,
-            "_get_payment_methods",
-        ), patch.object(billing, "_get_invoices"):
+        with (
+            patch.object(stripe.Subscription, "delete"),
+            patch.object(
+                billing,
+                "_get_stripe_subscription",
+                return_value=None,
+            ),
+            patch.object(
+                stripe.Customer, "create", return_value={"id": "cus_123abcdefg"}
+            ),
+            patch.object(
+                billing,
+                "_get_payment_methods",
+            ),
+            patch.object(billing, "_get_invoices"),
+        ):
             response = self.client.post(reverse("billing_subscription_cancel"))
 
             self.assertRedirects(response, reverse("billing_index"))
@@ -246,20 +267,27 @@ class BillingReenableSubscriptionTestCase(TestCase):
                 },
             },
         }
-        with patch.object(stripe.Subscription, "delete"), patch.object(
-            billing,
-            "_get_stripe_subscription",
-            return_value=subscription,
-        ), patch.object(
-            stripe.Customer, "create", return_value={"id": "cus_123abcdefg"}
-        ), patch.object(
-            stripe.Subscription,
-            "create",
-            return_value=created_subscription,
-        ), patch.object(
-            billing,
-            "_get_payment_methods",
-        ), patch.object(billing, "_get_invoices"):
+        with (
+            patch.object(stripe.Subscription, "delete"),
+            patch.object(
+                billing,
+                "_get_stripe_subscription",
+                return_value=subscription,
+            ),
+            patch.object(
+                stripe.Customer, "create", return_value={"id": "cus_123abcdefg"}
+            ),
+            patch.object(
+                stripe.Subscription,
+                "create",
+                return_value=created_subscription,
+            ),
+            patch.object(
+                billing,
+                "_get_payment_methods",
+            ),
+            patch.object(billing, "_get_invoices"),
+        ):
             response = self.client.post(reverse("billing_subscription"))
 
             self.assertRedirects(response, reverse("billing_index"))
