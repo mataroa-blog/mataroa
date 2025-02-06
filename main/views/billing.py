@@ -466,7 +466,12 @@ def billing_welcome(request):
 
     if stripe_intent["status"] == "succeeded":
         request.user.is_premium = True
+        request.user.is_approved = True
         request.user.save()
+        mail_admins(
+            f"New premium subscriber: {request.user.username}",
+            f"{request.user.blog_absolute_url}\n\n{request.user.blog_url}",
+        )
         messages.success(request, "premium subscription enabled")
     elif stripe_intent["status"] == "processing":
         messages.info(request, "payment is currently processing")
