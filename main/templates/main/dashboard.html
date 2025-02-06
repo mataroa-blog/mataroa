@@ -57,5 +57,14 @@
             <input type="submit" value="Log out">
         </form>
     </div>
+
+    {% if request.user.is_superuser %}
+    <strong>Administration</strong>
+    <div class="dashboard-list">
+        <a href="{% url 'admin:index' %}">Django Admin</a>
+        <br><a href="{% url 'adminextra_user_list' %}">Adminextra List Users</a>
+        <br><a href="{% url 'adminextra_user_cards' %}">Adminextra Cards</a>
+    </div>
+    {% endif %}
 </main>
 {% endblock %}

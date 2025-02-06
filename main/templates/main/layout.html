@@ -48,11 +48,6 @@
             {% if blog_user.custom_domain %}
             | <a href="//{{ blog_user.custom_domain }}{{ request.path }}">See in {{ blog_user.custom_domain }}</a>
             {% endif %}
-            {% if request.user.is_superuser %}
-            | <a href="{% url 'admin:index' %}">DjA</a>
-            | <a href="{% url 'adminextra_user_list' %}">AeLst</a>
-            | <a href="{% url 'adminextra_user_cards' %}">AeCrds</a>
-            {% endif %}
         </nav>
         {% endif %}
 
