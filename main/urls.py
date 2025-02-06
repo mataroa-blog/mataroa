@@ -14,7 +14,6 @@ urlpatterns = [
     path("modus/operandi/", general.operandi, name="operandi"),
     path("modus/transparency/", general.transparency, name="transparency"),
     path("modus/privacy/", general.privacy_redir, name="privacy_redir"),
-    path("guides/pricing/", general.guides_pricing, name="guides_pricing"),
     path("guides/markdown/", general.guides_markdown, name="guides_markdown"),
     path("guides/images/", general.guides_images, name="guides_images"),
     path(
