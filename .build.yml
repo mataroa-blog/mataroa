@@ -11,13 +11,13 @@ tasks:
       .venv/bin/pip install -r requirements.txt
   - test: |
       sudo -u postgres psql -U postgres -d postgres -c "ALTER USER postgres WITH PASSWORD 'postgres';"
+      export DEBUG=1
+      export DATABASE_URL='postgres://postgres:postgres@localhost:5432/postgres'
       cd mataroa/
       python3 -m venv .venv
       .venv/bin/pip install -r requirements.txt
-      export DEBUG=1
-      export DATABASE_URL='postgres://postgres:postgres@localhost:5432/postgres'
-      python3 manage.py collectstatic --noinput
-      python3 manage.py test
+      .venv/bin/python3 manage.py collectstatic --noinput
+      .venv/bin/python3 manage.py test
   - lint: |
       sudo -u root apt install shellcheck
       cd mataroa/
