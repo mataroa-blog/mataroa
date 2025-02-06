@@ -396,6 +396,10 @@ class BillingCancel(LoginRequiredMixin, View):
         request.user.is_premium = False
         request.user.stripe_subscription_id = None
         request.user.save()
+        mail_admins(
+            f"Cancellation premium subscriber: {request.user.username}",
+            f"{request.user.blog_absolute_url}\n",
+        )
         messages.success(request, self.success_message)
         return HttpResponseRedirect(self.success_url)
 
@@ -438,7 +442,12 @@ def billing_subscription(request):
     data = _create_stripe_subscription(request.user.stripe_customer_id)
     request.user.stripe_subscription_id = data["stripe_subscription_id"]
     request.user.is_premium = True
+    request.user.is_approved = True
     request.user.save()
+    mail_admins(
+        f"New premium subscriber: {request.user.username}",
+        f"{request.user.blog_absolute_url}\n\n{request.user.blog_url}",
+    )
 
     messages.success(request, "premium subscription enabled")
     return redirect("billing_index")
