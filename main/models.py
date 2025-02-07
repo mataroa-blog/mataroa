@@ -139,7 +139,8 @@ class User(AbstractUser):
 
     @property
     def blog_absolute_url(self):
-        return f"//{self.username}.{settings.CANONICAL_HOST}"
+        protocol = f"{util.get_protocol()}"
+        return f"{protocol}//{self.username}.{settings.CANONICAL_HOST}"
 
     @property
     def blog_url(self):
