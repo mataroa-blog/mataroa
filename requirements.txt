@@ -30,7 +30,7 @@ requests==2.32.3
     # via stripe
 sqlparse==0.5.3
     # via django
-stripe==7.14.0
+stripe==10.3.0
     # via -r requirements.in
 tinycss2==1.4.0
     # via bleach
