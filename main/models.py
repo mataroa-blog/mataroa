@@ -103,27 +103,6 @@ class User(AbstractUser):
     )
     export_unsubscribe_key = models.UUIDField(default=uuid.uuid4, unique=True)
 
-    # webring related
-    webring_name = models.CharField(max_length=200, blank=True, null=True)
-    webring_url = models.URLField(
-        blank=True,
-        null=True,
-        verbose_name="Webring info URL",
-        help_text="Informational URL.",
-    )
-    webring_prev_url = models.URLField(
-        blank=True,
-        null=True,
-        verbose_name="Webring previous URL",
-        help_text="URL for your webring's previous website.",
-    )
-    webring_next_url = models.URLField(
-        blank=True,
-        null=True,
-        verbose_name="Webring next URL",
-        help_text="URL for your webring's next website.",
-    )
-
     # billing
     stripe_customer_id = models.CharField(max_length=100, blank=True, null=True)
     stripe_subscription_id = models.CharField(max_length=100, blank=True, null=True)

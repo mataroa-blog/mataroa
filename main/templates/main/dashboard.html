@@ -34,8 +34,7 @@
 
     <strong>Manage</strong>
     <div class="dashboard-list">
-        <a href="{% url 'webring' %}">Webring</a>
-        <br><a href="{% url 'api_docs' %}">API</a>
+        <a href="{% url 'api_docs' %}">API</a>
 
         {% if billing_enabled %}
         <br><a href="{% url 'billing_index' %}">Billing</a>

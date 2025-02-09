@@ -33,8 +33,6 @@
     </article>
 </main>
 
-{% include 'partials/webring.html' %}
-
 {% if blog_user.comments_on %}
 <section class="comments">
     {% if request.user.is_authenticated and request.subdomain == request.user.username %}
