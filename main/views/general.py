@@ -1063,7 +1063,8 @@ class NotificationUnsubscribe(SuccessMessageMixin, FormView):
         return context
 
     def form_valid(self, form):
-        notification = models.Notification.objects.get(
+        notification = get_object_or_404(
+            models.Notification,
             blog_user=self.request.blog_user,
             email=form.cleaned_data.get("email"),
         )
