@@ -4,7 +4,7 @@ from django.conf import settings
 from django.http import Http404, HttpResponseBadRequest
 from django.shortcuts import redirect
 
-from main import models
+from main import denylist, models, util
 
 
 def host_middleware(get_response):
@@ -38,8 +38,11 @@ def host_middleware(get_response):
             # * also validation will happen inside views
             request.subdomain = host_parts[0]
 
-            # check if subdomain exists
-            if models.User.objects.filter(username=request.subdomain).exists():
+            # check if subdomain is disallowed
+            if request.subdomain in denylist.DISALLOWED_USERNAMES:
+                return redirect(f"{util.get_protocol()}//{settings.CANONICAL_HOST}")
+            # check if subdomain exists as blog
+            elif models.User.objects.filter(username=request.subdomain).exists():
                 request.blog_user = models.User.objects.get(username=request.subdomain)
 
                 # set theme
