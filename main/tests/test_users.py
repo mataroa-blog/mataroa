@@ -217,6 +217,20 @@ class UserUpdateTestCase(TestCase):
         self.assertEqual(updated_user.email, data["email"])
 
 
+class UserUpdateDisallowedTestCase(TestCase):
+    def setUp(self):
+        self.user = models.User.objects.create(username="alice")
+        self.client.force_login(self.user)
+
+    def test_user_update(self):
+        data = {"username": "admin"}
+        response = self.client.post(reverse("user_update"), data)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "This username is not available")
+        updated_user = models.User.objects.get(id=self.user.id)
+        self.assertEqual(updated_user.username, "alice")
+
+
 class UserPasswordChangeTestCase(TestCase):
     def setUp(self):
         self.user = models.User.objects.create(username="alice")

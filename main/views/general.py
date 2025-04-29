@@ -201,6 +201,10 @@ class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return self.request.user
 
     def form_valid(self, form):
+        if util.is_disallowed(form.cleaned_data.get("username")):
+            form.add_error("username", "This username is not available.")
+            return self.render_to_response(self.get_context_data(form=form))
+
         # we need to check if more than one users have the same custom domain
         if not form.cleaned_data.get("custom_domain"):
             # if it's not submitted, then just return
