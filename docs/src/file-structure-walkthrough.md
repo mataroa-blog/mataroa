@@ -49,8 +49,7 @@ Condensed and commented sources file tree:
 │   │   │   └── style.css
 │   │   ├── partials/
 │   │   │   ├── footer.html
-│   │   │   ├── footer_blog.html
-│   │   │   └── webring.html
+│   │   │   └── footer_blog.html
 │   │   └── registration/
 │   ├── tests/
 │   │   ├── test_billing.py
@@ -90,7 +89,7 @@ All urls are in this module. They are visually divided into several sections:
 * blog extras, includes rss and newsletter features
 * comments, related to the blog post comments
 * billing, subscription and card related
-* blog import, export, webring
+* blog import, export
 * images CRUD
 * analytics list and details
 * pages CRUD
@@ -107,7 +106,6 @@ It includes:
 * comments CRUD
 * images CRUD
 * pages CRUD
-* webring
 * analytics
 * notifications subscribe/unsubscribe
 * moderation dashboard
