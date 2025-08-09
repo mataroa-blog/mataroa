@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import include, path, re_path
 
 from main import feeds
-from main.views import adminextra, api, billing, export, general
+from main.views import api, billing, export, general, moderation
 
 admin.site.site_header = "mataroa admin"
 
@@ -42,24 +42,35 @@ urlpatterns += [
     path("accounts/domain/", general.domain_check, name="domain_check"),
 ]
 
-# adminextra
+# moderation
 urlpatterns += [
-    path("adminextra/cards/", adminextra.user_cards, name="adminextra_user_cards"),
-    path("adminextra/users/", adminextra.user_list, name="adminextra_user_list"),
+    path("moderation/index/", moderation.index, name="moderation_index"),
+    path("moderation/cards/", moderation.user_cards, name="moderation_user_cards"),
+    path("moderation/users/", moderation.user_list, name="moderation_user_list"),
+    path("moderation/images/", moderation.images_leaderboard, name="moderation_images"),
+    path("moderation/posts/", moderation.posts_leaderboard, name="moderation_posts"),
+    path("moderation/stats/", moderation.stats, name="moderation_stats"),
     path(
-        "adminextra/users/<int:user_id>/approve/",
-        adminextra.user_approve,
-        name="adminextra_user_approve",
+        "moderation/activity/",
+        moderation.activity,
+        name="moderation_activity",
+    ),
+    path("moderation/cohorts/", moderation.cohorts, name="moderation_cohorts"),
+    path("moderation/summary/<slug:date_str>/", moderation.summary, name="moderation_summary"),
+    path(
+        "moderation/users/<int:user_id>/approve/",
+        moderation.user_approve,
+        name="moderation_user_approve",
     ),
     path(
-        "adminextra/users/<int:user_id>/unapprove/",
-        adminextra.user_unapprove,
-        name="adminextra_user_unapprove",
+        "moderation/users/<int:user_id>/unapprove/",
+        moderation.user_unapprove,
+        name="moderation_user_unapprove",
     ),
     path(
-        "adminextra/users/<int:user_id>/delete/",
-        adminextra.user_delete,
-        name="adminextra_user_delete",
+        "moderation/users/<int:user_id>/delete/",
+        moderation.user_delete,
+        name="moderation_user_delete",
     ),
 ]
 

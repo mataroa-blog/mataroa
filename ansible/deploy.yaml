@@ -10,7 +10,7 @@
     # repository
     - name: clone
       ansible.builtin.git:
-        repo: https://github.com/mataroa-blog/mataroa
+        repo: https://github.com/mataroablog/mataroa
         dest: /var/www/mataroa
         version: main
         accept_hostkey: true

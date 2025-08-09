@@ -1,0 +1,28 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Moderation Cohorts{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Moderation Cohorts</h1>
+</main>
+
+<section class="moderation-content" style="max-width: 540px;">
+    <div>
+        <strong>Most published posts (last 30d)</strong>
+        <ul>
+            {% for r in leaders.most_published_30 %}
+            <li><a href="//{{ r.username }}.{{ CANONICAL_HOST }}/" target="_blank" rel="noopener">{{ r.username }}</a>: {{ r.cnt }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div>
+        <strong>Largest blogs by total post body bytes</strong>
+        <ul>
+            {% for r in leaders.largest_blogs_by_bytes %}
+            <li><a href="//{{ r.username }}.{{ CANONICAL_HOST }}/" target="_blank" rel="noopener">{{ r.username }}</a>: {{ r.total_bytes|filesizeformat }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
+{% endblock %}

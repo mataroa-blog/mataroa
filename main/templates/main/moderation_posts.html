@@ -1,0 +1,58 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Moderation Posts{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Moderation Posts</h1>
+</main>
+
+<section class="moderation-content" style="max-width: 800px;">
+    <div class="filterbar">
+        <strong>sort:</strong>
+        {% for f in filters %}
+            {% if f.active %}
+                <a href="{{ f.url }}" style="background: #eef; padding: 2px 6px; border: 1px solid #99c;">{{ f.key }} ×</a>
+            {% else %}
+                <a href="{{ f.url }}" style="padding: 2px 6px; border: 1px solid #ccc;">{{ f.key }}</a>
+            {% endif %}
+        {% endfor %}
+        <a href="{{ clear_filters_url }}" class="filterbar-clear">clear</a>
+        <form method="get" class="filterbar-form">
+            {% for key, value in request.GET.items %}
+                {% if key != 'limit' %}
+                    <input type="hidden" name="{{ key }}" value="{{ value }}" />
+                {% endif %}
+            {% endfor %}
+            <label>limit
+                <input type="number" name="limit" min="10" max="5000" value="{{ top_limit }}" />
+            </label>
+            <button type="submit">update</button>
+        </form>
+    </div>
+
+    <p>Top {{ user_list|length }} users.</p>
+
+    <div style="display: grid; grid-template-columns: 80px 1fr 110px 110px 110px 140px; gap: 8px; align-items: center;">
+        <div><strong>ID</strong></div>
+        <div><strong>User</strong></div>
+        <div style="text-align: right;"><strong>Total</strong></div>
+        <div style="text-align: right;"><strong>Published</strong></div>
+        <div style="text-align: right;"><strong>Drafts</strong></div>
+        <div style="text-align: right;"><strong>Last Published</strong></div>
+
+        {% for user in user_list %}
+            <div>
+                <a href="{% url 'admin:main_user_change' user.id %}" target="_blank" title="{{ user.date_joined }}">{{ user.id }}</a>
+            </div>
+            <div>
+                <a href="{{ user.blog_url }}" target="_blank" rel="noopener">{{ user.username }}</a>
+            </div>
+            <div style="text-align: right;">{{ user.posts_total }}</div>
+            <div style="text-align: right;">{{ user.posts_published }}</div>
+            <div style="text-align: right;">{{ user.posts_drafts }}</div>
+            <div style="text-align: right;">{{ user.last_post_date|date:'Y-m-d' }}</div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

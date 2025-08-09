@@ -1,0 +1,46 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Moderation Images{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Moderation Images</h1>
+</main>
+
+<section class="moderation-content" style="max-width: 700px;">
+    <div class="filterbar" style="margin: 0 0 12px 0; display: flex; gap: 12px; align-items: center;">
+        <strong>sort:</strong>
+        {% for f in filters %}
+            {% if f.active %}
+                <a href="{{ f.url }}" style="background: #eef; padding: 2px 6px; border: 1px solid #99c;">{{ f.key }} ×</a>
+            {% else %}
+                <a href="{{ f.url }}" style="padding: 2px 6px; border: 1px solid #ccc;">{{ f.key }}</a>
+            {% endif %}
+        {% endfor %}
+        <a href="{{ clear_filters_url }}" style="margin-left: auto;">clear</a>
+    </div>
+
+    <p>Top {{ user_list|length }} users.</p>
+
+    <div style="display: grid; grid-template-columns: 80px 1fr 120px 140px 120px; gap: 8px; align-items: center;">
+        <div><strong>ID</strong></div>
+        <div><strong>User</strong></div>
+        <div style="text-align: right;"><strong>Images</strong></div>
+        <div style="text-align: right;"><strong>Size (MB)</strong></div>
+        <div style="text-align: right;"><strong>Joined</strong></div>
+
+        {% for user in user_list %}
+            <div>
+                <a href="{% url 'admin:main_user_change' user.id %}" target="_blank" title="{{ user.date_joined }}">{{ user.id }}</a>
+            </div>
+            <div>
+                <a href="{{ user.blog_url }}" target="_blank" rel="noopener">{{ user.username }}</a>
+                {% if user.is_premium %}<span title="premium">★</span>{% endif %}
+            </div>
+            <div style="text-align: right;">{{ user.image_count }}</div>
+            <div style="text-align: right;">{{ user.image_megabytes }}</div>
+            <div style="text-align: right;">{{ user.date_joined|date:'Y-m-d' }}</div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

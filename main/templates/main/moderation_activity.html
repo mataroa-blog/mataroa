@@ -1,0 +1,183 @@
+{% extends 'main/layout.html' %}
+
+{% load humanize %}
+
+{% block title %}Moderation Activity{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Moderation Activity</h1>
+</main>
+
+<section class="moderation-content" style="max-width: 540px;">
+    <div style="display: grid; grid-template-columns: 1fr; gap: 16px;">
+        <div>
+            <strong>New users (daily, last 20 shown)</strong>
+            <svg version="1.1" viewBox="0 0 {{ chart_new_users_daily_width }} 112" xmlns="http://www.w3.org/2000/svg" class="analytics-chart">
+                {% for row in chart_new_users_daily %}
+                <rect
+                    x="{{ row.x_offset }}"
+                    y="{{ row.negative_count_percent }}"
+                    width="18"
+                    height="{{ row.count_percent }}"
+                    class="analytics-chart-bar"
+                >
+                    <title>{{ row.count }} new users on {{ row.period|date:'Y-m-d' }}</title>
+                </rect>
+                <text
+                    x="{{ row.x_offset|add:'9' }}"
+                    y="108"
+                    text-anchor="middle"
+                    dominant-baseline="middle"
+                    class="analytics-chart-text"
+                >
+                    {{ row.count }}
+                </text>
+                {% endfor %}
+            </svg>
+
+            <strong>New posts (daily, last 20 shown)</strong>
+            <svg version="1.1" viewBox="0 0 {{ chart_new_posts_daily_width }} 112" xmlns="http://www.w3.org/2000/svg" class="analytics-chart">
+                {% for row in chart_new_posts_daily %}
+                <rect
+                    x="{{ row.x_offset }}"
+                    y="{{ row.negative_count_percent }}"
+                    width="18"
+                    height="{{ row.count_percent }}"
+                    class="analytics-chart-bar"
+                >
+                    <title>{{ row.count }} new posts on {{ row.period|date:'Y-m-d' }}</title>
+                </rect>
+                <text
+                    x="{{ row.x_offset|add:'9' }}"
+                    y="108"
+                    text-anchor="middle"
+                    dominant-baseline="middle"
+                    class="analytics-chart-text"
+                >
+                    {{ row.count }}
+                </text>
+                {% endfor %}
+            </svg>
+        </div>
+
+        <div>
+            <strong>New users (weekly, last 12 shown)</strong>
+            <svg version="1.1" viewBox="0 0 {{ chart_new_users_weekly_width }} 112" xmlns="http://www.w3.org/2000/svg" class="analytics-chart">
+                {% for row in chart_new_users_weekly %}
+                <rect
+                    x="{{ row.x_offset }}"
+                    y="{{ row.negative_count_percent }}"
+                    width="18"
+                    height="{{ row.count_percent }}"
+                    class="analytics-chart-bar"
+                >
+                    <title>{{ row.count }} new users (week of {{ row.period|date:'Y-m-d' }})</title>
+                </rect>
+                <text
+                    x="{{ row.x_offset|add:'9' }}"
+                    y="108"
+                    text-anchor="middle"
+                    dominant-baseline="middle"
+                    class="analytics-chart-text"
+                >
+                    {{ row.count }}
+                </text>
+                {% endfor %}
+            </svg>
+
+            <strong>New posts (weekly, last 12 shown)</strong>
+            <svg version="1.1" viewBox="0 0 {{ chart_new_posts_weekly_width }} 112" xmlns="http://www.w3.org/2000/svg" class="analytics-chart">
+                {% for row in chart_new_posts_weekly %}
+                <rect
+                    x="{{ row.x_offset }}"
+                    y="{{ row.negative_count_percent }}"
+                    width="18"
+                    height="{{ row.count_percent }}"
+                    class="analytics-chart-bar"
+                >
+                    <title>{{ row.count }} new posts (week of {{ row.period|date:'Y-m-d' }})</title>
+                </rect>
+                <text
+                    x="{{ row.x_offset|add:'9' }}"
+                    y="108"
+                    text-anchor="middle"
+                    dominant-baseline="middle"
+                    class="analytics-chart-text"
+                >
+                    {{ row.count }}
+                </text>
+                {% endfor %}
+            </svg>
+        </div>
+    </div>
+
+    <h3 style="margin-top: 24px;">Cumulative</h3>
+    <div style="display: grid; grid-template-columns: 1fr; gap: 16px;">
+        <div>
+            <strong>Users (daily cumulative)</strong>
+            <ul>
+                {% for row in cum_users_daily|slice:'-20:' %}
+                <li>{{ row.period|date:'Y-m-d' }}: {{ row.cumulative }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div>
+            <strong>Posts (daily cumulative)</strong>
+            <ul>
+                {% for row in cum_posts_daily|slice:'-20:' %}
+                <li>{{ row.period|date:'Y-m-d' }}: {{ row.cumulative|intcomma }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <h3 style="margin-top: 24px;">Cumulative posts by month (since 2020-05-01)</h3>
+    <table class="table" style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr>
+                <th style="text-align: left; padding: 4px 0;">Month</th>
+                <th style="text-align: right; padding: 4px 0;">Cumulative posts</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in cumulative_posts_monthly_from_2020 %}
+            <tr>
+                <td style="padding: 2px 0;">{{ row.period|date:'Y-m-01' }}</td>
+                <td style="text-align: right; padding: 2px 0;">{{ row.cumulative|intcomma }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div style="margin-top: 12px;">
+        <strong>Cumulative posts by month — chart</strong>
+        <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+        <svg version="1.1" viewBox="0 0 {{ chart_cumulative_posts_monthly_width }} 112" width="{{ chart_cumulative_posts_monthly_width }}" height="112" xmlns="http://www.w3.org/2000/svg" class="analytics-chart">
+            {% for row in chart_cumulative_posts_monthly %}
+            <rect
+                x="{{ row.x_offset }}"
+                y="{{ row.negative_count_percent }}"
+                width="18"
+                height="{{ row.count_percent }}"
+                class="analytics-chart-bar"
+            >
+                <title>{{ row.count }} posts total by {{ row.period|date:'Y-m-01' }}</title>
+            </rect>
+            <g transform="translate({{ row.x_offset|add:'9' }},74) rotate(-90)">
+                <text
+                    x="0"
+                    y="0"
+                    text-anchor="middle"
+                    dominant-baseline="central"
+                    class="analytics-chart-text"
+                >
+                    {{ row.count|intcomma }}
+                </text>
+            </g>
+            {% endfor %}
+        </svg>
+        </div>
+    </div>
+</section>
+{% endblock %}

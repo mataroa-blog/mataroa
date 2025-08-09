@@ -1,0 +1,66 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Moderation Stats{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Moderation Stats</h1>
+</main>
+
+<section class="moderation-content" style="max-width: 800px;">
+    <h3>Totals</h3>
+    <div style="display: grid; grid-template-columns: 1fr 120px 1fr 120px; gap: 8px; align-items: center;">
+        <div><strong>Users</strong></div>
+        <div style="text-align: right;">{{ totals.users }}</div>
+        <div><strong>Approved Users</strong></div>
+        <div style="text-align: right;">{{ totals.users_approved }}</div>
+
+        <div><strong>Premium Users</strong></div>
+        <div style="text-align: right;">{{ totals.users_premium }}</div>
+        <div><strong>Users w/ Custom Domain</strong></div>
+        <div style="text-align: right;">{{ totals.users_with_custom_domain }}</div>
+
+        <div><strong>Posts (total)</strong></div>
+        <div style="text-align: right;">{{ totals.posts }}</div>
+        <div><strong>Posts (published)</strong></div>
+        <div style="text-align: right;">{{ totals.posts_published }}</div>
+
+        <div><strong>Posts (draft)</strong></div>
+        <div style="text-align: right;">{{ totals.posts_draft }}</div>
+        <div><strong>Pages</strong></div>
+        <div style="text-align: right;">{{ totals.pages }}</div>
+
+        <div><strong>Images</strong></div>
+        <div style="text-align: right;">{{ totals.images }}</div>
+        <div><strong>Images Size (MB)</strong></div>
+        <div style="text-align: right;">{{ totals.images_mb }}</div>
+
+        <div><strong>Comments</strong></div>
+        <div style="text-align: right;">{{ totals.comments }}</div>
+        <div><strong>Comments (approved)</strong></div>
+        <div style="text-align: right;">{{ totals.comments_approved }}</div>
+
+        <div><strong>Subscribers</strong></div>
+        <div style="text-align: right;">{{ totals.subscribers }}</div>
+        <div><strong>Subscribers (active)</strong></div>
+        <div style="text-align: right;">{{ totals.subscribers_active }}</div>
+
+        <div><strong>Notification Sends</strong></div>
+        <div style="text-align: right;">{{ totals.notification_sends }}</div>
+        <div><strong>Post Snapshots</strong></div>
+        <div style="text-align: right;">{{ totals.snapshots }}</div>
+    </div>
+
+    <h3 style="margin-top: 24px;">Averages</h3>
+    <div style="display: grid; grid-template-columns: 1fr 120px; gap: 8px; align-items: center;">
+        <div><strong>Posts per User (avg)</strong></div>
+        <div style="text-align: right;">{{ averages.posts_per_user }}</div>
+    </div>
+
+    <h3 style="margin-top: 24px;">Latest</h3>
+    <div style="display: grid; grid-template-columns: 1fr 200px; gap: 8px; align-items: center;">
+        <div><strong>Last Post Published</strong></div>
+        <div style="text-align: right;">{{ latest.last_post_date|date:'Y-m-d' }}</div>
+    </div>
+</section>
+{% endblock %}

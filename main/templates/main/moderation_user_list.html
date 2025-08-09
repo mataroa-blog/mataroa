@@ -1,6 +1,6 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}Adminextra Users{% endblock %}
+{% block title %}Moderation Users{% endblock %}
 
 {% block head_extra %}
 <style>
@@ -14,9 +14,9 @@ button {
 
 {% block content %}
 <main>
-    <h1>Adminextra Users</h1>
+    <h1>Moderation Users</h1>
 </main>
-<section class="adminextra-content">
+<section class="moderation-content">
 
     <div class="filterbar" style="margin: 0 0 12px 0; display: flex; gap: 12px; align-items: center;">
         <strong>filters:</strong>
@@ -24,40 +24,40 @@ button {
             {% if f.active %}
                 <a href="{{ f.url }}" style="background: #eef; padding: 2px 6px; border: 1px solid #99c;">{{ f.key }} ×</a>
             {% else %}
-                <a href="{{ f.url }}" style="padding: 2px 6px; border: 1px solid #ccc;">{{ f.key }}</a>
+                <a href="{{ f.url }}" style="padding: 2px 6px; border: 1px solid var(--light-grey-color);">{{ f.key }}</a>
             {% endif %}
         {% endfor %}
         <a href="{{ clear_filters_url }}" style="margin-left: auto;">clear</a>
     </div>
 
     {% if is_paginated %}
-    <div class="pagination" style="margin: 0 0 24px 0; display: flex; gap: 8px; align-items: center;">
+    <div class="pagination" style="margin-top: 0;">
         {% if page_obj.has_previous %}
             <a href="?page=1{% if querystring %}&{{ querystring }}{% endif %}">« first</a>
             <a href="?page={{ page_obj.previous_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">‹ prev</a>
         {% else %}
-            <span style="color: grey;">« first</span>
-            <span style="color: grey;">‹ prev</span>
+            <span class="disabled">« first</span>
+            <span class="disabled">‹ prev</span>
         {% endif %}
 
-        <span>page {{ page_obj.number }} of {{ paginator.num_pages }}</span>
+        <span class="status">page {{ page_obj.number }} of {{ paginator.num_pages }}</span>
 
         {% if page_obj.has_next %}
             <a href="?page={{ page_obj.next_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">next ›</a>
             <a href="?page={{ paginator.num_pages }}{% if querystring %}&{{ querystring }}{% endif %}">last »</a>
         {% else %}
-            <span style="color: grey;">next ›</span>
-            <span style="color: grey;">last »</span>
+            <span class="disabled">next ›</span>
+            <span class="disabled">last »</span>
         {% endif %}
 
-        <form method="get" style="margin-left: auto;">
+        <form method="get">
             {% for key, value in request.GET.items %}
                 {% if key != 'page' and key != 'per_page' %}
                     <input type="hidden" name="{{ key }}" value="{{ value }}" />
                 {% endif %}
             {% endfor %}
             <label>per page
-                <input type="number" name="per_page" min="10" max="500" value="{{ page_obj.paginator.per_page }}" style="width: 70px;" />
+                <input type="number" name="per_page" min="10" max="500" value="{{ page_obj.paginator.per_page }}" />
             </label>
             <button type="submit">update</button>
         </form>
@@ -65,16 +65,16 @@ button {
     {% endif %}
 
     {% for user in user_list %}
-    <div class="adminextra-content-row">
-        <div class="adminextra-content-row-id">
+    <div class="moderation-content-row">
+        <div class="moderation-content-row-id">
             <a href="{% url 'admin:main_user_change' user.id %}" target="_blank" title="{{ user.date_joined }}">
                 {{ user.id }}
             </a>
         </div>
-        <div class="adminextra-content-row-id2" style="padding-top: 8px;">
+        <div class="moderation-content-row-id2" style="padding-top: 8px;">
             {{ user.stripe_customer_id|default:"" }}
         </div>
-        <div class="adminextra-content-row-username">
+        <div class="moderation-content-row-username">
             <span>{{ user.class_status }}</span>
             {% if user.is_approved %}
             <span title="approved">✅</span>
@@ -93,7 +93,7 @@ button {
             </div>
             {% endif %}
         </div>
-        <div class="adminextra-content-row-actions" id="actions-{{ user.id }}">
+        <div class="moderation-content-row-actions" id="actions-{{ user.id }}">
             [
                 {% if not user.is_approved %}
                 <span onclick="approveUser('{{ user.id }}')" style="color: green; cursor: pointer;">approve</span>
@@ -103,15 +103,15 @@ button {
                 {% endif %}
             ]
         </div>
-        <div class="adminextra-content-row-url">
+        <div class="moderation-content-row-url">
             <a href="{{ user.blog_url }}" target="_blank">
                 {{ user.blog_url }}
             </a>
         </div>
-        <div class="adminextra-content-row-email">
+        <div class="moderation-content-row-email">
             {{ user.email }}
         </div>
-        <div class="adminextra-content-row-posts">
+        <div class="moderation-content-row-posts">
             <ul>
                 {% for post in user.post_set.all %}
                 <li>
@@ -128,33 +128,33 @@ button {
     {% endfor %}
 
     {% if is_paginated %}
-    <div class="pagination" style="margin: 24px 0; display: flex; gap: 8px; align-items: center;">
+    <div class="pagination">
         {% if page_obj.has_previous %}
             <a href="?page=1{% if querystring %}&{{ querystring }}{% endif %}">« first</a>
             <a href="?page={{ page_obj.previous_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">‹ prev</a>
         {% else %}
-            <span style="color: grey;">« first</span>
-            <span style="color: grey;">‹ prev</span>
+            <span class="disabled">« first</span>
+            <span class="disabled">‹ prev</span>
         {% endif %}
 
-        <span>page {{ page_obj.number }} of {{ paginator.num_pages }}</span>
+        <span class="status">page {{ page_obj.number }} of {{ paginator.num_pages }}</span>
 
         {% if page_obj.has_next %}
             <a href="?page={{ page_obj.next_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">next ›</a>
             <a href="?page={{ paginator.num_pages }}{% if querystring %}&{{ querystring }}{% endif %}">last »</a>
         {% else %}
-            <span style="color: grey;">next ›</span>
-            <span style="color: grey;">last »</span>
+            <span class="disabled">next ›</span>
+            <span class="disabled">last »</span>
         {% endif %}
 
-        <form method="get" style="margin-left: auto;">
+        <form method="get">
             {% for key, value in request.GET.items %}
                 {% if key != 'page' and key != 'per_page' %}
                     <input type="hidden" name="{{ key }}" value="{{ value }}" />
                 {% endif %}
             {% endfor %}
             <label>per page
-                <input type="number" name="per_page" min="10" max="500" value="{{ page_obj.paginator.per_page }}" style="width: 70px;" />
+                <input type="number" name="per_page" min="10" max="500" value="{{ page_obj.paginator.per_page }}" />
             </label>
             <button type="submit">update</button>
         </form>
@@ -167,7 +167,7 @@ button {
 {% block scripts %}
 <script>
     function approveUser(userID) {
-        fetch(`/adminextra/users/${userID}/approve/`, {
+        fetch(`/moderation/users/${userID}/approve/`, {
             method: 'POST',
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}',
@@ -179,7 +179,7 @@ button {
     }
 
     function unapproveUser(userID) {
-        fetch(`/adminextra/users/${userID}/unapprove/`, {
+        fetch(`/moderation/users/${userID}/unapprove/`, {
             method: 'POST',
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}',

@@ -1,0 +1,109 @@
+{% extends 'main/layout.html' %}
+{% load humanize %}
+
+{% block title %}Moderation — Summary {{ target_date|date:'Y-m-d' }}{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Summary for {{ target_date|date:'Y-m-d' }}</h1>
+
+    <div class="filterbar" style="display:flex; justify-content: space-between; gap: 12px; margin: 8px 0 16px 0;">
+        <a href="{% url 'moderation_summary' date_str=prev_date|date:'Y-m-d' %}">&larr; Previous day</a>
+        <a href="{% url 'moderation_summary' date_str=next_date|date:'Y-m-d' %}">Next day &rarr;</a>
+    </div>
+
+    <section class="moderation-content" style="max-width: 900px;">
+        <h2>Counts</h2>
+        <ul>
+            <li>New users: {{ counts.users }}</li>
+            <li>New posts: {{ counts.posts }}</li>
+            <li>New pages: {{ counts.pages }}</li>
+            <li>New comments: {{ counts.comments }}</li>
+            <li>Post visits: {{ counts.post_visits|intcomma }}</li>
+        </ul>
+
+        <h2>Top Posts by Visits</h2>
+        {% if top_posts_by_visits %}
+            <div style="display: grid; grid-template-columns: 1fr 140px 160px; gap: 8px; align-items: center;">
+                <div><strong>Post</strong></div>
+                <div style="text-align: right;"><strong>Visits</strong></div>
+                <div style="text-align: right;"><strong>Author</strong></div>
+
+                {% for p in top_posts_by_visits %}
+                    <div>
+                        <a href="{{ p.get_proper_url }}" target="_blank" rel="noopener">{{ p.title }}</a>
+                    </div>
+                    <div style="text-align: right;">{{ p.visit_count|intcomma }}</div>
+                    <div style="text-align: right;">
+                        <a href="{{ p.owner.blog_url }}" target="_blank" rel="noopener">{{ p.owner.username }}</a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>None.</p>
+        {% endif %}
+
+        <h2>New Posts</h2>
+        {% if new_posts %}
+            <ul>
+                {% for p in new_posts %}
+                    <li>
+                        <a href="{{ p.get_proper_url }}" target="_blank" rel="noopener">{{ p.title }}</a>
+                        by <a href="{{ p.owner.blog_url }}" target="_blank" rel="noopener">{{ p.owner.username }}</a>
+                        <small>({{ p.created_at|date:'H:i' }})</small>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>None.</p>
+        {% endif %}
+
+        <h2>New Users</h2>
+        {% if new_users %}
+            <ul>
+                {% for u in new_users %}
+                    <li>
+                        <a href="{{ u.blog_url }}" target="_blank" rel="noopener">{{ u.username }}</a>
+                        <small>({{ u.date_joined|date:'H:i' }})</small>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>None.</p>
+        {% endif %}
+
+        <h2>New Pages</h2>
+        {% if new_pages %}
+            <ul>
+                {% for pg in new_pages %}
+                    <li>
+                        <a href="{{ pg.get_absolute_url }}" target="_blank" rel="noopener">{{ pg.title }}</a>
+                        by <a href="{{ pg.owner.blog_url }}" target="_blank" rel="noopener">{{ pg.owner.username }}</a>
+                        <small>({{ pg.created_at|date:'H:i' }})</small>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>None.</p>
+        {% endif %}
+
+        <h2>New Comments</h2>
+        {% if new_comments %}
+            <ul>
+                {% for c in new_comments %}
+                    <li>
+                        on <a href="{{ c.post.get_proper_url }}#comment-{{ c.id }}" target="_blank" rel="noopener">{{ c.post.title }}</a>
+                        by <a href="{{ c.post.owner.blog_url }}" target="_blank" rel="noopener">{{ c.post.owner.username }}</a>
+                        <small>({{ c.created_at|date:'H:i' }})</small>
+                        {% if not c.is_approved %}<em>pending</em>{% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>None.</p>
+        {% endif %}
+    </section>
+</main>
+{% endblock %}
+
+

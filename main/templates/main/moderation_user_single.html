@@ -1,6 +1,6 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}Adminextra Cards{% endblock %}
+{% block title %}Moderation Cards{% endblock %}
 
 {% block head_extra %}
 <style>
@@ -22,14 +22,14 @@ img {
 {% block content %}
 <main>
     <h1>
-        Adminextra Cards
+        Moderation Cards
         <small>({{ user_count }})</small>
     </h1>
 </main>
-<section class="adminextra-content">
-    <div class="adminextra-content-cards">
+<section class="moderation-content">
+    <div class="moderation-content-cards">
 
-        <div class="adminextra-content-cards-col1">
+        <div class="moderation-content-cards-col1">
             <h2>Account</h2>
 
             <p>
@@ -83,7 +83,7 @@ img {
             </p>
         </div>
 
-        <div class="adminextra-content-cards-col2">
+        <div class="moderation-content-cards-col2">
             <div>
                 <div>
                     <h2>Post Titles</h2>
@@ -104,7 +104,7 @@ img {
             </div>
         </div>
 
-        <div class="adminextra-content-cards-col3">
+        <div class="moderation-content-cards-col3">
             <div>
                 {% for post in post_list_a %}
                 <h3>
@@ -121,7 +121,7 @@ img {
             </div>
         </div>
 
-        <div class="adminextra-content-cards-col4">
+        <div class="moderation-content-cards-col4">
             <div>
                 {% for post in post_list_b %}
                 <h3>
@@ -149,7 +149,7 @@ img {
             return false;
         }
 
-        fetch(`/adminextra/users/${userID}/delete/`, {
+        fetch(`/moderation/users/${userID}/delete/`, {
             method: 'POST',
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}',
@@ -161,7 +161,7 @@ img {
     }
 
     function approveUser(userID) {
-        fetch(`/adminextra/users/${userID}/approve/`, {
+        fetch(`/moderation/users/${userID}/approve/`, {
             method: 'POST',
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}',
@@ -173,7 +173,7 @@ img {
     }
 
     function unapproveUser(userID) {
-        fetch(`/adminextra/users/${userID}/unapprove/`, {
+        fetch(`/moderation/users/${userID}/unapprove/`, {
             method: 'POST',
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}',

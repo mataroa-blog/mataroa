@@ -1,0 +1,22 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Moderation — Index{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Moderation</h1>
+
+    {% now "Y-m-d" as today_str %}
+
+    <ul>
+        <li><a href="{% url 'moderation_user_list' %}">Users list</a></li>
+        <li><a href="{% url 'moderation_user_cards' %}">Users cards</a></li>
+        <li><a href="{% url 'moderation_images' %}">Images leaderboard</a></li>
+        <li><a href="{% url 'moderation_posts' %}">Posts leaderboard</a></li>
+        <li><a href="{% url 'moderation_stats' %}">Stats</a></li>
+        <li><a href="{% url 'moderation_activity' %}">Activity</a></li>
+        <li><a href="{% url 'moderation_summary' date_str=today_str %}">Today</a></li>
+        <li><a href="{% url 'moderation_cohorts' %}">Cohorts</a></li>
+    </ul>
+</main>
+{% endblock %}
