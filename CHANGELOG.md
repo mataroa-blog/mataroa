@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.0](https://github.com/mataroablog/mataroa/compare/v1.2...v1.3)
+
+### Important changes
+
+* Rebuild content moderation dashboard with
+    * pagination
+    * filters
+    * sort by
+    * day summary
+    * images overview
+    * global stats
+* Switch to astral uv
+* Add hard check for image uploading limit
+* Change sign up text
+* Remove robot checks from sign up form
+* Upgrade to Django 5.2
+* Add docker image auto-push to ghcr.io
+
+### Bug fixes
+
+* Improve dark mode colours for better readability
+* Fix ansible not auto-enabling systemd timers
+
 ## [1.2.0](https://github.com/mataroablog/mataroa/compare/v1.1...v1.2) - 2025-02-06
 
 ### Important changes
