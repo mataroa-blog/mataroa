@@ -14,12 +14,12 @@ Archives at
 
 ### Tools
 
-* [mataroa-cli](https://github.com/mataroa-blog/mataroa-cli)
+* [mataroa-cli](https://github.com/mataroablog/mataroa-cli)
 * [Mataroa Telegram Bot](https://github.com/Unknowing9428/Mataroa-Telegram-Bot)
 
 ## Contributing
 
-Open a PR on [GitHub](https://github.com/mataroa-blog/mataroa).
+Open a PR on [GitHub](https://github.com/mataroablog/mataroa).
 
 Send an email patch to
 [~sirodoht/public-inbox@lists.sr.ht](mailto:~sirodoht/public-inbox@lists.sr.ht).

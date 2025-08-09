@@ -1,20 +1,20 @@
 # Introduction
 
 Welcome to the documentation site of the
-[mataroa blog](https://github.com/mataroa-blog)
+[mataroa blog](https://github.com/mataroablog)
 project!
 
 **Main repository on GitHub**  
-[github.com/mataroa-blog/mataroa](https://github.com/mataroa-blog/mataroa)
+[github.com/mataroablog/mataroa](https://github.com/mataroablog/mataroa)
 
 **Mirror repository on sr.ht**  
 [git.sr.ht/~sirodoht/mataroa](https://git.sr.ht/~sirodoht/mataroa)
 
 **Report bugs on GitHub**  
-[github.com/mataroa-blog/mataroa/issues](https://github.com/mataroa-blog/mataroa/issues)
+[github.com/mataroablog/mataroa/issues](https://github.com/mataroablog/mataroa/issues)
 
 **Contribute on GitHub with Pull Requests**  
-[github.com/mataroa-blog/mataroa/pulls](https://github.com/mataroa-blog/mataroa/pulls)
+[github.com/mataroablog/mataroa/pulls](https://github.com/mataroablog/mataroa/pulls)
 
 **Contribute (platform independent) with email patches**  
 [~sirodoht/public-inbox@lists.sr.ht](mailto:~sirodoht/public-inbox@lists.sr.ht)
@@ -25,5 +25,5 @@ project!
 ## Start
 
 Start learning about mataroa with reading the
-<a href="https://github.com/mataroa-blog/mataroa">main repository</a>
+<a href="https://github.com/mataroablog/mataroa">main repository</a>
 README:
