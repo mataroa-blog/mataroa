@@ -70,14 +70,11 @@ Condensed and commented sources file tree:
 │   ├── views_billing.py
 │   └── views_export.py
 ├── manage.py
-├── mataroa
-│   ├── asgi.py
-│   ├── settings.py # django configuration file
-│   ├── urls.py
-│   └── wsgi.py
-├── requirements.in # user-editable requirements file
-├── requirements.txt # pip-compile generated version-locked dependencies
-└── requirements.dev.txt # user-editable development requirements
+└── mataroa
+    ├── asgi.py
+    ├── settings.py # django configuration file
+    ├── urls.py
+    └── wsgi.py
 ```
 
 ## [`main/urls.py`](/main/urls.py)

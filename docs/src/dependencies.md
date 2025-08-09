@@ -13,10 +13,10 @@ Vague rules include:
     * Packages should hold a high quality of coding practices.
 * No JavaScript libraries / dependencies.
 
-Current list of top-level PyPI dependencies (source at [requirements.in](/requirements.in)):
+Current list of top-level PyPI dependencies (source at [`pyproject.toml`](/pyproject.toml)):
 
 * [Django](https://pypi.org/project/Django/)
-* [psycopg2-binary](https://pypi.org/project/psycopg2-binary/)
+* [psycopg](https://pypi.org/project/psycopg/)
 * [gunicorn](https://pypi.org/project/gunicorn/)
 * [Markdown](https://pypi.org/project/Markdown/)
 * [Pygments](https://pypi.org/project/Pygments/)
@@ -25,12 +25,13 @@ Current list of top-level PyPI dependencies (source at [requirements.in](/requir
 
 ## Adding a new dependency
 
-After approving a dependency, the process to add it is:
+After approving a dependency, add it using `uv`:
 
-1. Assuming a venv is activated and `requirements.dev.txt` are installed.
-1. Add new dependency in [`requirements.in`](/requirements.in).
-1. Run `pip-compile` to generate [`requirements.txt`](/requirements.txt)
-1. Run `pip install -r requirements.txt`
+1. Ensure `uv` is installed and a virtualenv exists (managed by `uv`).
+1. Add the dependency to `pyproject.toml` and lockfile with:
+   - Runtime: `uv add PACKAGE`
+   - Dev-only: `uv add --dev PACKAGE`
+1. Install/sync dependencies: `uv sync`
 
 ## Upgrading dependencies
 
@@ -38,9 +39,9 @@ When a new Django version is out it’s a good idea to upgrade everything.
 
 Steps:
 
-1. Assuming a venv is activated and `requirements.dev.txt` are installed.
-1. Run `pip-compile -U --no-strip-extras` to generate an upgraded `requirements.txt`.
-1. Run `git diff requirements.txt` and spot non-patch level vesion bumps.
+1. Update the lockfile: `uv lock --upgrade`
+1. Review changes: `git diff uv.lock` and spot non-patch level version bumps.
 1. Examine release notes of each one.
+1. Install updated deps: `uv sync`
 1. Unless something comes up, make sure tests and smoke tests pass.
 1. Deploy new dependency versions.

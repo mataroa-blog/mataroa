@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     services:
       postgres:
@@ -28,21 +28,17 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.11'
+        python-version: '3.13'
     - name: Install Dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        uv pip install -r requirements.txt
     - name: Run Tests
       run: |
-        python manage.py collectstatic --noinput
-        DEBUG=1 python manage.py test
+        uv run manage.py test
       env:
+        DEBUG: '1'
         SECRET_KEY: 'thisisthesecretkey'
         DATABASE_URL: 'postgres://postgres:postgres@localhost:5432/postgres'
     - name: Lint
       run: |
-        touch .envrc
-        pip install -r requirements.dev.txt
-        pip install -r requirements.txt
-        ruff check .
+        uv run ruff check

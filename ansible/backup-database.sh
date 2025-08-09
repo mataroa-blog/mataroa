@@ -17,9 +17,11 @@ fi
 cd "$(dirname "$0")"
 
 main() {
-    # shellcheck disable=SC1091
-    # source for PGPASSWORD variable
-    source /var/www/mataroa/.envrc
+    # source for PGPASSWORD variable if present
+    if [ -f /var/www/mataroa/.envrc ]; then
+        # shellcheck disable=SC1091
+        source /var/www/mataroa/.envrc
+    fi
 
     # dump database in the home folder
     pg_dump -Fc --no-acl mataroa -h localhost -U mataroa -f /home/deploy/mataroa.dump -w

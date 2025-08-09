@@ -4,7 +4,9 @@ Description=Backup mataroa database
 [Service]
 Type=oneshot
 User=deploy
-ExecStart=/bin/bash -c '/home/deploy/backup-database.sh'
+WorkingDirectory=/home/deploy
+Environment="PGPASSWORD={{ postgres_password }}"
+ExecStart=/home/deploy/backup-database.sh
 
 [Install]
 WantedBy=multi-user.target

@@ -4,7 +4,9 @@ Description=Process mataroa notifications
 [Service]
 Type=oneshot
 User=deploy
-ExecStart=/bin/bash -c 'source /var/www/mataroa/.envrc && /var/www/mataroa/.venv/bin/python /var/www/mataroa/manage.py processnotifications --no-dryrun'
+WorkingDirectory=/var/www/mataroa
+EnvironmentFile=/etc/systemd/system/mataroa.env
+ExecStart=/home/deploy/.local/bin/uv run manage.py processnotifications --no-dryrun
 
 [Install]
 WantedBy=multi-user.target

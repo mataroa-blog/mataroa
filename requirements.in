@@ -1,7 +1,0 @@
-django
-psycopg2-binary
-gunicorn
-markdown
-pygments
-bleach[css]
-stripe<8.0.0

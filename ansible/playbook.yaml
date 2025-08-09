@@ -2,6 +2,16 @@
 - hosts: virtualmachines
   vars_files:
     - vars.yaml
+  vars:
+    app_dir: /var/www/mataroa
+    django_manage: /home/deploy/.local/bin/uv run python manage.py
+    systemd_unit_templates:
+      - mataroa-notifications.timer.j2
+      - mataroa-notifications.service.j2
+      - mataroa-exports.timer.j2
+      - mataroa-exports.service.j2
+      - mataroa-backup.timer.j2
+      - mataroa-backup.service.j2
   become: yes
   tasks:
     # smoke test and essential dependencies
@@ -13,14 +23,8 @@
         name:
           - gcc
           - git
-          - libpq-dev
-          - postgresql
-          - python3-psycopg2
-          - python3.11
-          - python3.11-dev
-          - python3.11-venv
-          - vim
           - rclone
+          - vim
         state: present
 
     # caddy
@@ -30,12 +34,12 @@
         url: https://dl.cloudsmith.io/public/caddy/stable/gpg.key
         keyring: /etc/apt/trusted.gpg.d/caddy-stable.gpg
         state: present
-    - name: add caddy deb repository
+    - name: add caddy repositories
       ansible.builtin.apt_repository:
-        repo: deb [signed-by=/etc/apt/trusted.gpg.d/caddy-stable.gpg] https://dl.cloudsmith.io/public/caddy/stable/deb/debian any-version main
-    - name: add caddy deb-src repository
-      ansible.builtin.apt_repository:
-        repo: deb [signed-by=/etc/apt/trusted.gpg.d/caddy-stable.gpg] https://dl.cloudsmith.io/public/caddy/stable/deb/debian any-version main
+        repo: "{{ item }}"
+      loop:
+        - "deb [signed-by=/etc/apt/trusted.gpg.d/caddy-stable.gpg] https://dl.cloudsmith.io/public/caddy/stable/deb/debian any-version main"
+        - "deb-src [signed-by=/etc/apt/trusted.gpg.d/caddy-stable.gpg] https://dl.cloudsmith.io/public/caddy/stable/deb/debian any-version main"
     - name: install caddy
       ansible.builtin.apt:
         update_cache: yes
@@ -47,13 +51,16 @@
         owner: root
         group: root
         mode: '0644'
+      notify: restart caddy
+    - name: systemd environment file for mataroa
+      ansible.builtin.template:
+        src: mataroa.env.j2
+        dest: /etc/systemd/system/mataroa.env
+        owner: root
+        group: root
+        mode: '0640'
 
     # deploy user and directory
-    - name: www directory
-      ansible.builtin.file:
-        path: /var/www
-        state: directory
-        mode: '0755'
     - name: create user
       ansible.builtin.user:
         name: deploy
@@ -67,12 +74,13 @@
         skeleton: '/etc/skel'
         generate_ssh_key: yes
         ssh_key_type: 'ed25519'
-    - name: www ownership
+    - name: www directory
       ansible.builtin.file:
         path: /var/www
+        state: directory
+        mode: '0755'
         owner: deploy
         group: www-data
-        recurse: yes
 
     # postgresql setup
     - name: pg user
@@ -97,20 +105,19 @@
         grant_option: true
       become_user: postgres
 
-    # repository
-    - name: clone
-      ansible.builtin.git:
-        repo: https://github.com/mataroablog/mataroa
-        dest: /var/www/mataroa
-        version: main
-        accept_hostkey: true
+    # repo and tooling (as deploy user)
+    - name: setup repo and tooling
       become_user: deploy
-    - name: dependencies
-      ansible.builtin.pip:
-        virtualenv_command: python3 -m venv .venv
-        virtualenv: /var/www/mataroa/.venv
-        requirements: /var/www/mataroa/requirements.txt
-      become_user: deploy
+      block:
+        - name: uv
+          ansible.builtin.shell:
+            cmd: curl -LsSf https://astral.sh/uv/0.8.8/install.sh | sh
+        - name: clone
+          ansible.builtin.git:
+            repo: https://github.com/mataroablog/mataroa
+            dest: /var/www/mataroa
+            version: main
+            accept_hostkey: true
 
     # systemd
     - name: systemd main service
@@ -120,84 +127,72 @@
         owner: root
         group: root
         mode: '0644'
-    - name: systemd notifications timer
+      notify:
+        - reload systemd
+        - restart mataroa
+    - name: systemd timers and helper services
       ansible.builtin.template:
-        src: mataroa-notifications.timer.j2
-        dest: /etc/systemd/system/mataroa-notifications.timer
+        src: "{{ item }}"
+        dest: "/etc/systemd/system/{{ item | regex_replace('\\.j2$', '') }}"
         owner: root
         group: root
         mode: '0644'
-    - name: systemd notifications service
-      ansible.builtin.template:
-        src: mataroa-notifications.service.j2
-        dest: /etc/systemd/system/mataroa-notifications.service
-        owner: root
-        group: root
-        mode: '0644'
-    - name: systemd exports timer
-      ansible.builtin.template:
-        src: mataroa-exports.timer.j2
-        dest: /etc/systemd/system/mataroa-exports.timer
-        owner: root
-        group: root
-        mode: '0644'
-    - name: systemd exports service
-      ansible.builtin.template:
-        src: mataroa-exports.service.j2
-        dest: /etc/systemd/system/mataroa-exports.service
-        owner: root
-        group: root
-        mode: '0644'
-    - name: systemd backup timer
-      ansible.builtin.template:
-        src: mataroa-backup.timer.j2
-        dest: /etc/systemd/system/mataroa-backup.timer
-        owner: root
-        group: root
-        mode: '0644'
-    - name: systemd backup service
-      ansible.builtin.template:
-        src: mataroa-backup.service.j2
-        dest: /etc/systemd/system/mataroa-backup.service
-        owner: root
-        group: root
-        mode: '0644'
-    - name: systemd reload
+      loop: "{{ systemd_unit_templates }}"
+      notify: reload systemd
+    - name: install backup script
+      ansible.builtin.copy:
+        src: backup-database.sh
+        dest: /home/deploy/backup-database.sh
+        owner: deploy
+        group: deploy
+        mode: '0755'
+    - name: flush handlers before enabling timers
+      ansible.builtin.meta: flush_handlers
+    - name: systemd enable and start timers
       ansible.builtin.systemd:
-        daemon_reload: true
+        name: "{{ item }}"
+        enabled: yes
+        state: started
+      loop:
+        - mataroa-notifications.timer
+        - mataroa-exports.timer
+        - mataroa-backup.timer
     - name: systemd enable
       ansible.builtin.systemd:
         name: mataroa
         enabled: yes
-    - name: systemd start
-      ansible.builtin.systemd:
-        name: mataroa
-        state: restarted
 
     # deployment specific
     - name: collectstatic
       ansible.builtin.shell:
-        cmd: |
-          source .venv/bin/activate
-          python3 manage.py collectstatic --no-input
-        chdir: /var/www/mataroa
+        cmd: "{{ django_manage }} collectstatic --no-input"
+        chdir: "{{ app_dir }}"
       args:
         executable: /bin/bash
       become_user: deploy
     - name: migrations
       ansible.builtin.shell:
-        cmd: |
-          source .venv/bin/activate
-          DATABASE_URL='{{ database_url }}' python3 manage.py migrate --no-input
-        chdir: /var/www/mataroa
+        cmd: "{{ django_manage }} migrate --no-input"
+        chdir: "{{ app_dir }}"
       args:
         executable: /bin/bash
+      environment:
+        DATABASE_URL: "{{ database_url }}"
       become_user: deploy
-    - name: gunicorn restart
+    - name: caddy enable
+      ansible.builtin.systemd:
+        name: caddy
+        enabled: yes
+
+  handlers:
+    - name: reload systemd
+      ansible.builtin.systemd:
+        daemon_reload: true
+    - name: restart mataroa
       ansible.builtin.systemd:
         name: mataroa
         state: restarted
-    - name: caddy restart
+    - name: restart caddy
       ansible.builtin.systemd:
         name: caddy
         state: restarted
