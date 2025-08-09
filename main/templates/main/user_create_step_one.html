@@ -8,72 +8,42 @@
 
 {% block content %}
 <main>
-    <h1>Sign up to start your blog</h1>
+    <h1>Welcome to Mataroa!</h1>
 
     <p>
-        The web is dominated by low-quality spam content for SEO or other purposes.
-        Mataroa does not tolerate any such or other machine-generated content that is not
-        designed to be read by humans. We delete accounts that violate this rule daily.
+        Once upon a time, the web was born. One of the early residents of the web
+        was the so-called weblog. The weblog — or just blog — was a log on the
+        web. A log as in a ship's log: a record of important events in a ship's history.
     </p>
     <p>
-        To help us in this endeavour, we ask three questions that help us
-        distinguish between a real person and a robot.
+        A blog is a mode of publication; as is the book, the magazine, the newspaper,
+        even the television show. We see the blog as a first level citizen in online
+        publishing. The simplest form to express and distribute ideas. The simplest
+        model for <em>just saying something</em> on the internet.
+    </p>
+    <p>
+        Originally, a blog was an online diary or a list of updates for an online
+        product. Today, a blog is a newsletter subscription, or a company's newsroom, or
+        anything that anybody writes in the online medium.
+    </p>
+    <p>
+        We, the internet users, now have an amazing selection of publishing and
+        distribution options. From tweets to articles to books, from text to image to videos,
+        from free software to walled gardens, from simple email delivery to personalised
+        algorithms, from bare text to fully-featured online shops. The present is
+        bright. There is something for everyone and <strong>we hope Mataroa fulfills
+        the needs of those who want to just write</strong>.
+    </p>
+    <p>
+        <strong>
+            We offer a place of no distractions to facilitate the most foundational mode
+            of intellectual internetic exchange: write a blog entry.
+        </strong>
     </p>
 
     <form method="post">
-        {{ form.non_field_errors }}
-
-        <p>
-            <label for="id_problems">
-                What do you think of low-quality spam content as part your web experience?
-            </label>
-            {% if form.problems.errors %}
-                {% for error in form.problems.errors %}
-                    <span class="form-error">{{ error|escape }}</span><br>
-                {% endfor %}
-            {% endif %}
-            {{ form.problems }}
-        </p>
-
-        <p>
-            <label for="id_quality">
-                Do you plan to publish articles that are designed to be read by non-humans?
-            </label>
-            {% if form.quality.errors %}
-                {% for error in form.quality.errors %}
-                    <span class="form-error">{{ error|escape }}</span><br>
-                {% endfor %}
-            {% endif %}
-            {{ form.quality }}
-        </p>
-
-        <p>
-            <label for="id_seo">
-                Are you making this blog to manipulate search engine results?
-            </label>
-            {% if form.seo.errors %}
-                {% for error in form.seo.errors %}
-                    <span class="form-error">{{ error|escape }}</span><br>
-                {% endfor %}
-            {% endif %}
-            {{ form.seo }}
-        </p>
-
-        <p>
-            <label for="id_sunflower">
-                I am not a robot:
-            </label>
-            {% if form.sunflower.errors %}
-                {% for error in form.sunflower.errors %}
-                    <span class="form-error">{{ error|escape }}</span><br>
-                {% endfor %}
-            {% endif %}
-            {{ form.sunflower }}
-        </p>
-
         {% csrf_token %}
-
-        <input type="submit" value="Sign up">
+        <input type="submit" value="Continue">
     </form>
 
     <p>

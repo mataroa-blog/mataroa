@@ -133,13 +133,6 @@ class UserCreateStepOne(CreateView):
 
     def form_valid(self, form):
         self.object = form.save()
-        if not form.cleaned_data["sunflower"]:
-            # this is a bot
-            messages.error(
-                self.request,
-                "If you are not a robot please go back and check the box!",
-            )
-            return redirect("index")
         return redirect("user_create_step_two", onboard_code=self.object.code)
 
 

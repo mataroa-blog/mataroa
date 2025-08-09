@@ -19,7 +19,7 @@ class UserCreateDisabledTestCase(TestCase):
             "blog_title": "New blog",
         }
         response = self.client.post(reverse("user_create"), data)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
         self.assertFalse(models.User.objects.filter(username=data["username"]).exists())
 
 
