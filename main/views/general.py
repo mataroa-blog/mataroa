@@ -14,8 +14,8 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.sitemaps.views import sitemap as DjSitemapView
 from django.core import mail
 from django.core.exceptions import PermissionDenied
-from django.db.models import Count
-from django.db.models.functions import TruncDay
+from django.db.models import Count, Sum
+from django.db.models.functions import Length, TruncDay
 from django.http import (
     Http404,
     HttpResponse,
@@ -654,10 +654,14 @@ class ImageList(LoginRequiredMixin, FormView):
         context = super().get_context_data(**kwargs)
         context["images"] = models.Image.objects.filter(owner=self.request.user)
 
-        context["total_quota"] = 0
-        for image in models.Image.objects.filter(owner=self.request.user):
-            context["total_quota"] += image.data_size
-        context["total_quota"] = round(context["total_quota"], 2)
+        # Total quota in MB (decimal, 1MB = 1,000,000 bytes)
+        total_bytes = (
+            models.Image.objects.filter(owner=self.request.user)
+            .aggregate(total=Sum(Length("data")))
+            .get("total")
+            or 0
+        )
+        context["total_quota"] = round(total_bytes / 1_000_000, 2)
         return context
 
     def post(self, request, *args, **kwargs):
@@ -665,6 +669,14 @@ class ImageList(LoginRequiredMixin, FormView):
         form = self.get_form(form_class)
         files = request.FILES.getlist("file")
         if form.is_valid():
+            # calculate current total storage used by user
+            user_total_bytes = (
+                models.Image.objects.filter(owner=self.request.user)
+                .aggregate(total=Sum(Length("data")))
+                .get("total")
+                or 0
+            )
+
             for f in files:
                 name_ext_parts = f.name.rsplit(".", 1)
                 name = name_ext_parts[0].replace(".", "-")
@@ -673,9 +685,18 @@ class ImageList(LoginRequiredMixin, FormView):
                     self.extension = "jpeg"
                 data = f.read()
 
-                # file limit 1.2MB but say it's 1MB
-                if len(data) > 1.2 * 1000 * 1000:
+                # check for file limit
+                if len(data) > 1.1 * 1000 * 1000:
                     form.add_error("file", "File too big. Limit is 1MB.")
+                    return self.form_invalid(form)
+
+                # quota limit 1GB total per user
+                if user_total_bytes + len(data) > 1_000_000_000:
+                    current_usage_mb = user_total_bytes / 1_000_000
+                    form.add_error(
+                        "file",
+                        f"Storage limit exceeded. Limit is 1GB. Currently using {current_usage_mb:.2f}MB.",
+                    )
                     return self.form_invalid(form)
 
                 self.slug = str(uuid.uuid4())[:8]
@@ -686,6 +707,8 @@ class ImageList(LoginRequiredMixin, FormView):
                     owner=request.user,
                     slug=self.slug,
                 )
+                # increment running total for multiple-file uploads
+                user_total_bytes += len(data)
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
