@@ -8,11 +8,11 @@ asgiref==3.9.1
     # via django
 bleach[css]==6.2.0
     # via -r requirements.in
-certifi==2025.7.9
+certifi==2025.8.3
     # via requests
-charset-normalizer==3.4.2
+charset-normalizer==3.4.3
     # via requests
-django==5.2.4
+django==5.2.5
     # via -r requirements.in
 gunicorn==23.0.0
     # via -r requirements.in
