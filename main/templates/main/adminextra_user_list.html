@@ -18,6 +18,52 @@ button {
 </main>
 <section class="adminextra-content">
 
+    <div class="filterbar" style="margin: 0 0 12px 0; display: flex; gap: 12px; align-items: center;">
+        <strong>filters:</strong>
+        {% for f in filters %}
+            {% if f.active %}
+                <a href="{{ f.url }}" style="background: #eef; padding: 2px 6px; border: 1px solid #99c;">{{ f.key }} ×</a>
+            {% else %}
+                <a href="{{ f.url }}" style="padding: 2px 6px; border: 1px solid #ccc;">{{ f.key }}</a>
+            {% endif %}
+        {% endfor %}
+        <a href="{{ clear_filters_url }}" style="margin-left: auto;">clear</a>
+    </div>
+
+    {% if is_paginated %}
+    <div class="pagination" style="margin: 0 0 24px 0; display: flex; gap: 8px; align-items: center;">
+        {% if page_obj.has_previous %}
+            <a href="?page=1{% if querystring %}&{{ querystring }}{% endif %}">« first</a>
+            <a href="?page={{ page_obj.previous_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">‹ prev</a>
+        {% else %}
+            <span style="color: grey;">« first</span>
+            <span style="color: grey;">‹ prev</span>
+        {% endif %}
+
+        <span>page {{ page_obj.number }} of {{ paginator.num_pages }}</span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">next ›</a>
+            <a href="?page={{ paginator.num_pages }}{% if querystring %}&{{ querystring }}{% endif %}">last »</a>
+        {% else %}
+            <span style="color: grey;">next ›</span>
+            <span style="color: grey;">last »</span>
+        {% endif %}
+
+        <form method="get" style="margin-left: auto;">
+            {% for key, value in request.GET.items %}
+                {% if key != 'page' and key != 'per_page' %}
+                    <input type="hidden" name="{{ key }}" value="{{ value }}" />
+                {% endif %}
+            {% endfor %}
+            <label>per page
+                <input type="number" name="per_page" min="10" max="500" value="{{ page_obj.paginator.per_page }}" style="width: 70px;" />
+            </label>
+            <button type="submit">update</button>
+        </form>
+    </div>
+    {% endif %}
+
     {% for user in user_list %}
     <div class="adminextra-content-row">
         <div class="adminextra-content-row-id">
@@ -81,6 +127,40 @@ button {
     </div>
     {% endfor %}
 
+    {% if is_paginated %}
+    <div class="pagination" style="margin: 24px 0; display: flex; gap: 8px; align-items: center;">
+        {% if page_obj.has_previous %}
+            <a href="?page=1{% if querystring %}&{{ querystring }}{% endif %}">« first</a>
+            <a href="?page={{ page_obj.previous_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">‹ prev</a>
+        {% else %}
+            <span style="color: grey;">« first</span>
+            <span style="color: grey;">‹ prev</span>
+        {% endif %}
+
+        <span>page {{ page_obj.number }} of {{ paginator.num_pages }}</span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">next ›</a>
+            <a href="?page={{ paginator.num_pages }}{% if querystring %}&{{ querystring }}{% endif %}">last »</a>
+        {% else %}
+            <span style="color: grey;">next ›</span>
+            <span style="color: grey;">last »</span>
+        {% endif %}
+
+        <form method="get" style="margin-left: auto;">
+            {% for key, value in request.GET.items %}
+                {% if key != 'page' and key != 'per_page' %}
+                    <input type="hidden" name="{{ key }}" value="{{ value }}" />
+                {% endif %}
+            {% endfor %}
+            <label>per page
+                <input type="number" name="per_page" min="10" max="500" value="{{ page_obj.paginator.per_page }}" style="width: 70px;" />
+            </label>
+            <button type="submit">update</button>
+        </form>
+    </div>
+    {% endif %}
+
 </section>
 {% endblock %}
 
@@ -94,7 +174,7 @@ button {
             }
         })
             .then(() => {
-                document.getElementById(`actions-${userID}`).innerHTML = 'approved';
+                document.getElementById(`actions-${userID}`).innerHTML = '[ approved ]';
             });
     }
 
@@ -106,13 +186,13 @@ button {
             }
         })
             .then(() => {
-                document.getElementById(`actions-${userID}`).innerHTML = 'unapproved';
+                document.getElementById(`actions-${userID}`).innerHTML = '[ unapproved ]';
             });
     }
 
     function translatePost(evt) {
         // prepare request options
-        const isDebug = {{ DEBUG }};
+        const isDebug = '{{ DEBUG }}' === 'true';
         const text = evt.target.parentElement.parentElement.querySelector('a').text.trim();
         const encodedCredentials = btoa('admin' + ':' + '{{ TRANSLATE_API_TOKEN }}');
         const headers = new Headers({
