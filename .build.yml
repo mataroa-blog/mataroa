@@ -3,17 +3,19 @@ packages:
   - curl
   - postgresql
 tasks:
-  - setup: |
-      curl -LsSf https://astral.sh/uv/0.8.8/install.sh | sh
-  - build: |
-      ~/.local/bin/uv run python -V
   - test: |
+      curl -LsSf https://astral.sh/uv/0.8.8/install.sh | sh
+      ~/.local/bin/uv run python -V
       sudo -u postgres psql -U postgres -d postgres -c "ALTER USER postgres WITH PASSWORD 'postgres';"
+      cd mataroa/
       export DEBUG=1
       export SECRET_KEY='thisisthesecretkey'
       export DATABASE_URL='postgres://postgres:postgres@localhost:5432/postgres'
       ~/.local/bin/uv run manage.py collectstatic --noinput
       ~/.local/bin/uv run manage.py test
   - lint: |
+      curl -LsSf https://astral.sh/uv/0.8.8/install.sh | sh
+      ~/.local/bin/uv run python -V
+      cd mataroa/
       ~/.local/bin/uv run ruff check
       ~/.local/bin/uv run djade main/templates/**/*.html
