@@ -281,6 +281,11 @@ hr {
     border-right: none;
 }
 
+summary {
+    cursor: pointer;
+    user-select: none;
+}
+
 footer {
     max-width: 34rem;
     margin-left: auto;

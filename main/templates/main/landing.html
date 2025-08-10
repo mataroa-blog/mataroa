@@ -141,6 +141,115 @@
         — <a href="//nutcroft.mataroa.blog">view example blog</a>
     </div>
 
+    <section id="faq">
+        <h2>FAQ</h2>
+
+        <details>
+            <summary>Do you support custom CSS?</summary>
+            <div>
+                <p>
+                    No. The philosophy of mataroa is to be as minimal as possible without enabling
+                    too many decisions about styling. Sorry! :)
+                </p>
+            </div>
+        </details>
+
+        <details>
+            <summary>Can I self-host mataroa?</summary>
+            <div>
+                <p>
+                    Absolutely. The project is
+                    <a href="https://github.com/mataroablog/mataroa">open source</a>
+                    and you can find deployment documentation
+                    <a href="repository">in the docs</a>.
+                </p>
+            </div>
+        </details>
+
+        <details>
+            <summary>Why should I use mataroa instead of Substack/WordPress/etc?</summary>
+            <div>
+                <p>
+                    Mataroa follows a minimalist philosophy. It's fast, simple, and prioritizes the
+                    essence, the text content, over fancy features. The platform is based on a
+                    design philosophy of minimalism with strong data interoperability. You own your
+                    data and you can export it easily as well.
+                </p>
+            </div>
+        </details>
+
+        <details>
+            <summary>Will you add themes?</summary>
+            <div>
+                <p>
+                    We are not interested in adding features that give more options to users. It's
+                    part of our philosophy to enable one to just write, without giving options for
+                    design, colours, or layouts. We understand that's not what everyone wants but we
+                    want to cater to people that either struggle with writing and don’t want too
+                    many distractions, or to people who want a minimal blog :)
+                </p>
+            </div>
+        </details>
+
+        <details>
+            <summary>What about tags or categories?</summary>
+            <div>
+                <p>
+                    We think tags are too complicated of a feature for the simpleton mataroa wants to be.
+                </p>
+            </div>
+        </details>
+
+        <details>
+            <summary>What about pagination?</summary>
+            <div>
+                <p>
+                    Pagination can be annoying as it breaks the browser search across all post titles.
+                    Additionally, because of how fast and simple mataroa is, speed is not an issue
+                    even with thousands of posts.
+                </p>
+            </div>
+        </details>
+
+        <details>
+            <summary>Why doesn't strikethrough markdown notation work?</summary>
+            <div>
+                <p>
+                    The markdown library we use
+                    (<a href="https://github.com/Python-Markdown/markdown" target="_blank">Python-Markdown</a>)
+                    supports
+                    <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">
+                        John Gruber’s markdown spec</a>,
+                    which does not define strikethrough text. We might migrate to another
+                    markdown library at some point in the future, though, this is not
+                    yet planned.
+                </p>
+            </div>
+        </details>
+
+        <details>
+            <summary>Would you consider a rich editor option?</summary>
+            <div>
+                <p>
+                    We think a rich editor is too much for mataroa. For example, a rich editor
+                    implementation such as Trix, which does looks pretty cool yet the complexity is
+                    too high with 200K of JavaScript code. Saving HTML in the database instead of
+                    simple text is also an annoyance.
+                </p>
+            </div>
+        </details>
+
+        <details>
+            <summary>Do you support ActivityPub Federation?</summary>
+            <div>
+                <p>
+                    We do not, however, we'd like to. This is unplanned work that might
+                    happen at some point in the future.
+                </p>
+            </div>
+        </details>
+
+    </section>
 </main>
 
 {% include 'partials/footer.html' %}
