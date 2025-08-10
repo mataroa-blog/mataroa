@@ -92,11 +92,10 @@ volume, located in the root of the project.
 
 ### Dependencies
 
+We use `uv` for dependency management and virtual environments.
+
 ```
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.dev.txt
-pip install -r requirements.txt
+uv sync --all-groups
 ```
 
 ### Environment variables
@@ -162,13 +161,13 @@ After setting the `DATABASE_URL` ([see above](#environment-variables)), create
 the database schema with:
 
 ```sh
-python manage.py migrate
+uv python manage.py migrate
 ```
 
 Initialising the database with some sample development data is possible with:
 
 ```sh
-python manage.py loaddata dev-data
+uv python manage.py loaddata dev-data
 ```
 
 * `dev-data` is defined in [`main/fixtures/dev-data.json`](main/fixtures/dev-data.json)
@@ -179,7 +178,7 @@ python manage.py loaddata dev-data
 To run the Django development server:
 
 ```sh
-python manage.py runserver
+uv python manage.py runserver
 ```
 
 If you have also configured hosts as described above in the "Set up subdomains"
@@ -191,14 +190,14 @@ section, mataroa should now be locally accessible at
 Using the Django test runner:
 
 ```sh
-python manage.py test
+uv run python manage.py test
 ```
 
 For coverage, run:
 
 ```sh
-coverage run --source='.' --omit '.venv/*' manage.py test
-coverage report -m
+uv run coverage run --source='.' --omit '.venv/*' manage.py test
+uv run coverage report -m
 ```
 
 ## Code linting & formatting
@@ -208,24 +207,30 @@ We use [ruff](https://github.com/astral-sh/ruff) for Python code formatting and 
 To format:
 
 ```sh
-ruff format
+uv run ruff format
 ```
 
 To lint:
 
 ```sh
-ruff check
-ruff check --fix
+uv run ruff check
+uv run ruff check --fix
 ```
 
 ## Python dependencies
 
-We use [pip-tools](https://github.com/jazzband/pip-tools) to manage our Python dependencies:
+We use `uv` to manage dependencies declared in `pyproject.toml` (see `[project]` and `[dependency-groups]`).
+
+Common commands:
 
 ```sh
-pip-compile -U requirements.in
-pip install --upgrade pip
-pip install -r requirements.txt
+# Add or remove dependencies
+uv add <package>
+uv remove <package>
+
+# Update locked versions and install
+uv lock -U
+uv sync --all-groups
 ```
 
 ## Deployment
