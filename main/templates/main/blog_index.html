@@ -32,6 +32,12 @@
     </div>
     {% endif %}
 
+    {% if blog_user.subscriptions_enabled and blog_user.stripe_connect_account_id and blog_user.stripe_connect_price_id and not is_subscribed %}
+    <p>
+        <a href="{% url 'marketplace_subscribe' %}" class="btn">Subscribe</a>
+    </p>
+    {% endif %}
+
     {% if request.user.is_authenticated and request.subdomain == request.user.username and drafts %}
     <div class="drafts">
         <strong>

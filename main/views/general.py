@@ -86,19 +86,21 @@ def index(request):
                     published_at__lte=timezone.now().date(),
                 ).defer("body")
 
-            return render(
-                request,
-                "main/blog_index.html",
-                {
-                    "subdomain": request.subdomain,
-                    "blog_user": request.blog_user,
-                    "posts": posts,
-                    "drafts": drafts,
-                    "pages": models.Page.objects.filter(
-                        owner=request.blog_user, is_hidden=False
-                    ).defer("body"),
-                },
-            )
+            context = {
+                "subdomain": request.subdomain,
+                "blog_user": request.blog_user,
+                "posts": posts,
+                "drafts": drafts,
+                "pages": models.Page.objects.filter(
+                    owner=request.blog_user, is_hidden=False
+                ).defer("body"),
+            }
+            if request.GET.get("subscribed") == "1":
+                messages.success(request, "thanks for subscribing")
+                context["is_subscribed"] = True
+            else:
+                context["is_subscribed"] = False
+            return render(request, "main/blog_index.html", context)
         else:
             return redirect("//" + settings.CANONICAL_HOST + reverse("index"))
 

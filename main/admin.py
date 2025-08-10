@@ -66,6 +66,11 @@ class UserAdmin(DjUserAdmin):
                     "monero_address",
                     "is_premium",
                     "is_grandfathered",
+                    "stripe_connect_account_id",
+                    "stripe_connect_product_id",
+                    "stripe_connect_price_id",
+                    "subscriptions_enabled",
+                    "subscription_price_cents",
                     "is_approved",
                     "api_key",
                 ),
@@ -201,6 +206,25 @@ class SnapshotAdmin(admin.ModelAdmin):
         "owner",
     )
     list_display_links = ("id", "title")
+    ordering = ["-id"]
+
+
+@admin.register(models.ReaderSubscription)
+class ReaderSubscriptionAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "owner",
+        "email",
+        "stripe_subscription_id",
+        "status",
+        "created_at",
+    )
+    search_fields = (
+        "owner__username",
+        "email",
+        "stripe_subscription_id",
+        "stripe_customer_id",
+    )
     ordering = ["-id"]
 
 
