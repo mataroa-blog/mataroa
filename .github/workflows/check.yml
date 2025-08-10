@@ -40,7 +40,9 @@ jobs:
         run: uv run djade main/templates/**/*.html
 
       - name: Run Tests
-        run: uv run manage.py test
+        run: |
+          uv run manage.py collectstatic --no-input
+          uv run manage.py test
         env:
           DEBUG: '1'
           SECRET_KEY: 'thisisthesecretkey'
