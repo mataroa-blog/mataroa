@@ -1,0 +1,22 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Subscribers — {{ request.user.username }}{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Subscribers</h1>
+    {% if subscriptions %}
+    <ul>
+        {% for s in subscriptions %}
+        <li>
+            {{ s.email|default:s.stripe_customer_id }} — {{ s.status }} — {{ s.created_at|date }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No subscribers yet.</p>
+    {% endif %}
+</main>
+{% endblock content %}
+
+

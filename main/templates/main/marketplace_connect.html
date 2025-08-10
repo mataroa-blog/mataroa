@@ -1,0 +1,53 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Monetize — {{ request.user.username }}{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Monetize your blog</h1>
+
+    {% if not has_account %}
+    <p>Connect a Stripe Express account to receive subscription payouts.</p>
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="start_onboarding">
+        <input type="submit" value="Connect with Stripe">
+    </form>
+    {% else %}
+    <p>
+        Connected account: <code>{{ account_id }}</code>
+        {% if charges_enabled is not None %}
+        — Charges: <strong>{{ charges_enabled|yesno:"enabled,disabled" }}</strong>
+        — Payouts: <strong>{{ payouts_enabled|yesno:"enabled,disabled" }}</strong>
+        {% endif %}
+        <form method="post" class="form-inline">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="open_dashboard">
+            <input type="submit" value="Open Stripe Dashboard">
+        </form>
+    </p>
+    {% endif %}
+
+    <h2>Payment settings</h2>
+    <form method="post">
+        {% csrf_token %}
+        {% if subscriptions_enabled %}
+        <p>Subscriptions are <strong>enabled</strong> — Price: ${{ price_dollars }} / month {% if price_id %}— Price ID: <code>{{ price_id }}</code>{% endif %}</p>
+        <input type="hidden" name="action" value="disable_subscriptions">
+        <input type="submit" value="Disable">
+        {% else %}
+        <p>Enable paid subscriptions for your readers.</p>
+        <input type="hidden" name="action" value="enable_subscriptions">
+        <label>Monthly price (cents):</label>
+        <input type="number" name="price_cents" min="100" step="50" value="{{ price_cents }}">
+        <input type="submit" value="Enable">
+        {% endif %}
+    </form>
+
+    <p style="margin-top: 24px;">
+        <a href="{% url 'marketplace_subscribers' %}">Subscribers »</a>
+    </p>
+</main>
+{% endblock content %}
+
+

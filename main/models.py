@@ -131,6 +131,30 @@ class User(AbstractUser):
     is_premium = models.BooleanField(default=False)
     is_grandfathered = models.BooleanField(default=False)
 
+    # marketplace (Stripe Connect)
+    stripe_connect_account_id = models.CharField(
+        max_length=100, blank=True, null=True, help_text="Stripe Connect account ID"
+    )
+    stripe_connect_product_id = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text="Stripe Product ID (platform account)",
+    )
+    stripe_connect_price_id = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text="Stripe Price ID for subscriptions (platform account)",
+    )
+    subscriptions_enabled = models.BooleanField(
+        default=False, help_text="Enable paid subscriptions for this blog"
+    )
+    subscription_price_cents = models.PositiveIntegerField(
+        default=500,
+        help_text="Price in cents (e.g., 500 = $5.00) for the monthly subscription",
+    )
+
     # moderation
     is_approved = models.BooleanField(default=False)
 
@@ -416,6 +440,28 @@ class NotificationRecord(models.Model):
             return self.sent_at.strftime("%c") + " – " + self.notification.email
         else:
             return self.sent_at.strftime("%c") + " – NULL"
+
+
+class ReaderSubscription(models.Model):
+    """Represents a reader's paid subscription to a blog author via Stripe Connect.
+
+    Subscriptions are created on the author's connected account. We store the
+    connected account ID and Stripe identifiers to reconcile webhook events.
+    """
+
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    stripe_account_id = models.CharField(max_length=100)
+    stripe_customer_id = models.CharField(max_length=100)
+    stripe_subscription_id = models.CharField(max_length=100, unique=True)
+    email = models.EmailField(blank=True, null=True)
+    status = models.CharField(max_length=50, default="active")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.owner.username} – {self.email or self.stripe_customer_id} – {self.status}"
 
 
 class ExportRecord(models.Model):

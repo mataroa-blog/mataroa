@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import include, path, re_path
 
 from main import feeds
-from main.views import api, billing, export, general, moderation
+from main.views import api, billing, export, general, moderation, marketplace
 
 admin.site.site_header = "mataroa admin"
 
@@ -192,6 +192,14 @@ urlpatterns += [
         billing.billing_stripe_webhook,
         name="billing_stripe_webhook",
     ),
+]
+
+# marketplace (Stripe Connect)
+urlpatterns += [
+    path("marketplace/connect/", marketplace.MarketplaceConnect.as_view(), name="marketplace_connect"),
+    path("marketplace/subscribers/", marketplace.SubscribersList.as_view(), name="marketplace_subscribers"),
+    path("marketplace/subscribe/", marketplace.subscribe, name="marketplace_subscribe"),
+    path("marketplace/stripe/webhook/", marketplace.marketplace_stripe_webhook, name="marketplace_stripe_webhook"),
 ]
 
 # blog import, export, webring
