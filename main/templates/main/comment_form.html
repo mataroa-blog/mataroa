@@ -6,11 +6,11 @@
     {% else %}
     Post a comment for {{ post.title }}
     {% endif %}
-{% endblock %}
+{% endblock title %}
 
 {% block head_viewport %}
 <meta name="viewport" content="width=device-width, user-scalable=no">
-{% endblock %}
+{% endblock head_viewport %}
 
 {% block content %}
 <main>
@@ -61,4 +61,4 @@
         <input type="submit" value="Publish comment">
     </form>
 </main>
-{% endblock %}
+{% endblock content %}

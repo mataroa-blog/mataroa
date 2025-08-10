@@ -2,11 +2,11 @@
 
 {% block title %}
     {% if form.initial %}Editing {{ form.title.value }}{% else %}Create a new post{% endif %}
-{% endblock %}
+{% endblock title %}
 
 {% block head_viewport %}
 <meta name="viewport" content="width=device-width, user-scalable=no">
-{% endblock %}
+{% endblock head_viewport %}
 
 {% block content %}
 <main>
@@ -76,7 +76,7 @@
         <input type="submit" value="Save">
     </form>
 </main>
-{% endblock %}
+{% endblock content %}
 
 {% block scripts %}
 <script>
@@ -87,4 +87,4 @@
     {% include "assets/save-snapshot.js" %}
     {% endif %}
 </script>
-{% endblock %}
+{% endblock scripts %}

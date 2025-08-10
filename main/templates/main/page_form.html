@@ -2,7 +2,7 @@
 
 {% block title %}
     {% if form.initial %}Editing {{ form.title.value }}{% else %}Create a new page{% endif %}
-{% endblock %}
+{% endblock title %}
 
 {% block content %}
 <main>
@@ -58,7 +58,7 @@
         <input type="submit" value="Save">
     </form>
 </main>
-{% endblock %}
+{% endblock content %}
 
 {% block scripts %}
 <script>
@@ -67,4 +67,4 @@
 
     {% include "assets/drag-and-drop-upload.js" %}
 </script>
-{% endblock %}
+{% endblock scripts %}

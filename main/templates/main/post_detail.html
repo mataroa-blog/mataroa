@@ -1,6 +1,6 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}{{ post.title}} — {{ blog_user.blog_title }}{% endblock %}
+{% block title %}{{ post.title }} — {{ blog_user.blog_title }}{% endblock %}
 
 {% block meta_description %}{{ post.body_as_text|truncatewords:16 }}{% endblock %}
 
@@ -32,7 +32,7 @@
                     ⚠️ This post is accessible to anyone with the link!
                 </strong>
             </blockquote>
-            {%  endif %}
+            {% endif %}
         </div>
 
         <div class="posts-item-body" itemprop="articleBody">
@@ -113,14 +113,14 @@
     <div class="comments-title">Comments pending ({{ comments_pending|length }})</div>
     <ul>
         {% for comment in comments_pending %}
-        <li id="comment-{{ comment.id}}">
+        <li id="comment-{{ comment.id }}">
 
             <span class="comments-author">
                 {{ comment.name|default_if_none:"Anonymous" }}
                 {% if comment.email %}
                     ({{ comment.email }})
                 {% endif %}—
-                <a href="#comment-{{ comment.id }}">{{ comment.created_at|date:'M j, Y'  }}</a>:
+                <a href="#comment-{{ comment.id }}">{{ comment.created_at|date:'M j, Y' }}</a>:
             </span>
 
             (<a href="{% url 'comment_approve' post.slug comment.id %}" class="type-approve">approve</a>
@@ -136,13 +136,13 @@
     <div class="comments-title">Comments</div>
     <ol>
         {% for comment in comments %}
-        <li id="comment-{{ comment.id}}">
+        <li id="comment-{{ comment.id }}">
 
             {% if comment.is_author %}
             <span class="comments-author">
                 <strong title="Comment by blog author">{{ comment.name }}</strong>
                 —
-                <a href="#comment-{{ comment.id }}">{{ comment.created_at|date:'M j, Y'  }}</a>:
+                <a href="#comment-{{ comment.id }}">{{ comment.created_at|date:'M j, Y' }}</a>:
             </span>
             {% else %}
             <span class="comments-author">
@@ -150,7 +150,7 @@
                 {% if request.user.is_authenticated and request.subdomain == request.user.username and comment.email %}
                     ({{ comment.email }})
                 {% endif %}—
-                <a href="#comment-{{ comment.id }}">{{ comment.created_at|date:'M j, Y'  }}</a>:
+                <a href="#comment-{{ comment.id }}">{{ comment.created_at|date:'M j, Y' }}</a>:
             </span>
             {% endif %}
 
@@ -168,7 +168,7 @@
 
 {% include 'partials/footer_blog.html' %}
 
-{% endblock %}
+{% endblock content %}
 
 {% block scripts %}
 {% if not blog_user.comments_on %}
@@ -183,4 +183,4 @@
     });
 </script>
 {% endif %}
-{% endblock %}
+{% endblock scripts %}

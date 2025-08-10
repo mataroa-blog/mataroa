@@ -1,6 +1,7 @@
 {% extends 'main/layout.html' %}
 
 {% block title %}{{ blog_user.blog_title|default:blog_user.username }}{% endblock %}
+
 {% block meta_description %}{{ blog_user.blog_byline|default:"" }}{% endblock %}
 
 {% block head_extra %}
@@ -8,7 +9,7 @@
 {% if blog_user.blog_byline %}
 <meta name="description" content="{{ blog_user.blog_byline_as_text }}">
 {% endif %}
-{% endblock %}
+{% endblock head_extra %}
 
 {% block content %}
 <nav>
@@ -70,4 +71,4 @@
 
 {% include 'partials/footer_blog.html' %}
 
-{% endblock %}
+{% endblock content %}

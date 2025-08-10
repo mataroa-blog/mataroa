@@ -1,6 +1,6 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}{{ page.title}} — {{ blog_user.blog_title }}{% endblock %}
+{% block title %}{{ page.title }} — {{ blog_user.blog_title }}{% endblock %}
 
 {% block meta_description %}{{ page.body|truncatewords:16 }}{% endblock %}
 
@@ -29,7 +29,7 @@
 
 {% include 'partials/footer_blog.html' %}
 
-{% endblock %}
+{% endblock content %}
 
 {% block scripts %}
 {% if not blog_user.comments_on %}
@@ -44,4 +44,4 @@
     });
 </script>
 {% endif %}
-{% endblock %}
+{% endblock scripts %}

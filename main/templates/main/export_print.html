@@ -1,6 +1,7 @@
 {% extends 'main/layout.html' %}
 
 {% block title %}{{ request.user.blog_title|default:request.user.username }}{% endblock %}
+
 {% block meta_description %}{{ request.user.blog_byline|default:"" }}{% endblock %}
 
 {% block content %}
@@ -49,4 +50,4 @@
     </article>
 </main>
 
-{% endblock %}
+{% endblock content %}
