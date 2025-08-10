@@ -1,4 +1,4 @@
-from datetime import date, timedelta, datetime
+from datetime import date, datetime, timedelta
 from urllib.parse import urlencode
 
 from django.conf import settings
@@ -721,8 +721,8 @@ def summary(request, date_str: str):
 
     try:
         target_date = datetime.strptime(date_str, "%Y-%m-%d").date()
-    except (TypeError, ValueError):
-        raise Http404()
+    except (TypeError, ValueError) as err:
+        raise Http404() from err
 
     prev_date = target_date - timedelta(days=1)
     next_date = target_date + timedelta(days=1)
