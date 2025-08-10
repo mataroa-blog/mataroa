@@ -1,28 +1,19 @@
 image: ubuntu/24.04
 packages:
-  - python3.12
-  - python3-pip
-  - python3-venv
+  - curl
   - postgresql
 tasks:
+  - setup: |
+      curl -LsSf https://astral.sh/uv/0.8.8/install.sh | sh
   - build: |
-      cd mataroa/
-      python3 -m venv .venv
-      .venv/bin/pip install -r requirements.txt
+      ~/.local/bin/uv run python -V
   - test: |
       sudo -u postgres psql -U postgres -d postgres -c "ALTER USER postgres WITH PASSWORD 'postgres';"
       export DEBUG=1
+      export SECRET_KEY='thisisthesecretkey'
       export DATABASE_URL='postgres://postgres:postgres@localhost:5432/postgres'
-      cd mataroa/
-      python3 -m venv .venv
-      .venv/bin/pip install -r requirements.txt
-      .venv/bin/python3 manage.py collectstatic --noinput
-      .venv/bin/python3 manage.py test
+      ~/.local/bin/uv run manage.py collectstatic --noinput
+      ~/.local/bin/uv run manage.py test
   - lint: |
-      sudo -u root apt install shellcheck
-      cd mataroa/
-      touch .envrc
-      python3 -m venv .venv
-      .venv/bin/pip install -r requirements.dev.txt
-      .venv/bin/pip install -r requirements.txt
-      .venv/bin/ruff check
+      ~/.local/bin/uv run ruff check
+      ~/.local/bin/uv run djade main/templates/**/*.html
