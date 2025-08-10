@@ -3,8 +3,8 @@ from django.urls import reverse
 
 
 class StaticTestCase(TestCase):
-    def test_operandi(self):
-        response = self.client.get(reverse("operandi"))
+    def test_methodology(self):
+        response = self.client.get(reverse("methodology"))
         self.assertEqual(response.status_code, 200)
 
     def test_transparency(self):

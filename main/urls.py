@@ -11,16 +11,15 @@ urlpatterns = [
     path("", general.index, name="index"),
     path("blog/", general.blog_index, name="blog_index"),
     path("dashboard/", general.dashboard, name="dashboard"),
-    path("modus/operandi/", general.operandi, name="operandi"),
-    path("modus/transparency/", general.transparency, name="transparency"),
-    path("modus/privacy/", general.privacy_redir, name="privacy_redir"),
+    path("about/methodology/", general.methodology, name="methodology"),
+    path("about/transparency/", general.transparency, name="transparency"),
+    path("about/comparisons/", general.comparisons, name="comparisons"),
     path("guides/markdown/", general.guides_markdown, name="guides_markdown"),
     path("guides/images/", general.guides_images, name="guides_images"),
     path(
         "guides/custom-domain/", general.guides_customdomain, name="guides_customdomain"
     ),
     path("guides/comments/", general.guides_comments, name="guides_comments"),
-    path("guides/comparisons/", general.comparisons, name="comparisons"),
 ]
 
 # user system
@@ -56,7 +55,11 @@ urlpatterns += [
         name="moderation_activity",
     ),
     path("moderation/cohorts/", moderation.cohorts, name="moderation_cohorts"),
-    path("moderation/summary/<slug:date_str>/", moderation.summary, name="moderation_summary"),
+    path(
+        "moderation/summary/<slug:date_str>/",
+        moderation.summary,
+        name="moderation_summary",
+    ),
     path(
         "moderation/users/<int:user_id>/approve/",
         moderation.user_approve,
