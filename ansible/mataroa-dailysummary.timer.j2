@@ -1,0 +1,8 @@
+[Unit]
+Description=Run mataroa-dailysummary every day at 00:15 UTC
+
+[Timer]
+OnCalendar=*-*-* 00:15:00
+
+[Install]
+WantedBy=timers.target

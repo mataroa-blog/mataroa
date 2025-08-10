@@ -6,13 +6,14 @@ All notable changes to this project will be documented in this file.
 
 ### Important changes
 
-* Rebuild content moderation dashboard with
+* Rebuild content moderation dashboard with:
     * pagination
     * filters
     * sort by
     * day summary
     * images overview
     * global stats
+    * daily admin summary email
 * Switch to astral uv
 * Add hard check for image uploading limit
 * Change sign up text

@@ -12,6 +12,8 @@
       - mataroa-exports.service.j2
       - mataroa-backup.timer.j2
       - mataroa-backup.service.j2
+      - mataroa-dailysummary.timer.j2
+      - mataroa-dailysummary.service.j2
   become: yes
   tasks:
     # smoke test and essential dependencies
@@ -157,6 +159,7 @@
         - mataroa-notifications.timer
         - mataroa-exports.timer
         - mataroa-backup.timer
+        - mataroa-dailysummary.timer
     - name: systemd enable
       ansible.builtin.systemd:
         name: mataroa
